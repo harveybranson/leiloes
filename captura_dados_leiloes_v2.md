@@ -3,6 +3,8 @@
 > Documento de referência para extração exaustiva de informações de qualquer tipo de site de leilão — incluindo sites públicos, autenticados (login/senha), com JavaScript pesado, APIs ocultas e proteções anti-bot.
 >
 > **Novidade da v2:** seção dedicada a contornar o **Cloudflare Managed Challenge / Turnstile** que bloqueia paginação (`?pag=2` em diante), com fluxo completo de sessão persistida no Playwright (seção 13).
+>
+> **Adições mai/2026 (seções 19-21):** scraping do diretório BomValor (113 leiloeiros, session limit, mapeamento de colunas), armadilhas no Windows (Python via Bash → exit 127, stdout reconfigure, desync CSV/JSON, monitoramento Playwright), migration de colunas ausentes no banco, e pipeline completo de importação com sequência correta de operações.
 
 ---
 
@@ -629,6 +631,34 @@ if not lote_urls:
     lote_urls = extract_lotes(fs_get(url, sid, max_timeout=90000)["response"])
 ```
 
+### 15.7. Python não encontrado no Git Bash no Windows (exit 127)
+
+**Problema:** `python script.py` via Bash tool ou Git Bash retorna exit code 127.
+
+**Causa:** o Python instalado no Windows não está no PATH do Git Bash/WSL.
+
+**Solução:** usar PowerShell para todo comando Python no Windows. Ver detalhes em **seção 20.1**.
+
+### 15.8. `sys.stdout.reconfigure` produz log vazio quando stdout é redirecionado
+
+**Problema:** log file fica com 0 bytes mesmo o processo estando ativo.
+
+**Causa:** `reconfigure` substitui o objeto stdout e pode quebrar o descriptor do arquivo redirecionado.
+
+**Solução:** monitorar via arquivo de progresso JSON, não via stdout. Ver **seção 20.2**.
+
+### 15.9. CSV e progress JSON desincronizados após mover arquivo
+
+**Problema:** progress JSON reporta N rows, CSV tem menos linhas.
+
+**Solução:** mover CSV junto com o progress JSON, ou usar `--reset`. Ver **seção 20.3**.
+
+### 15.10. Coluna ausente no banco quebra importação (UndefinedColumn)
+
+**Problema:** `psycopg2.errors.UndefinedColumn` ao tentar importar CSV quando `models.py` tem colunas novas não aplicadas ao PostgreSQL.
+
+**Solução:** rodar `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` antes de importar. Ver **seção 20.5**.
+
 ---
 
 ## 16. Fontes de leilões de imóveis — resultados validados
@@ -681,3 +711,467 @@ python scraper_completo.py --list
 **Progresso:** salvo em `scraper_completo_progress.json`; se o processo for interrompido, a próxima execução retoma a partir do site seguinte automaticamente.
 
 **Dependência para Milan:** container FlareSolverr deve estar rodando. O script tenta iniciá-lo automaticamente via `docker start flaresolverr`; se o container não existir, exibe o comando de criação e pula Milan.
+
+---
+
+## 17. Enriquecimento com documentos — edital, matrícula e PDFs
+
+Após coletar as URLs dos imóveis, uma segunda passagem ("enricher") visita cada página individual e extrai os documentos vinculados ao lote: edital do leilão, matrícula do imóvel, laudo de avaliação e outros PDFs.
+
+### 17.1. Modelo de dados
+
+Três campos adicionados à tabela `imoveis` (migration via `ALTER TABLE`):
+
+| Campo | Tipo | Conteúdo |
+|---|---|---|
+| `edital_url` | VARCHAR(1000) | Link direto para o PDF do edital |
+| `matricula_url` | VARCHAR(1000) | Link direto para a matrícula |
+| `documentos` | TEXT (JSON) | Array: `[{"tipo": "edital"|"matricula"|"documento", "url": "...", "descricao": "..."}]` |
+
+O mesmo modelo existe no `ImovelRaw` do scraper base, permitindo que scrapers primários já populem esses campos diretamente quando os encontrarem na fonte.
+
+### 17.2. Estratégia do enricher
+
+O enricher (`pipeline/enricher_documentos.py`) processa imóveis sem documentos em três camadas:
+
+**Camada 1 — Extrator específico por fonte (mais confiável)**
+Fontes conhecidas têm extratores dedicados que sabem exatamente onde buscar os documentos, sem precisar navegar nem fazer parsing genérico. Exemplo: Caixa Econômica Federal (ver 17.3).
+
+**Camada 2 — httpx rápido + regex genérico**
+Para fontes desconhecidas, tenta com `httpx` (sem browser). Extrai todos os `href` que batem nos padrões:
+- Edital: `edital`, `aviso.*leil`, `notice.*sale`
+- Matrícula: `matr[íi]cula`, `certid[aã]o`, `registro.*im[oó]vel`
+- Outros docs: `\.pdf$`, `laudo`, `avalia[çc][aã]o`, `vistoria`, `ônus`
+
+**Camada 3 — Playwright (fallback para SPA/JS)**
+Se httpx não achou nada, abre o Playwright e repete a extração no DOM renderizado.
+
+```python
+async_extractor = FONTE_EXTRACTORS_ASYNC.get(dominio)
+if async_extractor and browser:
+    resultado = await async_extractor(imovel, browser)   # extrator dedicado
+else:
+    docs = await _scrape_with_httpx(url)                  # camada 2
+    if not docs:
+        docs = await _scrape_with_playwright(browser, url) # camada 3
+```
+
+### 17.3. Estudo de caso: Caixa Econômica Federal
+
+A Caixa protege seus endpoints com **Radware Bot Manager** — httpx e curl retornam a página de CAPTCHA em vez do HTML real. Playwright passa sem problemas.
+
+**Descoberta do padrão (inspeção manual com Playwright):**
+
+A página de detalhe do imóvel (`/sistema/detalhe-imovel.asp?hdnimovel=XXXXXXX`) renderiza dois botões:
+```html
+<a onclick="javascript:ExibeDoc('/editais/matricula/SP/8787705673395.pdf')">
+  Baixar matrícula do imóvel
+</a>
+<a onclick="javascript:ExibeDoc('/editais/EA00110326CPVERE.PDF')">
+  Baixar edital e anexos
+</a>
+```
+
+O padrão real confirmado (mai/2026):
+- **Matrícula**: `https://venda-imoveis.caixa.gov.br/editais/matricula/{UF}/{hdnimovel}.pdf`
+- **Edital**: `https://venda-imoveis.caixa.gov.br/editais/{CODIGO_EDITAL}.PDF` (o código varia por lote/leilão — extraído do `onclick`)
+
+> **Armadilha:** Os padrões de URL da Caixa **não são previsíveis** para o edital — o código (`EA00110326CPVERE`) é gerado internamente e só aparece no HTML renderizado. Para a matrícula, a URL é determinística a partir do `hdnimovel` e da UF. Nunca tente construir a URL do edital sem visitar a página primeiro.
+
+**Extrator implementado:**
+
+```python
+async def _caixa_docs_playwright(imovel, browser) -> dict:
+    # Visita a página com Playwright
+    html = await page.content()
+    # Extrai todos os ExibeDoc('/...') do HTML
+    paths = re.findall(r"ExibeDoc\(['\"]([^'\"]+)['\"]\)", html)
+    for path in paths:
+        if "matricula" in path.lower():
+            resultado["matricula_url"] = base + path
+        else:
+            resultado["edital_url"] = base + path
+```
+
+**Resultado observado:**
+- 356 imóveis Caixa ativos
+- ~38 com edital + matrícula (~11%): propriedades com leilão ativo publicado
+- ~70 só com matrícula (~20%): venda direta sem edital
+- ~248 sem documentos (~70%): imóveis com página expirada ("Nenhum imóvel encontrado") — a Caixa remove o detalhe do lote após o leilão encerrar
+
+**Implicação prática:** enriquecer imóveis Caixa logo após o scraping, enquanto as páginas ainda estão ativas. Imóveis com mais de ~30 dias tendem a ter a página expirada.
+
+### 17.4. Uso do enricher
+
+```bash
+# Enriquecer imóveis Caixa (usa Playwright — ~5s/imóvel)
+docker exec leilao_api bash -c "cd /app && python run.py enriquecer-documentos --fonte caixa.gov.br --limite 500"
+
+# Enriquecer todos os imóveis sem documentos (httpx primeiro, Playwright como fallback)
+docker exec leilao_api bash -c "cd /app && python run.py enriquecer-documentos --limite 1000"
+
+# Só httpx (mais rápido, sem Playwright — para fontes que não requerem JS)
+docker exec leilao_api bash -c "cd /app && python run.py enriquecer-documentos --limite 2000 --sem-playwright"
+
+# Reprocessar imóveis já enriquecidos (força re-fetch)
+docker exec leilao_api bash -c "cd /app && python run.py enriquecer-documentos --reset --limite 200"
+```
+
+### 17.5. Não rode múltiplas instâncias simultaneamente
+
+Cada instância do enricher faz um SELECT inicial dos imóveis sem `edital_url IS NULL`, lança o Playwright e processa a lista. Se duas instâncias rodarem ao mesmo tempo, ambas leram a mesma lista inicial e vão processar as mesmas páginas em paralelo, desperdiçando recursos e gerando requisições duplicadas ao servidor alvo.
+
+**Problema observado:** 3 instâncias rodando simultaneamente reduziram a taxa efetiva para ~3 imóveis/minuto por instância (vs ~8/min com instância única), porque o Playwright fica competindo por CPU/memória no container.
+
+**Regra:** matar instâncias anteriores antes de iniciar uma nova execução.
+
+### 17.6. Checklist para enriquecimento de documentos
+
+1. Confirmar que a migration foi aplicada (`edital_url`, `matricula_url`, `documentos` existem em `imoveis`).
+2. Para fontes com bot protection (Caixa, etc.), usar Playwright — nunca assumir que httpx funciona.
+3. Inspecionar manualmente a página de um imóvel ativo antes de escrever o extrator — botões com `href="#"` e `onclick` são o padrão para downloads protegidos.
+4. Rodar o enricher logo após a coleta inicial, enquanto as páginas estão ativas.
+5. Não assumir padrões de URL para editais — extrair do HTML sempre.
+6. Para matrícula da Caixa, a URL é determinística: `/editais/matricula/{UF}/{hdnimovel}.pdf`.
+7. Monitorar progresso via query: `SELECT COUNT(*) FROM imoveis WHERE edital_url IS NOT NULL`.
+
+---
+
+## 18. Coluna de documentos nos cards e no admin
+
+Após o enriquecimento, os documentos aparecem automaticamente na interface:
+
+**Cards do site (`index.html`):**
+- Snippet de descrição (2 linhas, 120 chars) abaixo do score
+- Badges inline 📄 Edital e 📋 Matrícula no card (clicáveis, abre em nova aba, não propaga o click para o detalhe)
+- Seção "📁 Documentos" no detalhe do imóvel listando todos os PDFs encontrados
+
+**Admin (`/admin`, aba Imóveis):**
+- Coluna "Docs" na tabela: ícones 📄 📋 quando presentes, contador `+N` para extras
+- Snippet de descrição (80 chars) abaixo do título na tabela
+
+**Frontend — lógica de exibição:**
+```js
+// Cards: exibe badges apenas quando as URLs estão preenchidas
+${im.edital_url
+  ? `<a href="${im.edital_url}" target="_blank" onclick="event.stopPropagation()">📄 Edital</a>`
+  : ''}
+
+// Detalhe: monta seção completa incluindo documentos do array JSON
+const docs = [];
+if (im.edital_url)    docs.push({tipo:'edital',    url: im.edital_url});
+if (im.matricula_url) docs.push({tipo:'matricula', url: im.matricula_url});
+try { docs.push(...JSON.parse(im.documentos || '[]')); } catch(e) {}
+```
+
+O campo `documentos` (JSON) é incluído em `ImovelResumo` (não apenas em `ImovelDetalhe`) para que os cards na listagem já recebam as URLs sem precisar de uma segunda chamada de detalhe.
+
+---
+
+## 19. Scraping de diretórios de leiloeiros — BomValor.com.br
+
+**Contexto:** o portal `comunidades.bomvalor.com.br/leiloeiros-oficiais/` lista 113 leiloeiros oficiais com seus perfis no marketplace `mercado.bomvalor.com.br`. É uma fonte rápida e sem proteção anti-bot para descobrir leiloeiros ativos.
+
+### 19.1. Estrutura da paginação
+
+```
+GET https://comunidades.bomvalor.com.br/leiloeiros-oficiais/?q=&page=N
+```
+
+- 20 leiloeiros por página, total de 113 → 6 páginas.
+- Cada card tem: nome do leiloeiro, link de perfil no formato `/leiloeiro/nome-slugificado/`, e o site (`mercado.bomvalor.com.br/slug`).
+- O diretório indica "113 leiloeiros encontrados" no HTML — use para saber quantas páginas buscar.
+
+### 19.2. O que as páginas de perfil no mercado contêm (e o que não contêm)
+
+**Validado empiricamente para todos os 113 perfis** (`mercado.bomvalor.com.br/<slug>`):
+
+| O que existe | O que NÃO existe |
+|---|---|
+| Número de WhatsApp (`wa.me/55...`) | Link para site externo do leiloeiro |
+| FAQ do BomValor (Google Sites) | Instagram / Facebook / LinkedIn |
+| Links internos do ecossistema BomValor | Site próprio do leiloeiro |
+
+**Conclusão:** o `mercado.bomvalor.com.br/<slug>` **é** o site oficial da grande maioria dos leiloeiros. Apenas 3 dos 113 possuem site próprio externo (identificáveis diretamente no diretório):
+
+| Leiloeiro | Site externo |
+|---|---|
+| Emílio Matos Rocha | emiliomatosleiloes.com.br |
+| Eduardo Macario de Melo | www.macariosleiloes.com.br |
+| Sérgio Sousa Rodrigues | bhleiloaria.com.br |
+
+### 19.3. Session limit por aba/sessão
+
+O BomValor aplica um **limite de requisições por sessão de navegador**. Ao usar `WebFetch` em paralelo com muitas abas simultâneas, a partir de certo ponto a resposta muda para:
+
+```
+"You've hit your session limit · resets 12:40pm (America/Sao_Paulo)"
+```
+
+**Solução:** aguardar o horário de reset indicado na mensagem antes de retomar. Em scripts Python, use `requests.Session()` com delay entre chamadas (1-2 s) para evitar o limite.
+
+### 19.4. Importando leiloeiros BomValor no banco
+
+O importador padrão (`scrapers/leiloeiros/importar_csv.py`) espera colunas FENAJU (`nome`, `uf`, `site`, etc.). O CSV gerado pelo scraping BomValor usa colunas diferentes (`Nome`, `Site Oficial`, `WhatsApp`, `Status`). Mapeamento manual necessário:
+
+```python
+import csv
+from database.models import Leiloeiro
+from sqlalchemy.orm import Session
+
+with open("leiloeiros_bomvalor.csv", encoding="utf-8") as f:
+    for row in csv.DictReader(f):
+        nome = (row.get("Nome") or "").strip()
+        site_raw = (row.get("Site Oficial") or "").strip()
+        whatsapp = (row.get("WhatsApp") or "").strip()
+        status   = (row.get("Status") or "").strip()
+
+        if "404" in status or not site_raw or not nome:
+            continue  # ignora perfis inativos
+
+        site = site_raw if site_raw.startswith("http") else "https://" + site_raw
+        session.add(Leiloeiro(nome=nome, site=site, telefone=whatsapp or None, situacao="Regular"))
+
+session.commit()
+```
+
+**Resultado observado (mai/2026):** 96 inseridos, 17 ignorados (páginas 404).
+
+### 19.5. Checklist BomValor
+
+1. Buscar 6 páginas em paralelo: `?q=&page=1` até `?q=&page=6`.
+2. Extrair nome + slug de cada card.
+3. Visitar `mercado.bomvalor.com.br/<slug>` apenas para obter o WhatsApp (não há site externo).
+4. Para os 3 leiloeiros com site próprio, o URL externo aparece diretamente no diretório.
+5. Usar delays de 1-2 s entre requisições para evitar session limit.
+6. Ao importar, mapear colunas manualmente (não usar o importador FENAJU direto).
+
+---
+
+## 20. Armadilhas adicionais documentadas (mai/2026)
+
+### 20.1. Python no Windows: use PowerShell, não Bash
+
+**Problema:** executar `python script.py` via Bash (Git Bash / WSL) no Windows retorna **exit code 127** ("command not found").
+
+**Causa:** o `python` instalado via Microsoft Store ou instalador Windows fica no PATH do PowerShell/CMD mas não no PATH do Git Bash.
+
+**Solução:** sempre use PowerShell para rodar scripts Python no Windows:
+
+```powershell
+# Correto
+cd "C:\caminho\projeto"
+python scraper_completo.py
+
+# Errado (Git Bash no Windows)
+cd /c/caminho/projeto && python scraper_completo.py   # → exit 127
+```
+
+### 20.2. `sys.stdout.reconfigure` quebra redirecionamento de arquivo
+
+**Problema:** scripts que chamam `sys.stdout.reconfigure(encoding="utf-8")` na inicialização produzem **arquivo de log vazio** quando o processo é iniciado com `stdout` redirecionado para arquivo (`-RedirectStandardOutput`).
+
+**Causa:** `reconfigure` substitui o objeto stdout pelo wrapper UTF-8, que pode não herdar o file descriptor do redirecionamento original.
+
+**Solução:** para monitorar progresso de processos externos, leia o **arquivo de progresso JSON** gerado pelo script, não o stdout:
+
+```powershell
+# Em vez de depender do log:
+python -c "
+import json
+d = json.load(open('scraper_completo_progress.json', encoding='utf-8'))
+print('done:', d['done'], '| rows:', len(d['rows']))
+"
+```
+
+### 20.3. CSV e progress JSON desincronizados
+
+**Problema:** o `scraper_completo_progress.json` pode reportar N rows enquanto o `ofertas_completo.csv` tem menos linhas (o CSV foi movido, renomeado ou sobrescrito por outra execução).
+
+**Causa:** `save_csv()` e `save_progress()` são chamadas separadas. Se o arquivo CSV for movido entre chamadas, o progress JSON acumula rows que não estão no CSV.
+
+**Diagnóstico:**
+```powershell
+# Comparar contagens
+python -c "import json; d=json.load(open('scraper_completo_progress.json', encoding='utf-8')); print('JSON rows:', len(d['rows']))"
+(Get-Content "ofertas_completo.csv" | Measure-Object -Line).Lines  # deve ser JSON rows + 1 (header)
+```
+
+**Solução:** ao mover o CSV, mover junto (ou apagar) o arquivo de progresso; ou usar `--reset` para recomeçar do zero.
+
+### 20.4. Monitorar processo Playwright indiretamente
+
+Quando o scraper Playwright roda em background sem output visível, monitore o processo filho do Chromium:
+
+```powershell
+# Identifica processos Python e seu consumo
+Get-Process python -ErrorAction SilentlyContinue |
+    Select-Object Id, CPU, WorkingSet, StartTime
+
+# Sinal de atividade normal:
+# - CPU aumentando ~4-10 s por minuto
+# - WorkingSet do Chromium: 150-200 MB (ativo)
+# - WorkingSet do Python: 50-70 MB
+
+# Sinal de problema:
+# - CPU estagnada por >5 min → Playwright provavelmente preso em timeout
+# - WorkingSet caindo → processo encerrado
+```
+
+Se o scraper parar de responder, mate e reinicie via PowerShell (não via Bash):
+```powershell
+Stop-Process -Id <PID> -Force
+python scraper_completo.py  # retoma de onde parou (progress.json)
+```
+
+### 20.5. Migration obrigatória antes de importar quando modelo à frente do banco
+
+**Problema:** `sqlalchemy.exc.ProgrammingError: column "arquivos" of relation "imoveis" does not exist` ao tentar importar CSV no banco.
+
+**Causa:** `models.py` foi atualizado com novas colunas (ex.: `arquivos`, `edital_url`, `matricula_url`, `documentos`) mas a migration correspondente nunca foi aplicada ao PostgreSQL.
+
+**Diagnóstico:**
+```python
+from sqlalchemy import create_engine, text
+engine = create_engine(DATABASE_URL_SYNC)
+with engine.connect() as conn:
+    cols = [r[0] for r in conn.execute(text(
+        "SELECT column_name FROM information_schema.columns "
+        "WHERE table_name='imoveis' ORDER BY ordinal_position"
+    ))]
+    print(cols)
+```
+
+**Solução:** aplicar migration manual antes de qualquer importação:
+```python
+migrations = [
+    "ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS arquivos TEXT",
+    "ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS edital_url VARCHAR(1000)",
+    "ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS matricula_url VARCHAR(1000)",
+    "ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS documentos TEXT",
+]
+with engine.connect() as conn:
+    for sql in migrations:
+        conn.execute(text(sql))
+    conn.commit()
+```
+
+**Regra:** sempre verificar se todas as colunas do `models.py` existem no banco antes de importar. `ADD COLUMN IF NOT EXISTS` é seguro de rodar múltiplas vezes.
+
+---
+
+## 21. Pipeline completo de importação — sequência correta
+
+Após rodar o `scraper_completo.py` e gerar o `ofertas_completo.csv`, a sequência correta de operações para popular e limpar o banco é:
+
+```
+1. Migration (se modelo atualizado)
+2. Importar CSV → banco
+3. Classificar imóveis
+4. Normalizar cidades
+5. Deduplicar
+6. Desativar encerrados
+7. Geocodificar
+```
+
+### 21.1. Comandos (executar nesta ordem)
+
+```powershell
+$DB = "postgresql://leilao:leilao123@localhost:5432/leilao_db"
+$DIR = "C:\caminho\leilao-scraper\leilao-scraper"
+$CSV = "C:\caminho\leiloes\ofertas_completo.csv"
+
+Set-Location $DIR
+
+# 1. Migration (só se novas colunas no models.py)
+# → ver seção 20.5
+
+# 2. Importar CSV gerado pelo scraper
+$env:DATABASE_URL_SYNC = $DB
+python -m pipeline.importar_ofertas_csv --csv $CSV
+
+# 3. Classificar (calcula score_oportunidade e tipo_imovel)
+python run.py classificar --limite 5000
+
+# 4. Normalizar cidades (requer acesso IBGE — pode falhar SSL em alguns ambientes)
+python run.py normalizar-cidades
+
+# 5. Deduplicar (remove duplicatas por URL e por título+local)
+python run.py deduplicar
+
+# 6. Desativar leilões encerrados (datas passadas)
+python run.py devoltaparaofuturo
+
+# 7. Geocodificar (lat/lng via Google Maps ou Nominatim)
+python run.py geocodificar --limite 500
+```
+
+### 21.2. Importar leiloeiros de CSV não-FENAJU
+
+Quando o CSV não segue o formato FENAJU (`nome`, `uf`, `site`, etc.) — como o gerado pelo scraping BomValor — use importação direta:
+
+```powershell
+# Adaptar colunas e importar via script inline (ver seção 19.4)
+python -c "
+import csv, sys
+sys.path.insert(0, '.')
+from sqlalchemy import create_engine, select
+from sqlalchemy.orm import sessionmaker
+from database.models import Leiloeiro
+
+engine = create_engine('$DB')
+Session = sessionmaker(bind=engine)
+session = Session()
+ins = 0
+
+with open('leiloeiros_bomvalor.csv', encoding='utf-8') as f:
+    for row in csv.DictReader(f):
+        nome = (row.get('Nome') or '').strip()
+        site = (row.get('Site Oficial') or '').strip()
+        wa   = (row.get('WhatsApp') or '').strip()
+        if not nome or '404' in (row.get('Status') or ''):
+            continue
+        if not site.startswith('http'):
+            site = 'https://' + site
+        session.add(Leiloeiro(nome=nome, site=site, telefone=wa or None, situacao='Regular'))
+        ins += 1
+
+session.commit()
+print(f'{ins} leiloeiros inseridos')
+"
+```
+
+### 21.3. Stack Docker — serviços em execução
+
+O sistema completo usa os seguintes containers:
+
+| Container | Função | Porta |
+|---|---|---|
+| `leilao_api` | FastAPI (site + API REST) | 8000 |
+| `leilao_postgres` | PostgreSQL | 5432 |
+| `leilao_redis` | Redis (broker Celery) | 6379 |
+| `leilao_worker` | Celery worker (tarefas async) | — |
+| `leilao_beat` | Celery beat (agendamento) | — |
+| `leilao_flower` | Monitor Celery | 5555 |
+| `flaresolverr` | Bypass Cloudflare | 8191 |
+
+**Comandos úteis:**
+```powershell
+# Ver status de todos
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+# Rodar pipeline dentro do container da API
+docker exec leilao_api bash -c "cd /app && python run.py classificar --limite 5000"
+
+# Ver logs da API em tempo real
+docker logs -f leilao_api
+```
+
+### 21.4. Checklist pós-scraping
+
+1. Verificar se progress JSON e CSV estão sincronizados (ver 20.3).
+2. Aplicar migration se necessário (ver 20.5).
+3. Importar CSV (`importar_ofertas_csv`).
+4. Confirmar inserções: `SELECT leiloeiro, COUNT(*) FROM imoveis WHERE criado_em > NOW() - INTERVAL '1 hour' GROUP BY leiloeiro`.
+5. Classificar → deduplicar → desativar encerrados → geocodificar (nesta ordem).
+6. Verificar total ativo: `SELECT COUNT(*) FROM imoveis WHERE ativo=true`.

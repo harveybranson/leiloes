@@ -11,6 +11,8 @@
 > **Adições jun/2026 (seções 24-25):** pipeline end-to-end completo — de site único, lista `.txt`, planilha `.csv`/`.xlsx` até os cards do sistema com documentos (edital/matrícula), deduplicação global, inserção de únicos e exportação automática de CSV datado para a pasta `/csv`; sincronização obrigatória de imóveis com `/admin` e de novos leiloeiros com `/admin` e aba **Leiloeiros** do frontend.
 >
 > **Adições jun/2026 (`baixar-docs`):** implementação do `DocumentoDownloader` — após o scraping, **obrigatório** rodar `python run.py baixar-docs --limite 200` para baixar os PDFs (edital, matrícula, laudos) para disco local em `storage/docs/`, com fallback automático via FlareSolverr para sites com Cloudflare. O comando atualiza o campo `arquivos` no banco com `path_local` e `hash_md5`. Integrado no `pipeline`, Celery beat (a cada hora) e endpoint `GET /imoveis/{id}/documentos/{idx}/download` na API.
+>
+> **Adições jun/2026 (seção 26):** scraper standalone da Caixa Econômica Federal (`scraping/scraper_caixa.py`) — bypassa Radware Bot Manager via Playwright + playwright-stealth + `expect_download`; novo formato de CSV (colunas `N° do imóvel`, `Preço`, sem matrícula separada); URL de matrícula determinística; filtro por data da 1ª praça (seção 8.1); 27.363 imóveis coletados em ~2 min para todos os 27 estados.
 
 ---
 
@@ -2174,3 +2176,241 @@ Write-Host "  → Site público : http://localhost:8000 → aba Leiloeiros"
 7. Abrir `http://localhost:8000` → aba **Leiloeiros** — confirmar exibição pública.
 8. Completar dados do leiloeiro (site, logo, telefone) via admin ou script da seção 25.2.6.
 9. Exportar CSV final para `/csv` (seção 24.9).
+
+---
+
+## 26. Scraper standalone da Caixa Econômica Federal
+
+Script de referência: **`scraping/scraper_caixa.py`** — extrai imóveis de todos os 27 estados diretamente dos CSVs públicos da Caixa, com bypass do Radware Bot Manager via Playwright + stealth.
+
+### 26.1. Proteção: Radware Bot Manager
+
+A Caixa usa **Radware Bot Manager** — diferente do Cloudflare — que bloqueia:
+
+| Ferramenta | Resultado |
+|---|---|
+| `httpx` / `requests` | 200 OK, mas retorna HTML do CAPTCHA Radware |
+| `curl_cffi` | Idem — Radware não é bypassado por TLS fingerprint |
+| Playwright headless (sem stealth) | Detectado e bloqueado |
+| **Playwright + `playwright-stealth`** | ✅ Passa — retorna o CSV real |
+
+O FlareSolverr **não funciona** para Radware (é específico para Cloudflare).
+
+### 26.2. Padrão crítico: captura de download com `expect_download`
+
+O endpoint `/listaweb/Lista_imoveis_{UF}.csv` **dispara um download direto** em vez de renderizar a página. O `page.goto()` lança `"Download is starting"` — isso é comportamento esperado.
+
+**Padrão correto:**
+
+```python
+async with page.expect_download(timeout=30000) as dl_info:
+    try:
+        await page.goto(url, timeout=30000)
+    except Exception:
+        pass  # "Download is starting" é esperado — download já foi capturado
+
+# FORA do bloco with: aguarda o download completar
+download = await dl_info.value
+await download.save_as(tmp_path)
+```
+
+**Erro comum:** colocar `download = await dl_info.value` DENTRO do `try/except` que captura o erro do `goto`. O `except` sai do bloco `async with` antes de `dl_info.value` ser resolvido.
+
+**Warm-up obrigatório:** visitar a home (`https://venda-imoveis.caixa.gov.br`) antes de solicitar o CSV acumula cookies legítimos e reduz a chance de bloqueio.
+
+```python
+await page.goto(CAIXA_BASE, timeout=20000, wait_until="domcontentloaded")
+await page.wait_for_timeout(1200)  # simula navegação humana
+
+async with page.expect_download(timeout=30000) as dl_info:
+    try:
+        await page.goto(CSV_URL, timeout=30000)
+    except Exception:
+        pass
+
+download = await dl_info.value
+```
+
+### 26.3. Formato do CSV (atualizado mai/2026)
+
+O formato mudou em relação às versões anteriores. Colunas atuais:
+
+| Coluna CSV | Campo normalizado | Observação |
+|---|---|---|
+| `N° do imóvel` | `id_imovel` | ID único da Caixa (ex: `8787708470452`) |
+| `UF` | `estado` | Sigla do estado |
+| `Cidade` | `cidade` | |
+| `Bairro` | `bairro` | |
+| `Endereço` | `endereco` | |
+| `Preço` | `valor_minimo` | Valor mínimo de venda (≠ avaliação) |
+| `Valor de avaliação` | `valor_avaliacao` | |
+| `Desconto` | `desconto_pct` | Percentual como string com `%` |
+| `Financiamento` | `financiamento` | `"Sim"` / `"Não"` |
+| `Descrição` | `descricao` | Texto livre com área, quartos, tipo |
+| `Modalidade de venda` | `modalidade` | `"Licitação Aberta"`, `"Venda Direta"`, etc. |
+| `Link de acesso` | `url_original` | URL da página de detalhe do imóvel |
+
+**Colunas removidas** (existiam em versões anteriores):
+- `Número Matrícula` → substituída por `N° do imóvel`
+- `Valor Mínimo de Venda` → renomeada para `Preço`
+- `Área Total` / `Área Privativa` → agora dentro da `Descrição`
+- `Tipo` / `CEP` → removidas; tipo inferido da descrição
+
+**Localização do header no CSV:**
+```
+Linha 0: (vazia)
+Linha 1: " Lista de Imóveis da Caixa;;Data de geração:;DD/MM/YYYY..."
+Linha 2: " N° do imóvel;UF;Cidade;Bairro;Endereço;Preço;..."  ← HEADER REAL
+Linha 3: (vazia)
+Linha 4+: dados
+```
+
+Para encontrar o header programaticamente:
+```python
+for i, line in enumerate(lines):
+    if line.strip().count(";") >= 4 and "Lista de Im" not in line:
+        header_idx = i
+        break
+```
+
+### 26.4. Normalização de chaves
+
+As chaves do CSV contêm `°` (grau), espaços e BOM. Normalizar antes de acessar:
+
+```python
+def normaliza_chaves(row: dict) -> dict:
+    return {
+        re.sub(r"[°\xb0﻿\s]+", " ", k).strip(): v.strip()
+        for k, v in row.items() if k
+    }
+# "N° do imóvel" → "N do imóvel" → acessar com row.get("N do imovel") etc.
+```
+
+Variações observadas da mesma coluna (encoding diferente em cada execução):
+- `"N do imovel"`, `"N do imóvel"`, `"N do Im vel"`, `"Numero do imovel"`
+- `"Pre o"`, `"Preço"`, `"Preco"`
+- `"Valor de avalia o"`, `"Valor de avaliação"`
+- `"Link de acesso"`, `"Link de Acesso"`
+
+Sempre usar `.get()` com múltiplas variações via `or`:
+```python
+id_imovel = (row.get("N do imovel") or row.get("N do imóvel") or
+             row.get("Numero do imovel") or "").strip()
+```
+
+### 26.5. URL de matrícula determinística
+
+A URL de matrícula de qualquer imóvel da Caixa pode ser construída sem visitar a página de detalhe:
+
+```
+https://venda-imoveis.caixa.gov.br/editais/matricula/{UF}/{hdnimovel}.pdf
+```
+
+O `hdnimovel` é extraído da `Link de acesso`:
+```python
+m = re.search(r"hdnimovel=(\d+)", url_detalhe, re.IGNORECASE)
+hdnimovel = m.group(1) if m else id_imovel
+matricula_url = f"https://venda-imoveis.caixa.gov.br/editais/matricula/{uf}/{hdnimovel}.pdf"
+```
+
+O edital ainda requer Playwright na página de detalhe (seção 17.3).
+
+### 26.6. Tipo de imóvel inferido da descrição
+
+O CSV não tem uma coluna de tipo estruturada — inferir da `Descrição`:
+
+```python
+_TIPO_KW = {
+    "apartamento": ["apartamento", "apto"],
+    "casa":        ["casa", "residência", "sobrado"],
+    "terreno":     ["terreno", "lote", "gleba"],
+    "comercial":   ["sala", "loja", "galpão", "garagem"],
+    "rural":       ["fazenda", "sítio", "chácara"],
+}
+
+def infer_tipo(descricao: str) -> str:
+    desc_l = descricao.lower()
+    for tipo, kws in _TIPO_KW.items():
+        if any(kw in desc_l for kw in kws):
+            return tipo
+    return "outro"
+```
+
+### 26.7. Filtro por data da 1ª praça (seção 8.1)
+
+O CSV da Caixa **não contém a data da praça** — ela só aparece na página de detalhe. Para aplicar o filtro da seção 8.1 seria necessário visitar cada detalhe (lento). Estratégia recomendada:
+
+1. Inserir todos os imóveis do CSV (sem filtro de data)
+2. Rodar `python run.py devoltaparaofuturo` após importar — esse comando desativa lotes com datas passadas
+
+### 26.8. Resultados validados (jun/2026)
+
+| Estado | Imóveis | | Estado | Imóveis |
+|---|---|---|---|---|
+| RJ | 10.493 | | PB | 872 |
+| GO | 4.571 | | MG | 838 |
+| SP | 2.932 | | BA | 795 |
+| PE | 1.504 | | PI | 762 |
+| CE | 721 | | RS | 718 |
+| RN | 730 | | PR | 619 |
+| SE | 452 | | AM | 228 |
+| PA | 218 | | MA | 145 |
+| MS | 161 | | SC | 150 |
+| MT | 135 | | AL | 111 |
+| ES | 70 | | DF | 59 |
+| RO | 24 | | TO | 22 |
+| AC | 25 | | AP | 4 |
+| RR | 4 | | **Total** | **27.363** |
+
+Tempo total: ~2 minutos para os 27 estados (4 s/estado via Playwright headless).
+
+### 26.9. Uso do script standalone
+
+```powershell
+cd "C:\Users\arthur\OneDrive\Documentos\Cursor\leilao-scraper\scraping"
+
+# Todos os estados
+python scraper_caixa.py
+
+# Estado específico
+python scraper_caixa.py --estado SP
+
+# Vários estados
+python scraper_caixa.py --estado SP RJ MG PR
+
+# Reiniciar do zero (ignora progresso anterior)
+python scraper_caixa.py --reset
+
+# Arquivo de saída customizado
+python scraper_caixa.py --saida "C:\dados\caixa_jun2026.csv"
+```
+
+**Saídas geradas:**
+- `caixa_imoveis_YYYYMMDD.csv` — planilha com todos os campos
+- `caixa_imoveis_YYYYMMDD.jsonl` — linha por imóvel em JSON
+- `caixa_progress.json` — progresso (permite retomar se interrompido)
+
+**Importar no banco após coleta:**
+```powershell
+cd "C:\Users\arthur\OneDrive\Documentos\Cursor\leilao-scraper\leilao-scraper"
+$env:PYTHONIOENCODING = "utf-8"
+
+# Via run.py (usa scraper integrado)
+python run.py scrape --fonte caixa
+
+# Ou via CSV gerado pelo script standalone
+python -m pipeline.importar_ofertas_csv --csv "C:\...\caixa_imoveis_YYYYMMDD.csv"
+```
+
+### 26.10. Checklist Caixa
+
+1. Playwright e playwright-stealth instalados: `pip install playwright playwright-stealth && playwright install chromium`
+2. Warm-up na home antes do CSV — evita bloqueio Radware.
+3. `expect_download` com `goto` dentro do `try/except` — o `"Download is starting"` é esperado.
+4. `await dl_info.value` **fora** do `async with` — funciona após o bloco.
+5. Normalizar chaves do CSV antes de acessar — caracteres especiais variam por encoding.
+6. Header real na linha 2 (índice 2) — não na 0 nem na 1.
+7. `Preço` = valor mínimo de venda; `Valor de avaliação` = avaliação.
+8. Tipo de imóvel inferido da descrição — não há coluna estruturada.
+9. URL de matrícula construída deterministicamente com `hdnimovel`.
+10. Rodar `devoltaparaofuturo` após importar para desativar lotes com datas passadas.

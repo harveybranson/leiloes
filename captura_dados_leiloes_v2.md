@@ -5,6 +5,8 @@
 > **Novidade da v2:** seção dedicada a contornar o **Cloudflare Managed Challenge / Turnstile** que bloqueia paginação (`?pag=2` em diante), com fluxo completo de sessão persistida no Playwright (seção 13).
 >
 > **Adições mai/2026 (seções 19-21):** scraping do diretório BomValor (113 leiloeiros, session limit, mapeamento de colunas), armadilhas no Windows (Python via Bash → exit 127, stdout reconfigure, desync CSV/JSON, monitoramento Playwright), migration de colunas ausentes no banco, e pipeline completo de importação com sequência correta de operações.
+>
+> **Adições mai/2026 (seções 22-23):** diferenciação imóvel vs produto/veículo (`categoria_bem`, classificação em camadas) e captura de documentos para download (edital, matrícula) no scraper genérico do `leilao-scraper` — complementa a seção 17 com a implementação real em produção.
 
 ---
 
@@ -211,7 +213,8 @@ with sync_playwright() as p:
 
 ### 5.1. Leilões judiciais / extrajudiciais (imóveis, veículos)
 - Frequentemente SSR com HTML estático → scraping direto + JSON-LD funciona bem.
-- Documentos (editais, matrículas) em PDF → baixe e extraia texto com `pdfplumber` ou OCR (`pytesseract`) para PDFs escaneados.
+- Documentos (editais, matrículas) em PDF → baixe e extraia texto com `pdfplumber` ou OCR (`pytesseract`) para PDFs escaneados. Ver **seções 17 e 23** para captura de links e enrichers.
+- A mesma listagem mistura imóveis e outros bens — classifique com `categoria_bem` (**seção 22**).
 - Datas de praça/leilão, valor de avaliação e valor mínimo são campos críticos — capture-os de forma tipada.
 
 ### 5.2. Leilões de veículos (seguradoras, financeiras, pátios)
@@ -324,7 +327,8 @@ class Lote(BaseModel):
 6. Se houver **lances ao vivo**, conecte ao WebSocket.
 7. **Valide e tipe** cada campo com `pydantic`.
 8. **Armazene** com deduplicação e histórico.
-9. **Respeite** rate limits, robots.txt e os termos do site.
+9. **Classifique** imóvel vs produto (`categoria_bem`, seção 22) e capture documentos na página de detalhe (seção 23).
+10. **Respeite** rate limits, robots.txt e os termos do site.
 
 ---
 
@@ -1175,3 +1179,365 @@ docker logs -f leilao_api
 4. Confirmar inserções: `SELECT leiloeiro, COUNT(*) FROM imoveis WHERE criado_em > NOW() - INTERVAL '1 hour' GROUP BY leiloeiro`.
 5. Classificar → deduplicar → desativar encerrados → geocodificar (nesta ordem).
 6. Verificar total ativo: `SELECT COUNT(*) FROM imoveis WHERE ativo=true`.
+
+---
+
+## 22. Diferenciar imóveis de outros produtos (veículos, máquinas, mercadorias)
+
+Em leilões judiciais e extrajudiciais, a mesma listagem mistura **imóveis**, **veículos**, **equipamentos** e **mercadorias**. Tratar tudo como imóvel polui busca, mapa, filtros e score de oportunidade.
+
+### 22.1. Problema do modelo atual (armadilhas comuns)
+
+| Abordagem frágil | Por que falha |
+|---|---|
+| `tipo_imovel = outro` como “não-imóvel” | `OUTRO` também significa imóvel de tipo desconhecido |
+| Corte por preço (ex.: &lt; R$ 20.000 = produto) | Terreno barato vira produto; veículo caro vira imóvel |
+| Palavras-chave só no título | “Galpão com 2 caminhões” é imóvel, não veículo |
+| URL `/lote/` genérica | Lote pode ser qualquer bem penhorado |
+
+**Implementação atual no `leilao-scraper`:** a API filtra imóveis por `tipo_imovel ∈ {apartamento, casa, terreno…}` **e** exclui itens com `valor_minimo < 20_000`; o botão “Produtos” no frontend inverte esse filtro. Funciona como heurística rápida, mas não é confiável o suficiente para escalar.
+
+### 22.2. Solução recomendada: campo `categoria_bem`
+
+Separar **categoria do bem** (imóvel ou não) de **subtipo do imóvel**:
+
+```
+categoria_bem: imovel | veiculo | maquina | mercadoria | outro
+tipo_imovel:   apartamento | casa | terreno | …   (só quando categoria_bem = imovel)
+```
+
+| Campo | Uso |
+|---|---|
+| `categoria_bem` | Filtros do site, mapa, SEO, exclusão de produtos |
+| `tipo_imovel` | Subtipo habitacional/comercial/rural |
+| `classificacao_confianca` | `alta` \| `media` \| `baixa` — fila de revisão manual |
+
+**Regra:** filtros do site e mapa usam `categoria_bem = imovel`, nunca preço ou `OUTRO`.
+
+### 22.3. Classificação em cascata (ordem de confiança)
+
+```
+1. Categoria do site        → /imoveis/, API categoria=Imóveis, menu “Imóveis”
+2. JSON-LD @type            → RealEstateListing vs Product / Vehicle
+3. URL do lote              → /imovel/, /veiculo/, /imoveis/ (lote é ambíguo)
+4. Campos estruturados      → area_m2, quartos, matrícula vs renavam, placa, chassi
+5. Regex de keywords        → pipeline/separar_produtos.py
+6. Preço                    → sinal fraco apenas (nunca critério único)
+7. LLM fallback             → extrator_llm.py retorna {"_nao_imovel": true}
+```
+
+**JSON-LD (já usado em `scraping/leiloeiros.py` e `extrator_generico.py`):**
+
+```python
+_TIPOS_IMOVEL  = {"RealEstateListing", "Residence", "House", "Apartment", ...}
+_TIPOS_PRODUTO = {"Product", "IndividualProduct", "Offer", "AggregateOffer"}
+
+def rank(node):
+    t = set([node["@type"]] if isinstance(node.get("@type"), str) else node.get("@type") or [])
+    if t & _TIPOS_IMOVEL:   return 0   # prioridade máxima
+    if t & _TIPOS_PRODUTO: return 1
+    return 2
+```
+
+**Keywords de produto (pipeline `separar_produtos.py`):** moto, veículo, caminhão, renavam, placa, escavadeira, notebook, sucata, mercadoria…
+
+**Keywords de imóvel:** apartamento, terreno, matrícula, m², rua, edificação, gleba, hectare…
+
+**Regra de desempate:** se o **título** contém marcador claro de imóvel, não reclassificar como produto mesmo com keywords ambíguas no corpo.
+
+### 22.4. Quando classificar
+
+| Momento | Ação |
+|---|---|
+| **Ingestão (scrape/import)** | Definir `categoria_bem` com sinais 1–4 |
+| **Pós-import (`separar-produtos`)** | Corrigir erros com keywords + preço fraco |
+| **Classificador (`classificar`)** | Score/risco só para `categoria_bem = imovel` |
+
+```bash
+python run.py separar-produtos   # reclassifica OUTRO ↔ imóvel real
+python run.py classificar --limite 5000
+```
+
+### 22.5. Frontend e API
+
+- Modo padrão: `categoria_bem=imovel` (substituir filtro por preço)
+- Botão “Produtos”: `categoria_bem != imovel`
+- Ocultar filtro “Tipo de imóvel” no modo produtos
+- Mapa / Street View / preço-m²: apenas imóveis
+- Cards distintos: imóvel (m², quartos) vs produto (marca/modelo, sem geocoding)
+
+### 22.6. Métricas de qualidade
+
+Monitorar por fonte:
+
+```sql
+SELECT f.nome,
+       COUNT(*) FILTER (WHERE tipo_imovel = 'outro') AS outros,
+       COUNT(*) FILTER (WHERE valor_minimo < 20000) AS abaixo_20k
+FROM imoveis i JOIN fontes f ON f.id = i.fonte_id
+WHERE i.ativo = true
+GROUP BY f.nome ORDER BY outros DESC;
+```
+
+Fontes com alto % de reclassificação em `separar-produtos` precisam de parser dedicado ou filtro de categoria na coleta.
+
+### 22.7. Checklist imóvel vs produto
+
+1. Na coleta, filtrar por seção/categoria do site quando existir (`categoria=imoveis`, `/imoveis/`).
+2. Gravar `categoria_bem` na importação — não depender só do pós-processamento.
+3. Manter `separar-produtos` como correção, não como única linha de defesa.
+4. Não usar preço como critério único.
+5. Separar `OUTRO` (tipo desconhecido) de produto (categoria diferente).
+6. Expor `classificacao_confianca` para revisão manual dos casos ambíguos.
+
+---
+
+## 23. Captura de documentos para download — edital, matrícula e PDFs (leilao-scraper)
+
+Complementa a **seção 17** (enricher dedicado com `edital_url` / `matricula_url`). No projeto **`leilao-scraper`**, a implementação em produção usa um **array JSON unificado** no campo `arquivos`, populado automaticamente pelo scraper genérico na visita à página de detalhe.
+
+### 23.1. Modelo de dados (implementação atual)
+
+| Camada | Campo | Formato |
+|---|---|---|
+| Scraper (`ImovelRaw`) | `arquivos` | `list[dict]` |
+| Banco (`imoveis`) | `arquivos` | TEXT — JSON serializado |
+| API / frontend | `arquivos` | `[{tipo, url, nome}]` |
+
+Tipos reconhecidos: `edital`, `matricula`, `laudo`, `certidao`, `memorial`, `processo`, `pdf`, `documento`.
+
+```python
+# scrapers/base.py
+arquivos: list[dict] = field(default_factory=list)  # [{tipo, url, nome}]
+```
+
+Migration (se coluna ausente):
+
+```bash
+python migrar_arquivos.py
+# ou: ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS arquivos TEXT;
+```
+
+O normalizer **preserva** `arquivos` existente se um novo scrape vier vazio (`PRESERVAR_SE_NULL`).
+
+### 23.2. Fluxo no scraper genérico
+
+```
+Listagem de lotes
+    → URL do lote (url_original)
+    → _enriquecer_com_pagina()  [visita página individual]
+    → _extrair_arquivos(soup, page_url)
+    → salvar_imoveis() → coluna arquivos
+    → frontend: seção "Documentos" no detalhe
+```
+
+O enriquecimento dispara quando faltam dados **ou** quando `arquivos` está vazio:
+
+```python
+precisa = (
+    not im.data_primeiro_leilao or
+    not im.endereco_completo or
+    not im.descricao or
+    not im.arquivos              # documentos (edital/matrícula)
+)
+```
+
+**Comando:**
+
+```powershell
+cd "C:\Users\arthur\OneDrive\Documentos\Cursor\leilao-scraper\leilao-scraper"
+python run.py scrape-lista --site https://exemplo-leiloes.com.br
+python run.py scrape-csv caminho\sites.csv
+```
+
+Sites com JS pesado: Playwright é acionado automaticamente quando `_is_js_heavy(html)`.
+
+### 23.3. Lógica de `_extrair_arquivos`
+
+Arquivo: `scrapers/leiloeiros/generic_scraper.py`
+
+Para cada `<a href>` da página de detalhe:
+
+1. Ignora `#`, `javascript:`, `mailto:`, `tel:`
+2. Resolve URL relativa com `urljoin(page_url, href)`
+3. Aceita se **PDF** (`.pdf`) **ou** texto/href contém keyword:
+   - `edital`, `matr[íi]cula`, `laudo`, `avaliação`, `certidão`, `memorial`, `processo`, `penhora`…
+4. Classifica o `tipo` pela keyword dominante
+5. Limite: 15 documentos por lote
+
+```python
+RE_PDF_EXT = re.compile(r'\.pdf(\?[^"\']*)?$', re.IGNORECASE)
+RE_DOC_KW  = re.compile(
+    r'edital|matr[íi]cula|laudo|avalia[cç][ãa]o|certid[ãa]o|memorial|'
+    r'escritura|penhora|registro|processo',
+    re.IGNORECASE,
+)
+```
+
+### 23.4. Onde os sites guardam edital e matrícula
+
+| Padrão | Onde procurar | Cobertura atual |
+|---|---|---|
+| Link direto `<a href="...edital.pdf">` | Seção “Documentos”, “Anexos” | ✅ `_extrair_arquivos` |
+| Botão JS `onclick="ExibeDoc('/path.pdf')"` | Caixa, alguns judiciais | ❌ precisa regex no HTML bruto |
+| `<iframe src="...pdf">` | Tribunais, visualizadores embutidos | ❌ estender extrator |
+| API interna `/api/lote/{id}/anexos` | Milan, Frazão, Superbid | ❌ parser por site |
+| Edital na **página do leilão** (não do lote) | 1 edital para N lotes | ❌ scrape da página pai |
+| `data-url` / `data-href` em botões | SPAs React/Next.js | ❌ estender extrator |
+| Download via POST autenticado | Área logada | ❌ sessão + replay Network |
+
+### 23.5. Extensões recomendadas do extrator genérico
+
+**A) iframes com PDF**
+
+```python
+for iframe in soup.find_all("iframe", src=True):
+    src = urljoin(page_url, iframe["src"])
+    if RE_PDF_EXT.search(src) or RE_DOC_KW.search(src):
+        arquivos.append({"tipo": "pdf", "url": src, "nome": "Documento"})
+```
+
+**B) onclick / ExibeDoc (padrão Caixa)**
+
+```python
+for path in re.findall(r"ExibeDoc\(['\"]([^'\"]+)['\"]\)", html):
+    url = urljoin(base, path)
+    tipo = "matricula" if "matricula" in path.lower() else "edital"
+    arquivos.append({"tipo": tipo, "url": url, "nome": tipo.capitalize()})
+```
+
+**C) atributos data-* em botões SPA**
+
+```python
+for el in soup.find_all(attrs={"data-url": True}):
+    url = urljoin(page_url, el["data-url"])
+    ...
+```
+
+**D) Playwright quando link só aparece após render**
+
+```python
+await page.wait_for_selector('a[href*=".pdf"], a:has-text("Edital")', timeout=8000)
+links = await page.eval_on_selector_all(
+    'a[href*=".pdf"], a[href*="edital"], a[href*="matricula"]',
+    "els => els.map(a => ({href: a.href, text: a.innerText.trim()}))"
+)
+```
+
+**E) Interceptar API no Playwright**
+
+```python
+async def handle_response(response):
+    if "application/json" in response.headers.get("content-type", ""):
+        if "anexo" in response.url or "documento" in response.url:
+            data = await response.json()
+            # extrair URLs de PDF
+page.on("response", handle_response)
+```
+
+### 23.6. Guardar link vs baixar o arquivo
+
+| Estratégia | Prós | Contras |
+|---|---|---|
+| **Só URL** (atual) | Simples, sem storage, link sempre do site oficial | Link expira; depende do site estar no ar |
+| **Download local/S3** | Disponível offline; sobrevive a páginas removidas | Storage, copyright, links com cookie/sessão |
+
+**Download opcional (pipeline futuro):**
+
+```python
+async def baixar_documento(client, doc: dict, destino: Path) -> Path:
+    resp = await client.get(doc["url"], follow_redirects=True)
+    resp.raise_for_status()
+    if b"%PDF" not in resp.content[:4]:
+        raise ValueError("Não é PDF")
+    path = destino / f"{doc['tipo']}_{hash(doc['url'])}.pdf"
+    path.write_bytes(resp.content)
+    return path
+```
+
+JSON estendido sugerido:
+
+```json
+{
+  "tipo": "edital",
+  "url": "https://site.com/edital.pdf",
+  "nome": "Edital do Leilão",
+  "url_local": "/storage/docs/123/edital.pdf",
+  "baixado_em": "2026-05-31T12:00:00"
+}
+```
+
+**Cuidados:** rate limit, PDFs grandes (limite ex.: 20 MB), URLs POST-only, cookies de sessão.
+
+### 23.7. Parser dedicado por leiloeiro (quando genérico não basta)
+
+Para sites com API previsível, criar extrator no scraper específico:
+
+```python
+async def _extrair_documentos_frazao(self, lote_id: str) -> list[dict]:
+    resp = await self._get(f"{API}/lote/{lote_id}/anexos")
+    return [
+        {
+            "tipo": "edital" if "edital" in a["nome"].lower() else "matricula",
+            "url": a["url"],
+            "nome": a["nome"],
+        }
+        for a in resp.json()
+    ]
+```
+
+Registrar em mapa `FONTE_EXTRACTORS` (padrão descrito na seção 17.2).
+
+### 23.8. Exibição no frontend
+
+Seção **Documentos** em `frontend/index.html` — parse de `im.arquivos`:
+
+```javascript
+const docs = JSON.parse(im.arquivos || '[]');
+// ícones: edital 📋, matricula 📄, laudo 🔍, certidao 📜 ...
+docs.map(d => `<a href="${d.url}" target="_blank">${d.nome}</a>`)
+```
+
+### 23.9. Diagnóstico quando documentos não aparecem
+
+| Sintoma | Causa provável | Ação |
+|---|---|---|
+| `arquivos` sempre null | Página não visitada no enrich | Confirmar `_enriquecer_com_pagina` |
+| Só edital, sem matrícula | Matrícula em iframe/JS | Playwright + extensões 23.5 |
+| Funcionava, parou | `arquivos` preservado de scrape antigo vazio | `--reset` ou forçar re-enrich |
+| 403 no link | Bot protection (Caixa/Radware) | Playwright na mesma sessão (seção 17.3) |
+| Edital no leilão, não no lote | Escopo errado | Scrape URL do evento/leilão pai |
+
+**Query de cobertura:**
+
+```sql
+SELECT f.nome,
+       COUNT(*) AS total,
+       COUNT(*) FILTER (WHERE arquivos IS NOT NULL AND arquivos != '[]') AS com_docs
+FROM imoveis i
+JOIN fontes f ON f.id = i.fonte_id
+WHERE i.ativo = true
+GROUP BY f.nome
+ORDER BY com_docs::float / NULLIF(total, 0) ASC;
+```
+
+### 23.10. Checklist captura de documentos
+
+1. Confirmar coluna `arquivos` no banco (`migrar_arquivos.py`).
+2. Inspecionar **Network → filtro pdf** em um lote ativo antes de codar.
+3. Se HTML estático → `_extrair_arquivos` costuma bastar.
+4. Se SPA/API → parser dedicado ou interceptação Playwright.
+5. Se `onclick`/`ExibeDoc` → regex no HTML bruto, não confiar só em `href`.
+6. Rodar enrich logo após coleta (páginas expiram — ver Caixa, seção 17.3).
+7. Não assumir URL de edital previsível; matrícula Caixa é exceção (`/editais/matricula/{UF}/{id}.pdf`).
+8. Decidir cedo: **só links** (atual) vs **download para storage** (23.6).
+9. Uma instância por vez em enrichers com Playwright (seção 17.5).
+
+### 23.11. Relação com a seção 17
+
+| Aspecto | Seção 17 (enricher dedicado) | Seção 23 (scraper genérico) |
+|---|---|---|
+| Campos | `edital_url`, `matricula_url`, `documentos` | `arquivos` (JSON unificado) |
+| Quando roda | Comando `enriquecer-documentos` | Durante `scrape-lista` / `scrape-csv` |
+| Melhor para | Caixa, fontes com bot protection | Leiloeiros com links `<a href>` visíveis |
+| Evolução | Unificar em `arquivos` ou migrar para colunas dedicadas | Estender `_extrair_arquivos` + parsers por site |

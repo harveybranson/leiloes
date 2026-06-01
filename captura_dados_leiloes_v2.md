@@ -7,6 +7,10 @@
 > **Adições mai/2026 (seções 19-21):** scraping do diretório BomValor (113 leiloeiros, session limit, mapeamento de colunas), armadilhas no Windows (Python via Bash → exit 127, stdout reconfigure, desync CSV/JSON, monitoramento Playwright), migration de colunas ausentes no banco, e pipeline completo de importação com sequência correta de operações.
 >
 > **Adições mai/2026 (seções 22-23):** diferenciação imóvel vs produto/veículo (`categoria_bem`, classificação em camadas) e captura de documentos para download (edital, matrícula) no scraper genérico do `leilao-scraper` — complementa a seção 17 com a implementação real em produção.
+>
+> **Adições jun/2026 (seções 24-25):** pipeline end-to-end completo — de site único, lista `.txt`, planilha `.csv`/`.xlsx` até os cards do sistema com documentos (edital/matrícula), deduplicação global, inserção de únicos e exportação automática de CSV datado para a pasta `/csv`; sincronização obrigatória de imóveis com `/admin` e de novos leiloeiros com `/admin` e aba **Leiloeiros** do frontend.
+>
+> **Adições jun/2026 (`baixar-docs`):** implementação do `DocumentoDownloader` — após o scraping, **obrigatório** rodar `python run.py baixar-docs --limite 200` para baixar os PDFs (edital, matrícula, laudos) para disco local em `storage/docs/`, com fallback automático via FlareSolverr para sites com Cloudflare. O comando atualiza o campo `arquivos` no banco com `path_local` e `hash_md5`. Integrado no `pipeline`, Celery beat (a cada hora) e endpoint `GET /imoveis/{id}/documentos/{idx}/download` na API.
 
 ---
 
@@ -328,7 +332,8 @@ class Lote(BaseModel):
 7. **Valide e tipe** cada campo com `pydantic`.
 8. **Armazene** com deduplicação e histórico.
 9. **Classifique** imóvel vs produto (`categoria_bem`, seção 22) e capture documentos na página de detalhe (seção 23).
-10. **Respeite** rate limits, robots.txt e os termos do site.
+10. **Baixe os documentos** para disco: `python run.py baixar-docs --limite 200` (obrigatório após qualquer scraping — ver seção 23.6).
+11. **Respeite** rate limits, robots.txt e os termos do site.
 
 ---
 
@@ -1348,6 +1353,9 @@ precisa = (
 cd "C:\Users\arthur\OneDrive\Documentos\Cursor\leilao-scraper\leilao-scraper"
 python run.py scrape-lista --site https://exemplo-leiloes.com.br
 python run.py scrape-csv caminho\sites.csv
+
+# OBRIGATÓRIO após o scraping — baixa PDFs para disco local
+python run.py baixar-docs --limite 200
 ```
 
 Sites com JS pesado: Playwright é acionado automaticamente quando `_is_js_heavy(html)`.
@@ -1442,32 +1450,38 @@ page.on("response", handle_response)
 | **Só URL** (atual) | Simples, sem storage, link sempre do site oficial | Link expira; depende do site estar no ar |
 | **Download local/S3** | Disponível offline; sobrevive a páginas removidas | Storage, copyright, links com cookie/sessão |
 
-**Download opcional (pipeline futuro):**
+**Download implementado — `pipeline/document_downloader.py`:**
 
-```python
-async def baixar_documento(client, doc: dict, destino: Path) -> Path:
-    resp = await client.get(doc["url"], follow_redirects=True)
-    resp.raise_for_status()
-    if b"%PDF" not in resp.content[:4]:
-        raise ValueError("Não é PDF")
-    path = destino / f"{doc['tipo']}_{hash(doc['url'])}.pdf"
-    path.write_bytes(resp.content)
-    return path
+```powershell
+# Obrigatório após qualquer scraping
+python run.py baixar-docs --limite 200
+
+# Opções adicionais
+python run.py baixar-docs --limite 500 --storage "D:\docs_leilao"
 ```
 
-JSON estendido sugerido:
+O `DocumentoDownloader` (implementado em jun/2026):
+- **Camada 1:** download direto via `httpx`, validação por magic bytes (`%PDF`, `PK`, OLE2)
+- **Camada 2:** fallback automático via FlareSolverr (`http://localhost:8191`) para sites com Cloudflare
+- **Armazenamento:** `storage/docs/{fonte}/{id_externo}/{tipo}_{hash8}.pdf`
+- **Banco:** campo `arquivos` atualizado com `path_local`, `hash_md5`, `baixado: true/false`
+- **Celery:** task `baixar_documentos` agendada automaticamente a cada hora (`:45`)
+- **API:** `GET /imoveis/{id}/documentos/{idx}/download` — serve o arquivo local ou redireciona para URL original se ainda não baixado
+
+JSON resultante no campo `arquivos`:
 
 ```json
 {
   "tipo": "edital",
   "url": "https://site.com/edital.pdf",
   "nome": "Edital do Leilão",
-  "url_local": "/storage/docs/123/edital.pdf",
-  "baixado_em": "2026-05-31T12:00:00"
+  "path_local": "storage/docs/mega_leiloes/abc123/edital_a1b2c3d4.pdf",
+  "hash_md5": "a1b2c3d4e5f6...",
+  "baixado": true
 }
 ```
 
-**Cuidados:** rate limit, PDFs grandes (limite ex.: 20 MB), URLs POST-only, cookies de sessão.
+**Cuidados:** rate limit, PDFs grandes (limite ex.: 20 MB), URLs POST-only, cookies de sessão. URLs temporárias (S3 pre-signed) expiram em horas — rodar `baixar-docs` logo após o scraping.
 
 ### 23.7. Parser dedicado por leiloeiro (quando genérico não basta)
 
@@ -1541,3 +1555,622 @@ ORDER BY com_docs::float / NULLIF(total, 0) ASC;
 | Quando roda | Comando `enriquecer-documentos` | Durante `scrape-lista` / `scrape-csv` |
 | Melhor para | Caixa, fontes com bot protection | Leiloeiros com links `<a href>` visíveis |
 | Evolução | Unificar em `arquivos` ou migrar para colunas dedicadas | Estender `_extrair_arquivos` + parsers por site |
+
+---
+
+## 24. Pipeline completo: de site/lista até os cards do sistema
+
+Fluxo end-to-end para scraping de um site isolado ou de uma lista/planilha de sites, com extração completa de dados (leiloeiro, descrição, preços, datas, documentos), deduplicação global, inserção no banco e exportação CSV para `/csv`.
+
+### 24.1. Entradas suportadas
+
+| Entrada | Formato | Comando |
+|---|---|---|
+| URL única | `https://leiloeiro.com.br` | `python run.py scrape-lista --site URL` |
+| Lista em arquivo `.txt` | Uma URL por linha | `python run.py scrape-lista --arquivo sites.txt` |
+| Planilha `.csv` | Coluna `site` ou `url` | `python run.py scrape-csv planilha.csv` |
+| Planilha `.xlsx` | Coluna `site` ou `url` | Converter para CSV primeiro (ver 24.2) |
+
+### 24.2. Converter planilha Excel para CSV antes de scraping
+
+```powershell
+python -c "
+import pandas as pd
+df = pd.read_excel('sites.xlsx')
+df.to_csv('sites.csv', index=False, encoding='utf-8')
+print(df.columns.tolist())   # confirmar nome da coluna de URL
+print(f'{len(df)} sites')
+"
+```
+
+Se a coluna de URL não se chamar `site` ou `url`, renomeie:
+
+```powershell
+python -c "
+import pandas as pd
+df = pd.read_excel('sites.xlsx')
+df = df.rename(columns={'Link': 'site', 'Endereço': 'site'})  # ajustar ao nome real
+df.to_csv('sites.csv', index=False, encoding='utf-8')
+"
+```
+
+### 24.3. Dados extraídos por imóvel
+
+O scraper genérico coleta — em cada lote visitado — os seguintes campos:
+
+| Campo | Descrição |
+|---|---|
+| `leiloeiro` | Nome ou domínio do leiloeiro |
+| `titulo` | Título completo do lote |
+| `descricao` | Descrição detalhada do imóvel |
+| `cidade` / `estado` | Localização |
+| `endereco_completo` | Endereço quando disponível |
+| `tipo_imovel` | apartamento, casa, terreno, etc. |
+| `area_m2` | Área útil/total em m² |
+| `valor_minimo` | Valor mínimo de arrematação (1ª praça) |
+| `valor_avaliacao` | Valor de avaliação do imóvel |
+| `desconto_pct` | Desconto calculado: `(1 - minimo/avaliacao) * 100` |
+| `data_primeiro_leilao` | Data/hora da 1ª praça |
+| `data_segundo_leilao` | Data/hora da 2ª praça (quando houver) |
+| `url_original` | URL do lote no site do leiloeiro |
+| `imagem_principal` | URL da foto principal |
+| `arquivos` | JSON: `[{tipo, url, nome}]` — edital, matrícula, laudos |
+| `latitude` / `longitude` | Coordenadas para o mapa (geocodificadas depois) |
+
+### 24.4. Campos de documentos (edital e matrícula)
+
+O enriquecimento automático ocorre durante o scraping (`_enriquecer_com_pagina`). Para cada lote, o scraper visita a página individual e extrai links de documentos:
+
+```python
+# Exemplo de saída do campo arquivos:
+[
+  {"tipo": "edital",    "url": "https://site.com/edital.pdf",    "nome": "Edital do Leilão"},
+  {"tipo": "matricula", "url": "https://site.com/matricula.pdf", "nome": "Matrícula"},
+  {"tipo": "laudo",     "url": "https://site.com/laudo.pdf",     "nome": "Laudo de Avaliação"}
+]
+```
+
+Se o scraping primário não capturou documentos, rodar o enricher em seguida:
+
+```powershell
+# Dentro do container Docker (produção)
+docker exec leilao_api bash -c "cd /app && python run.py enriquecer-documentos --limite 500"
+
+# Fora do container (desenvolvimento local)
+cd "C:\Users\arthur\leilao-scraper"
+python run.py enriquecer-documentos --limite 500
+```
+
+### 24.5. Execução do scraping (passo a passo)
+
+```powershell
+# ── Preparação ──────────────────────────────────────────────────────────────
+cd "C:\Users\arthur\leilao-scraper"
+$env:DATABASE_URL_SYNC = "postgresql://leilao:leilao123@localhost:5432/leilao_db"
+
+# ── Opção 1: site único ─────────────────────────────────────────────────────
+python run.py scrape-lista --site https://www.megaleiloes.com.br
+
+# ── Opção 2: arquivo .txt com lista de URLs ─────────────────────────────────
+python run.py scrape-lista --arquivo sites.txt
+
+# ── Opção 3: planilha .csv (coluna "site") ──────────────────────────────────
+python run.py scrape-csv planilha.csv
+
+# ── Opção 4: todas as fontes cadastradas no banco ───────────────────────────
+python run.py scrape-todos --limite-por-fonte 500
+```
+
+Progresso salvo automaticamente em `scraper_progress.json` — se interrompido, retoma de onde parou.
+
+### 24.6. Verificação de duplicatas em todo o sistema
+
+A deduplicação compara **novos lotes** contra **tudo que já existe no banco** usando dois critérios em cascata:
+
+```
+1. URL exata (url_original)          → duplicata certa
+2. Título + cidade + estado + preço  → duplicata provável (fuzzy)
+```
+
+```powershell
+# Deduplicar todo o banco (marca campo duplicado=true nos repetidos)
+python run.py deduplicar
+
+# Ver relatório de duplicatas por fonte antes de inserir
+python run.py deduplicar --dry-run --verbose
+```
+
+Saída do `--dry-run`:
+
+```
+Fontes com mais duplicatas:
+  mega_leiloes:    312 únicos,  47 duplicados (13%)
+  grupo_lance:     289 únicos,  17 duplicados  (6%)
+  central_sul:     339 únicos,   2 duplicados  (1%)
+Total: 940 únicos, 66 duplicados
+```
+
+A deduplicação **não apaga** — apenas marca `duplicado=true`. O campo pode ser revisado manualmente quando necessário.
+
+### 24.7. Inserção apenas dos imóveis únicos
+
+Após a deduplicação, somente imóveis com `duplicado=false` ficam visíveis na API e nos cards:
+
+```python
+# Filtro padrão na API (api/routers/imoveis.py)
+query = query.filter(
+    Imovel.ativo == True,
+    Imovel.duplicado == False,
+    Imovel.categoria_bem == 'imovel',
+)
+```
+
+Para forçar reprocessamento de possíveis falsos-positivos:
+
+```powershell
+# Reabrir para revisão imóveis marcados como duplicados de uma fonte
+python run.py deduplicar --reset-fonte mega_leiloes
+```
+
+### 24.8. Transportar documentos para os cards
+
+Os documentos ficam disponíveis nos cards automaticamente quando `arquivos` está preenchido. O frontend lê o campo JSON e renderiza badges e links:
+
+**Card de listagem** — badges clicáveis (não propagam o clique para o detalhe):
+```javascript
+const arquivos = JSON.parse(im.arquivos || '[]');
+const edital    = arquivos.find(a => a.tipo === 'edital');
+const matricula = arquivos.find(a => a.tipo === 'matricula');
+
+// Badges inline no card
+${edital    ? `<a href="${edital.url}"    target="_blank" onclick="event.stopPropagation()">📋 Edital</a>`    : ''}
+${matricula ? `<a href="${matricula.url}" target="_blank" onclick="event.stopPropagation()">📄 Matrícula</a>` : ''}
+```
+
+**Detalhe do imóvel** — seção completa com todos os documentos:
+```javascript
+const docs = JSON.parse(im.arquivos || '[]');
+if (docs.length) {
+  const icones = { edital:'📋', matricula:'📄', laudo:'🔍', certidao:'📜', pdf:'📁' };
+  html += `<div class="doc-section"><h4>📁 Documentos</h4>` +
+    docs.map(d =>
+      `<a href="${d.url}" target="_blank" class="doc-badge">
+         ${icones[d.tipo]||'📁'} ${d.nome || d.tipo}
+       </a>`
+    ).join('') + `</div>`;
+}
+```
+
+### 24.9. Exportar resultado para CSV em /csv
+
+Após a inserção e deduplicação, gerar o arquivo CSV dos imóveis únicos e salvá-lo em `/csv`:
+
+```powershell
+# Criar pasta /csv se não existir
+New-Item -ItemType Directory -Force -Path "C:\Users\arthur\leilao-scraper\csv"
+
+# Exportar imóveis únicos e ativos
+python -c "
+import os, csv, json
+from datetime import datetime
+from sqlalchemy import create_engine, text
+
+engine = create_engine(os.environ['DATABASE_URL_SYNC'])
+hoje = datetime.now().strftime('%Y%m%d_%H%M')
+caminho = fr'C:\Users\arthur\leilao-scraper\csv\imoveis_{hoje}.csv'
+
+campos = [
+    'id','leiloeiro','titulo','descricao','cidade','estado',
+    'tipo_imovel','area_m2','valor_minimo','valor_avaliacao','desconto_pct',
+    'data_primeiro_leilao','data_segundo_leilao',
+    'url_original','imagem_principal','arquivos',
+    'latitude','longitude','score_oportunidade','criado_em'
+]
+
+with engine.connect() as conn:
+    rows = conn.execute(text(
+        f'SELECT {chr(44).join(campos)} FROM imoveis '
+        'WHERE ativo=true AND duplicado=false AND categoria_bem=\'imovel\' '
+        'ORDER BY score_oportunidade DESC NULLS LAST'
+    ))
+    with open(caminho, 'w', newline='', encoding='utf-8-sig') as f:
+        w = csv.writer(f)
+        w.writerow(campos)
+        w.writerows(rows)
+    total = rows.rowcount
+
+print(f'{total} imóveis exportados → {caminho}')
+"
+```
+
+O sufixo `-sig` no encoding garante que o Excel abra o CSV com acentos corretamente.
+
+### 24.10. Pipeline completo em um único bloco (copiar e executar)
+
+```powershell
+cd "C:\Users\arthur\leilao-scraper"
+$env:DATABASE_URL_SYNC = "postgresql://leilao:leilao123@localhost:5432/leilao_db"
+$SITE = "https://www.megaleiloes.com.br"   # ou --arquivo sites.txt / --csv planilha.csv
+
+# 1. Scraping + enriquecimento automático de documentos
+python run.py scrape-lista --site $SITE
+
+# 2. Enriquecer documentos que o scraper não pegou
+python run.py enriquecer-documentos --limite 500
+
+# 3. *** OBRIGATÓRIO *** Baixar PDFs para disco (edital, matrícula, laudos)
+python run.py baixar-docs --limite 500
+
+# 4. Classificar (score_oportunidade, tipo_imovel, categoria_bem)
+python run.py classificar --limite 5000
+
+# 5. Normalizar cidades
+python run.py normalizar-cidades
+
+# 6. Deduplicar (marca duplicado=true nos repetidos)
+python run.py deduplicar
+
+# 7. Desativar leilões encerrados
+python run.py devoltaparaofuturo
+
+# 8. Geocodificar novos imóveis
+python run.py geocodificar --limite 500
+
+# 9. Exportar CSV com únicos para /csv
+$hoje = Get-Date -Format "yyyyMMdd_HHmm"
+python -c "
+import os, csv
+from sqlalchemy import create_engine, text
+engine = create_engine(os.environ['DATABASE_URL_SYNC'])
+campos = ['id','leiloeiro','titulo','cidade','estado','tipo_imovel','area_m2',
+          'valor_minimo','valor_avaliacao','desconto_pct',
+          'data_primeiro_leilao','url_original','arquivos','score_oportunidade']
+with engine.connect() as conn:
+    rows = list(conn.execute(text(
+        f'SELECT {chr(44).join(campos)} FROM imoveis '
+        'WHERE ativo=true AND duplicado=false AND categoria_bem=\'imovel\' '
+        'ORDER BY score_oportunidade DESC NULLS LAST'
+    )))
+import pathlib
+pathlib.Path('csv').mkdir(exist_ok=True)
+with open(f'csv/imoveis_$hoje.csv', 'w', newline='', encoding='utf-8-sig') as f:
+    w = csv.writer(f); w.writerow(campos); w.writerows(rows)
+print(f'{len(rows)} imóveis → csv/imoveis_$hoje.csv')
+"
+```
+
+### 24.11. Verificar o que foi inserido
+
+```sql
+-- Novos imóveis da última hora por fonte
+SELECT leiloeiro, COUNT(*) AS novos,
+       COUNT(*) FILTER (WHERE duplicado=true)  AS duplicados,
+       COUNT(*) FILTER (WHERE arquivos IS NOT NULL AND arquivos != '[]') AS com_docs
+FROM imoveis
+WHERE criado_em > NOW() - INTERVAL '1 hour'
+GROUP BY leiloeiro ORDER BY novos DESC;
+
+-- Total geral do sistema
+SELECT COUNT(*) FILTER (WHERE ativo=true AND duplicado=false) AS ativos_unicos,
+       COUNT(*) FILTER (WHERE duplicado=true)                 AS duplicados,
+       COUNT(*) FILTER (WHERE arquivos IS NOT NULL AND arquivos != '[]') AS com_documentos
+FROM imoveis;
+```
+
+### 24.12. Checklist completo
+
+1. **Preparar entrada:** URL única, `.txt`, `.csv` ou `.xlsx` (converter Excel antes).
+2. **Rodar scraping:** `scrape-lista --site URL` ou `scrape-csv planilha.csv`.
+3. **Conferir dados brutos:** verificar se `titulo`, `valor_minimo`, `data_primeiro_leilao` e `arquivos` foram preenchidos.
+4. **Enriquecer documentos** caso `arquivos` esteja vazio: `enriquecer-documentos --limite 500`.
+5. **⚠️ OBRIGATÓRIO — Baixar PDFs para disco:** `baixar-docs --limite 500` (salva edital/matrícula/laudos em `storage/docs/`; atualiza `path_local` e `hash_md5` no banco).
+6. **Classificar:** `classificar --limite 5000` (gera `score_oportunidade` e `tipo_imovel`).
+7. **Deduplicar:** `deduplicar` — conferir % de duplicatas com `--dry-run` antes.
+8. **Desativar encerrados:** `devoltaparaofuturo`.
+9. **Geocodificar:** `geocodificar --limite 500`.
+10. **Sincronizar imóveis com /admin:** confirmar que todos os imóveis ativos e únicos aparecem no painel (ver seção 25.1).
+11. **Sincronizar leiloeiros novos com /admin e aba Leiloeiros:** confirmar que novos leiloeiros foram inseridos e aparecem no frontend (ver seção 25.2).
+12. **Conferir cards:** abrir `http://localhost:8000` e verificar badges de Edital/Matrícula — o link de download deve apontar para `GET /imoveis/{id}/documentos/{idx}/download`.
+13. **Exportar CSV:** script da seção 24.9 → arquivo salvo em `/csv/imoveis_YYYYMMDD_HHMM.csv`.
+
+---
+
+## 25. Sincronização com /admin e aba Leiloeiros do frontend
+
+Todo scraping deve ser seguido de sincronização: imóveis no painel `/admin` e novos leiloeiros tanto no `/admin` quanto na aba **Leiloeiros** do site público. Esse passo fecha o ciclo — dados coletados ficam visíveis e gerenciáveis para o operador.
+
+### 25.1. Sincronização de imóveis com /admin
+
+O `/admin` consome a mesma API que o frontend público (`GET /api/v1/imoveis`). Não há carga separada — os imóveis aparecem automaticamente assim que estiverem com `ativo=true` e `duplicado=false` no banco.
+
+**Verificar se os imóveis estão aparecendo no /admin:**
+
+```sql
+-- Quantos imóveis estão visíveis para o admin agora
+SELECT COUNT(*) AS visiveis_admin
+FROM imoveis
+WHERE ativo = true AND duplicado = false;
+
+-- Breakdown por fonte (útil para confirmar que o scraping novo chegou)
+SELECT leiloeiro,
+       COUNT(*)                                                    AS total,
+       COUNT(*) FILTER (WHERE criado_em > NOW() - INTERVAL '2h') AS novos_2h
+FROM imoveis
+WHERE ativo = true AND duplicado = false
+GROUP BY leiloeiro
+ORDER BY novos_2h DESC, total DESC;
+```
+
+**Se imóveis não aparecem no /admin após o pipeline:**
+
+| Sintoma | Causa provável | Ação |
+|---|---|---|
+| Imóvel existe no banco mas `ativo=false` | `devoltaparaofuturo` marcou como encerrado | Verificar `data_primeiro_leilao` — pode estar errada |
+| Imóvel existe mas `duplicado=true` | Deduplicação falso-positivo | `python run.py deduplicar --reset-fonte <fonte>` |
+| Imóvel não existe no banco | Scraping não inseriu | Verificar `scraper_progress.json` e logs |
+| Admin mostra 0 imóveis | Filtro de `categoria_bem` excluindo tudo | Confirmar `categoria_bem='imovel'` nos registros |
+
+**Forçar refresh do cache da API (se aplicável):**
+
+```powershell
+# Reiniciar o uvicorn dentro do container para limpar cache em memória
+docker exec leilao_api bash -c "kill -HUP 1"
+# ou reiniciar o container completo
+docker restart leilao_api
+```
+
+**Campos exibidos no /admin (tabela de imóveis):**
+
+| Coluna admin | Campo no banco | Observação |
+|---|---|---|
+| ID | `id` | Link para detalhe |
+| Leiloeiro | `leiloeiro` | Fonte do imóvel |
+| Título | `titulo` | Truncado a 80 chars |
+| Cidade/UF | `cidade`, `estado` | |
+| Tipo | `tipo_imovel` | |
+| Valor mín. | `valor_minimo` | Formatado em R$ |
+| Desconto | `desconto_pct` | % em relação à avaliação |
+| Score | `score_oportunidade` | 0–100 |
+| Docs | `arquivos` | Ícones 📋📄 quando preenchidos |
+| Data leilão | `data_primeiro_leilao` | |
+| Ativo | `ativo` | Toggle on/off |
+| Duplicado | `duplicado` | Badge vermelho quando true |
+
+### 25.2. Sincronização de novos leiloeiros com /admin e aba Leiloeiros
+
+Cada site scrapado implica um leiloeiro. Se o leiloeiro ainda não está cadastrado no banco (`tabela leiloeiros`), ele deve ser inserido — caso contrário não aparece na aba **Leiloeiros** do frontend nem no painel `/admin`.
+
+#### 25.2.1. Identificar leiloeiros novos após scraping
+
+```sql
+-- Leiloeiros presentes em imóveis mas sem cadastro na tabela leiloeiros
+SELECT DISTINCT i.leiloeiro
+FROM imoveis i
+LEFT JOIN leiloeiros l ON lower(l.nome) = lower(i.leiloeiro)
+                      OR l.site ILIKE '%' || split_part(i.leiloeiro, '.', 1) || '%'
+WHERE l.id IS NULL
+ORDER BY i.leiloeiro;
+```
+
+#### 25.2.2. Inserir leiloeiros novos no banco
+
+```powershell
+python -c "
+import os
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
+from database.models import Leiloeiro
+
+engine = create_engine(os.environ['DATABASE_URL_SYNC'])
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Buscar leiloeiros presentes em imóveis mas sem cadastro
+with engine.connect() as conn:
+    rows = conn.execute(text('''
+        SELECT DISTINCT i.leiloeiro,
+               MIN(i.url_original) AS url_exemplo
+        FROM imoveis i
+        LEFT JOIN leiloeiros l
+               ON lower(l.nome) = lower(i.leiloeiro)
+        WHERE l.id IS NULL
+          AND i.ativo = true
+        GROUP BY i.leiloeiro
+    ''')).fetchall()
+
+inseridos = 0
+for nome, url_exemplo in rows:
+    # Extrai domínio da URL como site
+    from urllib.parse import urlparse
+    site = ''
+    if url_exemplo:
+        p = urlparse(url_exemplo)
+        site = f'{p.scheme}://{p.netloc}' if p.netloc else ''
+    session.add(Leiloeiro(
+        nome=nome,
+        site=site or None,
+        situacao='Regular',
+    ))
+    inseridos += 1
+
+session.commit()
+print(f'{inseridos} leiloeiros inseridos')
+"
+```
+
+#### 25.2.3. Campos obrigatórios do leiloeiro no banco
+
+| Campo | Obrigatório | Descrição |
+|---|---|---|
+| `nome` | Sim | Nome completo ou domínio |
+| `site` | Recomendado | URL raiz do site (ex.: `https://megaleiloes.com.br`) |
+| `situacao` | Sim | `'Regular'` para leiloeiros ativos |
+| `uf` | Opcional | Estado de atuação principal |
+| `telefone` | Opcional | WhatsApp ou telefone de contato |
+| `logo_url` | Opcional | URL do logo para exibição no card |
+
+#### 25.2.4. Exibição na aba Leiloeiros do frontend
+
+A aba **Leiloeiros** em `http://localhost:8000` exibe todos os registros da tabela `leiloeiros` onde `situacao='Regular'`. O card de cada leiloeiro mostra:
+
+- Nome
+- Logo (quando `logo_url` preenchido)
+- Link para o site
+- Quantidade de imóveis ativos vinculados
+- Botão de contato (WhatsApp quando `telefone` preenchido)
+
+**Verificar se o leiloeiro novo aparece no frontend:**
+
+```sql
+-- Leiloeiros cadastrados com imóveis ativos
+SELECT l.nome, l.site, l.situacao,
+       COUNT(i.id) AS imoveis_ativos
+FROM leiloeiros l
+LEFT JOIN imoveis i ON lower(i.leiloeiro) = lower(l.nome)
+                   AND i.ativo = true AND i.duplicado = false
+GROUP BY l.id, l.nome, l.site, l.situacao
+ORDER BY imoveis_ativos DESC;
+```
+
+**Se o leiloeiro foi inserido mas não aparece no frontend:**
+
+| Sintoma | Causa | Ação |
+|---|---|---|
+| Leiloeiro sem imóveis no card | `leiloeiro` em `imoveis` não bate com `nome` em `leiloeiros` | Padronizar o campo `leiloeiro` na importação |
+| Leiloeiro não aparece na aba | `situacao != 'Regular'` | `UPDATE leiloeiros SET situacao='Regular' WHERE nome='...'` |
+| Aba Leiloeiros vazia | API retorna erro | Verificar `docker logs leilao_api` |
+
+#### 25.2.5. Sincronização via /admin (interface)
+
+No painel `/admin`, aba **Leiloeiros**:
+
+1. Todos os leiloeiros do banco aparecem na tabela (independente de ter imóveis).
+2. É possível editar nome, site, logo, UF, telefone e situação diretamente.
+3. Leiloeiros com `situacao='Inativo'` ficam ocultos no frontend mas visíveis no admin.
+4. O campo **"Imóveis ativos"** no admin é calculado em tempo real — atualiza automaticamente após novo scraping.
+
+#### 25.2.6. Atualizar logo e dados do leiloeiro
+
+```powershell
+python -c "
+import os
+from sqlalchemy import create_engine, text
+
+engine = create_engine(os.environ['DATABASE_URL_SYNC'])
+with engine.connect() as conn:
+    conn.execute(text('''
+        UPDATE leiloeiros SET
+            site      = :site,
+            logo_url  = :logo,
+            telefone  = :tel,
+            uf        = :uf,
+            situacao  = 'Regular'
+        WHERE lower(nome) = lower(:nome)
+    '''), {
+        'nome': 'Mega Leilões',
+        'site': 'https://www.megaleiloes.com.br',
+        'logo': 'https://www.megaleiloes.com.br/logo.png',
+        'tel':  '5511999999999',
+        'uf':   'SP',
+    })
+    conn.commit()
+print('Leiloeiro atualizado')
+"
+```
+
+### 25.3. Pipeline completo com sincronização (bloco final)
+
+Extensão do bloco da seção 24.10 com os passos de sincronização:
+
+```powershell
+cd "C:\Users\arthur\leilao-scraper"
+$env:DATABASE_URL_SYNC = "postgresql://leilao:leilao123@localhost:5432/leilao_db"
+
+# ── Scraping + enrichment ────────────────────────────────────────────────────
+python run.py scrape-lista --site $SITE
+python run.py enriquecer-documentos --limite 500
+
+# ── OBRIGATÓRIO: baixar PDFs para disco ──────────────────────────────────────
+python run.py baixar-docs --limite 500
+
+# ── Pós-processamento ────────────────────────────────────────────────────────
+python run.py classificar --limite 5000
+python run.py normalizar-cidades
+python run.py deduplicar
+python run.py devoltaparaofuturo
+python run.py geocodificar --limite 500
+
+# ── Sincronização: novos leiloeiros → banco → /admin → aba Leiloeiros ───────
+python -c "
+import os
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
+from database.models import Leiloeiro
+from urllib.parse import urlparse
+
+engine = create_engine(os.environ['DATABASE_URL_SYNC'])
+session = sessionmaker(bind=engine)()
+
+rows = engine.connect().execute(text('''
+    SELECT DISTINCT i.leiloeiro, MIN(i.url_original) AS url_ex
+    FROM imoveis i
+    LEFT JOIN leiloeiros l ON lower(l.nome) = lower(i.leiloeiro)
+    WHERE l.id IS NULL AND i.ativo = true
+    GROUP BY i.leiloeiro
+''')).fetchall()
+
+ins = 0
+for nome, url_ex in rows:
+    p = urlparse(url_ex or '')
+    site = f'{p.scheme}://{p.netloc}' if p.netloc else None
+    session.add(Leiloeiro(nome=nome, site=site, situacao='Regular'))
+    ins += 1
+session.commit()
+print(f'{ins} leiloeiro(s) novo(s) inserido(s)')
+"
+
+# ── Exportar CSV ─────────────────────────────────────────────────────────────
+$hoje = Get-Date -Format "yyyyMMdd_HHmm"
+python -c "
+import os, csv, pathlib
+from sqlalchemy import create_engine, text
+engine = create_engine(os.environ['DATABASE_URL_SYNC'])
+campos = ['id','leiloeiro','titulo','cidade','estado','tipo_imovel','area_m2',
+          'valor_minimo','valor_avaliacao','desconto_pct',
+          'data_primeiro_leilao','url_original','arquivos','score_oportunidade']
+with engine.connect() as conn:
+    rows = list(conn.execute(text(
+        f'SELECT {chr(44).join(campos)} FROM imoveis '
+        'WHERE ativo=true AND duplicado=false AND categoria_bem=\'imovel\' '
+        'ORDER BY score_oportunidade DESC NULLS LAST'
+    )))
+pathlib.Path('csv').mkdir(exist_ok=True)
+with open(f'csv/imoveis_$hoje.csv', 'w', newline='', encoding='utf-8-sig') as f:
+    w = csv.writer(f); w.writerow(campos); w.writerows(rows)
+print(f'{len(rows)} imóveis → csv/imoveis_$hoje.csv')
+"
+
+# ── Confirmar no admin ───────────────────────────────────────────────────────
+Write-Host ""
+Write-Host "Verificar em: http://localhost:8000/admin"
+Write-Host "  → Aba Imóveis : todos os ativos aparecem?"
+Write-Host "  → Aba Leiloeiros: novos leiloeiros aparecem?"
+Write-Host "  → Site público : http://localhost:8000 → aba Leiloeiros"
+```
+
+### 25.4. Checklist de sincronização
+
+1. Após o pipeline, confirmar com SQL que imóveis têm `ativo=true` e `duplicado=false`.
+2. **⚠️ OBRIGATÓRIO — Confirmar que `baixar-docs` foi executado:** verificar no banco se os registros com `arquivos` têm `path_local` preenchido:
+   ```sql
+   SELECT COUNT(*) FILTER (WHERE arquivos LIKE '%path_local%') AS com_arquivo_local,
+          COUNT(*) FILTER (WHERE arquivos IS NOT NULL)         AS total_com_arquivos
+   FROM imoveis WHERE ativo = true;
+   ```
+3. Abrir `/admin` → aba **Imóveis** — conferir que novos imóveis aparecem com score, docs e data.
+4. Rodar query da seção 25.2.1 para identificar leiloeiros sem cadastro.
+5. Inserir leiloeiros novos com `situacao='Regular'` (script da seção 25.2.2).
+6. Abrir `/admin` → aba **Leiloeiros** — confirmar que novos leiloeiros estão listados.
+7. Abrir `http://localhost:8000` → aba **Leiloeiros** — confirmar exibição pública.
+8. Completar dados do leiloeiro (site, logo, telefone) via admin ou script da seção 25.2.6.
+9. Exportar CSV final para `/csv` (seção 24.9).

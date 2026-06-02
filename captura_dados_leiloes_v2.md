@@ -8,6 +8,8 @@
 >
 > **Adições mai/2026 (seções 22-23):** diferenciação imóvel vs produto/veículo (`categoria_bem`, classificação em camadas) e captura de documentos para download (edital, matrícula) no scraper genérico do `leilao-scraper` — complementa a seção 17 com a implementação real em produção.
 >
+> **Adições jun/2026 (seção 27):** arquitetura de referência para scraper genérico de leiloeiros — princípios, seleção de ferramenta por tipo de site, camada de adaptadores por plataforma, esqueleto de código Playwright + httpx e boas práticas operacionais.
+>
 > **Adições jun/2026 (seções 24-25):** pipeline end-to-end completo — de site único, lista `.txt`, planilha `.csv`/`.xlsx` até os cards do sistema com documentos (edital/matrícula), deduplicação global, inserção de únicos e exportação automática de CSV datado para a pasta `/csv`; sincronização obrigatória de imóveis com `/admin` e de novos leiloeiros com `/admin` e aba **Leiloeiros** do frontend.
 >
 > **Adições jun/2026 (`baixar-docs`):** implementação do `DocumentoDownloader` — após o scraping, **obrigatório** rodar `python run.py baixar-docs --limite 200` para baixar os PDFs (edital, matrícula, laudos) para disco local em `storage/docs/`, com fallback automático via FlareSolverr para sites com Cloudflare. O comando atualiza o campo `arquivos` no banco com `path_local` e `hash_md5`. Integrado no `pipeline`, Celery beat (a cada hora) e endpoint `GET /imoveis/{id}/documentos/{idx}/download` na API.
@@ -2414,3 +2416,145 @@ python -m pipeline.importar_ofertas_csv --csv "C:\...\caixa_imoveis_YYYYMMDD.csv
 8. Tipo de imóvel inferido da descrição — não há coluna estruturada.
 9. URL de matrícula construída deterministicamente com `hdnimovel`.
 10. Rodar `devoltaparaofuturo` após importar para desativar lotes com datas passadas.
+
+---
+
+## 27. Arquitetura de referência para scraper genérico de leiloeiros
+
+Documentação técnica para coleta estruturada de dados de sites de leiloeiros: lotes, fotos, datas, valores e anexos (editais, matrículas, laudos).
+
+### 27.1. Princípios
+
+- **Tente o caminho mais barato primeiro.** HTTP estático → API JSON interna → Playwright. Só escale a complexidade quando o site exigir.
+- **Robustez, não força.** Retries com backoff, detecção de mudança de layout e logs cobrem mais casos de forma sustentável do que tentar burlar proteções.
+- **Respeite o site.** Cheque `robots.txt` e os Termos de Uso, aplique rate limiting e não contorne CAPTCHA / proteção anti-bot ativa. Muitos dados de leilão são públicos por obrigação legal, então raramente é preciso forçar.
+- **Login só com credenciais próprias.** Use sessões que você mesmo cadastrou; persista cookies/storage state para não relogar a cada execução.
+
+### 27.2. Escolha de ferramenta por tipo de site
+
+| Tipo de site | Ferramenta | Observação |
+|---|---|---|
+| HTML estático (servidor renderiza) | `httpx` + `selectolax`/`BeautifulSoup` | Rápido e escalável. Teste primeiro. |
+| SPA / JavaScript pesado | Playwright | Renderiza tudo, mais lento. |
+| API JSON interna | `httpx` direto no endpoint | Mais eficiente. Descubra via DevTools → Network. |
+
+> **Dica:** muitos sites de leilão carregam lotes via API JSON interna. Encontrar esse endpoint (DevTools → aba Network) permite pular HTML e Playwright e obter dados já estruturados.
+
+### 27.3. Arquitetura em camadas
+
+1. **Descoberta** — dado um link inicial, identifique a plataforma. Muitos leiloeiros usam as mesmas plataformas (Superbid, Sodré Santoro, Mega Leilões, sistemas white-label). Detectar a plataforma permite reaproveitar o mesmo extrator para vários sites.
+2. **Login** (quando necessário) — Playwright com sessão persistente.
+3. **Listagem** — pagine pelos lotes coletando URLs.
+4. **Extração por lote** — título, descrição, datas (1ª/2ª praça), valores, status.
+5. **Mídia e anexos** — baixe imagens e PDFs seguindo os links.
+
+**Camada de adaptadores:** um extrator por plataforma, selecionado por detecção de domínio/HTML. Resolve vários sites com pouco código.
+
+- **Fallback inteligente:** tenta HTTP → tenta JSON interno → cai pro Playwright só se necessário.
+- **Schema unificado:** normalize tudo (datas, valores, status) num formato único, independente da origem.
+
+### 27.4. Esqueleto de código (Playwright + httpx)
+
+```python
+from playwright.sync_api import sync_playwright
+import httpx, pathlib, time
+
+class LeilaoScraper:
+    def __init__(self, state_file="session.json"):
+        self.state_file = pathlib.Path(state_file)
+
+    def login(self, login_url, user, pwd, user_sel, pwd_sel, submit_sel):
+        with sync_playwright() as p:
+            b = p.chromium.launch(headless=False)  # headful no 1º login
+            ctx = b.new_context()
+            pg = ctx.new_page()
+            pg.goto(login_url)
+            pg.fill(user_sel, user)
+            pg.fill(pwd_sel, pwd)
+            pg.click(submit_sel)
+            pg.wait_for_load_state("networkidle")
+            ctx.storage_state(path=str(self.state_file))  # salva sessão
+            b.close()
+
+    def coletar_lote(self, url):
+        with sync_playwright() as p:
+            b = p.chromium.launch(headless=True)
+            ctx = b.new_context(
+                storage_state=str(self.state_file) if self.state_file.exists() else None
+            )
+            pg = ctx.new_page()
+            pg.goto(url, wait_until="networkidle")
+            dado = {
+                "url": url,
+                "titulo": pg.locator("h1").first.inner_text(),
+                "imagens": pg.locator("img.lote-foto").evaluate_all(
+                    "els => els.map(e => e.src)"),
+                "anexos": pg.locator("a[href$='.pdf']").evaluate_all(
+                    "els => els.map(e => e.href)"),
+            }
+            b.close()
+            return dado
+
+    def baixar(self, urls, pasta="anexos"):
+        pathlib.Path(pasta).mkdir(exist_ok=True)
+        with httpx.Client(timeout=60) as c:
+            for u in urls:
+                r = c.get(u)
+                nome = u.split("/")[-1].split("?")[0]
+                (pathlib.Path(pasta) / nome).write_bytes(r.content)
+                time.sleep(1)  # educado com o servidor
+```
+
+> Os seletores (`h1`, `img.lote-foto`, etc.) mudam por site — é aí que entra a camada de extrator por plataforma.
+
+### 27.5. Boas práticas operacionais
+
+- **Rate limiting** entre requisições (`time.sleep`) para não sobrecarregar o servidor.
+- **Retries com backoff exponencial** em falhas de rede.
+- **Persistência de sessão** para evitar logins repetidos (ver seção 4.3).
+- **Logs e detecção de mudança de layout** para manutenção contínua.
+- **Schema de saída unificado** (JSON/banco) para consumo posterior — ver modelo `ImovelRaw` em `scrapers/base.py`.
+- **Identificar a plataforma antes de codar** — muitos sites compartilham o mesmo sistema (leilaoprocore, VIP Leilões, suporteleiloes.com.br, e-leiloes). Um adaptador serve vários leiloeiros.
+
+### 27.6. Plataformas comuns identificadas (leiloeiros credenciados Caixa)
+
+| Plataforma | URL padrão de listagem | URL do lote | Exemplos |
+|---|---|---|---|
+| **leilaoprocore** | `/leiloes` → `/leilao/{slug}/lotes/lista` | `/leilao/{slug}/lote_id/{id}` | leffaleiloes.com.br, soleiloes.com.br |
+| **VIP Leilões** | `/filtro/imoveis` | `/leilao/{code}/lote/{id}` | lancecertoleiloes.com.br |
+| **e-leiloes / Stefanelli** | `/eventos` | `/eventos/leilao/{id}/{slug}/lote` | e-leiloes.com.br, stefanellileiloes.com.br |
+| **suporteleiloes.com.br** | `/oferta/leilao/imoveis/...` | `/oferta/lote/{id}` | edgarcarvalholeiloeiro.com.br |
+| **ASP.NET custom** | `/ResultadoPesquisaCategoria.aspx?Categoria=Imóveis` | `/DetalheOferta.aspx?...` | leiloeiropublico.com.br |
+| **leil.br** | Varia por leiloeiro | Varia | moacira.lel.br, hammer.lel.br |
+
+**Detecção automática de plataforma:** checar o HTML inicial por marcadores únicos antes de tentar scraping:
+
+```python
+def detectar_plataforma(html: str, url: str) -> str:
+    if "leilaoprocore" in html or "/leilao/" in html and "/lotes/lista" in html:
+        return "leilaoprocore"
+    if "vipleiloes.com.br" in html or "/filtro/imoveis" in html:
+        return "vipleiloes"
+    if "/eventos/leilao/" in html:
+        return "eleiloes"
+    if "suporteleiloes" in html or "/oferta/leilao/" in html:
+        return "suporteleiloes"
+    if "ResultadoPesquisaCategoria" in html:
+        return "aspnet_custom"
+    if ".lel.br" in url:
+        return "leilbr"
+    return "generico"
+```
+
+### 27.7. Checklist para novo site de leiloeiro
+
+1. **Identificar a plataforma** — acessar homepage e procurar marcadores no HTML.
+2. **Procurar API JSON interna** — DevTools → Network → filtrar XHR ao navegar pelos lotes.
+3. **Mapear a URL de listagem** — `/imoveis`, `/filtro/imoveis`, `/leiloes`, `/eventos`, etc.
+4. **Testar com `httpx` primeiro** — se o HTML já contém os dados, não precisa de Playwright.
+5. **Adicionar Playwright só se necessário** — conteúdo JS-pesado ou proteção anti-bot.
+6. **Capturar imagens** — URLs de `<img>` nos cards/detalhes; usar CDN URL quando disponível.
+7. **Capturar documentos** — `<a href="*.pdf">` com palavras-chave (edital, matrícula, laudo).
+8. **Normalizar campos** — datas para `datetime`, valores para `Decimal`, limpar `R$`, `.`, `,`.
+9. **Integrar ao pipeline** — usar `salvar_imoveis()` do normalizer para upsert no banco.
+10. **Registrar na tabela `fontes`** — nome do leiloeiro + URL base para rastreabilidade.

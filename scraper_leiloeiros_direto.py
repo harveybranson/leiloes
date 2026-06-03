@@ -44,15 +44,12 @@ TODAY = date.today()
 FIELDNAMES = ["id","leiloeiro","junta","site","titulo","descricao","endereco",
               "cidade","uf","lance_inicial","avaliacao","data_leilao","url","tipo","imagem"]
 
-# Serviços de e-mail — domínios descartados
+# Serviços de e-mail — apenas o NOME do domínio (sem TLD) é comparado
 EMAIL_SERVICES = {
     "gmail","hotmail","yahoo","terra","bol","uol","outlook","ig","live",
     "icloud","msn","globo","zipmail","superig","ymail","proton","gmx",
-    "tutanota","mail","hotmal","itelefonica","oabsp","compe","fsa",
-    "socorronet","r7","zap","wp","me","ibest","pop","aol","oi","vivo",
-    "adv","net","com","org","gov","edu","temp",
-    # domínios jurídicos / não-site
-    "oab","creci","trt","tjsp","tjmg","tjrj","aasp",
+    "tutanota","hotmal","ibest","pop","aol","vivo",
+    "oabsp","oab","creci","adv",
 }
 
 # ── Logger ────────────────────────────────────────────────────────────────────
@@ -94,7 +91,14 @@ def extract_email_domain(email: str) -> str | None:
     domain = m.group(1).strip()
     if not domain or len(domain) < 5: return None
     parts = domain.split(".")
-    base  = parts[-2] if len(parts) >= 2 else parts[0]
+
+    # Para domínios .br (ex: hoppeleiloes.com.br → base="hoppeleiloes")
+    # Para domínios .com (ex: alfaleiloes.com → base="alfaleiloes")
+    if parts[-1] in ("br","ar","mx","co","uk","pt") and len(parts) >= 3:
+        base = parts[-3]
+    else:
+        base = parts[-2] if len(parts) >= 2 else parts[0]
+
     if base in EMAIL_SERVICES: return None
     if len(base) < 3: return None
     return domain

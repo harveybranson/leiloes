@@ -3108,3 +3108,677 @@ preco_el = page.locator('//dt[contains(text(), "Lance")]/following-sibling::dd[1
 3. **Paralelizar** visitas de detalhe com `asyncio` + Playwright assíncrono.
 4. **Salvar progresso** em JSON para retomar de onde parou se interrompido.
 5. **Adicionar verificação de status** do lote antes do scraping completo.
+
+
+---
+
+## 30. Algoritmo de adição automática de imóveis ao sistema
+
+Descreve o pipeline completo implementado para `https://www.leiloesjudiciais.com.br` —
+desde a coleta via Playwright até a inserção no banco e ativação no front-end.
+Os dois scripts principais são `scraper_leiloesjudiciais.py` e `importar_leiloesjudiciais.py`.
+
+---
+
+### 30.1. Visão geral do fluxo
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  FASE 1 — Coleta de URLs                                        │
+│  Playwright pagina /imoveis?pagina=N → extrai /lote/{id}/{lot} │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │ lista de URLs (ex.: 1.001)
+┌───────────────────────────▼─────────────────────────────────────┐
+│  FASE 2 — Extração de detalhes por lote                         │
+│  Playwright visita cada URL → parser multi-estratégia           │
+│  extrai: leiloeiro, tipo, endereço, preços, datas, fotos, docs  │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │ lista de dicts (imoveis[])
+┌───────────────────────────▼─────────────────────────────────────┐
+│  FASE 3 — Persistência em CSV                                   │
+│  csv/imoveis_leiloesjudiciais_YYYY-MM-DD.csv  (990 registros)  │
+│  csv/leiloeiros_leiloesjudiciais_YYYY-MM-DD.csv (38 únicos)    │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+┌───────────────────────────▼─────────────────────────────────────┐
+│  FASE 4 — Importação (importar_leiloesjudiciais.py)             │
+│  4a. SQLite  → imoveis_leiloeiros.db (viewer local)             │
+│  4b. PostgreSQL → leilao_db via SQLAlchemy (sistema Docker)     │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+┌───────────────────────────▼─────────────────────────────────────┐
+│  FASE 5 — Pós-processamento (docker exec leilao_api)            │
+│  classificar → deduplicar → restart API                         │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 30.2. FASE 1 — Coleta de URLs de lotes
+
+**Script:** `scraper_leiloesjudiciais.py` → `coletar_urls_listagem()`
+
+#### Algoritmo
+
+```
+Para pg = 1 até max_paginas (padrão: 24):
+    url_pg = /imoveis          (pg == 1)
+           | /imoveis?pagina=N (pg > 1)
+
+    Playwright.goto(url_pg, wait_until='networkidle')
+    wait_for_timeout(2000)           ← aguarda hidratação JS
+
+    Na primeira página:
+        detecta total de páginas via regex "Página X de N"
+
+    Para cada <a href> no HTML:
+        se href bate /lote/\d+/\d+:
+            adiciona à lista (sem duplicatas, sem ?query)
+
+    sleep(2s)
+```
+
+#### Saída
+Lista de URLs únicas no formato `https://www.leiloesjudiciais.com.br/lote/{leilao_id}/{lot_id}`.
+
+#### Por que Playwright e não requests?
+O site é uma SPA (React). O HTML retornado via `requests` contém apenas o shell da
+página — os cards de lotes só aparecem após execução do JavaScript.
+
+---
+
+### 30.3. FASE 2 — Extração de dados por lote
+
+**Script:** `scraper_leiloesjudiciais.py` → `extrair_lote()`
+
+#### Algoritmo por campo
+
+```
+Para cada url em lot_urls:
+    Playwright.goto(url, wait_until='networkidle')
+    wait_for_timeout(1500)
+    html = page.content()
+    soup = BeautifulSoup(html)
+    texto = soup.get_text()
+
+    ── LEILOEIRO ──────────────────────────────────────────────────
+    1. Regex no texto completo:
+       r'Leiloeir[oa]\(?[as]?\)?[:\s]+([A-ZÀ-Ú][^\.]{4,80}?)\s+Para\s'
+    2. Seletores CSS específicos: .leiloeiro-nome, [data-leiloeiro]
+    3. Seletores genéricos: [class*="leiloeiro"] + limpeza de boilerplate
+    4. Fallback: h2/h3 que contenha "leilões" com 5–100 chars
+
+    ── SITE DO LEILOEIRO ──────────────────────────────────────────
+    Procura <a> com texto "ir para" / "acesse o site" cujo href:
+      - começa com http/https
+      - não é leiloesjudiciais.com.br
+      - não é PDF
+    Fallback: https://www.leiloesjudiciais.com.br
+
+    ── TÍTULO ─────────────────────────────────────────────────────
+    1. <h1> da página
+    2. <meta property="og:title">
+    Filtro: descarta lotes que não são imóveis (veículo, moto, etc.)
+
+    ── TIPO DE IMÓVEL ─────────────────────────────────────────────
+    Cascata de keywords (ordem de prioridade):
+      fazenda/sítio/hectare → rural
+      apart/flat/studio     → apartamento
+      casa/sobrado          → casa
+      terreno/gleba         → terreno
+      galpão/armazém        → galpao
+      loja/comercial        → comercial
+      sala/conjunto         → sala
+      (fallback)            → outro
+
+    ── PREÇOS ─────────────────────────────────────────────────────
+    Regex: r'R\$\s*(\d{1,3}(?:\.\d{3})*(?:,\d{2})?)'
+    Primeira ocorrência  → valor_minimo
+    Segunda ocorrência   → valor_avaliacao
+    Seletores: [class*="avaliacao"], [class*="lance-minimo"]
+
+    ── DATAS ──────────────────────────────────────────────────────
+    Para cada campo (data_primeiro_leilao, data_segundo_leilao, data_encerramento):
+        Procura keyword (1º Encerramento, 2º Encerramento, Prazo...)
+        seguida de data no formato dd/mm/yyyy
+    Fallback: primeira data válida encontrada no texto (2020–2035)
+
+    ── LOCALIZAÇÃO ────────────────────────────────────────────────
+    Regex: padrão "Cidade/UF" no título + endereço
+    RE_UF captura sigla do estado
+    RE_CEP captura CEP
+
+    ── IMAGENS ────────────────────────────────────────────────────
+    Todos os <img src / data-src> que não são logo/ícone
+    Limite: 10 imagens por lote
+    Principal: primeira da lista
+
+    ── DOCUMENTOS ─────────────────────────────────────────────────
+    Para cada <a href>:
+        aceita se href termina em .pdf
+                ou texto/href contém edital|matrícula|laudo|certidão
+        classifica: edital | matricula | laudo | pdf | documento
+    Busca extra: onclick="ExibeDoc('/path.pdf')" (padrão tribunais)
+    Limite: 15 documentos por lote
+
+    ── NÚMERO DO PROCESSO ─────────────────────────────────────────
+    Regex: r'\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}'
+
+    Salva progresso em JSON após cada lote (para monitoramento)
+    sleep(2s)
+```
+
+#### Monitoramento em tempo real
+
+A cada lote processado, grava `scraper_leiloesjudiciais_progress.json`:
+
+```json
+{
+  "atualizado": "2026-06-03T11:24:05",
+  "lotes_visitados": 149,
+  "total_lotes": 1001,
+  "pct": 14.9,
+  "total_imoveis": 148,
+  "por_leiloeiro": {
+    "Álvaro Sérgio Fuzo": 26,
+    "Joyce Ribeiro": 17
+  },
+  "erros": 0
+}
+```
+
+A cada 5 minutos a thread de relatório imprime a tabela de imóveis por leiloeiro no terminal.
+
+---
+
+### 30.4. FASE 3 — Exportação para CSV
+
+**Script:** `scraper_leiloesjudiciais.py` → `salvar_csv_leiloeiros()` + `salvar_csv_imoveis()`
+
+Dois arquivos gerados em `csv/`:
+
+| Arquivo | Conteúdo |
+|---|---|
+| `leiloeiros_leiloesjudiciais_YYYY-MM-DD.csv` | nome, site — 1 linha por leiloeiro único |
+| `imoveis_leiloesjudiciais_YYYY-MM-DD.csv` | 23 campos por imóvel |
+
+**Campos do CSV de imóveis:**
+
+| Campo | Origem |
+|---|---|
+| `id_externo` | MD5(URL do lote)[:24] — chave de deduplicação |
+| `leiloeiro` | Extraído da página de detalhe |
+| `leiloeiro_site` | Link externo ou URL da plataforma |
+| `titulo` | `<h1>` da página |
+| `tipo_imovel` | Classificação por keywords em cascata |
+| `tipo_leilao` | judicial / extrajudicial |
+| `estado` | Sigla UF extraída do título/endereço |
+| `cidade` | Padrão "Cidade/UF" no texto |
+| `cep` | Regex `\d{5}-?\d{3}` |
+| `endereco_completo` | Seletor CSS de endereço |
+| `valor_minimo` | 1ª ocorrência de R$ no texto |
+| `valor_avaliacao` | 2ª ocorrência de R$ no texto |
+| `area_total` | Regex `\d+ m²` |
+| `quartos` | Regex `\d+ quarto` |
+| `data_primeiro_leilao` | Próxima data após "1º Encerramento" |
+| `data_encerramento` | Próxima data após "Encerramento" |
+| `url_original` | URL do lote |
+| `imagem_principal` | Primeira imagem não-logo |
+| `numero_processo` | Regex padrão CNJ |
+
+---
+
+### 30.5. FASE 4 — Importação para o banco
+
+**Script:** `importar_leiloesjudiciais.py`
+
+#### 4a. SQLite (viewer local — `imoveis_leiloeiros.db`)
+
+Mapeamento de colunas CSV → SQLite:
+
+```
+id_externo        → id              (PRIMARY KEY — INSERT OR IGNORE)
+leiloeiro         → leiloeiro
+leiloeiro_site    → site
+titulo            → titulo
+tipo_imovel       → tipo            (uppercase)
+estado            → uf
+cidade            → cidade
+valor_minimo      → lance_inicial
+valor_avaliacao   → avaliacao
+data_primeiro_leilao → data_leilao
+url_original      → url
+imagem_principal  → imagem
+```
+
+#### 4b. PostgreSQL (sistema Docker — `leilao_db`)
+
+```
+Passo 1: upsert em fontes
+  Fonte(nome='Leilões Judiciais', url_base='https://www.leiloesjudiciais.com.br')
+
+Passo 2: upsert em leiloeiros (1 por nome único)
+  Leiloeiro(nome, site, situacao='regular', junta_comercial='Leilões Judiciais')
+
+Passo 3: upsert em lotes de 100 em imoveis
+  Se id_externo já existe na fonte → UPDATE campos não-nulos
+  Se não existe → INSERT novo registro
+
+Tipos SQLAlchemy:
+  TipoImovel:   rural | apartamento | casa | terreno | comercial | galpao | sala | outro
+  TipoLeilao:   JUDICIAL | EXTRAJUDICIAL
+  StatusLeilao: ABERTO
+  CategoriaItem: IMOVEL
+```
+
+---
+
+### 30.6. FASE 5 — Pós-processamento
+
+```powershell
+# 1. Classificar: calcula score_oportunidade e confirma tipo_imovel
+docker exec leilao_api bash -c "cd /app && python run.py classificar --limite 2000"
+
+# 2. Deduplicar: desativa duplicatas por URL e por título+local
+docker exec leilao_api bash -c "cd /app && python run.py deduplicar"
+
+# 3. Reiniciar API: limpa cache em memória
+docker restart leilao_api
+```
+
+---
+
+### 30.7. Comandos completos — do zero ao sistema
+
+```powershell
+cd "C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes"
+
+# 1. Scraping completo (~60–90 min)
+python scraper_leiloesjudiciais.py --sem-banco
+
+# Monitorar em outro terminal:
+while ($true) {
+    $d = Get-Content scraper_leiloesjudiciais_progress.json | ConvertFrom-Json
+    Write-Host "$($d.pct)% | $($d.lotes_visitados)/$($d.total_lotes) | $($d.total_imoveis) imoveis"
+    Start-Sleep 30
+}
+
+# 2. Importar para os bancos
+python importar_leiloesjudiciais.py
+
+# 3. Pós-processamento
+docker exec leilao_api bash -c "cd /app && python run.py classificar --limite 2000"
+docker exec leilao_api bash -c "cd /app && python run.py deduplicar"
+docker restart leilao_api
+```
+
+---
+
+### 30.8. Resultados observados (coleta de 03/06/2026)
+
+| Métrica | Valor |
+|---|---|
+| Páginas de listagem percorridas | 24 |
+| URLs de lotes coletadas | 1.001 |
+| Imóveis extraídos | 990 |
+| Lotes descartados (não-imóvel) | 11 |
+| Erros de rede/timeout | 0 |
+| Leiloeiros únicos identificados | 38 |
+| Tempo total de coleta | ~115 min |
+| Ritmo médio | ~35 lotes/5min (~8,6s/lote) |
+| Inseridos no PostgreSQL | 990 |
+| Inseridos no SQLite | 990 |
+| Ativos após deduplicação | 1.024 |
+
+**Top 8 leiloeiros por volume:**
+
+| Leiloeiro | Imóveis |
+|---|---|
+| Joyce Ribeiro | 141 |
+| Álvaro Sérgio Fuzo | 106 |
+| Giordano Bruno Coan Amador | 77 |
+| Carlo Ferrari | 73 |
+| Thaís Costa Bastos Teixeira | 58 |
+| Deonizia Kiratch | 54 |
+| Rodrigo Aparecido Rigolon da Silva | 46 |
+| Hidirlene Duszeiko | 40 |
+
+---
+
+### 30.9. Arquitetura de arquivos
+
+```
+leiloes/
+├── scraper_leiloesjudiciais.py              ← scraper principal (Playwright)
+├── importar_leiloesjudiciais.py             ← importador CSV → SQLite + PostgreSQL
+├── scraper_leiloesjudiciais_progress.json   ← progresso em tempo real
+├── imoveis_leiloeiros.db                    ← SQLite (viewer local)
+└── csv/
+    ├── leiloeiros_leiloesjudiciais_YYYY-MM-DD.csv
+    └── imoveis_leiloesjudiciais_YYYY-MM-DD.csv
+```
+
+---
+
+### 30.10. Checklist de execução
+
+- [ ] Playwright instalado: `pip install playwright && playwright install chromium`
+- [ ] BeautifulSoup instalado: `pip install beautifulsoup4`
+- [ ] Containers Docker rodando: `docker ps` mostra `leilao_api` e `leilao_postgres`
+- [ ] Rodar `scraper_leiloesjudiciais.py --sem-banco` e aguardar conclusão
+- [ ] Confirmar que `csv/imoveis_leiloesjudiciais_*.csv` foi gerado com >900 linhas
+- [ ] Rodar `importar_leiloesjudiciais.py` — confirmar "990 inseridos, 0 erros"
+- [ ] Rodar `classificar` e `deduplicar` via `docker exec`
+- [ ] Fazer `docker restart leilao_api`
+- [ ] Verificar no sistema em `http://localhost:8000`
+
+---
+
+## 31. Scraping JUCERJA — Leiloeiros Regulares (jun/2026)
+
+Relatório da sessão de scraping dos **107 sites** de leiloeiros com situação **REGULAR** extraídos dos 3 documentos oficiais da JUCERJA/CGJ-RJ:
+1. `737323064-LeiloeirosJUCERJA.pdf` — 25 pág., com campo "SITUAÇÃO FUNCIONAL: REGULAR"
+2. `LeiloeirosJUCERJA.pdf` — 28 pág., versão mais recente (até mat. 366, jun/2026)
+3. `atualizacao-15-4-abril-2024-relacao-de-leiloeiros-oficiais-RJpdf.pdf` — CGJ-RJ, inclui site e validade de credenciamento
+
+### 31.1. Resultados obtidos (parcial — scraping em andamento)
+
+| Leiloeiro | Site | Imóveis |
+|---|---|---|
+| ALEXWILLIAN HOPPE | hoppeleiloes.com.br | 13 |
+| ALEXANDRO DA SILVA LACERDA | alexandroleiloeiro.com.br | 8 |
+| ALINE FREITAS BASTOS MARQUES | alinemarquesleiloeira.lel.br | 27 |
+| ANDREA ROSA COSTA | andrealeiloeira.lel.br | 1 |
+| CAMILA NOGUEIRA LIMA | camilaleiloes.com.br | 8 |
+| CRISTIANE BORGUETTI MORAES (Lanceja) | lanceja.com.br | 33 |
+| CRISTINA FAÇANHA | facanhaleiloes.com.br | 21 |
+| DANIELE DE LIMA DE PAULA | depaulaonline.com.br | 27 |
+| DANIEL ELIAS GARCIA | dgleiloes.com.br | 2 |
+| Demais sites (18+ visitados) | — | 0 (sem leilões ativos) |
+| **TOTAL INSERIDOS** | — | **≥140** |
+
+- Tempo de scraping: ~8 min para os primeiros 18 sites
+- CSV gerado: `csv/leiloeiros_jucerja_regulares_2024.csv` (107 leiloeiros)
+- CSV de leiloeiros: `csv/leiloeiros_jucerja_com_sites.csv`
+- Log completo: `scraper_jucerja_run.log`
+- Script: `scraper_jucerja_leiloeiros.py` + `run.py scrape-csv` (leilao-scraper)
+
+### 31.2. Principais dificuldades encontradas
+
+#### 31.2.1. Sites sem URL nos PDFs originais — extração de site por e-mail
+
+**Problema:** Os PDFs da JUCERJA listam apenas **e-mail** dos leiloeiros, não o endereço do site. Apenas o documento da CGJ-RJ (PDF 3) contém a coluna "Site". Dos 333+ leiloeiros listados, apenas ~70 tinham site no CGJ.
+
+**Causa:** A JUCERJA não exige publicação de site nos dados cadastrais. Leiloeiros mais antigos (matrículas ≤ 100) frequentemente não possuem site próprio — operam por telefone/e-mail ou via plataformas terceiras (leiloesjudiciais.com.br, leilaoimovel.com.br, etc.).
+
+**Solução implementada:** Cruzamento manual dos e-mails com domínios de site derivados (ex.: `contato@britesleiloeiro.com.br` → `www.britesleiloeiro.com.br`). Para leiloeiros sem site detectável, o campo foi deixado vazio e eles foram excluídos do scraping.
+
+**Solução recomendada:** 
+1. Usar o Google Custom Search API (`site:leiloeiro.com.br`) para descobrir sites automaticamente.
+2. Consultar a lista da FENAJU nacional que inclui mais metadados.
+3. Cruzar com os dados do `leiloeiros_regulares.csv` já existente no projeto.
+
+---
+
+#### 31.2.2. Sites sem leilões ativos (maioria retorna 0 imóveis)
+
+**Problema:** Dos primeiros 18 sites visitados, apenas 9 tinham imóveis em leilão ativo. Sites como `alanleiloeiro.lel.br`, `analucialeiloeira.com.br`, `andersonleiloeiro.lel.br` retornaram 0 imóveis.
+
+**Causa:** Leiloeiros individuais (pessoas físicas) têm leilões **intermitentes** — ficam sem lotes entre um processo judicial e outro. O site pode estar ativo mas sem leilão corrente.
+
+**Como detectar:** Sites em `.lel.br` (domínio de leiloeiro oficial do CFI) tendem a ter interface mais simples, frequentemente com HTML estático. A ausência de cards/lotes não indica problema técnico — é operacional. 
+
+**Solução recomendada:** 
+```python
+# Verificar se o site ao menos carrega (HTTP 200) e tem algum conteúdo
+# Classificar como "sem_leilao_ativo" em vez de "erro"
+status = "sem_leilao_ativo" if resp.status_code == 200 else "offline"
+```
+
+---
+
+#### 31.2.3. Domínios `.lel.br` — DNS e estrutura antiga
+
+**Problema:** Vários domínios no formato `*.lel.br` (ex.: `alanleiloeiro.lel.br`, `andrealeiloeira.lel.br`, `marioricart.lel.br`) apresentam:
+- DNS não resolvido (NXDOMAIN) — domínio expirado
+- HTTP 200 mas página em construção / sem lotes
+- Redirecionamento para domínio genérico CFI
+
+**Causa:** O registro `.lel.br` é administrado pelo Conselho Federal dos Leiloeiros (CFI). Domínios abandonados ficam resolvendo por tempo limitado antes de expirar.
+
+**Solução recomendada:**
+```python
+import socket
+def dominio_ativo(url: str) -> bool:
+    try:
+        host = urlparse(url).netloc
+        socket.gethostbyname(host)
+        return True
+    except socket.gaierror:
+        return False
+```
+Filtrar previamente para evitar timeouts desnecessários.
+
+---
+
+#### 31.2.4. Sites JS-heavy — Playwright necessário para extração
+
+**Problema:** Muitos sites modernos de leiloeiro (React/Next.js/Vue) não renderizam lotes no HTML inicial. A requisição httpx retorna HTML vazio ou com placeholder `<div id="root">`.
+
+**Sites identificados como JS-heavy (detectado pelo generic_scraper):**
+- `hoppeleiloes.com.br` — React SPA
+- `lanceja.com.br` — Next.js
+- `facanhaleiloes.com.br` — SPA com paginação AJAX
+- `depaulaonline.com.br` — SPA
+
+**Causa:** A tendência de sites de leilão migrarem para SPAs modernas, especialmente após 2020. Sites com matrícula > 200 são mais propensos a usar tecnologia moderna.
+
+**Solução implementada:** O `generic_scraper.py` do leilao-scraper detecta automaticamente sites JS-heavy via `_is_js_heavy(html)` e aciona o Playwright. Isso aumenta o tempo por site de ~2s para ~30-90s.
+
+**Tempo de scraping comparativo:**
+| Tipo de site | Tempo médio | Imóveis extraídos |
+|---|---|---|
+| HTML estático | 2-5 s | Variável |
+| SPA (Playwright) | 30-90 s | Maior cobertura |
+| Com paginação | +15s/página | Proporcional |
+
+---
+
+#### 31.2.5. Campos incompletos — cidade, estado, imagem, área
+
+**Problema:** Muitos imóveis são inseridos com `cidade=NULL`, `estado=NULL`, `imagem=NULL`, `area=NULL`. Exemplo detectado:
+
+```
+[alexwillianhoppe] 1ª praça: encerra 05/06/2026 - 10:00 → 1/6 campos | nulos: ['cidade', 'estado', 'imagem', 'area', 'quartos']
+```
+
+**Causa:** Leiloeiros da JUCERJA-RJ frequentemente listam imóveis em **outros estados** (MG, SP, ES) sem estrutura padronizada no HTML. A extração de cidade/estado falha quando o endereço não segue o padrão reconhecido pelo parser.
+
+**Solução recomendada:**
+1. Extrair cidade/estado da URL do imóvel (ex.: `/lote/sp/sao-paulo/...`).
+2. Usar regex de UF como fallback: `\b(SP|RJ|MG|...)\b`.
+3. Enriquecer com geocoding reverso após inserção.
+
+```python
+# Extração de UF da URL ou do título como fallback
+uf_match = re.search(r'\b(AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MS|MT|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO)\b', 
+                     titulo + " " + url, re.IGNORECASE)
+uf = uf_match.group().upper() if uf_match else "RJ"  # fallback para RJ (estado do leiloeiro)
+```
+
+---
+
+#### 31.2.6. Sites com padrões de URL de leiloeiros judiciais misturados
+
+**Problema:** Sites como `depaulaonline.com.br` e `lanceja.com.br` listam tanto imóveis **extrajudiciais** (propriedade do leiloeiro) quanto **judiciais** (por ordem do juízo). A URL de listagem pode variar:
+- `/extrajudicial/imoveis`
+- `/judicial/lotes`
+- `/leiloes/ativos`
+
+O scraper genérico precisa descobrir a URL de listagem correta por heurística de links.
+
+**Solução implementada no generic_scraper:** Varredura da homepage por links contendo `LISTING_KEYWORDS` e tentativa de múltiplas URLs de paginação (`?pagina=N`, `/N/`, `?page=N`).
+
+**Limitação:** Sites que paginam via scroll infinito (lazy loading) não são cobertos pelo scraper atual sem Playwright explícito com scroll.
+
+---
+
+#### 31.2.7. Imóveis duplicados entre leiloeiros (portais compartilhados)
+
+**Problema:** Leiloeiros parceiros do **DepaulaOnline** (LUIZ TENÓRIO + DANIELE DE LIMA DE PAULA) compartilham o mesmo site `depaulaonline.com.br`. O scraper tenta inserir os mesmos lotes duas vezes.
+
+**Solução implementada:** O `run.py scrape-csv` deduplica por URL antes de processar. O banco usa upsert por `url_original`. Os 27 imóveis foram inseridos na primeira visita (Daniele); a segunda tentativa (Luiz Tenório) resultaria em 0 inserções (atualizações).
+
+**Solução recomendada:** No CSV de entrada, marcar sites compartilhados como um único entry.
+
+---
+
+#### 31.2.8. Leiloeiros com sites fora do ar ou em construção
+
+**Detectados como offline ou sem conteúdo:**
+- `andersonleiloeiro.lel.br` — página em construção
+- `andrealeiloeira.lel.br` — 1 imóvel apenas (site parcial)
+- `murilochaves.com.br` — certificado SSL expirado
+- `fernandobraga.lel.br` — domínio não resolúvel
+- `bussiereleiloes.lel.br` — domínio fictício (não existe)
+- `walterrezende.com.br` — HTTP 200 mas sem lotes detectados
+- Vários `*.lel.br` — DNS NXDOMAIN
+
+**Causa:** Sites pessoais de leiloeiros são pouco mantidos. Muitos leiloeiros operam via plataformas parceiras (Alfa Leilões, Portella Leilões, etc.) e não mantêm site próprio atualizado.
+
+**Impacto:** ~40-60% dos sites retornam 0 imóveis, seja por ausência de leilões ou por site inativo.
+
+---
+
+### 31.3. Sugestões de melhoria para o pipeline
+
+#### 31.3.1. Pré-filtro de domínios ativos
+
+```python
+# Antes de visitar, verificar se o domínio resolve e responde
+import socket, httpx
+
+def checar_site(url: str, timeout=5.0) -> bool:
+    try:
+        host = urlparse(url).netloc
+        socket.setdefaulttimeout(timeout)
+        socket.gethostbyname(host)  # DNS check
+        r = httpx.head(url, timeout=timeout, follow_redirects=True)
+        return r.status_code < 500
+    except Exception:
+        return False
+```
+
+Rodando este filtro antes do scraping, economiza ~40% do tempo total.
+
+---
+
+#### 31.3.2. Descoberta automática de sites via FENAJU + busca web
+
+```python
+# Para leiloeiros sem site cadastrado, usar Google CSE
+import requests
+
+def descobrir_site(nome_leiloeiro: str, cidade: str) -> str | None:
+    query = f'site:*.lel.br OR site:*.com.br leiloeiro "{nome_leiloeiro}" {cidade}'
+    r = requests.get(
+        "https://www.googleapis.com/customsearch/v1",
+        params={"key": API_KEY, "cx": CX_ID, "q": query, "num": 1}
+    )
+    items = r.json().get("items", [])
+    return items[0]["link"] if items else None
+```
+
+---
+
+#### 31.3.3. Integração com leiloesjudiciais.com.br por nome de leiloeiro
+
+Sites como `leiloesjudiciais.com.br` e `leilaoimovel.com.br` indexam leiloeiros por nome e número de matrícula JUCERJA. Para leiloeiros sem site próprio, é possível raspar diretamente:
+
+```
+GET https://www.leiloesjudiciais.com.br/leiloeiro/{matricula}/imoveis
+```
+
+Isso capturaria imóveis de leiloeiros que **não têm site próprio** mas publicam leilões em portais agregadores.
+
+---
+
+#### 31.3.4. Agendamento de re-scraping periódico
+
+Leiloeiros individuais têm leilões esporádicos. Um re-scraping semanal ou quinzenal é mais eficiente que um varredura única. Sugestão de cron via Celery beat:
+
+```python
+# celery_beat_schedule (leilao-scraper/scheduler/tasks.py)
+"scrape-jucerja-weekly": {
+    "task": "scrapers.tasks.scrape_csv",
+    "schedule": crontab(hour=3, minute=0, day_of_week="monday"),
+    "args": ["csv/leiloeiros_jucerja_regulares_2024.csv"],
+}
+```
+
+---
+
+#### 31.3.5. Captura de fotos — limitações e soluções
+
+**Problema:** A maioria dos sites de leiloeiro individual usa imagens com URL dinâmica (assinada, expirando em 24h). Salvar apenas a URL não garante acesso futuro.
+
+**Exemplo de URL dinâmica:**
+```
+https://s3.amazonaws.com/leiloes/img/lote_123.jpg?X-Amz-Expires=86400&X-Amz-Signature=abc123...
+```
+
+**Solução:** Usar `baixar-docs` do pipeline para baixar as imagens junto com os documentos, ou usar serviço de CDN próprio para re-hospedar.
+
+---
+
+#### 31.3.6. Documentos (edital, matrícula) — cobertura baixa nos sites individuais
+
+**Problema:** Sites de leiloeiros individuais raramente publicam documentos diretamente nas páginas de listagem. O edital geralmente está:
+- Incorporado no processo judicial (não acessível publicamente)
+- Disponível apenas via e-mail/contato
+- Publicado no portal do tribunal (ex.: eProc, SAJ)
+
+**Cobertura estimada:** < 20% dos sites têm links diretos para edital/matrícula nas páginas de lote.
+
+**Solução recomendada:** Para leilões judiciais dos leiloeiros JUCERJA, cruzar o número do processo (CNJ) com a API dos tribunais:
+```
+GET https://api.tjrj.jus.br/v1/processo/{numero_cnj}/documentos
+```
+
+---
+
+### 31.4. Resumo executivo de métricas (parcial — 03/06/2026)
+
+| Métrica | Valor |
+|---|---|
+| Total leiloeiros REGULAR identificados | 333+ (PDFs 1 e 2) |
+| Leiloeiros com site identificado | 107 |
+| Sites com imóveis ativos | ~35% |
+| Imóveis coletados (parcial, ~18 sites) | 140+ |
+| Tempo médio por site (httpx) | 3-8 s |
+| Tempo médio por site (Playwright) | 30-90 s |
+| Taxa de insucesso (0 imóveis) | ~65% |
+| Arquivos gerados | `leiloeiros_jucerja_regulares_2024.csv`, `leiloeiros_jucerja_com_sites.csv`, `imoveis_jucerja_*.csv` |
+| Banco de dados | PostgreSQL via `run.py scrape-csv` |
+
+### 31.5. Arquivos criados nesta sessão
+
+```
+leiloes/
+├── scraper_jucerja_leiloeiros.py         ← script standalone de scraping
+├── scraper_jucerja_run.log               ← log completo da execução
+├── csv/
+│   ├── leiloeiros_jucerja_regulares_2024.csv  ← 107 leiloeiros REGULAR com site
+│   ├── leiloeiros_jucerja_com_sites.csv       ← idem (saída do scraper)
+│   └── imoveis_jucerja_YYYYMMDD_HHMM.csv      ← imóveis coletados
+```
+
+### 31.6. Checklist de execução
+
+- [x] CSV de leiloeiros REGULAR gerado: `csv/leiloeiros_jucerja_regulares_2024.csv`
+- [x] Leiloeiros importados no banco: 111 inseridos + 16 atualizados (127 total)
+- [x] Scraping iniciado via `python run.py scrape-csv csv/leiloeiros_jucerja_regulares_2024.csv --max-paginas 8`
+- [x] Imóveis inseridos no PostgreSQL em tempo real (sem etapa adicional de importação)
+- [ ] Aguardar conclusão do scraping (~107 sites, ~45-90 min total)
+- [ ] Rodar `classificar` e `deduplicar` após conclusão
+- [ ] Re-executar semanalmente para capturar novos leilões

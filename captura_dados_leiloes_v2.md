@@ -2958,3 +2958,153 @@ preco_el = page.locator('//dt[contains(text(), "Lance")]/following-sibling::dd[1
 3. **Paralelizar** visitas de detalhe com `asyncio` + Playwright assíncrono.
 4. **Salvar progresso** em JSON para retomar de onde parou se interrompido.
 5. **Adicionar verificação de status** do lote antes do scraping completo.
+
+---
+
+## 29. Estudo de caso: Leilões Judiciais (03/06/2026 12:55)
+
+Coleta realizada em `https://www.leiloesjudiciais.com.br` — portal nacional de leilões judiciais online.
+
+### 29.1. Resultado da coleta
+
+| Métrica | Valor |
+|---|---|
+| Leiloeiros únicos identificados | 38 |
+| Total de imóveis coletados | 990 |
+| CSV de leiloeiros gerado | `leiloeiros_leiloesjudiciais_2026-06-03.csv` |
+| CSV de imóveis gerado | `imoveis_leiloesjudiciais_2026-06-03.csv` |
+| Total de erros registrados | 0 |
+
+### 29.2. Distribuição por leiloeiro
+
+- **Joyce Ribeiro**: 141 imóveis
+- **Álvaro Sérgio Fuzo**: 106 imóveis
+- **Giordano Bruno Coan Amador**: 77 imóveis
+- **Carlo Ferrari**: 73 imóveis
+- **Thaís Costa Bastos Teixeira**: 58 imóveis
+- **Deonizia Kiratch**: 54 imóveis
+- **Rodrigo Aparecido Rigolon da Silva**: 46 imóveis
+- **Hidirlene Duszeiko**: 40 imóveis
+- **Renato Guedes Rocha**: 39 imóveis
+- **Francisco Freitas**: 39 imóveis
+- **Paulo Cézar Rocha Teixeira**: 35 imóveis
+- **Fábio Manoel Guimarães**: 26 imóveis
+- **José Antônio Rodovalho Júnior**: 23 imóveis
+- **Alessandro de Assis Teixeira**: 22 imóveis
+- **Conceição Maria Fixer**: 19 imóveis
+- **Rosimeire Maia**: 19 imóveis
+- **José David Gonçalves de Melo**: 18 imóveis
+- **Helton Verri**: 14 imóveis
+- **Rafael Galvani Ferreira**: 14 imóveis
+- **Daniel Oliveira Júnior**: 13 imóveis
+
+### 29.3. Principais dificuldades enfrentadas
+
+#### 29.3.1. Renderização JavaScript (SPA)
+
+**Problema:** O site leiloesjudiciais.com.br é uma SPA (React/Next.js). O HTML inicial
+retornado via `requests`/`httpx` está quase vazio — sem cards de lotes. O conteúdo
+(listagem de lotes, detalhes do imóvel) só aparece após execução de JavaScript.
+
+**Impacto:** Impossível usar scraping HTTP simples; Playwright é obrigatório.
+
+**Solução aplicada:** Playwright com `wait_until='networkidle'` + `wait_for_timeout(2000)`.
+
+**Solução de escala recomendada:**
+```python
+# Interceptar as chamadas de API internas durante a navegação Playwright
+page.on("response", lambda r: capturar_json(r) if "api" in r.url else None)
+```
+
+#### 29.3.2. Robots.txt bloqueia paginação via `?pagina=N`
+
+**Problema:** O `robots.txt` do site declara explicitamente:
+```
+Disallow: /imoveis?pagina=
+```
+Isso sinaliza que o operador não quer scrapers paginando via esse parâmetro.
+
+**Impacto:** Risco legal/contratual de scraping massivo via paginação direta.
+
+**Solução recomendada:**
+1. Contatar o operador (leiloesjudiciais.com.br) para API de parceiro.
+2. Usar o sitemap.xml (que é público e completo) como fonte de URLs de lotes.
+3. Fatiamento por categoria (`/imoveis/apartamentos`, `/imoveis/casas`, etc.)
+   em vez de `?pagina=`.
+
+```python
+# Coletar URLs via sitemap em vez de paginação
+import xml.etree.ElementTree as ET
+import requests
+
+r = requests.get('https://www.leiloesjudiciais.com.br/sitemap.xml')
+root = ET.fromstring(r.text)
+lote_urls = [loc.text for loc in root.iter('{http://www.sitemaps.org/schemas/sitemap/0.9}loc')
+             if '/lote/' in (loc.text or '')]
+```
+
+#### 29.3.3. Identificação do leiloeiro no HTML
+
+**Problema:** O nome do leiloeiro não aparece nos cards da listagem — apenas
+na página de detalhe do lote. Isso força uma visita extra por lote.
+
+**Impacto:** Volume de requisições ~2× maior (listagem + detalhe).
+
+**Solução recomendada:**
+1. Interceptar a resposta JSON da API interna na página de listagem (que provavelmente
+   inclui o nome do leiloeiro no payload).
+2. Ou cachear o leiloeiro por ID de leilão para evitar re-fetch.
+
+```python
+leiloeiros_cache: dict[str, str] = {}
+
+def get_leiloeiro(page, leilao_id: str) -> str:
+    if leilao_id in leiloeiros_cache:
+        return leiloeiros_cache[leilao_id]
+    # ... fetch da página do leilão
+    leiloeiros_cache[leilao_id] = nome_leiloeiro
+    return nome_leiloeiro
+```
+
+#### 29.3.4. Seletores CSS instáveis (classes geradas dinamicamente)
+
+**Problema:** Sites React/Next.js com CSS Modules ou Tailwind geram nomes de
+classes dinâmicos (ex.: `sc-bdfxgf`, `css-1a2b3c`). Seletores por classe
+quebram a cada deploy.
+
+**Solução aplicada:** Fallback em cascata — texto, regex, data-attributes.
+
+**Solução recomendada:**
+1. Priorizar `data-*` attributes (ex.: `data-testid`, `data-lote-id`).
+2. Usar XPath por texto ("Lance mínimo") em vez de classe.
+3. Interceptar JSON da API interna — imune a mudanças de CSS.
+
+```python
+# XPath robusto por label de texto
+preco_el = page.locator('//dt[contains(text(), "Lance")]/following-sibling::dd[1]')
+```
+
+
+### 29.4. Erros por tipo
+
+| Tipo | Ocorrências | Causa |
+|---|---|---|
+
+### 29.5. Checklist específico Leilões Judiciais
+
+1. **Playwright obrigatório** — SPA sem dados no HTML estático.
+2. **Coletar via sitemap** em vez de `?pagina=` — respeita robots.txt.
+3. **Interceptar API interna** para obter JSON limpo com leiloeiro já incluído.
+4. **Seletores por data-attribute** — mais estáveis que classes CSS dinâmicas.
+5. **Cache de leiloeiro por leilão** — evita visitas repetidas à página do leilão.
+6. **Filtrar por categoria `/imoveis/`** para coletar só imóveis.
+7. **Verificar status "Aberto para Lances"** antes de processar — evita lotes encerrados.
+8. **Documentos** (edital, matrícula) estão na página de detalhe como links diretos.
+
+### 29.6. Sugestões de melhoria para o pipeline
+
+1. **Adicionar interceptação de API** no Playwright para capturar JSON da listagem.
+2. **Usar sitemap.xml** como fonte primária de URLs de lotes.
+3. **Paralelizar** visitas de detalhe com `asyncio` + Playwright assíncrono.
+4. **Salvar progresso** em JSON para retomar de onde parou se interrompido.
+5. **Adicionar verificação de status** do lote antes do scraping completo.

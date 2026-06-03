@@ -67,7 +67,8 @@ MAX_PAGINAS  = 24          # máximo de páginas de listagem
 LOTES_POR_PG = 50          # estimativa de lotes por página
 DELAY        = 2.0         # segundos entre requisições
 TIMEOUT      = 30000       # ms Playwright
-REPORT_INTERVAL = 300      # 5 minutos
+REPORT_INTERVAL  = 300      # 5 minutos
+PROGRESS_FILE    = Path(__file__).parent / "scraper_leiloesjudiciais_progress.json"
 
 LEILOES_DIR = Path(__file__).parent
 CSV_DIR     = LEILOES_DIR / "csv"
@@ -123,6 +124,27 @@ def _registrar_erro(tipo: str, url: str, detalhe: str):
                        'ts': datetime.now().isoformat()})
 
 
+def _salvar_progresso(lotes_visitados: int = 0, total_lotes: int = 0):
+    """Grava progresso em JSON para monitoramento externo."""
+    with _lock:
+        total_imoveis = sum(_progresso.values())
+        pct = round(lotes_visitados / total_lotes * 100, 1) if total_lotes else 0
+        dados = {
+            "atualizado": datetime.now().isoformat(),
+            "lotes_visitados": lotes_visitados,
+            "total_lotes": total_lotes,
+            "pct": pct,
+            "total_imoveis": total_imoveis,
+            "por_leiloeiro": dict(sorted(_progresso.items(), key=lambda x: -x[1])),
+            "erros": len(_erros),
+        }
+    try:
+        with open(PROGRESS_FILE, "w", encoding="utf-8") as f:
+            json.dump(dados, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+
+
 def _imprimir_relatorio():
     elapsed = (datetime.now() - _iniciado_em).seconds // 60
     print(f"\n{'='*60}")
@@ -141,10 +163,16 @@ def _imprimir_relatorio():
     sys.stdout.flush()
 
 
+# Contador global para acesso pela thread de relatório
+_g_lotes_visitados = 0
+_g_total_lotes     = 0
+
+
 def _thread_relatorio():
     while True:
         time.sleep(REPORT_INTERVAL)
         _imprimir_relatorio()
+        _salvar_progresso(_g_lotes_visitados, _g_total_lotes)
 
 
 # ─── Helpers ───────────────────────────────────────────────────────────────────
@@ -1011,7 +1039,11 @@ def main():
         print(f"\n[FASE 2] Processando {total} lotes...\n")
 
         # ── 2. Extrai dados de cada lote ──
+        global _g_lotes_visitados, _g_total_lotes
+        _g_total_lotes = total
+
         for idx, url in enumerate(lot_urls, 1):
+            _g_lotes_visitados = idx
             print(f"[{idx}/{total}] {url}")
             try:
                 dados = extrair_lote(page, url)
@@ -1021,6 +1053,7 @@ def main():
 
             if not dados:
                 print(f"  -> Ignorado (sem dados ou não-imóvel)")
+                _salvar_progresso(idx, total)
                 time.sleep(DELAY)
                 continue
 
@@ -1030,6 +1063,7 @@ def main():
 
             all_imoveis.append(dados)
             _registrar(lei_nome)
+            _salvar_progresso(idx, total)
 
             # Inserção em lotes de 50 para não acumular muito na memória
             if usar_banco and session and len(all_imoveis) % 50 == 0:

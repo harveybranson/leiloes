@@ -524,79 +524,128 @@ Domínios únicos a scraping: 339
 2026-06-03 06:57:29,456 [INFO]   -> Marta Simone Shiokawa [JUCESP] | https://mleiloes.com.br
 2026-06-03 06:57:42,629 [INFO]   -> Mauro Zukerman [JUCESP] | https://zukerman.com.br
 2026-06-03 06:57:52,168 [INFO]   -> Miriam Aparecida Trindade Gir [JUCESP] | https://conceitoleiloes.com.br
-6-06-03 06:53:47,634 [INFO]   -> Otavio Martins Colucci [JUCESP] | https://omcleiloes.com.br
-2026-06-03 06:54:00,799 [INFO]   -> Paulo Cesar De Carvalho [JUCESP] | https://nossoleilao.com.br
-2026-06-03 06:54:18,926 [INFO]     1 válidos / 30 extraídos
-2026-06-03 06:54:19,627 [INFO]   -> Persio Boschetti Junior [JUCESP] | https://deseulance.com
-2026-06-03 06:54:27,259 [INFO]     3 válidos / 3 extraídos
-2026-06-03 06:54:27,960 [INFO]   -> Rafael Brambila Peixoto [JUCESP] | https://peixotoleiloes.com.br
-2026-06-03 06:54:37,158 [INFO]   -> Regina Teresa Franci Brotto [JUCESP] | https://brottoleiloes.com.br
+2026-06-03 06:58:07,353 [INFO]   -> Otavio Martins Colucci [JUCESP] | https://omcleiloes.com.br
+2026-06-03 06:58:20,581 [INFO]   -> Paulo Cesar De Carvalho [JUCESP] | https://nossoleilao.com.br
+2026-06-03 06:58:38,124 [INFO]     1 válidos / 30 extraídos
+2026-06-03 06:58:38,825 [INFO]   -> Persio Boschetti Junior [JUCESP] | https://deseulance.com
+2026-06-03 06:58:46,482 [INFO]     3 válidos / 3 extraídos
+2026-06-03 06:58:47,183 [INFO]   -> Rafael Brambila Peixoto [JUCESP] | https://peixotoleiloes.com.br
+2026-06-03 06:58:56,263 [INFO]   -> Regina Teresa Franci Brotto [JUCESP] | https://brottoleiloes.com.br
+2026-06-03 06:59:09,808 [INFO]   -> Renan Souza Silva [JUCESP] | https://souzasilvaleiloes.com.br
+2026-06-03 06:59:19,802 [INFO]   -> Renato Gracie [JUCESP] | https://gracieleiloes.com.br
+2026-06-03 06:59:28,803 [INFO]   -> Ricardo Lucas Granado Da Silva [JUCESP] | https://granadoleiloes.com.br
+2026-06-03 06:59:35,399 [INFO]     2 válidos / 2 extraídos
+2026-06-03 06:59:36,100 [INFO]   -> Romualdo Pandolfo [JUCESP] | https://totalleiloes.com.br
 
 ════════════════════════════════════════════════════════════
-  06:54:50  PROGRESSO [█████████████████░░░] 89%
-  Sites: 303/339  ✓ OK:95  ✗ Err:208
-  Imóveis capturados: 2161
+  06:59:45  PROGRESSO [██████████████████░░] 90%
+  Sites: 307/339  ✓ OK:96  ✗ Err:211
+  Imóveis capturados: 2155
 ════════════════════════════════════════════════════════════
 
-2026-06-03 06:54:50,258 [INFO] CSV: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_leiloeiros_2026-06-03.csv (2161 registros)
-2026-06-03 06:54:50,715 [INFO] Viewer: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\viewer_leiloeiros_direto.html
-2026-06-03 06:54:51,417 [INFO]   -> Renan Souza Silva [JUCESP] | https://souzasilvaleiloes.com.br
-2026-06-03 06:55:01,475 [INFO]   -> Renato Gracie [JUCESP] | https://gracieleiloes.com.br
-2026-06-03 06:55:10,671 [INFO]   -> Ricardo Lucas Granado Da Silva [JUCESP] | https://granadoleiloes.com.br
-2026-06-03 06:55:17,670 [INFO]     2 válidos / 2 extraídos
-2026-06-03 06:55:18,371 [INFO]   -> Romualdo Pandolfo [JUCESP] | https://totalleiloes.com.br
-2026-06-03 06:55:28,410 [INFO]   -> Sami Raicher [JUCESP] | https://raicherleiloes.com.br
-2026-06-03 06:55:44,490 [INFO]     10 válidos / 17 extraídos
-2026-06-03 06:55:45,191 [INFO]   -> Silvia Dau Pelloni De Souza [JUCESP] | https://casaamarelaleiloes.com.br
-2026-06-03 06:55:49,824 [INFO]   -> Silvio Cesar De Jesus Santos [JUCESP] | https://editalleiloes.com.br
-2026-06-03 06:56:05,382 [INFO]   -> Spartaco Santi Junior [JUCESP] | https://spartacoleiloes.com.br
-2026-06-03 06:56:18,561 [INFO]   -> Tiago Clemente Sampaio [JUCESP] | https://multipliqueleiloes.com.br
-2026-06-03 06:56:28,316 [INFO]   -> Uilian Aparecido Da Silva [JUCESP] | https://goldleiloes.com.br
-2026-06-03 06:56:38,650 [INFO]     51 válidos / 71 extraídos
-2026-06-03 06:56:39,351 [INFO]   -> Wagner Lotti [JUCESP] | https://lottileiloes.com.br
-2026-06-03 06:56:56,266 [INFO]     20 válidos / 20 extraídos
-2026-06-03 06:56:56,967 [INFO]   -> Wanderley Samuel Pereira [JUCESP] | https://wspleiloes.com.br
-2026-06-03 06:57:14,397 [INFO]     28 válidos / 30 extraídos
-2026-06-03 06:57:15,098 [INFO]   -> Willian Pereira Teixeira Quenca [JUCESP] | https://willianquencaleiloeiro.com.br
-2026-06-03 06:57:23,997 [INFO]   -> Eduardo Gomes [JUCETINS] | https://leiloeiroeduardo.com.br
-2026-06-03 06:57:48,123 [INFO]   -> Jonas Gabriel Antunes Moreira [JUCETINS] | https://jonasleiloeiro.com.br
-2026-06-03 06:57:57,254 [INFO]   -> Lívia Leilane De Oliveira Azevedo [JUCETINS] | https://livialeiloes.com.br
-[JUCETINS] | https://lucasleiloeiro.com.br
-2026-06-03 06:52:18,066 [INFO]   -> ANA CAROLINA BRASIL DE OLIVEIRA MAIA [JUCISDF] | https://anabrasilleiloes.com.br
-2026-06-03 06:52:58,336 [INFO]     30 válidos / 30 extraídos
-2026-06-03 06:52:59,037 [INFO]   -> GIAN ROBERTO CAGNI BRAGGIO [JUCISDF] | https://braggio.com.br
-2026-06-03 06:53:09,980 [INFO]   -> HELCIO KRONBERG [JUCISDF] | https://krobergleiloes.com.br
-2026-06-03 06:53:23,215 [INFO]   -> Marcelo Valland [JUCISDF] | https://valland.com.br
-2026-06-03 06:53:35,366 [INFO]     55 válidos / 56 extraídos
-2026-06-03 06:53:36,067 [INFO]   -> PAULO HENRIQUE DE ALMEIDA TOLENTINO [JUCISDF] | https://paulotolentino.com.br
-2026-06-03 06:54:23,428 [INFO]     30 válidos / 30 extraídos
+2026-06-03 06:59:45,169 [INFO] CSV: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_leiloeiros_2026-06-03.csv (2155 registros)
+2026-06-03 06:59:45,624 [INFO] Viewer: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\viewer_leiloeiros_direto.html
+2026-06-03 06:59:46,326 [INFO]   -> Sami Raicher [JUCESP] | https://raicherleiloes.com.br
+2026-06-03 07:00:01,697 [INFO]     10 válidos / 17 extraídos
+2026-06-03 07:00:02,398 [INFO]   -> Silvia Dau Pelloni De Souza [JUCESP] | https://casaamarelaleiloes.com.br
+2026-06-03 07:00:06,937 [INFO]   -> Silvio Cesar De Jesus Santos [JUCESP] | https://editalleiloes.com.br
+2026-06-03 07:00:22,452 [INFO]   -> Spartaco Santi Junior [JUCESP] | https://spartacoleiloes.com.br
+2026-06-03 07:00:35,631 [INFO]   -> Tiago Clemente Sampaio [JUCESP] | https://multipliqueleiloes.com.br
+2026-06-03 07:00:44,799 [INFO]   -> Uilian Aparecido Da Silva [JUCESP] | https://goldleiloes.com.br
+2026-06-03 07:00:55,756 [INFO]     51 válidos / 71 extraídos
+2026-06-03 07:00:56,457 [INFO]   -> Wagner Lotti [JUCESP] | https://lottileiloes.com.br
+2026-06-03 07:01:13,083 [INFO]     20 válidos / 20 extraídos
+2026-06-03 07:01:13,783 [INFO]   -> Wanderley Samuel Pereira [JUCESP] | https://wspleiloes.com.br
+2026-06-03 07:01:31,629 [INFO]     28 válidos / 30 extraídos
+2026-06-03 07:01:32,330 [INFO]   -> Willian Pereira Teixeira Quenca [JUCESP] | https://willianquencaleiloeiro.com.br
+2026-06-03 07:01:41,327 [INFO]   -> Eduardo Gomes [JUCETINS] | https://leiloeiroeduardo.com.br
+2026-06-03 07:02:07,500 [INFO]   -> Jonas Gabriel Antunes Moreira [JUCETINS] | https://jonasleiloeiro.com.br
+2026-06-03 07:02:16,816 [INFO]   -> Lívia Leilane De Oliveira Azevedo [JUCETINS] | https://livialeiloes.com.br
+2026-06-03 07:02:27,600 [INFO]   -> Lucas Rafael Antunes Moreira [JUCETINS] | https://lucasleiloeiro.com.br
+2026-06-03 07:02:36,910 [INFO]   -> ANA CAROLINA BRASIL DE OLIVEIRA MAIA [JUCISDF] | https://anabrasilleiloes.com.br
+2026-06-03 07:03:18,374 [INFO]     30 válidos / 30 extraídos
+2026-06-03 07:03:19,075 [INFO]   -> GIAN ROBERTO CAGNI BRAGGIO [JUCISDF] | https://braggio.com.br
+2026-06-03 07:03:29,100 [INFO]   -> HELCIO KRONBERG [JUCISDF] | https://krobergleiloes.com.br
+2026-06-03 07:03:42,870 [INFO]   -> Marcelo Valland [JUCISDF] | https://valland.com.br
+2026-06-03 07:03:54,772 [INFO]     56 válidos / 56 extraídos
+2026-06-03 07:03:55,473 [INFO]   -> PAULO HENRIQUE DE ALMEIDA TOLENTINO [JUCISDF] | https://paulotolentino.com.br
+2026-06-03 07:04:39,427 [INFO]     30 válidos / 30 extraídos
+2026-06-03 07:04:40,128 [INFO]   -> Rossana Paiva Borges De Oliveira [JUCISDF] | https://caiapoleiloes.com.br
 
 ════════════════════════════════════════════════════════════
-  06:54:23  PROGRESSO [███████████████████░] 95%
-  Sites: 325/339  ✓ OK:102  ✗ Err:223
-  Imóveis capturados: 2329
+  07:05:06  PROGRESSO [███████████████████░] 96%
+  Sites: 326/339  ✓ OK:103  ✗ Err:223
+  Imóveis capturados: 2380
 ════════════════════════════════════════════════════════════
 
-2026-06-03 06:54:23,458 [INFO] CSV: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_leiloeiros_2026-06-03.csv (2329 registros)
-2026-06-03 06:54:24,099 [INFO] Viewer: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\viewer_leiloeiros_direto.html
-2026-06-03 06:54:24,802 [INFO]   -> Rossana Paiva Borges De Oliveira [JUCISDF] | https://caiapoleiloes.com.br
-2026-06-03 06:54:48,293 [INFO]   -> ALEXANDRE RECH [JUCISRS] | https://rechleiloes.com.br
-2026-06-03 06:55:17,374 [INFO]     40 válidos / 40 extraídos
-2026-06-03 06:55:18,075 [INFO]   -> AUGUSTO PARMEGGIANI PESTANA MARQUES GOME [JUCISRS] | https://pestanaleiloes.com.br
-2026-06-03 06:55:24,270 [INFO]   -> DIONIR BIANCHI [JUCISRS] | https://bianchileiloes.com.br
-2026-06-03 06:55:39,835 [INFO]     9 válidos / 9 extraídos
-2026-06-03 06:55:40,537 [INFO]   -> GABRIEL SILVA DA ROSA [JUCISRS] | https://gabrielleiloes.com.br
-2026-06-03 06:55:54,261 [INFO]   -> GIANCARLO PETERLONGO LORENZINI MENEGOTTO [JUCISRS] | https://peterlongoleiloes.com.br
-2026-06-03 06:56:07,953 [INFO]     50 válidos / 65 extraídos
-2026-06-03 06:56:08,654 [INFO]   -> GUSTAVO TURANI [JUCISRS] | https://turanileiloes.com.br
-2026-06-03 06:56:18,858 [INFO]   -> JEFÃRSON BENEDETTO [JUCISRS] | https://benedettoleiloes.com.br
-2026-06-03 06:56:27,837 [INFO]   -> JOEL DA SILVA REIS [JUCISRS] | https://joelreisleiloes.com.br
-2026-06-03 06:56:40,688 [INFO]   -> Josecelli Kildare Fraga Gomes [JUCISRS] | https://kildareleiloes.com.br
-2026-06-03 06:57:00,436 [INFO]   -> JOYCE RIBEIRO [JUCISRS] | https://leiloesjudiciaisrs.com.br
-2026-06-03 06:57:26,171 [INFO]   -> LUCIANO SCHEID [JUCISRS] | https://scheidleiloes.com.br
-2026-06-03 06:57:46,809 [INFO]     30 válidos / 30 extraídos
-2026-06-03 06:57:47,510 [INFO]   -> MAURICIO RODRIGO BACK [JUCISRS] | https://backleiloes.com.br
-2026-06-03 06:58:03,212 [INFO]     3 válidos / 4 extraídos
- De Oliveira Azevedo [JUCETINS] | https://livialeiloes.com.br
-2026-06-03 06:54:49,231 [INFO]   -> Lucas Rafael Antunes Moreira [JUCETINS] | https://lucasleiloeiro.com.br
-2026-06-03 06:54:58,369 [INFO]   -> ANA CAROLINA BRASIL DE OLIVEIRA MAIA [JUCISDF] | https://anabrasilleiloes.com.br
+2026-06-03 07:05:06,554 [INFO] CSV: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_leiloeiros_2026-06-03.csv (2380 registros)
+2026-06-03 07:05:07,143 [INFO] Viewer: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\viewer_leiloeiros_direto.html
+2026-06-03 07:05:07,845 [INFO]   -> ALEXANDRE RECH [JUCISRS] | https://rechleiloes.com.br
+2026-06-03 07:05:36,936 [INFO]     40 válidos / 40 extraídos
+2026-06-03 07:05:37,637 [INFO]   -> AUGUSTO PARMEGGIANI PESTANA MARQUES GOME [JUCISRS] | https://pestanaleiloes.com.br
+2026-06-03 07:05:43,684 [INFO]   -> DIONIR BIANCHI [JUCISRS] | https://bianchileiloes.com.br
+2026-06-03 07:05:58,629 [INFO]     9 válidos / 9 extraídos
+2026-06-03 07:05:59,330 [INFO]   -> GABRIEL SILVA DA ROSA [JUCISRS] | https://gabrielleiloes.com.br
+2026-06-03 07:06:13,680 [INFO]   -> GIANCARLO PETERLONGO LORENZINI MENEGOTTO [JUCISRS] | https://peterlongoleiloes.com.br
+2026-06-03 07:06:26,382 [INFO]     50 válidos / 65 extraídos
+2026-06-03 07:06:27,083 [INFO]   -> GUSTAVO TURANI [JUCISRS] | https://turanileiloes.com.br
+2026-06-03 07:06:37,780 [INFO]   -> JEFÃRSON BENEDETTO [JUCISRS] | https://benedettoleiloes.com.br
+2026-06-03 07:06:46,411 [INFO]   -> JOEL DA SILVA REIS [JUCISRS] | https://joelreisleiloes.com.br
+2026-06-03 07:06:58,086 [INFO]   -> Josecelli Kildare Fraga Gomes [JUCISRS] | https://kildareleiloes.com.br
+2026-06-03 07:07:18,214 [INFO]   -> JOYCE RIBEIRO [JUCISRS] | https://leiloesjudiciaisrs.com.br
+2026-06-03 07:07:42,759 [INFO]   -> LUCIANO SCHEID [JUCISRS] | https://scheidleiloes.com.br
+2026-06-03 07:08:04,668 [INFO]     30 válidos / 30 extraídos
+2026-06-03 07:08:05,369 [INFO]   -> MAURICIO RODRIGO BACK [JUCISRS] | https://backleiloes.com.br
+2026-06-03 07:08:20,560 [INFO]     3 válidos / 4 extraídos
+2026-06-03 07:08:21,261 [INFO]   -> PEDRO MESQUITA DA CRUZ [JUCISRS] | https://evolveleiloes.com
+
+════════════════════════════════════════════════════════════
+  07:08:34  PROGRESSO [████████████████████] 100%
+  Sites: 339/339  ✓ OK:108  ✗ Err:231
+  Imóveis capturados: 2512
+════════════════════════════════════════════════════════════
+
+2026-06-03 07:08:34,439 [INFO] CSV: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_leiloeiros_2026-06-03.csv (2512 registros)
+2026-06-03 07:08:35,103 [INFO] Viewer: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\viewer_leiloeiros_direto.html
+2026-06-03 07:08:35,105 [INFO] === CONCLUÍDO! 2512 imóveis de 108 sites ===
+
+Viewer: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\viewer_leiloeiros_direto.html
+CSV:    c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_leiloeiros_2026-06-03.csv
+] | https://pestanaleiloes.com.br
+
+════════════════════════════════════════════════════════════
+  06:58:03  PROGRESSO [███████████████████░] 96%
+  Sites: 328/339  ✓ OK:104  ✗ Err:224
+  Imóveis capturados: 2421
+════════════════════════════════════════════════════════════
+
+2026-06-03 06:58:03,718 [INFO] CSV: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_leiloeiros_2026-06-03.csv (2421 registros)
+2026-06-03 06:58:04,379 [INFO] Viewer: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\viewer_leiloeiros_direto.html
+2026-06-03 06:58:05,083 [INFO]   -> DIONIR BIANCHI [JUCISRS] | https://bianchileiloes.com.br
+2026-06-03 06:58:20,797 [INFO]     9 válidos / 9 extraídos
+2026-06-03 06:58:21,499 [INFO]   -> GABRIEL SILVA DA ROSA [JUCISRS] | https://gabrielleiloes.com.br
+2026-06-03 06:58:34,868 [INFO]   -> GIANCARLO PETERLONGO LORENZINI MENEGOTTO [JUCISRS] | https://peterlongoleiloes.com.br
+2026-06-03 06:58:48,215 [INFO]     50 válidos / 65 extraídos
+2026-06-03 06:58:48,917 [INFO]   -> GUSTAVO TURANI [JUCISRS] | https://turanileiloes.com.br
+2026-06-03 06:58:59,380 [INFO]   -> JEFÃRSON BENEDETTO [JUCISRS] | https://benedettoleiloes.com.br
+2026-06-03 06:59:07,943 [INFO]   -> JOEL DA SILVA REIS [JUCISRS] | https://joelreisleiloes.com.br
+2026-06-03 06:59:19,684 [INFO]   -> Josecelli Kildare Fraga Gomes [JUCISRS] | https://kildareleiloes.com.br
+2026-06-03 06:59:40,443 [INFO]   -> JOYCE RIBEIRO [JUCISRS] | https://leiloesjudiciaisrs.com.br
+2026-06-03 07:00:04,958 [INFO]   -> LUCIANO SCHEID [JUCISRS] | https://scheidleiloes.com.br
+2026-06-03 07:00:30,011 [INFO]     30 válidos / 30 extraídos
+2026-06-03 07:00:30,712 [INFO]   -> MAURICIO RODRIGO BACK [JUCISRS] | https://backleiloes.com.br
+2026-06-03 07:00:45,903 [INFO]     3 válidos / 4 extraídos
+2026-06-03 07:00:46,604 [INFO]   -> PEDRO MESQUITA DA CRUZ [JUCISRS] | https://evolveleiloes.com
+
+════════════════════════════════════════════════════════════
+  07:00:59  PROGRESSO [████████████████████] 100%
+  Sites: 339/339  ✓ OK:108  ✗ Err:231
+  Imóveis capturados: 2513
+════════════════════════════════════════════════════════════
+
+2026-06-03 07:00:59,914 [INFO] CSV: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_leiloeiros_2026-06-03.csv (2513 registros)
+2026-06-03 07:01:00,545 [INFO] Viewer: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\viewer_leiloeiros_direto.html
+2026-06-03 07:01:00,548 [INFO] === CONCLUÍDO! 2513 imóveis de 108 sites ===
+
+Viewer: c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\viewer_leiloeiros_direto.html
+CSV:    c:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_leiloeiros_2026-06-03.csv

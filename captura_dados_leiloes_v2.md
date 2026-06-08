@@ -19,6 +19,8 @@
 > **Adições jun/2026 (seção 32):** correção e deduplicação de nomes de cidades no PostgreSQL Docker — diagnóstico de mojibake, endpoint `/imoveis/cidades` sem `unaccent`/`municipios_ibge`, enums maiúsculos, e script `corrigir_cidades.py` com modos `--todos`, `--cidade`, `--deduplicar` e `--listar`.
 >
 > **Adições jun/2026 (seção 34):** scraping JUCEMS — parse robusto de arquivo `.txt` com encoding corrompido (U+FFFD), leiloeiros Regular do MS, 593 imóveis de 49 sites, diagnóstico de armadilhas: enums PostgreSQL maiúsculos, `WinError 206` (SQL muito longo no Windows), sites offline/DNS inválido, leiloeiro com endereço em UF diferente do MS, `sys.stdout.reconfigure` quebrando redirecionamento de log.
+>
+> **Adições jun/2026 (seção 36):** correção crítica de importação PostgreSQL — rollback em cascata com psycopg2 (cada falha apagava até 99 linhas pendentes), NUL bytes (0x00) em campos de texto rejeitados pelo driver, overflow numérico, e duplicatas de `id_externo` no CSV. Solução com `SAVEPOINT` por linha. Checagem obrigatória pós-scraping (`verificar_importacao.py`) que compara CSV vs banco e reimporta os faltantes automaticamente.
 
 ---
 
@@ -4683,3 +4685,1061 @@ leiloes/
 - [x] API reiniciada
 - [ ] Geocodificar imóveis com estado incorreto
 - [ ] Pré-filtrar domínios offline antes de próxima execução
+
+---
+
+## 35. Scraping JUCISRS — Leiloeiros Regulares do RS (jun/2026)
+
+Coleta de imóveis dos leiloeiros credenciados pela **JUCISRS** (Junta Comercial do Estado do Rio Grande do Sul).
+Fonte: `https://sistemas.jucisrs.rs.gov.br/leiloeiros/busca/listar` (POST com `CodMunicipio=0`).
+Script: `scraper_jucisrs.py`.
+
+### 35.1. Descoberta da API JUCISRS
+
+A página raiz (`/leiloeiros/`) possui formulário com POST para `/busca/listar`:
+
+```python
+# GET direto retorna 500; necessário primeiro buscar cookie de sessão
+sess = requests.Session()
+sess.get('https://sistemas.jucisrs.rs.gov.br/leiloeiros/', verify=False)
+
+# POST com CodMunicipio='0' retorna todos os municípios (244+ leiloeiros)
+r = sess.post('https://sistemas.jucisrs.rs.gov.br/leiloeiros/busca/listar',
+              data={'Nome': '', 'CodMunicipio': '0'}, verify=False)
+r.encoding = 'latin-1'  # crítico: página em Latin-1
+```
+
+**Armadilha:** `GET /busca/listar` retorna `500 Database Error`. Necessário:
+1. Fazer GET da home para obter `ci_session` (cookie)
+2. Fazer POST com `CodMunicipio='0'` (todas as cidades)
+3. Decodificar como `latin-1` (encoding do servidor)
+
+### 35.2. Estrutura de dados no HTML
+
+O HTML retornado não usa `<table>` — usa blocos delimitados por `<hr>`:
+
+```
+<b><font color="#A01A14">173</font> - ADEMIR MIGUEL CORRÊA</b>
+www.correleiloes.com.br<br>
+Posse : 06/08/2003<br>
+RUA BORGES DE MEDEIROS, 415 - CANELA - RS<br>
+CEP 95.680-000 Telefone : (54) 999738341<br>
+e-Mail : correa@...<br>
+<hr>
+<b><font color="#A01A14">174</font> - CÍCERO VILAGRAN DA ROSA
+<font color="#FF0000"> (Cancelado)</font></b>
+...
+<hr>
+```
+
+**Filtro para Regular:** blocos que **não contêm** `(Cancelado)` nem `(Suspenso)`.
+
+```python
+blocks = re.split(r'<hr>', html, flags=re.IGNORECASE)
+for block in blocks[4:]:   # primeiros 4 são cabeçalho/formulário
+    if 'cancelado' in block.lower(): continue
+    if 'suspenso' in block.lower(): continue
+    # → este bloco é Regular
+```
+
+### 35.3. Resultado da coleta
+
+| Métrica | Valor |
+|---|---|
+| Leiloeiros Regular encontrados | 244 |
+| Cancelados (filtrados) | 121 |
+| Suspensos (filtrados) | 16 |
+| Leiloeiros com site identificado | 183 |
+| Leiloeiros sem site | 34 |
+| Sites processados | 183 |
+| Sites com imóveis ativos | 128 |
+| Sites sem leilão ativo | 55 |
+| Sites offline | 1 |
+| Erros de rede | 0 |
+| **Total imóveis coletados** | **3.946** |
+| SQLite: inseridos | 3.629 (317 já existiam) |
+| PostgreSQL: inseridos | 3.862 |
+| Tempo total de scraping | ~203 min (3h23min) |
+| CSV leiloeiros | `csv/leiloeiros_jucisrs_2026-06-08.csv` |
+| CSV imóveis | `csv/imoveis_jucisrs_2026-06-08.csv` |
+
+### 35.4. Distribuição por leiloeiro (top 20)
+
+| Leiloeiro | Imóveis |
+|---|---|
+| DANIEL HAMOUI (dhleiloes.com.br) | 195 |
+| IRANI FLORES (leilaobrasil.com.br) | 144 |
+| GIANCARLO PETERLONGO LORENZINI (peterlongoleiloes.com.br) | 119 |
+| EDUARDO VIVIAN (eduardovivian.com) | 105 |
+| TIAGO TESSLER BLECHER (webleiloes.com.br) | 81 |
+| LUCAS ANDREATTA DE OLIVEIRA (leiloariasmart.com.br) | 78 |
+| CARMEN GOMES PIETOSO (pietosoleiloes.lel.br) | 76 |
+| GILMAR THUME (gtleiloes.com.br) | 64 |
+| MARCELO SOUZA SCHONARDIE (marceloleiloeiro.com.br) | 64 |
+| JOSÉ CLÓVIS VAZ DE SOUZA (clovisleiloeiro.com.br) | 51 |
+| DANIEL COSTA MÜLLER (mullerleiloes.com.br) | 51 |
+| DANIEL ELIAS GARCIA (danielgarcialeiloes.com.br) | 47 |
+| GUSTAVO EVALDO GAITSCH HUMOR (prhleiloes.com.br) | 45 |
+| FRANCISCO HILLESHEIM (alemaoleiloeiro.com.br) | 44 |
+| CATIELE BORGES LEFFA (leffaleiloes.com.br) | 43 |
+| ... demais 113 leiloeiros | 1–42 cada |
+
+### 35.5. Principais dificuldades enfrentadas
+
+#### 35.5.1. Site retorna 500 com GET direto
+
+**Problema:** `GET /leiloeiros/busca/listar` retorna `500 - A PHP Error was encountered`:
+```
+Undefined index: Nome (Model_leiloeiros.php, line 7)
+```
+
+**Causa:** O controller PHP espera os parâmetros `Nome` e `CodMunicipio` no corpo do POST.
+Um GET simples não envia esses campos, causando o erro de índice indefinido.
+
+**Solução:**
+```python
+# Obrigatório: sessão para cookie ci_session
+sess = requests.Session()
+sess.get(HOME_URL, verify=False)
+
+# POST com CodMunicipio='0' = todas as cidades
+r = sess.post(LISTAR_URL,
+              data={'Nome': '', 'CodMunicipio': '0'},
+              verify=False)
+```
+
+---
+
+#### 35.5.2. Encoding Latin-1 na resposta
+
+**Problema:** A página retorna encoding `LATIN1` (charset declarado no HTTP header).
+Se lido como UTF-8, todos os caracteres acentuados ficam corrompidos (`Ã©`, `Ã§`, etc.).
+
+**Solução:**
+```python
+r.encoding = 'latin-1'  # forçar antes de acessar r.text
+```
+
+---
+
+#### 35.5.3. Sites falsos positivos: provedores de e-mail e ISPs
+
+**Problema:** O parser extraía a URL de qualquer padrão `www.*.* ` no bloco HTML.
+Três leiloeiros tinham registrado como "site" o URL do seu provedor de e-mail:
+
+| Leiloeiro | URL registrada | Problema |
+|---|---|---|
+| LUIZ BARBOSA DE LIMA JUNIOR | `www.ymail.com` | Portal Yahoo Mail |
+| NELSON BERTOLUCI SANTOS | `www.sinos.net` | ISP regional RS |
+| VITOR HUGO ANTUNES FARIAS | `www.outlook.com.br` | Microsoft Outlook |
+
+**Impacto:** Sites processados desnecessariamente, sem imóveis encontrados.
+
+**Solução recomendada:** Expandir lista de domínios ignorados no parser:
+
+```python
+DOMINIOS_IGNORADOS = {
+    "gmail.com", "hotmail.com", "yahoo.com", "outlook.com", "ymail.com",
+    "outlook.com.br", "terra.com.br", "uol.com.br", "bol.com.br",
+    # ISPs regionais RS
+    "sinos.net", "brturbo.com", "oi.com.br", "gvt.com.br",
+    # Portais genéricos
+    "facebook.com", "instagram.com", "whatsapp.com",
+}
+def _derivar_site_email(email: str) -> str | None:
+    m = re.search(r'@([a-z0-9\-]+\.[a-z\.]+)', email.lower())
+    if not m or m.group(1) in DOMINIOS_IGNORADOS: return None
+    return f'https://www.{m.group(1)}'
+```
+
+---
+
+#### 35.5.4. Alta proporção de sites JS-heavy (~40% precisam de Playwright)
+
+**Problema:** ~75 dos 183 sites (~41%) retornaram HTML sem conteúdo de lotes
+via HTTP simples (`requests`) e exigiram Playwright para render. Isso aumentou
+o tempo médio de 3s/site (HTTP) para ~65s/site (Playwright), contribuindo para
+o tempo total de 3h23min.
+
+**Causa:** Tendência crescente de sites modernos de leilão usarem React/Next.js.
+Sites mais novos (matrícula > 400) são mais propensos a JS-heavy.
+
+**Sinais detectados automaticamente:**
+```python
+def is_js_heavy(html: str) -> bool:
+    markers = ["__next_data__", "__nuxt__", "react-root", "vue-app",
+               "ng-app", "window.__INITIAL_STATE__"]
+    if any(m in html.lower() for m in markers): return True
+    return len(BeautifulSoup(html, 'html.parser').get_text().strip()) < 300
+```
+
+**Solução recomendada:** Para scrapers futuros com muitos sites RS, executar
+Playwright paralelizado com `asyncio` + `playwright.async_api`:
+```python
+async def scrape_all_async(leiloeiros: list[dict]) -> list[dict]:
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        tasks = [scrape_one_async(browser, l) for l in leiloeiros]
+        return await asyncio.gather(*tasks, return_exceptions=True)
+```
+
+---
+
+#### 35.5.5. Timeout em sites lentos ou instáveis
+
+**Problema:** Alguns sites do RS apresentaram timeouts intermitentes:
+- `leiloesdosul.com.br` — `ConnectTimeout`
+- `rzleiloes.com.br` — `ReadTimeout`
+- `sinos.net` — `ConnectTimeout`
+
+**Causa:** Servidores com latência alta ou conexão instável. Alguns sites `.lel.br`
+(domínio CFI) apresentaram instabilidade de DNS.
+
+**Solução aplicada:** Fallback automático para Playwright quando HTTP falha:
+```python
+except Exception as e:
+    log(f"[WARN] HTTP falhou ({type(e).__name__}). Playwright...")
+    imoveis = scrape_playwright(lei, max_pags)
+```
+
+**Solução recomendada:** Retry com backoff exponencial antes de acionar Playwright:
+```python
+for attempt in range(3):
+    try:
+        r = sess.get(url, timeout=15, verify=False)
+        break
+    except requests.exceptions.Timeout:
+        time.sleep(2 ** attempt)  # 1s, 2s, 4s
+```
+
+---
+
+#### 35.5.6. Bloqueio de título `prhleiloes.com.br` (Playwright preso)
+
+**Problema:** O site `www.prhleiloes.com.br` ficou com Playwright preso por
+~10 minutos sem retornar conteúdo. Isso bloqueou a fila de scraping.
+
+**Causa:** O site provavelmente usa proteção Cloudflare que não foi detectada
+pelo `is_js_heavy()`, mas que bloqueia o Playwright headless sem stealth.
+
+**Solução recomendada:** Adicionar timeout global por site e detectar Cloudflare:
+```python
+# Timeout global de 120s por site
+try:
+    imoveis, status = func_timeout(120, scrape_leiloeiro, args=(lei, max_pags))
+except FunctionTimedOut:
+    log(f"  [TIMEOUT] {lei['site']} ultrapassou 120s")
+    imoveis, status = [], "timeout"
+```
+
+---
+
+#### 35.5.7. Nomes duplicados com matrícula diferente
+
+**Problema:** O parser retornou `GUSTAVO EVALDO GAITSCH HUMOR` com nome
+truncado incorretamente pela regex de corte (leu `HUMOR` como parte do nome).
+
+**Causa:** A regex `r"(\d+)\s*[-–]\s*([A-ZÁ...][A-Za-z...]+)"` não capturou
+o nome completo de leiloeiros com nomes longos terminando antes de "Posse:".
+
+**Exemplo observado:**
+```
+Bloco: "85 - GUSTAVO EVALDO GAITSCH HUMOR Posse : ..."
+Nome extraído: "GUSTAVO EVALDO GAITSCH HUMOR"  ← correto
+```
+Neste caso o corte funcionou, mas `HUMOR` ficou no nome.
+
+**Solução recomendada:** Usar stop-words mais precisos para o corte:
+```python
+nome = re.sub(r'\s+(Posse|www\.|http|Rua |Av\.|CEP|Fone|e-Mail)\s*:?.*$',
+              '', nome, flags=re.IGNORECASE | re.DOTALL).strip()
+```
+
+---
+
+### 35.6. Ordem de execução
+
+```powershell
+cd "C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes"
+
+# 1. Scraping (inclui importação automática para SQLite e PostgreSQL)
+python scraper_jucisrs.py --max-paginas 8
+
+# 2. Pós-processamento (se necessário manualmente)
+docker exec leilao_api bash -c "cd /app && python run.py classificar --limite 5000"
+docker exec leilao_api bash -c "cd /app && python run.py deduplicar"
+docker restart leilao_api
+```
+
+### 35.7. Arquivos criados nesta sessão
+
+```
+leiloes/
+├── scraper_jucisrs.py                  ← scraper principal
+├── import_jucisrs_docker.py            ← script de importação (gerado dinamicamente)
+├── scraper_jucisrs.log                 ← log completo (203 min)
+├── scraper_jucisrs_progress.json       ← progresso em tempo real
+└── csv/
+    ├── leiloeiros_jucisrs_2026-06-08.csv ← 244 leiloeiros Regular
+    └── imoveis_jucisrs_2026-06-08.csv   ← 3.946 imóveis
+```
+
+### 35.8. Checklist de execução
+
+- [x] POST com sessão para JUCISRS: 244 Regular identificados
+- [x] 183 sites únicos com site identificado
+- [x] CSV leiloeiros: `csv/leiloeiros_jucisrs_2026-06-08.csv` (244 registros)
+- [x] 3.946 imóveis coletados → `csv/imoveis_jucisrs_2026-06-08.csv`
+- [x] SQLite: 3.629 inseridos
+- [x] PostgreSQL: 3.862 inseridos via container
+- [x] Classifier: 206 classificados
+- [x] Deduplicar: 0 duplicatas (banco já consistente)
+- [x] API reiniciada
+- [ ] Expandir DOMINIOS_IGNORADOS para evitar ymail/sinos.net/outlook
+- [ ] Adicionar timeout global de 120s por site para evitar Playwright preso
+- [ ] Implementar Playwright async paralelo para reduzir tempo de 3h para ~40min
+
+---
+
+## 36. Checagem e correção de importação incompleta para o PostgreSQL
+
+Toda vez que um scraper termina com "X imóveis coletados" mas o banco mostra menos,
+o problema tem **três causas documentadas** — todas resolvidas pelo padrão desta seção.
+
+---
+
+### 36.1. As três causas de perda de dados na importação
+
+#### Causa 1: Rollback em cascata (a mais grave)
+
+**Sintoma:** log diz "N inseridos" mas banco tem muito menos.
+
+O psycopg2 usa transações explícitas. Quando `conn.rollback()` é chamado ao
+tratar um erro, ele **desfaz toda a transação pendente** — não só a linha que falhou.
+Com commits a cada 100 linhas, cada erro pode apagar até 99 linhas anteriores.
+
+```python
+# PADRÃO ERRADO — usado em versões antigas dos scrapers
+for r in rows:
+    try:
+        cur.execute(INSERT_SQL, params)
+        ins += 1
+    except Exception as e:
+        err += 1
+        conn.rollback()   # ← apaga até 99 linhas não commitadas!
+    if ins % 100 == 0:
+        conn.commit()
+conn.commit()
+```
+
+```python
+# PADRÃO CORRETO — SAVEPOINT isola a falha na linha atual
+for r in rows:
+    cur.execute('SAVEPOINT sp')
+    try:
+        cur.execute(INSERT_SQL, params)
+        cur.execute('RELEASE SAVEPOINT sp')
+        ins += 1
+    except Exception as e:
+        cur.execute('ROLLBACK TO SAVEPOINT sp')
+        cur.execute('RELEASE SAVEPOINT sp')
+        err += 1
+    if (ins + err) % 200 == 0:
+        conn.commit()
+conn.commit()
+```
+
+> **Regra:** nunca use `conn.rollback()` dentro de um loop de inserção.
+> Use sempre `SAVEPOINT` / `ROLLBACK TO SAVEPOINT` para isolar falhas por linha.
+
+---
+
+#### Causa 2: NUL bytes (0x00) em campos de texto
+
+**Sintoma:** `psycopg2.errors.StringDataRightTruncation` ou
+`A string literal cannot contain NUL (0x00) characters.`
+
+HTML de alguns sites embute bytes nulos em títulos, descrições e URLs.
+O psycopg2 rejeita qualquer string com `\x00`.
+
+```python
+# PADRÃO CORRETO — limpar NUL antes de qualquer INSERT
+def clean(v: str | None, max_len: int | None = None) -> str:
+    s = str(v or '').replace('\x00', '')   # remove NUL bytes
+    return s[:max_len] if max_len else s
+```
+
+Aplicar em todos os campos de texto antes de passar para `cur.execute()`.
+
+---
+
+#### Causa 3: Overflow numérico em campos NUMERIC
+
+**Sintoma:** `numeric field overflow — A field with precision 15, scale 2 must round to an absolute value less than 10^13.`
+
+Valores de preço absurdos (ex.: `10000000000000.0`) surgem quando o scraper
+captura uma área ou código como preço (parsing errado do HTML).
+
+```python
+# Validar antes de inserir
+MAX_PRICE = 9_999_999_999_999.99   # limite do NUMERIC(15,2)
+
+def _d(v) -> float | None:
+    try:
+        f = float(Decimal(str(v).replace(',', '.'))) if v else None
+        if f is not None and abs(f) > MAX_PRICE:
+            return None   # descarta valor impossível
+        return f
+    except Exception:
+        return None
+```
+
+---
+
+### 36.2. Script `verificar_importacao.py` — checagem obrigatória pós-scraping
+
+Roda ao final de **todo scraping**, compara o CSV com o banco e reimporta
+automaticamente as linhas faltantes usando o padrão correto (savepoints + limpeza).
+
+Localização: `C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\verificar_importacao.py`
+
+**Uso:**
+```powershell
+# Verifica e reimporta se necessário (modo padrão)
+python verificar_importacao.py
+
+# Só verifica, não importa
+python verificar_importacao.py --so-verificar
+
+# Força reimportação de todos (mesmo os que já estão no banco)
+python verificar_importacao.py --forcar
+```
+
+**O que o script faz:**
+1. Lê o CSV mais recente de `csv/imoveis_*.csv`
+2. Consulta o banco: `SELECT id_externo FROM imoveis WHERE fonte_id = ?`
+3. Calcula `faltantes = ids_csv - ids_banco`
+4. Se `faltantes > 0`: copia CSV para o container e reimporta usando savepoints
+5. Repete a verificação e reporta o resultado final
+
+**Critérios de sucesso:**
+- `faltantes == 0` após reimportação → OK
+- `faltantes > 0` por overflow/dado inválido → reporta as linhas problemáticas
+- `faltantes > 0` por duplicata de `id_externo` → comportamento esperado (mesmo URL = mesmo hash)
+
+---
+
+### 36.3. Código completo do `verificar_importacao.py`
+
+```python
+"""
+verificar_importacao.py
+=======================
+Checagem pós-scraping: compara CSV com banco e reimporta faltantes.
+Executar após qualquer scraping de leiloeiros.
+
+Uso:
+    python verificar_importacao.py [--so-verificar] [--forcar] [--fonte NOME] [--csv ARQUIVO]
+"""
+import csv, os, sys, subprocess, argparse
+from pathlib import Path
+from decimal import Decimal
+
+BASE    = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+CSV_DIR = BASE / "csv"
+
+
+def _d(v):
+    try:
+        f = float(Decimal(str(v).replace(',', '.'))) if v else None
+        return f if f is None or abs(f) <= 9_999_999_999_999.99 else None
+    except Exception:
+        return None
+
+
+def clean(v, max_len=None):
+    s = str(v or '').replace('\x00', '')
+    return s[:max_len] if max_len else s
+
+
+def detectar_fonte(csv_path: Path) -> str:
+    """Detecta o nome da fonte pelo nome do arquivo CSV."""
+    nome = csv_path.stem.lower()
+    for junta in ['jucisrs','jucems','jucesc','jucerja','jucemat','jucesp']:
+        if junta in nome:
+            return junta.upper()
+    if 'caixa' in nome: return 'Caixa'
+    if 'leiloesjudiciais' in nome: return 'LeilõesJudiciais'
+    if 'bomvalor' in nome: return 'BomValor'
+    return Path(nome).stem.replace('imoveis_','').replace('_',' ').title()
+
+
+def psql_query(sql: str) -> list[str]:
+    """Executa query no container e retorna lista de linhas."""
+    proc = subprocess.run(
+        ['docker','exec','leilao_postgres','psql','-U','leilao','-d','leilao_db',
+         '--no-align','--tuples-only','-c', sql],
+        capture_output=True, text=True, encoding='utf-8', timeout=30
+    )
+    return [l.strip() for l in proc.stdout.splitlines() if l.strip()]
+
+
+def verificar(csv_path: Path, fonte_nome: str) -> dict:
+    """Retorna {'total_csv','ids_csv','ids_banco','faltantes','extras'}."""
+    rows = list(csv.DictReader(open(csv_path, newline='', encoding='utf-8-sig')))
+    ids_csv = {clean(r.get('id_externo',''), 200) for r in rows if r.get('id_externo')}
+
+    # IDs no banco para esta fonte
+    ids_banco_raw = psql_query(
+        f"SELECT id_externo FROM imoveis WHERE fonte_id="
+        f"(SELECT id FROM fontes WHERE nome='{fonte_nome}' LIMIT 1)"
+    )
+    ids_banco = set(ids_banco_raw)
+
+    faltantes = ids_csv - ids_banco
+    extras    = ids_banco - ids_csv   # no banco mas não no CSV (importações anteriores)
+
+    return {
+        'total_csv':   len(rows),
+        'total_unicos_csv': len(ids_csv),
+        'ids_csv':     ids_csv,
+        'ids_banco':   ids_banco,
+        'faltantes':   faltantes,
+        'extras':      extras,
+    }
+
+
+# Script que roda DENTRO do container Docker
+INNER_SCRIPT = '''
+import csv, os, sys
+from decimal import Decimal
+from pathlib import Path
+
+CSV_FILE = '/tmp/_reimport.csv'
+FONTE_NOME = open('/tmp/_reimport_fonte.txt').read().strip()
+
+rows = list(csv.DictReader(open(CSV_FILE, newline='', encoding='utf-8-sig')))
+
+def _d(v):
+    try:
+        f = float(Decimal(str(v).replace(',', '.'))) if v else None
+        return f if f is None or abs(f) <= 9_999_999_999_999.99 else None
+    except Exception: return None
+
+def clean(v, max_len=None):
+    s = str(v or '').replace('\\x00', '')
+    return s[:max_len] if max_len else s
+
+import psycopg2
+db_url = os.environ.get('DATABASE_URL_SYNC','postgresql://leilao:leilao123@postgres:5432/leilao_db')
+db_url = db_url.replace('postgresql+asyncpg://','postgresql://')
+conn = psycopg2.connect(db_url)
+cur = conn.cursor()
+
+cur.execute(f"INSERT INTO fontes (nome,url_base,ativo,criado_em) VALUES ('{FONTE_NOME}','',true,NOW()) ON CONFLICT (nome) DO NOTHING")
+cur.execute(f"SELECT id FROM fontes WHERE nome='{FONTE_NOME}' LIMIT 1")
+FONTE_ID = cur.fetchone()[0]
+conn.commit()
+
+TIPOS_I = {'APARTAMENTO','CASA','TERRENO','COMERCIAL','RURAL','GALPAO','SALA','VAGA','OUTRO'}
+TIPOS_L = {'JUDICIAL','EXTRAJUDICIAL','BANCARIO'}
+ins = upd = err = 0
+
+SQL = """INSERT INTO imoveis (
+    fonte_id,id_externo,titulo,descricao,url_original,
+    tipo_imovel,tipo_leilao,status,categoria,
+    cidade,estado,cep,endereco_completo,
+    valor_minimo,valor_avaliacao,area_total,quartos,
+    data_primeiro_leilao,data_segundo_leilao,
+    imagem_principal,arquivos,numero_processo,
+    leiloeiro,ativo,classificado,geocodificado,criado_em,atualizado_em
+) VALUES (%s,%s,%s,%s,%s,%s,%s,'ABERTO','IMOVEL',
+          %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
+          true,false,false,NOW(),NOW())
+ON CONFLICT (fonte_id,id_externo) DO UPDATE SET
+    titulo=EXCLUDED.titulo, valor_minimo=EXCLUDED.valor_minimo,
+    data_primeiro_leilao=EXCLUDED.data_primeiro_leilao,
+    imagem_principal=EXCLUDED.imagem_principal,
+    arquivos=EXCLUDED.arquivos, atualizado_em=NOW()"""
+
+for i, r in enumerate(rows):
+    ti = clean(r.get('tipo_imovel','outro')).upper()
+    if ti not in TIPOS_I: ti = 'OUTRO'
+    tl = clean(r.get('tipo_leilao','extrajudicial')).upper()
+    if tl not in TIPOS_L: tl = 'EXTRAJUDICIAL'
+    id_ext = clean(r.get('id_externo',''), 200)
+    if not id_ext: continue
+    cur.execute('SAVEPOINT sp')
+    try:
+        cur.execute(SQL, (
+            FONTE_ID, id_ext,
+            clean(r.get('titulo',''),500), clean(r.get('descricao',''),500),
+            clean(r.get('url_original',''),1000), ti, tl,
+            clean(r.get('cidade',''),200), clean(r.get('estado','RS'),2),
+            clean(r.get('cep',''),10), clean(r.get('endereco_completo',''),500),
+            _d(r.get('valor_minimo')), _d(r.get('valor_avaliacao')),
+            _d(r.get('area_total')),
+            int(r['quartos']) if r.get('quartos') else None,
+            clean(r.get('data_primeiro_leilao','')) or None,
+            clean(r.get('data_segundo_leilao','')) or None,
+            clean(r.get('imagem_principal',''),1000),
+            clean(r.get('arquivos','[]'),4000),
+            clean(r.get('numero_processo',''),100),
+            clean(r.get('leiloeiro',''),300),
+        ))
+        cur.execute('RELEASE SAVEPOINT sp')
+        ins += 1
+    except Exception as e:
+        cur.execute('ROLLBACK TO SAVEPOINT sp')
+        cur.execute('RELEASE SAVEPOINT sp')
+        err += 1
+        if err <= 5: print(f'  ERR [{i}] {str(e)[:100]}')
+    if (i+1) % 200 == 0:
+        conn.commit()
+
+conn.commit(); cur.close(); conn.close()
+print(f'[OK] {ins} processados, {err} erros')
+'''
+
+
+def reimportar(csv_path: Path, fonte_nome: str, ids_faltantes: set) -> tuple[int, int]:
+    """Reimporta apenas as linhas faltantes. Retorna (inseridos, erros)."""
+    rows_todas = list(csv.DictReader(open(csv_path, newline='', encoding='utf-8-sig')))
+    rows_faltantes = [r for r in rows_todas
+                      if clean(r.get('id_externo',''), 200) in ids_faltantes]
+
+    if not rows_faltantes:
+        return 0, 0
+
+    # Salva CSV temporário só com as linhas faltantes
+    tmp_csv = BASE / '_reimport_tmp.csv'
+    with open(tmp_csv, 'w', newline='', encoding='utf-8-sig') as f:
+        w = csv.DictWriter(f, fieldnames=rows_todas[0].keys())
+        w.writeheader()
+        w.writerows(rows_faltantes)
+
+    # Salva script e fonte
+    script_path = BASE / '_reimport_inner.py'
+    script_path.write_text(INNER_SCRIPT, encoding='utf-8')
+    (BASE / '_reimport_fonte.txt').write_text(fonte_nome, encoding='utf-8')
+
+    # Copia para container e executa
+    subprocess.run(['docker','cp', str(tmp_csv),   'leilao_api:/tmp/_reimport.csv'], check=True)
+    subprocess.run(['docker','cp', str(script_path),'leilao_api:/tmp/_reimport_inner.py'], check=True)
+    subprocess.run(['docker','cp', str(BASE/'_reimport_fonte.txt'),'leilao_api:/tmp/_reimport_fonte.txt'], check=True)
+
+    proc = subprocess.run(
+        ['docker','exec','leilao_api','python','/tmp/_reimport_inner.py'],
+        capture_output=True, text=True, encoding='utf-8', timeout=600
+    )
+    print(proc.stdout.strip())
+    if proc.returncode != 0:
+        print('[ERR]', proc.stderr[:200])
+
+    # Lê resultado
+    for linha in proc.stdout.splitlines():
+        if '[OK]' in linha:
+            parts = linha.replace('[OK]','').split(',')
+            ins = int(parts[0].strip().split()[0]) if parts else 0
+            err = int(parts[1].strip().split()[0]) if len(parts) > 1 else 0
+            return ins, err
+    return 0, 0
+
+
+def main():
+    ap = argparse.ArgumentParser(description='Checagem pós-scraping CSV vs banco')
+    ap.add_argument('--so-verificar', action='store_true', help='Só verifica, não reimporta')
+    ap.add_argument('--forcar', action='store_true', help='Reimporta todos (mesmo existentes)')
+    ap.add_argument('--fonte', type=str, help='Nome da fonte no banco (ex: JUCISRS)')
+    ap.add_argument('--csv', type=str, help='Caminho do CSV (padrão: mais recente em /csv)')
+    args = ap.parse_args()
+
+    # Encontra CSV
+    if args.csv:
+        csv_path = Path(args.csv)
+    else:
+        csvs = sorted(CSV_DIR.glob('imoveis_*.csv'), key=lambda p: p.stat().st_mtime, reverse=True)
+        if not csvs:
+            print('[ERRO] Nenhum CSV encontrado em', CSV_DIR)
+            sys.exit(1)
+        csv_path = csvs[0]
+
+    fonte_nome = args.fonte or detectar_fonte(csv_path)
+    print(f'[INFO] CSV:   {csv_path.name}')
+    print(f'[INFO] Fonte: {fonte_nome}')
+
+    # Verificação inicial
+    print('\n--- Verificação inicial ---')
+    resultado = verificar(csv_path, fonte_nome)
+    total_csv   = resultado['total_csv']
+    unicos_csv  = resultado['total_unicos_csv']
+    n_banco     = len(resultado['ids_banco'])
+    n_faltantes = len(resultado['faltantes'])
+    n_extras    = len(resultado['extras'])
+    duplicatas  = total_csv - unicos_csv
+
+    print(f'  Total CSV:            {total_csv}')
+    print(f'  Únicos (id_externo):  {unicos_csv}  ({duplicatas} duplicatas no CSV = mesmo URL)')
+    print(f'  No banco (fonte):     {n_banco}')
+    print(f'  Faltando no banco:    {n_faltantes}')
+    print(f'  Extras no banco:      {n_extras}  (de importações anteriores)')
+
+    if n_faltantes == 0 and not args.forcar:
+        print('\n[OK] Todos os imóveis únicos do CSV estão no banco.')
+        return
+
+    if args.so_verificar:
+        print(f'\n[ATENÇÃO] {n_faltantes} faltantes. Use sem --so-verificar para reimportar.')
+        return
+
+    # Reimportação
+    ids_para_reimportar = resultado['faltantes'] if not args.forcar else resultado['ids_csv']
+    print(f'\n--- Reimportando {len(ids_para_reimportar)} linhas faltantes ---')
+    ins, err = reimportar(csv_path, fonte_nome, ids_para_reimportar)
+    print(f'  Reimportados: {ins} | Erros persistentes: {err}')
+
+    # Verificação final
+    print('\n--- Verificação final ---')
+    resultado2 = verificar(csv_path, fonte_nome)
+    n_faltantes2 = len(resultado2['faltantes'])
+    n_banco2     = len(resultado2['ids_banco'])
+
+    print(f'  No banco agora:    {n_banco2}')
+    print(f'  Ainda faltando:    {n_faltantes2}')
+
+    if n_faltantes2 == 0:
+        print('\n[OK] Banco sincronizado com o CSV.')
+    elif n_faltantes2 == err:
+        print(f'\n[AVISO] {n_faltantes2} linha(s) com dados inválidos (overflow, NUL irrecuperável).')
+        print('  Estas linhas têm erros nos dados de origem e não podem ser inseridas.')
+        # Mostra quais
+        rows_inv = list(csv.DictReader(open(csv_path, newline='', encoding='utf-8-sig')))
+        for r in rows_inv:
+            if clean(r.get('id_externo',''),200) in resultado2['faltantes']:
+                print(f'  → [{r.get("id_externo","")[:20]}] {r.get("leiloeiro","")} | '
+                      f'preco={r.get("valor_minimo","")} | titulo={r.get("titulo","")[:40]}')
+    else:
+        print(f'\n[FALHA] {n_faltantes2} linhas ainda faltando após reimportação.')
+        print('  Execute novamente ou verifique o log do container:')
+        print('  docker logs leilao_api --tail 50')
+
+    # Pós-processamento
+    if n_banco2 > n_banco:
+        print('\n[Pós-processamento] Classificando e deduplicando novos registros...')
+        subprocess.run(['docker','exec','leilao_api','bash','-c',
+                        'cd /app && python run.py classificar --limite 2000'],
+                       capture_output=True, timeout=120)
+        subprocess.run(['docker','exec','leilao_api','bash','-c',
+                        'cd /app && python run.py deduplicar'],
+                       capture_output=True, timeout=60)
+        subprocess.run(['docker','restart','leilao_api'], capture_output=True, timeout=60)
+        print('  Feito.')
+
+
+if __name__ == '__main__':
+    main()
+```
+
+---
+
+### 36.4. Como integrar no pipeline de cada scraper
+
+**Passo único:** adicionar no final de todo scraper, depois da importação:
+
+```python
+# Ao final do main() de qualquer scraper
+import subprocess
+print("\n[Checagem pós-scraping] Verificando integridade...")
+proc = subprocess.run(
+    ["python", "verificar_importacao.py",
+     "--fonte", NOME_FONTE,         # ex.: "JUCISRS", "JUCEMS", "JUCESC"
+     "--csv",   str(csv_imoveis)],  # caminho do CSV gerado
+    capture_output=False,           # mostra output em tempo real
+    timeout=600
+)
+```
+
+Ou via linha de comando, como checagem manual após qualquer scraping:
+
+```powershell
+cd "C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes"
+
+# Verifica o CSV mais recente (detecção automática de fonte)
+python verificar_importacao.py
+
+# Verifica um CSV específico
+python verificar_importacao.py --csv csv\imoveis_jucisrs_2026-06-08.csv
+
+# Apenas mostra divergência sem reimportar
+python verificar_importacao.py --so-verificar
+
+# Força reimportação completa (útil se o banco foi recriado)
+python verificar_importacao.py --forcar
+```
+
+---
+
+### 36.5. Padrão de INSERT correto para todos os scrapers futuros
+
+Todo script de importação para PostgreSQL deve seguir este padrão:
+
+```python
+def importar_postgres_correto(rows: list[dict], fonte_id: int, conn):
+    """
+    Importação robusta com:
+    - SAVEPOINT por linha (falha isola só a linha atual)
+    - Limpeza de NUL bytes antes de inserir
+    - Validação de overflow numérico
+    - Commit a cada 200 linhas
+    """
+    MAX_PRICE = 9_999_999_999_999.99
+    cur = conn.cursor()
+    ins = upd = err = 0
+
+    for i, r in enumerate(rows):
+        id_ext = clean(r.get('id_externo', ''), 200)
+        if not id_ext:
+            continue
+
+        cur.execute('SAVEPOINT sp')
+        try:
+            cur.execute(INSERT_SQL, build_params(r, fonte_id))
+            cur.execute('RELEASE SAVEPOINT sp')
+            ins += 1
+        except Exception as e:
+            cur.execute('ROLLBACK TO SAVEPOINT sp')
+            cur.execute('RELEASE SAVEPOINT sp')
+            err += 1
+            if err <= 3:
+                print(f'  ERR [{i}] {str(e)[:120]}')
+        finally:
+            if (i + 1) % 200 == 0:
+                conn.commit()
+                print(f'  {i+1}/{len(rows)}: {ins} ins, {err} err')
+
+    conn.commit()
+    cur.close()
+    print(f'  Total: {ins} inseridos, {err} erros')
+    return ins, err
+
+
+def clean(v, max_len=None):
+    """Remove NUL bytes e trunca."""
+    s = str(v or '').replace('\x00', '')
+    return s[:max_len] if max_len else s
+
+
+def _d(v):
+    """Converte para float validando overflow NUMERIC(15,2)."""
+    try:
+        f = float(Decimal(str(v).replace(',', '.'))) if v else None
+        if f is not None and abs(f) > 9_999_999_999_999.99:
+            return None   # descarta: dado impossível
+        return f
+    except Exception:
+        return None
+```
+
+---
+
+### 36.6. Diagnóstico rápido de divergência CSV vs banco
+
+```powershell
+# 1. Quantos estão no CSV?
+(Get-Content "csv\imoveis_jucisrs_*.csv" | Measure-Object -Line).Lines  # -1 para o header
+
+# 2. Quantos estão no banco?
+docker exec leilao_postgres psql -U leilao -d leilao_db -c `
+  "SELECT COUNT(*) FROM imoveis WHERE fonte_id=(SELECT id FROM fontes WHERE nome='JUCISRS');"
+
+# 3. Quais ids_externo estão no CSV mas não no banco?
+python -c "
+import csv, subprocess
+rows = list(csv.DictReader(open('csv/imoveis_jucisrs_2026-06-08.csv', encoding='utf-8-sig')))
+ids_csv = {r.get('id_externo','') for r in rows if r.get('id_externo')}
+proc = subprocess.run(['docker','exec','leilao_postgres','psql','-U','leilao','-d','leilao_db',
+    '--no-align','--tuples-only','-c',
+    \"SELECT id_externo FROM imoveis WHERE fonte_id=(SELECT id FROM fontes WHERE nome='JUCISRS')\"],
+    capture_output=True, text=True)
+ids_banco = set(proc.stdout.splitlines())
+faltantes = ids_csv - ids_banco
+print(f'Faltando: {len(faltantes)} de {len(ids_csv)} unicos no CSV')
+"
+
+# 4. Reimportar faltantes
+python verificar_importacao.py
+```
+
+---
+
+### 36.7. Checklist pós-scraping (obrigatório após todo scraping)
+
+Adicionar ao final do checklist de qualquer seção de scraping deste documento:
+
+- [ ] **Executar checagem:** `python verificar_importacao.py`
+- [ ] **Confirmar resultado:** `[OK] Todos os imóveis únicos do CSV estão no banco.`
+- [ ] Se `faltantes > 0` após a reimportação automática: verificar se são dados inválidos (overflow, NUL irrecuperável) — esses são esperados e documentar na seção do scraper
+- [ ] Se `faltantes > 0` por outro motivo: verificar `docker logs leilao_api --tail 50` e abrir issue
+
+---
+
+### 36.8. Raiz dos erros (resumo executivo)
+
+| Erro | Causa | Solução |
+|---|---|---|
+| **Rollback em cascata** | `conn.rollback()` dentro de loop desfaz toda transação pendente | `SAVEPOINT sp` / `ROLLBACK TO SAVEPOINT sp` por linha |
+| **NUL bytes (0x00)** | HTML scrapeado embute `\x00` em strings | `s.replace('\x00','')` antes de INSERT |
+| **Overflow numérico** | Parser captura código/área como preço | Validar `abs(f) <= 9_999_999_999_999.99` |
+| **Duplicatas id_externo** | Mesmo URL visitado 2x por leiloeiros com site compartilhado | Comportamento esperado — ON CONFLICT DO UPDATE |
+
+
+---
+
+## 37. Scraping JUCEES (ES) — Relatório de dificuldades (2026-06-08 14:55)
+
+### 37.1. Resumo da execução
+
+| Métrica | Valor |
+|---|---|
+| Leiloeiros REGULAR encontrados | 64 |
+| Leiloeiros com site | 41 |
+| Sites com imóveis | 22 |
+| Sites sem leilão ativo | 19 |
+| Sites com erro / offline | 0 |
+| Total de imóveis coletados | 758 |
+| CSV gerado | `csv/leiloeiros_jucees_2026-06-08.csv` |
+| CSV imóveis | `csv/imoveis_jucees_2026-06-08.csv` |
+
+### 37.2. Imóveis por leiloeiro
+
+| Leiloeiro | Site | Imóveis |
+|---|---|---|
+| TIAGO TESSLER BLECHER | https://www.webleiloes.com.br | 175 |
+| IRANI FLORES | https://www.leilaobrasil.com.br | 137 |
+| MARCO ANTONIO BARBOSA DE OLIVEIRA JUNIOR | https://www.marcoantonioleiloeiro.com.br | 74 |
+| DANIEL MELO CRUZ | https://www.grupolance.com.br | 71 |
+| SUED PETER BASTOS DYNA | https://www.suedpeterleiloes.com.br/ | 47 |
+| DANIEL ELIAS GARCIA | https://danielgarcialeiloes.com.br/ | 46 |
+| DORA PLAT | https://www.portalzuk.com.br | 46 |
+| JOSÉ SÉRGIO DELLA GIUSTINA | https://www.macedoleiloes.com.br | 33 |
+| PAULO CESAR AGOSTINHO | https://www.agostinholeiloes.com.br/ | 24 |
+| LILIANE DE NARDE SALLES | https://www.lilianecorretora.com.br | 21 |
+| RUDIVAL ALMEIDA GOMES JÚNIOR | https://www.rjleiloes.com.br | 20 |
+| ALEX WILLIAN HOPPE | https://www.hoppeleiloes.com.br/ | 19 |
+| DAVI BORGES DE AQUINO | https://www.alfaleiloes.com | 12 |
+| EDUARDO SCHMITZ | https://www.clicleiloes.com.br | 10 |
+| GUSTAVO MARTINS ROCHA | https://www.grleiloes.com | 8 |
+| MAURO COLODETE | https://colodeteleiloes.com.br/ | 6 |
+| ALEXANDRE BUAIZ NETO | https://www.buaizleiloes.com.br/ | 3 |
+| BRENNO DE FIGUEIREDO PORTO | https://www.portoleiloes.com.br/ | 2 |
+| HIDIRLENE DUSZEIKO | https://www.hdleiloes.com.br/ | 1 |
+| ALESSANDRO DE ASSIS TEIXEIRA | https://www.alessandroteixeiraleiloes.com.br | 1 |
+| ERICK SOARES TELES | https://www.teza.com.br | 1 |
+| MARCOS RODRIGO CUSTODIO SOARES | https://www.custodioleiloes.com.br | 1 |
+| DJANIR DA RÓS | https://www.djanirleiloes.com.br/ | 0 |
+| ANTONIO FREIRE DE PAIVA ALMEIDA | https://www.publicjud.com.br | 0 |
+| ORLANDO LOPES FERNANDES | https://www.leilobras.lel.br/ | 0 |
+| SÉRGIO DE PAULA PEREIRA | https://www.esleiloes.com.br/ | 0 |
+| PATRÍCIA C. ALMEIDA | — | 0 |
+| MARIA AMÉLIA DYNA DE SOUZA | — | 0 |
+| MAURO CESAR ROCHA | http://www.leilofacil.lel.br/ | 0 |
+| GABRIEL FARDIN PEREIRA | https://www.vixleiloes.com.br/ | 0 |
+| AYRTON DE SOUZA PORTO FILHO | https://www.gestaodeleiloes.com.br/ | 0 |
+| PIETRANGELO ROSALÉM | — | 0 |
+| RENAN NERIS DA SILVA | https://www.renannerisleiloeiro.com.br/ | 0 |
+| FLÁVIA DE OLIVEIRA ROCHA | https://www.leilofacil.lel.br/ | 0 |
+| CAROLINE DE SOUSA RIBAS | — | 0 |
+| ALEXSANDER PRETTI DOMINGOS | — | 0 |
+| SANDRA DE FÁTIMA SANTOS | — | 0 |
+| RONALD DE FREITAS MOREIRA | — | 0 |
+| LUCAS RAFAEL ANTUNES MOREIRA | — | 0 |
+| FERNANDO CAETANO MOREIRA FILHO | — | 0 |
+| JONAS GABRIEL ANTUNES MOREIRA | — | 0 |
+| GUSTAVO BOLZAN | https://www.gbleiloes.com.br/ | 0 |
+| MARCUS ALLAIN DE OLIVEIRA BARBOSA | https://www.maleiloesro.com.br | 0 |
+| PÂMELA DE SOUZA ALVES | — | 0 |
+| RUAM CARLOS CHAVES GOTARDO | https://www.serranaleiloes.com.br | 0 |
+| RENATO SCHLOBACH MOYSES | https://www.majudicial.com.br | 0 |
+| GUSTAVO MORETTO GUIMARÃES DE OLIVEIRA | https://www.gustavomorettoleiloeiro.com.br | 0 |
+| CAIO DE CARVALHO BORGES | https://www.cb-leiloeiro.com.br | 0 |
+| ESTEVÃO STRINI CAMILO | — | 0 |
+| JONAS RYMER | — | 0 |
+| CARLA KARINE SANTOS AGOSTINHO | — | 0 |
+| VICTOR DE ALMEIDA DOMINGUES CUNHA | https://www.almeidacunha.com | 0 |
+| THIECO WAYNER MOZART MIGUEL GALVÃO | — | 0 |
+| JOAO RENATO LAHAS DI CHIARA | — | 0 |
+| MATHEUS WERNECK DE OLIVEIRA SANTOS | — | 0 |
+| BRUNO BIRSCHNER LUBE | — | 0 |
+| LUIZ ROBERTO DE OLIVEIRA BRENNEKEN | https://www.lubreleiloes.com.br | 0 |
+| MANUELA MASAI VILAR VIEIRA DO NASCIMENTO | — | 0 |
+| GIOVANA MARQUES COELHO BASTOS | — | 0 |
+| SARA CORONA JUNQUEIRA | https://www.leiloescapixaba.com.br | 0 |
+| MARCELO SEPULCRI VALADARES | — | 0 |
+| ELIZABETH DE CARVALHO BORGES | https://www.vendaemgaragem.com | 0 |
+| LUIS OTAVIO MARCOLINO SHINKAWA | — | 0 |
+| COSME MARTINS | — | 0 |
+
+### 37.3. Dificuldades encontradas
+
+#### Bloqueio Cloudflare / WAF (403) (1 ocorrência)
+
+- `https://www.vendaemgaragem.com` — ELIZABETH DE CARVALHO BORGES
+
+#### Erro HTTP (404, 503, etc.) (1 ocorrência)
+
+- `https://www.serranaleiloes.com.br` — RUAM CARLOS CHAVES GOTARDO
+
+#### Falha na requisição HTTP (1 ocorrência)
+
+- `HTTP falhou mesmo sem SSL: HTTPSConnectionPool(host='www.lubreleiloes.com.br', p` — LUIZ ROBERTO DE OLIVEIRA BRENNEKEN
+
+#### Erro ao inserir no PostgreSQL (15 ocorrências)
+
+- `[WinError 206] O nome do arquivo ou a extensão é muito grande`
+- `[WinError 206] O nome do arquivo ou a extensão é muito grande`
+- `[WinError 206] O nome do arquivo ou a extensão é muito grande`
+- `[WinError 206] O nome do arquivo ou a extensão é muito grande`
+- `[WinError 206] O nome do arquivo ou a extensão é muito grande`
+- *(+10 ocorrências omitidas)*
+
+#### Site acessado mas sem imóveis encontrados (13 ocorrências)
+
+- `https://www.djanirleiloes.com.br/` — DJANIR DA RÓS
+- `https://www.publicjud.com.br` — ANTONIO FREIRE DE PAIVA ALMEIDA
+- `https://www.leilobras.lel.br/` — ORLANDO LOPES FERNANDES
+- `https://www.esleiloes.com.br/` — SÉRGIO DE PAULA PEREIRA
+- `https://www.vixleiloes.com.br/` — GABRIEL FARDIN PEREIRA
+- *(+8 ocorrências omitidas)*
+
+#### Site do leiloeiro offline / DNS inválido (3 ocorrências)
+
+- `Conexão recusada / site offline: http://www.leilofacil.lel.br/` — MAURO CESAR ROCHA
+- `Conexão recusada / site offline: https://www.leilofacil.lel.br/` — FLÁVIA DE OLIVEIRA ROCHA
+- `Conexão recusada / site offline: https://www.leiloescapixaba.com.br` — SARA CORONA JUNQUEIRA
+
+#### Erro de certificado SSL (1 ocorrência)
+
+- `Erro SSL em https://www.lubreleiloes.com.br: HTTPSConnectionPool(host='www.lubre` — LUIZ ROBERTO DE OLIVEIRA BRENNEKEN
+
+### 37.4. Sugestões de correção
+
+| Problema | Causa | Correção sugerida |
+|---|---|---|
+| Sites sem leilão ativo | Leiloeiro sem eventos abertos no momento | Reagendar scraping; adicionar monitoramento periódico |
+| Site offline / DNS inválido | Site encerrado ou URL desatualizada | Verificar URL manualmente; contatar leiloeiro; atualizar PDF da JUCEES |
+| Cloudflare / WAF (403) | Proteção anti-bot ativa | Usar FlareSolverr (Docker :8191) — ver **seção 14** deste guia |
+| Erro SSL | Certificado inválido ou expirado | Já contornado com `verify=False`; avisar o leiloeiro |
+| JS-heavy sem imóveis (Playwright) | SPA carrega dados via API interna não interceptada | Inspecionar DevTools → XHR; criar extrator dedicado com `page.on('response')` |
+| Leiloeiros sem site | Campo Site em branco na JUCEES | Derivar site do e-mail (domínio não-genérico); buscar manualmente |
+| Leiloeiros 2025 não na Relação Regulares | PDF pode estar desatualizado | Fazer scraping direto do site https://leiloeiros.jucees.es.gov.br/ com filtro `regular` |
+| Preços não extraídos | HTML sem padrão `R$` ou preço em atributo JS | Ampliar janela de regex; interceptar JSON da API interna |
+| Imagens com URL relativa quebrada | `urljoin` não resolve alguns CDNs | Adicionar `data-src` e `data-lazy-src` ao extrator de imagens |
+| PostgreSQL: fonte_id não encontrado | Container não rodando ou tabela `fontes` ausente | Verificar `docker ps`; rodar migration antes de importar |
+
+### 37.5. Próximos passos
+
+1. Para sites com Cloudflare: instalar FlareSolverr e adaptar `scrape_site_playwright` conforme seção 14.
+2. Rodar `python run.py classificar --limite 5000` no container para classificar os imóveis importados.
+3. Rodar `python run.py deduplicar` para remover duplicatas.
+4. Rodar `python run.py baixar-docs --limite 200` para baixar PDFs (editais/matrículas).
+5. Agendar re-scraping semanal com `CronCreate` para manter base atualizada.

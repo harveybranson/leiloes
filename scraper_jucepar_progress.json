@@ -1,0 +1,236 @@
+{
+  "atualizado": "2026-06-08T14:54:19.589653",
+  "total_imoveis": 670,
+  "por_leiloeiro": {
+    "ADALBERTO SCHERER FILHO": 2,
+    "ADRIANO MELNISKI": 0,
+    "ADYEL MARQUES DE PAULA": 5,
+    "ALEX SANDRO VIEIRA FELIX": 0,
+    "ALEX WILLIAN HOPPE": 18,
+    "ALEXANDRE AUGUSTO DOS SANTOS SABBAG": 6,
+    "ANA CAROLINA ZANINETTI ROSA": 62,
+    "ANTONIO MAGNO JACOB DA ROCHA": 24,
+    "APARECIDA MARIA FIXER": 20,
+    "ARTHUR FERREIRA NUNES": 0,
+    "ARTUR NOGARI DOS SANTOS": 21,
+    "AUGUSTO PARMEGGIANI PESTANA M. GOMES": 0,
+    "BEATRIZ SILVA CARVALHO": 0,
+    "BRUNO BARRETO SANCHES": 19,
+    "BRUNO HENRIQUE LOPES": 11,
+    "CAMILA DE MOURA GAIA PELLISSARI": 0,
+    "CAMILA PADILHA PRESOTTO": 29,
+    "CAROLINE DE SOUSA RIBAS": 20,
+    "CAROLINE FERREIRA BARBOZA": 3,
+    "CATIA FERNANDA ALIEVI TOPOROSKI": 0,
+    "CATIELE BORGES LEFFA": 57,
+    "CLAUDIO CESAR KUSS": 1,
+    "CLEVER ELMES MILANI": 26,
+    "CONRADO AUGUSTO CARVALHO DE MAGALHÃES": 8,
+    "CRISTIANE BORGUETTI MORAES LOPES": 8,
+    "DANIEL ELIAS GARCIA": 68,
+    "DANIEL OLIVEIRA JUNIOR": 18,
+    "DANIEL RIBAS ROSA FRAHM": 0,
+    "DAVI BORGES DE AQUINO": 12,
+    "DEYSE SCHEERER PIETNOZKA KULTZ": 6,
+    "DIEGO COSTA MULLER": 51,
+    "DIEGO WOLF DE OLIVEIRA": 24,
+    "DORA PLAT": 3,
+    "EDUARDO JESUS BORDIGNON": 53,
+    "EDUARDO SCHMITZ": 22,
+    "ELTON LUIZ SIMON": 12,
+    "ERICK SOARES TELES": 1,
+    "FÁBIO GONÇALVES BARBOSA": 21,
+    "FABIO MARLON MACHADO": 39,
+    "FERNANDO CAETANO MOREIRA FILHO": 0,
+    "FERNANDO DE OLIVEIRA KUSS": 0,
+    "FLAVIA KLOCKNER RODRIGUES": 0,
+    "GALVÃO ADENYR LOPES JUNIOR": 0,
+    "GELSON BOURSCHIET": 0
+  },
+  "sites_ok": 31,
+  "sites_err": 0,
+  "sites_sem_leilao": 13,
+  "erros": [],
+  "dificuldades": [
+    {
+      "leiloeiro": "ADRIANO MELNISKI",
+      "site": "https://www.amleiloeiro.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
+    },
+    {
+      "leiloeiro": "ALEX SANDRO VIEIRA FELIX",
+      "site": "https://www.alleiloes.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
+    },
+    {
+      "leiloeiro": "ALEX SANDRO VIEIRA FELIX",
+      "site": "https://www.alleiloes.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
+    },
+    {
+      "leiloeiro": "ALEX WILLIAN HOPPE",
+      "site": "https://www.hoppeleiloes.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
+    },
+    {
+      "leiloeiro": "ANTONIO MAGNO JACOB DA ROCHA",
+      "site": "https://www.rochaleiloes.com.br",
+      "tipo": "HTTP_VAZIO_PW_OK",
+      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 24"
+    },
+    {
+      "leiloeiro": "APARECIDA MARIA FIXER",
+      "site": "https://www.cidafixerleiloes.com.br",
+      "tipo": "HTTP_VAZIO_PW_OK",
+      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 20"
+    },
+    {
+      "leiloeiro": "ARTHUR FERREIRA NUNES",
+      "site": "https://www.arthurnunesleiloes.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
+    },
+    {
+      "leiloeiro": "AUGUSTO PARMEGGIANI PESTANA M. GOMES",
+      "site": "https://www.pestanaleiloes.com.br",
+      "tipo": "HTTP_403",
+      "detalhe": "Status 403 na home"
+    },
+    {
+      "leiloeiro": "BEATRIZ SILVA CARVALHO",
+      "site": "https://www.grupocarvalholeiloes.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
+    },
+    {
+      "leiloeiro": "BRUNO BARRETO SANCHES",
+      "site": "https://www.barretoleiloes.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
+    },
+    {
+      "leiloeiro": "BRUNO HENRIQUE LOPES",
+      "site": "https://www.brunoleiloes.com.br",
+      "tipo": "HTTP_VAZIO_PW_OK",
+      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 11"
+    },
+    {
+      "leiloeiro": "CAMILA DE MOURA GAIA PELLISSARI",
+      "site": "https://www.camilagaialeiloes.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
+    },
+    {
+      "leiloeiro": "CAMILA PADILHA PRESOTTO",
+      "site": "https://www.presottoleiloes.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
+    },
+    {
+      "leiloeiro": "CAROLINE FERREIRA BARBOZA",
+      "site": "https://www.bzleiloes.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
+    },
+    {
+      "leiloeiro": "CATIA FERNANDA ALIEVI TOPOROSKI",
+      "site": "https://www.aleiloeira.leilao.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
+    },
+    {
+      "leiloeiro": "CATIA FERNANDA ALIEVI TOPOROSKI",
+      "site": "https://www.aleiloeira.leilao.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
+    },
+    {
+      "leiloeiro": "CLEVER ELMES MILANI",
+      "site": "https://www.milanileiloes.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
+    },
+    {
+      "leiloeiro": "DANIEL OLIVEIRA JUNIOR",
+      "site": "https://www.doleiloes.com.br",
+      "tipo": "HTTP_VAZIO_PW_OK",
+      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 18"
+    },
+    {
+      "leiloeiro": "DANIEL RIBAS ROSA FRAHM",
+      "site": "https://www.drrleiloes.com.br",
+      "tipo": "CONNECTION_ERROR",
+      "detalhe": "HTTPSConnectionPool(host='www.drrleiloes.com.br', port=443): Max retries exceeded with url: / (Caused by NameResolutionE"
+    },
+    {
+      "leiloeiro": "DIEGO WOLF DE OLIVEIRA",
+      "site": "https://www.diegoleiloes.com.br",
+      "tipo": "CONNECTION_ERROR",
+      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+    },
+    {
+      "leiloeiro": "EDUARDO SCHMITZ",
+      "site": "https://www.clicleiloes.com.br",
+      "tipo": "CONNECTION_ERROR",
+      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+    },
+    {
+      "leiloeiro": "ELTON LUIZ SIMON",
+      "site": "https://www.simonleiloes.com.br",
+      "tipo": "CONNECTION_ERROR",
+      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+    },
+    {
+      "leiloeiro": "ERICK SOARES TELES",
+      "site": "https://www.teza.com.br",
+      "tipo": "CONNECTION_ERROR",
+      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+    },
+    {
+      "leiloeiro": "FÁBIO GONÇALVES BARBOSA",
+      "site": "https://www.fabiobarbosaleiloes.com.br",
+      "tipo": "CONNECTION_ERROR",
+      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+    },
+    {
+      "leiloeiro": "FABIO MARLON MACHADO",
+      "site": "https://www.machadoleiloeiro.com.br",
+      "tipo": "CONNECTION_ERROR",
+      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+    },
+    {
+      "leiloeiro": "FERNANDO CAETANO MOREIRA FILHO",
+      "site": "https://www.fernandoleiloeiro.com.br",
+      "tipo": "CONNECTION_ERROR",
+      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+    },
+    {
+      "leiloeiro": "FERNANDO DE OLIVEIRA KUSS",
+      "site": "https://www.ksleiloes.com.br",
+      "tipo": "CONNECTION_ERROR",
+      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+    },
+    {
+      "leiloeiro": "FLAVIA KLOCKNER RODRIGUES",
+      "site": "https://www.fkleiloes.com.br",
+      "tipo": "CONNECTION_ERROR",
+      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+    },
+    {
+      "leiloeiro": "GALVÃO ADENYR LOPES JUNIOR",
+      "site": "https://www.lancejusto.com.br",
+      "tipo": "CONNECTION_ERROR",
+      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+    },
+    {
+      "leiloeiro": "GELSON BOURSCHIET",
+      "site": "https://www.gelsonleiloes.com.br",
+      "tipo": "CONNECTION_ERROR",
+      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+    }
+  ]
+}

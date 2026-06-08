@@ -1,0 +1,476 @@
+[13:58:49] =================================================================
+[13:58:49] JUCEPAR Scraper iniciado — 2026-06-08 13:58:49
+[13:58:49] =================================================================
+[13:58:49] Lendo leiloeiros de: leiloeiros_jucepar_2026-06-08.csv
+[13:58:49]   116 leiloeiros REGULAR carregados
+[13:58:49] 
+Total REGULAR: 116
+[13:58:49]   Com site (únicos): 110
+[13:58:49]   Sem site (pulados): 0
+[13:58:49] 
+Iniciando scraping de 110 sites...
+
+[13:58:49] 
+[1/110] ADALBERTO SCHERER FILHO | https://www.schererleiloes.com.br
+[13:58:49]   → Scraping: ADALBERTO SCHERER FILHO | https://www.schererleiloes.com.br
+[13:58:50]     JS-heavy detectado (SPA/Next.js). Usando Playwright...
+[13:59:27]   Status: ok | 2 imóveis | Total: 2
+[13:59:29] 
+[2/110] ADRIANO MELNISKI | https://www.amleiloeiro.com.br
+[13:59:29]   → Scraping: ADRIANO MELNISKI | https://www.amleiloeiro.com.br
+[13:59:31]     JS-heavy detectado (SPA/Next.js). Usando Playwright...
+[14:00:06]   Status: sem_leilao | 0 imóveis | Total: 2
+[14:00:09] 
+[3/110] ADYEL MARQUES DE PAULA | https://www.marquesleiloes.com.br
+[14:00:09]   → Scraping: ADYEL MARQUES DE PAULA | https://www.marquesleiloes.com.br
+[14:00:33]   Status: ok | 5 imóveis | Total: 7
+[14:00:35] 
+[4/110] ALEX SANDRO VIEIRA FELIX | https://www.alleiloes.com.br
+[14:00:35]   → Scraping: ALEX SANDRO VIEIRA FELIX | https://www.alleiloes.com.br
+[14:00:37]     JS-heavy detectado (SPA/Next.js). Usando Playwright...
+[14:01:12]   Status: sem_leilao | 0 imóveis | Total: 7
+[14:01:14] 
+[5/110] ALEX WILLIAN HOPPE | https://www.hoppeleiloes.com.br
+[14:01:14]   → Scraping: ALEX WILLIAN HOPPE | https://www.hoppeleiloes.com.br
+[14:01:15]     JS-heavy detectado (SPA/Next.js). Usando Playwright...
+[14:03:49] 
+=================================================================
+[14:03:49] RELATÓRIO PARCIAL | Total: 7 imóveis | Atual: ALEX WILLIAN HOPPE
+[14:03:49]   OK: 2 | Sem leilão: 2 | Erro: 0
+[14:03:49]   Imóveis por leiloeiro (com resultados):
+[14:03:49]     ADYEL MARQUES DE PAULA                           5 imóveis
+[14:03:49]     ADALBERTO SCHERER FILHO                          2 imóveis
+[14:03:49]     ADRIANO MELNISKI                                 0 imóveis
+[14:03:49]     ALEX SANDRO VIEIRA FELIX                         0 imóveis
+[14:03:49] =================================================================
+
+[14:04:21]   Status: ok | 18 imóveis | Total: 25
+[14:04:23] 
+[6/110] ALEXANDRE AUGUSTO DOS SANTOS SABBAG | https://www.sabbagleiloes.com.br
+[14:04:23]   → Scraping: ALEXANDRE AUGUSTO DOS SANTOS SABBAG | https://www.sabbagleiloes.com.br
+[14:04:49]   Status: ok | 6 imóveis | Total: 31
+[14:04:51] 
+[7/110] ANA CAROLINA ZANINETTI ROSA | https://www.lancevip.com.br
+[14:04:51]   → Scraping: ANA CAROLINA ZANINETTI ROSA | https://www.lancevip.com.br
+[14:06:54]   Status: ok | 62 imóveis | Total: 93
+[14:06:56] 
+[8/110] ANTONIO MAGNO JACOB DA ROCHA | https://www.rochaleiloes.com.br
+[14:06:56]   → Scraping: ANTONIO MAGNO JACOB DA ROCHA | https://www.rochaleiloes.com.br
+[14:07:13]     HTTP sem resultados. Tentando Playwright...
+[14:08:37]   Status: ok | 24 imóveis | Total: 117
+[14:08:39] 
+[9/110] APARECIDA MARIA FIXER | https://www.cidafixerleiloes.com.br
+[14:08:39]   → Scraping: APARECIDA MARIA FIXER | https://www.cidafixerleiloes.com.br
+[14:08:49] 
+=================================================================
+[14:08:49] RELATÓRIO PARCIAL | Total: 117 imóveis | Atual: APARECIDA MARIA FIXER
+[14:08:49]   OK: 6 | Sem leilão: 2 | Erro: 0
+[14:08:49]   Imóveis por leiloeiro (com resultados):
+[14:08:49]     ANA CAROLINA ZANINETTI ROSA                     62 imóveis
+[14:08:49]     ANTONIO MAGNO JACOB DA ROCHA                    24 imóveis
+[14:08:49]     ALEX WILLIAN HOPPE                              18 imóveis
+[14:08:49]     ALEXANDRE AUGUSTO DOS SANTOS SABBAG              6 imóveis
+[14:08:49]     ADYEL MARQUES DE PAULA                           5 imóveis
+[14:08:49]     ADALBERTO SCHERER FILHO                          2 imóveis
+[14:08:49]     ADRIANO MELNISKI                                 0 imóveis
+[14:08:49]     ALEX SANDRO VIEIRA FELIX                         0 imóveis
+[14:08:49] =================================================================
+
+[14:08:55]     HTTP sem resultados. Tentando Playwright...
+[14:11:31]   Status: ok | 20 imóveis | Total: 137
+[14:11:33] 
+[10/110] ARTHUR FERREIRA NUNES | https://www.arthurnunesleiloes.com.br
+[14:11:33]   → Scraping: ARTHUR FERREIRA NUNES | https://www.arthurnunesleiloes.com.br
+[14:11:57]     HTTP sem resultados. Tentando Playwright...
+[14:12:20]   Status: sem_leilao | 0 imóveis | Total: 137
+[14:12:22] 
+[11/110] ARTUR NOGARI DOS SANTOS | https://www.nogarileiloes.com.br
+[14:12:22]   → Scraping: ARTUR NOGARI DOS SANTOS | https://www.nogarileiloes.com.br
+[14:13:39]   Status: ok | 21 imóveis | Total: 158
+[14:13:41] 
+[12/110] AUGUSTO PARMEGGIANI PESTANA M. GOMES | https://www.pestanaleiloes.com.br
+[14:13:41]   → Scraping: AUGUSTO PARMEGGIANI PESTANA M. GOMES | https://www.pestanaleiloes.com.br
+[14:13:41]   Status: offline | 0 imóveis | Total: 158
+[14:13:43] 
+[13/110] BEATRIZ SILVA CARVALHO | https://www.grupocarvalholeiloes.com.br
+[14:13:43]   → Scraping: BEATRIZ SILVA CARVALHO | https://www.grupocarvalholeiloes.com.br
+[14:13:49] 
+=================================================================
+[14:13:49] RELATÓRIO PARCIAL | Total: 158 imóveis | Atual: BEATRIZ SILVA CARVALHO
+[14:13:49]   OK: 8 | Sem leilão: 4 | Erro: 0
+[14:13:49]   Imóveis por leiloeiro (com resultados):
+[14:13:49]     ANA CAROLINA ZANINETTI ROSA                     62 imóveis
+[14:13:49]     ANTONIO MAGNO JACOB DA ROCHA                    24 imóveis
+[14:13:49]     ARTUR NOGARI DOS SANTOS                         21 imóveis
+[14:13:49]     APARECIDA MARIA FIXER                           20 imóveis
+[14:13:49]     ALEX WILLIAN HOPPE                              18 imóveis
+[14:13:49]     ALEXANDRE AUGUSTO DOS SANTOS SABBAG              6 imóveis
+[14:13:49]     ADYEL MARQUES DE PAULA                           5 imóveis
+[14:13:49]     ADALBERTO SCHERER FILHO                          2 imóveis
+[14:13:49]     ADRIANO MELNISKI                                 0 imóveis
+[14:13:49]     ALEX SANDRO VIEIRA FELIX                         0 imóveis
+[14:13:49]     ARTHUR FERREIRA NUNES                            0 imóveis
+[14:13:49]     AUGUSTO PARMEGGIANI PESTANA M. GOMES             0 imóveis
+[14:13:49] =================================================================
+
+[14:14:00]     HTTP sem resultados. Tentando Playwright...
+[14:14:14]   Status: sem_leilao | 0 imóveis | Total: 158
+[14:14:16] 
+[14/110] BRUNO BARRETO SANCHES | https://www.barretoleiloes.com.br
+[14:14:17]   → Scraping: BRUNO BARRETO SANCHES | https://www.barretoleiloes.com.br
+[14:14:17]     JS-heavy detectado (SPA/Next.js). Usando Playwright...
+[14:16:21]   Status: ok | 19 imóveis | Total: 177
+[14:16:23] 
+[15/110] BRUNO HENRIQUE LOPES | https://www.brunoleiloes.com.br
+[14:16:23]   → Scraping: BRUNO HENRIQUE LOPES | https://www.brunoleiloes.com.br
+[14:16:39]     HTTP sem resultados. Tentando Playwright...
+[14:17:36]   Status: ok | 11 imóveis | Total: 188
+[14:17:38] 
+[16/110] CAMILA DE MOURA GAIA PELLISSARI | https://www.camilagaialeiloes.com.br
+[14:17:38]   → Scraping: CAMILA DE MOURA GAIA PELLISSARI | https://www.camilagaialeiloes.com.br
+[14:17:48]     HTTP sem resultados. Tentando Playwright...
+[14:18:00]   Status: sem_leilao | 0 imóveis | Total: 188
+[14:18:03] 
+[17/110] CAMILA PADILHA PRESOTTO | https://www.presottoleiloes.com.br
+[14:18:03]   → Scraping: CAMILA PADILHA PRESOTTO | https://www.presottoleiloes.com.br
+[14:18:03]     JS-heavy detectado (SPA/Next.js). Usando Playwright...
+[14:18:49] 
+=================================================================
+[14:18:49] RELATÓRIO PARCIAL | Total: 188 imóveis | Atual: CAMILA PADILHA PRESOTTO
+[14:18:49]   OK: 10 | Sem leilão: 6 | Erro: 0
+[14:18:49]   Imóveis por leiloeiro (com resultados):
+[14:18:49]     ANA CAROLINA ZANINETTI ROSA                     62 imóveis
+[14:18:49]     ANTONIO MAGNO JACOB DA ROCHA                    24 imóveis
+[14:18:49]     ARTUR NOGARI DOS SANTOS                         21 imóveis
+[14:18:49]     APARECIDA MARIA FIXER                           20 imóveis
+[14:18:49]     BRUNO BARRETO SANCHES                           19 imóveis
+[14:18:49]     ALEX WILLIAN HOPPE                              18 imóveis
+[14:18:49]     BRUNO HENRIQUE LOPES                            11 imóveis
+[14:18:49]     ALEXANDRE AUGUSTO DOS SANTOS SABBAG              6 imóveis
+[14:18:49]     ADYEL MARQUES DE PAULA                           5 imóveis
+[14:18:49]     ADALBERTO SCHERER FILHO                          2 imóveis
+[14:18:49]     ADRIANO MELNISKI                                 0 imóveis
+[14:18:49]     ALEX SANDRO VIEIRA FELIX                         0 imóveis
+[14:18:49]     ARTHUR FERREIRA NUNES                            0 imóveis
+[14:18:49]     AUGUSTO PARMEGGIANI PESTANA M. GOMES             0 imóveis
+[14:18:49]     BEATRIZ SILVA CARVALHO                           0 imóveis
+[14:18:49]     CAMILA DE MOURA GAIA PELLISSARI                  0 imóveis
+[14:18:49] =================================================================
+
+[14:21:33]   Status: ok | 29 imóveis | Total: 217
+[14:21:35] 
+[18/110] CAROLINE DE SOUSA RIBAS | https://www.liderleiloes.com.br
+[14:21:35]   → Scraping: CAROLINE DE SOUSA RIBAS | https://www.liderleiloes.com.br
+[14:22:49]   Status: ok | 20 imóveis | Total: 237
+[14:22:51] 
+[19/110] CAROLINE FERREIRA BARBOZA | https://www.bzleiloes.com.br
+[14:22:51]   → Scraping: CAROLINE FERREIRA BARBOZA | https://www.bzleiloes.com.br
+[14:22:52]     JS-heavy detectado (SPA/Next.js). Usando Playwright...
+[14:23:16]   Status: ok | 3 imóveis | Total: 240
+[14:23:18] 
+[20/110] CATIA FERNANDA ALIEVI TOPOROSKI | https://www.aleiloeira.leilao.br
+[14:23:18]   → Scraping: CATIA FERNANDA ALIEVI TOPOROSKI | https://www.aleiloeira.leilao.br
+[14:23:20]     JS-heavy detectado (SPA/Next.js). Usando Playwright...
+[14:23:49] 
+=================================================================
+[14:23:49] RELATÓRIO PARCIAL | Total: 240 imóveis | Atual: CATIA FERNANDA ALIEVI TOPOROSKI
+[14:23:49]   OK: 13 | Sem leilão: 6 | Erro: 0
+[14:23:49]   Imóveis por leiloeiro (com resultados):
+[14:23:49]     ANA CAROLINA ZANINETTI ROSA                     62 imóveis
+[14:23:49]     CAMILA PADILHA PRESOTTO                         29 imóveis
+[14:23:49]     ANTONIO MAGNO JACOB DA ROCHA                    24 imóveis
+[14:23:49]     ARTUR NOGARI DOS SANTOS                         21 imóveis
+[14:23:49]     APARECIDA MARIA FIXER                           20 imóveis
+[14:23:49]     CAROLINE DE SOUSA RIBAS                         20 imóveis
+[14:23:49]     BRUNO BARRETO SANCHES                           19 imóveis
+[14:23:49]     ALEX WILLIAN HOPPE                              18 imóveis
+[14:23:49]     BRUNO HENRIQUE LOPES                            11 imóveis
+[14:23:49]     ALEXANDRE AUGUSTO DOS SANTOS SABBAG              6 imóveis
+[14:23:49]     ADYEL MARQUES DE PAULA                           5 imóveis
+[14:23:49]     CAROLINE FERREIRA BARBOZA                        3 imóveis
+[14:23:49]     ADALBERTO SCHERER FILHO                          2 imóveis
+[14:23:49]     ADRIANO MELNISKI                                 0 imóveis
+[14:23:49]     ALEX SANDRO VIEIRA FELIX                         0 imóveis
+[14:23:49]     ARTHUR FERREIRA NUNES                            0 imóveis
+[14:23:49]     AUGUSTO PARMEGGIANI PESTANA M. GOMES             0 imóveis
+[14:23:49]     BEATRIZ SILVA CARVALHO                           0 imóveis
+[14:23:49]     CAMILA DE MOURA GAIA PELLISSARI                  0 imóveis
+[14:23:49] =================================================================
+
+[14:23:55]   Status: sem_leilao | 0 imóveis | Total: 240
+[14:23:57] 
+[21/110] CATIELE BORGES LEFFA | https://www.leffaleiloes.com.br
+[14:23:57]   → Scraping: CATIELE BORGES LEFFA | https://www.leffaleiloes.com.br
+[14:25:45]   Status: ok | 57 imóveis | Total: 297
+[14:25:47] 
+[22/110] CLAUDIO CESAR KUSS | https://www.claudiokussleiloes.com.br
+[14:25:47]   → Scraping: CLAUDIO CESAR KUSS | https://www.claudiokussleiloes.com.br
+[14:25:58]   Status: ok | 1 imóveis | Total: 298
+[14:26:00] 
+[23/110] CLEVER ELMES MILANI | https://www.milanileiloes.com.br
+[14:26:00]   → Scraping: CLEVER ELMES MILANI | https://www.milanileiloes.com.br
+[14:26:01]     JS-heavy detectado (SPA/Next.js). Usando Playwright...
+[14:28:10]   Status: ok | 26 imóveis | Total: 324
+[14:28:12] 
+[24/110] CONRADO AUGUSTO CARVALHO DE MAGALHÃES | https://www.magalhaesleiloes.com.br
+[14:28:12]   → Scraping: CONRADO AUGUSTO CARVALHO DE MAGALHÃES | https://www.magalhaesleiloes.com.br
+[14:28:49] 
+=================================================================
+[14:28:49] RELATÓRIO PARCIAL | Total: 324 imóveis | Atual: CONRADO AUGUSTO CARVALHO DE MAGALHÃES
+[14:28:49]   OK: 16 | Sem leilão: 7 | Erro: 0
+[14:28:49]   Imóveis por leiloeiro (com resultados):
+[14:28:49]     ANA CAROLINA ZANINETTI ROSA                     62 imóveis
+[14:28:49]     CATIELE BORGES LEFFA                            57 imóveis
+[14:28:49]     CAMILA PADILHA PRESOTTO                         29 imóveis
+[14:28:49]     CLEVER ELMES MILANI                             26 imóveis
+[14:28:49]     ANTONIO MAGNO JACOB DA ROCHA                    24 imóveis
+[14:28:49]     ARTUR NOGARI DOS SANTOS                         21 imóveis
+[14:28:49]     APARECIDA MARIA FIXER                           20 imóveis
+[14:28:49]     CAROLINE DE SOUSA RIBAS                         20 imóveis
+[14:28:49]     BRUNO BARRETO SANCHES                           19 imóveis
+[14:28:49]     ALEX WILLIAN HOPPE                              18 imóveis
+[14:28:49]     BRUNO HENRIQUE LOPES                            11 imóveis
+[14:28:49]     ALEXANDRE AUGUSTO DOS SANTOS SABBAG              6 imóveis
+[14:28:49]     ADYEL MARQUES DE PAULA                           5 imóveis
+[14:28:49]     CAROLINE FERREIRA BARBOZA                        3 imóveis
+[14:28:49]     ADALBERTO SCHERER FILHO                          2 imóveis
+[14:28:49]     CLAUDIO CESAR KUSS                               1 imóveis
+[14:28:49]     ADRIANO MELNISKI                                 0 imóveis
+[14:28:49]     ALEX SANDRO VIEIRA FELIX                         0 imóveis
+[14:28:49]     ARTHUR FERREIRA NUNES                            0 imóveis
+[14:28:49]     AUGUSTO PARMEGGIANI PESTANA M. GOMES             0 imóveis
+[14:28:49] =================================================================
+
+[14:28:54]   Status: ok | 8 imóveis | Total: 332
+[14:28:56] 
+[25/110] CRISTIANE BORGUETTI MORAES LOPES | https://www.lanceja.com.br
+[14:28:56]   → Scraping: CRISTIANE BORGUETTI MORAES LOPES | https://www.lanceja.com.br
+[14:29:20]   Status: ok | 8 imóveis | Total: 340
+[14:29:22] 
+[26/110] DANIEL ELIAS GARCIA | https://www.danielgarcialeiloes.com.br
+[14:29:22]   → Scraping: DANIEL ELIAS GARCIA | https://www.danielgarcialeiloes.com.br
+[14:32:00]   Status: ok | 68 imóveis | Total: 408
+[14:32:02] 
+[27/110] DANIEL OLIVEIRA JUNIOR | https://www.doleiloes.com.br
+[14:32:02]   → Scraping: DANIEL OLIVEIRA JUNIOR | https://www.doleiloes.com.br
+[14:32:19]     HTTP sem resultados. Tentando Playwright...
+[14:33:44]   Status: ok | 18 imóveis | Total: 426
+[14:33:46] 
+[28/110] DANIEL RIBAS ROSA FRAHM | https://www.drrleiloes.com.br
+[14:33:46]   → Scraping: DANIEL RIBAS ROSA FRAHM | https://www.drrleiloes.com.br
+[14:33:46]     [CONN] HTTPSConnectionPool(host='www.drrleiloes.com.br', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("HTTPSConnection(host='www.drrleiloes.com.br', port=443): Failed to resolve 'www.drrleiloes.com.br' ([Errno 11001] getaddrinfo failed)"))
+[14:33:49] 
+=================================================================
+[14:33:49] RELATÓRIO PARCIAL | Total: 426 imóveis | Atual: DANIEL RIBAS ROSA FRAHM
+[14:33:49]   OK: 20 | Sem leilão: 7 | Erro: 0
+[14:33:49]   Imóveis por leiloeiro (com resultados):
+[14:33:49]     DANIEL ELIAS GARCIA                             68 imóveis
+[14:33:49]     ANA CAROLINA ZANINETTI ROSA                     62 imóveis
+[14:33:49]     CATIELE BORGES LEFFA                            57 imóveis
+[14:33:49]     CAMILA PADILHA PRESOTTO                         29 imóveis
+[14:33:49]     CLEVER ELMES MILANI                             26 imóveis
+[14:33:49]     ANTONIO MAGNO JACOB DA ROCHA                    24 imóveis
+[14:33:49]     ARTUR NOGARI DOS SANTOS                         21 imóveis
+[14:33:49]     APARECIDA MARIA FIXER                           20 imóveis
+[14:33:49]     CAROLINE DE SOUSA RIBAS                         20 imóveis
+[14:33:49]     BRUNO BARRETO SANCHES                           19 imóveis
+[14:33:49]     ALEX WILLIAN HOPPE                              18 imóveis
+[14:33:49]     DANIEL OLIVEIRA JUNIOR                          18 imóveis
+[14:33:49]     BRUNO HENRIQUE LOPES                            11 imóveis
+[14:33:49]     CONRADO AUGUSTO CARVALHO DE MAGALHÃES            8 imóveis
+[14:33:49]     CRISTIANE BORGUETTI MORAES LOPES                 8 imóveis
+[14:33:49]     ALEXANDRE AUGUSTO DOS SANTOS SABBAG              6 imóveis
+[14:33:49]     ADYEL MARQUES DE PAULA                           5 imóveis
+[14:33:49]     CAROLINE FERREIRA BARBOZA                        3 imóveis
+[14:33:49]     ADALBERTO SCHERER FILHO                          2 imóveis
+[14:33:49]     CLAUDIO CESAR KUSS                               1 imóveis
+[14:33:49] =================================================================
+
+[14:33:51]   Status: sem_leilao | 0 imóveis | Total: 426
+[14:33:53] 
+[29/110] DAVI BORGES DE AQUINO | https://www.alfaleiloes.com
+[14:33:53]   → Scraping: DAVI BORGES DE AQUINO | https://www.alfaleiloes.com
+[14:34:54]   Status: ok | 12 imóveis | Total: 438
+[14:34:56] 
+[30/110] DEYSE SCHEERER PIETNOZKA KULTZ | https://www.dsleiloes.com.br
+[14:34:56]   → Scraping: DEYSE SCHEERER PIETNOZKA KULTZ | https://www.dsleiloes.com.br
+[14:35:22]   Status: ok | 6 imóveis | Total: 444
+[14:35:24] 
+[31/110] DIEGO COSTA MULLER | https://www.mullerleiloes.com.br
+[14:35:24]   → Scraping: DIEGO COSTA MULLER | https://www.mullerleiloes.com.br
+[14:37:16]   Status: ok | 51 imóveis | Total: 495
+[14:37:18] 
+[32/110] DIEGO WOLF DE OLIVEIRA | https://www.diegoleiloes.com.br
+[14:37:18]   → Scraping: DIEGO WOLF DE OLIVEIRA | https://www.diegoleiloes.com.br
+[14:37:18]     [CONN] ('Connection aborted.', PermissionError(13, 'Permission denied'))
+[14:38:49] 
+=================================================================
+[14:38:49] RELATÓRIO PARCIAL | Total: 495 imóveis | Atual: DIEGO WOLF DE OLIVEIRA
+[14:38:49]   OK: 23 | Sem leilão: 8 | Erro: 0
+[14:38:49]   Imóveis por leiloeiro (com resultados):
+[14:38:49]     DANIEL ELIAS GARCIA                             68 imóveis
+[14:38:49]     ANA CAROLINA ZANINETTI ROSA                     62 imóveis
+[14:38:49]     CATIELE BORGES LEFFA                            57 imóveis
+[14:38:49]     DIEGO COSTA MULLER                              51 imóveis
+[14:38:49]     CAMILA PADILHA PRESOTTO                         29 imóveis
+[14:38:49]     CLEVER ELMES MILANI                             26 imóveis
+[14:38:49]     ANTONIO MAGNO JACOB DA ROCHA                    24 imóveis
+[14:38:49]     ARTUR NOGARI DOS SANTOS                         21 imóveis
+[14:38:49]     APARECIDA MARIA FIXER                           20 imóveis
+[14:38:49]     CAROLINE DE SOUSA RIBAS                         20 imóveis
+[14:38:49]     BRUNO BARRETO SANCHES                           19 imóveis
+[14:38:49]     ALEX WILLIAN HOPPE                              18 imóveis
+[14:38:49]     DANIEL OLIVEIRA JUNIOR                          18 imóveis
+[14:38:49]     DAVI BORGES DE AQUINO                           12 imóveis
+[14:38:49]     BRUNO HENRIQUE LOPES                            11 imóveis
+[14:38:49]     CONRADO AUGUSTO CARVALHO DE MAGALHÃES            8 imóveis
+[14:38:49]     CRISTIANE BORGUETTI MORAES LOPES                 8 imóveis
+[14:38:49]     ALEXANDRE AUGUSTO DOS SANTOS SABBAG              6 imóveis
+[14:38:49]     DEYSE SCHEERER PIETNOZKA KULTZ                   6 imóveis
+[14:38:49]     ADYEL MARQUES DE PAULA                           5 imóveis
+[14:38:49] =================================================================
+
+[14:39:36]   Status: ok | 24 imóveis | Total: 519
+[14:39:38] 
+[33/110] DORA PLAT | https://www.portalzuk.com.br
+[14:39:38]   → Scraping: DORA PLAT | https://www.portalzuk.com.br
+[14:39:53]   Status: ok | 3 imóveis | Total: 522
+[14:39:55] 
+[34/110] EDUARDO JESUS BORDIGNON | https://www.leilopar.com.br
+[14:39:55]   → Scraping: EDUARDO JESUS BORDIGNON | https://www.leilopar.com.br
+[14:42:30]   Status: ok | 53 imóveis | Total: 575
+[14:42:32] 
+[35/110] EDUARDO SCHMITZ | https://www.clicleiloes.com.br
+[14:42:32]   → Scraping: EDUARDO SCHMITZ | https://www.clicleiloes.com.br
+[14:42:33]     [CONN] ('Connection aborted.', PermissionError(13, 'Permission denied'))
+[14:43:49] 
+=================================================================
+[14:43:49] RELATÓRIO PARCIAL | Total: 575 imóveis | Atual: EDUARDO SCHMITZ
+[14:43:49]   OK: 26 | Sem leilão: 8 | Erro: 0
+[14:43:49]   Imóveis por leiloeiro (com resultados):
+[14:43:49]     DANIEL ELIAS GARCIA                             68 imóveis
+[14:43:49]     ANA CAROLINA ZANINETTI ROSA                     62 imóveis
+[14:43:49]     CATIELE BORGES LEFFA                            57 imóveis
+[14:43:49]     EDUARDO JESUS BORDIGNON                         53 imóveis
+[14:43:49]     DIEGO COSTA MULLER                              51 imóveis
+[14:43:49]     CAMILA PADILHA PRESOTTO                         29 imóveis
+[14:43:49]     CLEVER ELMES MILANI                             26 imóveis
+[14:43:49]     ANTONIO MAGNO JACOB DA ROCHA                    24 imóveis
+[14:43:49]     DIEGO WOLF DE OLIVEIRA                          24 imóveis
+[14:43:49]     ARTUR NOGARI DOS SANTOS                         21 imóveis
+[14:43:49]     APARECIDA MARIA FIXER                           20 imóveis
+[14:43:49]     CAROLINE DE SOUSA RIBAS                         20 imóveis
+[14:43:49]     BRUNO BARRETO SANCHES                           19 imóveis
+[14:43:49]     ALEX WILLIAN HOPPE                              18 imóveis
+[14:43:49]     DANIEL OLIVEIRA JUNIOR                          18 imóveis
+[14:43:49]     DAVI BORGES DE AQUINO                           12 imóveis
+[14:43:49]     BRUNO HENRIQUE LOPES                            11 imóveis
+[14:43:49]     CONRADO AUGUSTO CARVALHO DE MAGALHÃES            8 imóveis
+[14:43:49]     CRISTIANE BORGUETTI MORAES LOPES                 8 imóveis
+[14:43:49]     ALEXANDRE AUGUSTO DOS SANTOS SABBAG              6 imóveis
+[14:43:49] =================================================================
+
+[14:44:46]   Status: ok | 22 imóveis | Total: 597
+[14:44:48] 
+[36/110] ELTON LUIZ SIMON | https://www.simonleiloes.com.br
+[14:44:48]   → Scraping: ELTON LUIZ SIMON | https://www.simonleiloes.com.br
+[14:44:49]     [CONN] ('Connection aborted.', PermissionError(13, 'Permission denied'))
+[14:46:10]   Status: ok | 12 imóveis | Total: 609
+[14:46:12] 
+[37/110] ERICK SOARES TELES | https://www.teza.com.br
+[14:46:12]   → Scraping: ERICK SOARES TELES | https://www.teza.com.br
+[14:46:12]     [CONN] ('Connection aborted.', PermissionError(13, 'Permission denied'))
+[14:46:33]   Status: ok | 1 imóveis | Total: 610
+[14:46:35] 
+[38/110] FÁBIO GONÇALVES BARBOSA | https://www.fabiobarbosaleiloes.com.br
+[14:46:35]   → Scraping: FÁBIO GONÇALVES BARBOSA | https://www.fabiobarbosaleiloes.com.br
+[14:46:35]     [CONN] ('Connection aborted.', PermissionError(13, 'Permission denied'))
+[14:48:09]   Status: ok | 21 imóveis | Total: 631
+[14:48:11] 
+[39/110] FABIO MARLON MACHADO | https://www.machadoleiloeiro.com.br
+[14:48:11]   → Scraping: FABIO MARLON MACHADO | https://www.machadoleiloeiro.com.br
+[14:48:12]     [CONN] ('Connection aborted.', PermissionError(13, 'Permission denied'))
+[14:48:49] 
+=================================================================
+[14:48:49] RELATÓRIO PARCIAL | Total: 631 imóveis | Atual: FABIO MARLON MACHADO
+[14:48:49]   OK: 30 | Sem leilão: 8 | Erro: 0
+[14:48:49]   Imóveis por leiloeiro (com resultados):
+[14:48:49]     DANIEL ELIAS GARCIA                             68 imóveis
+[14:48:49]     ANA CAROLINA ZANINETTI ROSA                     62 imóveis
+[14:48:49]     CATIELE BORGES LEFFA                            57 imóveis
+[14:48:49]     EDUARDO JESUS BORDIGNON                         53 imóveis
+[14:48:49]     DIEGO COSTA MULLER                              51 imóveis
+[14:48:49]     CAMILA PADILHA PRESOTTO                         29 imóveis
+[14:48:49]     CLEVER ELMES MILANI                             26 imóveis
+[14:48:49]     ANTONIO MAGNO JACOB DA ROCHA                    24 imóveis
+[14:48:49]     DIEGO WOLF DE OLIVEIRA                          24 imóveis
+[14:48:49]     EDUARDO SCHMITZ                                 22 imóveis
+[14:48:49]     ARTUR NOGARI DOS SANTOS                         21 imóveis
+[14:48:49]     FÁBIO GONÇALVES BARBOSA                         21 imóveis
+[14:48:49]     APARECIDA MARIA FIXER                           20 imóveis
+[14:48:49]     CAROLINE DE SOUSA RIBAS                         20 imóveis
+[14:48:49]     BRUNO BARRETO SANCHES                           19 imóveis
+[14:48:49]     ALEX WILLIAN HOPPE                              18 imóveis
+[14:48:49]     DANIEL OLIVEIRA JUNIOR                          18 imóveis
+[14:48:49]     DAVI BORGES DE AQUINO                           12 imóveis
+[14:48:49]     ELTON LUIZ SIMON                                12 imóveis
+[14:48:49]     BRUNO HENRIQUE LOPES                            11 imóveis
+[14:48:49] =================================================================
+
+[14:51:21]   Status: ok | 39 imóveis | Total: 670
+[14:51:23] 
+[40/110] FERNANDO CAETANO MOREIRA FILHO | https://www.fernandoleiloeiro.com.br
+[14:51:23]   → Scraping: FERNANDO CAETANO MOREIRA FILHO | https://www.fernandoleiloeiro.com.br
+[14:51:24]     [CONN] ('Connection aborted.', PermissionError(13, 'Permission denied'))
+[14:51:58]   Status: sem_leilao | 0 imóveis | Total: 670
+[14:52:00] 
+[41/110] FERNANDO DE OLIVEIRA KUSS | https://www.ksleiloes.com.br
+[14:52:00]   → Scraping: FERNANDO DE OLIVEIRA KUSS | https://www.ksleiloes.com.br
+[14:52:01]     [CONN] ('Connection aborted.', PermissionError(13, 'Permission denied'))
+[14:52:37]   Status: sem_leilao | 0 imóveis | Total: 670
+[14:52:39] 
+[42/110] FLAVIA KLOCKNER RODRIGUES | https://www.fkleiloes.com.br
+[14:52:39]   → Scraping: FLAVIA KLOCKNER RODRIGUES | https://www.fkleiloes.com.br
+[14:52:39]     [CONN] ('Connection aborted.', PermissionError(13, 'Permission denied'))
+[14:52:53]   Status: sem_leilao | 0 imóveis | Total: 670
+[14:52:55] 
+[43/110] GALVÃO ADENYR LOPES JUNIOR | https://www.lancejusto.com.br
+[14:52:55]   → Scraping: GALVÃO ADENYR LOPES JUNIOR | https://www.lancejusto.com.br
+[14:52:55]     [CONN] ('Connection aborted.', PermissionError(13, 'Permission denied'))
+[14:53:30]   Status: sem_leilao | 0 imóveis | Total: 670
+[14:53:32] 
+[44/110] GELSON BOURSCHIET | https://www.gelsonleiloes.com.br
+[14:53:32]   → Scraping: GELSON BOURSCHIET | https://www.gelsonleiloes.com.br
+[14:53:33]     [CONN] ('Connection aborted.', PermissionError(13, 'Permission denied'))
+[14:53:49] 
+=================================================================
+[14:53:49] RELATÓRIO PARCIAL | Total: 670 imóveis | Atual: GELSON BOURSCHIET
+[14:53:49]   OK: 31 | Sem leilão: 12 | Erro: 0
+[14:53:49]   Imóveis por leiloeiro (com resultados):
+[14:53:49]     DANIEL ELIAS GARCIA                             68 imóveis
+[14:53:49]     ANA CAROLINA ZANINETTI ROSA                     62 imóveis
+[14:53:49]     CATIELE BORGES LEFFA                            57 imóveis
+[14:53:49]     EDUARDO JESUS BORDIGNON                         53 imóveis
+[14:53:49]     DIEGO COSTA MULLER                              51 imóveis
+[14:53:49]     FABIO MARLON MACHADO                            39 imóveis
+[14:53:49]     CAMILA PADILHA PRESOTTO                         29 imóveis
+[14:53:49]     CLEVER ELMES MILANI                             26 imóveis
+[14:53:49]     ANTONIO MAGNO JACOB DA ROCHA                    24 imóveis
+[14:53:49]     DIEGO WOLF DE OLIVEIRA                          24 imóveis
+[14:53:49]     EDUARDO SCHMITZ                                 22 imóveis
+[14:53:49]     ARTUR NOGARI DOS SANTOS                         21 imóveis
+[14:53:49]     FÁBIO GONÇALVES BARBOSA                         21 imóveis
+[14:53:49]     APARECIDA MARIA FIXER                           20 imóveis
+[14:53:49]     CAROLINE DE SOUSA RIBAS                         20 imóveis
+[14:53:49]     BRUNO BARRETO SANCHES                           19 imóveis
+[14:53:49]     ALEX WILLIAN HOPPE                              18 imóveis
+[14:53:49]     DANIEL OLIVEIRA JUNIOR                          18 imóveis
+[14:53:49]     DAVI BORGES DE AQUINO                           12 imóveis
+[14:53:49]     ELTON LUIZ SIMON                                12 imóveis
+[14:53:49] =================================================================
+
+[14:54:19]   Status: sem_leilao | 0 imóveis | Total: 670
+[14:54:21] 
+[45/110] GIANCARLO PETERLONGO LORENZINI MENEGOTTO | https://www.peterlongoleiloes.com.br
+[14:54:21]   → Scraping: GIANCARLO PETERLONGO LORENZINI MENEGOTTO | https://www.peterlongoleiloes.com.br
+[14:54:22]     [CONN] ('Connection aborted.', PermissionError(13, 'Permission denied'))

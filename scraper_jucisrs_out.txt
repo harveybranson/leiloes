@@ -1,0 +1,1837 @@
+[09:24:16] ============================================================
+[09:24:16] JUCISRS Scraper — 2026-06-08 09:24:16
+[09:24:16] ============================================================
+[09:24:16] Buscando lista JUCISRS em https://sistemas.jucisrs.rs.gov.br/leiloeiros/busca/listar ...
+[09:24:17]   Total blocos HR: 386
+[09:24:17]   Regular: 244 | Cancelados: 121 | Suspensos: 16
+[09:24:17] 
+Total Regular: 244 | Com site: 183 | Sem site: 34
+[09:24:17] [CSV] Leiloeiros: leiloeiros_jucisrs_2026-06-08.csv (244 registros)
+[09:24:17] 
+[1/183] ADEMIR MIGUEL CORRÊA | https://www.correleiloes.com.br
+[09:24:17]   → ADEMIR MIGUEL CORRÊA | https://www.correleiloes.com.br
+[09:24:19]     JS-heavy → Playwright
+[09:26:12]   sem_leilao | 0 imóveis | Total: 0
+[09:26:14] 
+[2/183] ALESSANDRO FAHRION PINTO | https://www.regionalleiloes.com.br
+[09:26:14]   → ALESSANDRO FAHRION PINTO | https://www.regionalleiloes.com.br
+[09:27:19]   ok | 39 imóveis | Total: 39
+[09:27:21] 
+[3/183] ALEX FONSECA LOTTERMANN | https://www.lottermannleiloes.com.br
+[09:27:21]   → ALEX FONSECA LOTTERMANN | https://www.lottermannleiloes.com.br
+[09:27:34]   ok | 3 imóveis | Total: 42
+[09:27:36] 
+[4/183] ALEX WILLIAN HOPPE | https://www.hoppeleiloes.com.br
+[09:27:36]   → ALEX WILLIAN HOPPE | https://www.hoppeleiloes.com.br
+[09:27:36]     JS-heavy → Playwright
+[09:29:17] 
+============================================================
+[09:29:17] RELATÓRIO | Total: 42 imóveis | Agora: ALEX WILLIAN HOPPE
+[09:29:17]   ALESSANDRO FAHRION PINTO                     39
+[09:29:17]   ALEX FONSECA LOTTERMANN                       3
+[09:29:17]   ADEMIR MIGUEL CORRÊA                          0
+[09:29:17] ============================================================
+
+[09:30:19]   ok | 19 imóveis | Total: 61
+[09:30:21] 
+[5/183] ALEXANDRE RECH | https://www.rechleiloes.com.br
+[09:30:21]   → ALEXANDRE RECH | https://www.rechleiloes.com.br
+[09:31:28]   ok | 23 imóveis | Total: 84
+[09:31:30] 
+[6/183] ALEXANDRE WEYH | https://www.awleiloes.com.br
+[09:31:30]   → ALEXANDRE WEYH | https://www.awleiloes.com.br
+[09:31:33]     HTTP sem resultados → Playwright
+[09:31:47]   sem_leilao | 0 imóveis | Total: 84
+[09:31:49] 
+[7/183] ALEXSANDRO PEREIRA | https://www.alexsandroleiloes.com.br
+[09:31:49]   → ALEXSANDRO PEREIRA | https://www.alexsandroleiloes.com.br
+[09:31:53]     HTTP sem resultados → Playwright
+[09:32:08]   sem_leilao | 0 imóveis | Total: 84
+[09:32:10] 
+[8/183] ALFEU VALÉRIO IAMIN | https://www.valerioleiloeiro.blogspot.com
+[09:32:10]   → ALFEU VALÉRIO IAMIN | https://www.valerioleiloeiro.blogspot.com
+[09:32:16]     HTTP sem resultados → Playwright
+[09:32:37]   sem_leilao | 0 imóveis | Total: 84
+[09:32:39] 
+[9/183] ALFIO CARLOS AFFONSO ZALLI NETO | https://www.zallileiloes.com.br
+[09:32:39]   → ALFIO CARLOS AFFONSO ZALLI NETO | https://www.zallileiloes.com.br
+[09:32:41]     HTTP sem resultados → Playwright
+[09:33:56]   ok | 7 imóveis | Total: 91
+[09:33:58] 
+[10/183] ÁLVARO MARQUES TEIXEIRA | https://www.amtleiloes.com.br
+[09:33:58]   → ÁLVARO MARQUES TEIXEIRA | https://www.amtleiloes.com.br
+[09:34:17] 
+============================================================
+[09:34:17] RELATÓRIO | Total: 91 imóveis | Agora: ÁLVARO MARQUES TEIXEIRA
+[09:34:17]   ALESSANDRO FAHRION PINTO                     39
+[09:34:17]   ALEXANDRE RECH                               23
+[09:34:17]   ALEX WILLIAN HOPPE                           19
+[09:34:17]   ALFIO CARLOS AFFONSO ZALLI NETO               7
+[09:34:17]   ALEX FONSECA LOTTERMANN                       3
+[09:34:17]   ADEMIR MIGUEL CORRÊA                          0
+[09:34:17]   ALEXANDRE WEYH                                0
+[09:34:17]   ALEXSANDRO PEREIRA                            0
+[09:34:17]   ALFEU VALÉRIO IAMIN                           0
+[09:34:17] ============================================================
+
+[09:34:30]   ok | 15 imóveis | Total: 106
+[09:34:32] 
+[11/183] ANA MARIA DAL | https://www.dalaqualeiloes.com.br
+[09:34:32]   → ANA MARIA DAL | https://www.dalaqualeiloes.com.br
+[09:35:02]   ok | 15 imóveis | Total: 121
+[09:35:04] 
+[12/183] ANDRÉ ANTONIO FAUTH | https://www.fauthleiloes.com.br
+[09:35:04]   → ANDRÉ ANTONIO FAUTH | https://www.fauthleiloes.com.br
+[09:35:19]   ok | 1 imóveis | Total: 122
+[09:35:21] 
+[13/183] ANDRÉ BAZACAS VELHO | https://www.leilaobutia.com.br
+[09:35:21]   → ANDRÉ BAZACAS VELHO | https://www.leilaobutia.com.br
+[09:35:37]   ok | 6 imóveis | Total: 128
+[09:35:39] 
+[14/183] ANDRÉ LUIZ WUITSCHIK | https://www.andreluizleiloes.com.br
+[09:35:39]   → ANDRÉ LUIZ WUITSCHIK | https://www.andreluizleiloes.com.br
+[09:35:40]     JS-heavy → Playwright
+[09:39:16]   ok | 23 imóveis | Total: 151
+[09:39:18] 
+============================================================
+[09:39:18] RELATÓRIO | Total: 151 imóveis | Agora: ANDRÉ LUIZ WUITSCHIK
+[09:39:18]   ALESSANDRO FAHRION PINTO                     39
+[09:39:18]   ALEXANDRE RECH                               23
+[09:39:18]   ANDRÉ LUIZ WUITSCHIK                         23
+[09:39:18]   ALEX WILLIAN HOPPE                           19
+[09:39:18]   ÁLVARO MARQUES TEIXEIRA                      15
+[09:39:18]   ANA MARIA DAL                                15
+[09:39:18]   ALFIO CARLOS AFFONSO ZALLI NETO               7
+[09:39:18]   ANDRÉ BAZACAS VELHO                           6
+[09:39:18]   ALEX FONSECA LOTTERMANN                       3
+[09:39:18]   ANDRÉ ANTONIO FAUTH                           1
+[09:39:18]   ADEMIR MIGUEL CORRÊA                          0
+[09:39:18]   ALEXANDRE WEYH                                0
+[09:39:18]   ALEXSANDRO PEREIRA                            0
+[09:39:18]   ALFEU VALÉRIO IAMIN                           0
+[09:39:18] ============================================================
+
+[09:39:18] 
+[15/183] ANDRÉ SOARES MENEGAT | https://www.leiloeiro.lel.br
+[09:39:18]   → ANDRÉ SOARES MENEGAT | https://www.leiloeiro.lel.br
+[09:39:19]     JS-heavy → Playwright
+[09:39:31]   sem_leilao | 0 imóveis | Total: 151
+[09:39:33] 
+[16/183] ANDRESSA SEDREZ TERRES TONIAL FERREIRA | https://www.tonialleiloes.com.br
+[09:39:33]   → ANDRESSA SEDREZ TERRES TONIAL FERREIRA | https://www.tonialleiloes.com.br
+[09:40:20]   ok | 24 imóveis | Total: 175
+[09:40:22] 
+[17/183] ANTONIO ALEXANDRE RAOTA | https://www.raotaleiloes.com.br
+[09:40:22]   → ANTONIO ALEXANDRE RAOTA | https://www.raotaleiloes.com.br
+[09:40:43]     HTTP sem resultados → Playwright
+[09:42:42]   ok | 6 imóveis | Total: 181
+[09:42:44] 
+[18/183] ANTÔNIO PEDRO PACHECO LOPES | https://www.superleiloes.net
+[09:42:44]   → ANTÔNIO PEDRO PACHECO LOPES | https://www.superleiloes.net
+[09:43:26]   ok | 21 imóveis | Total: 202
+[09:43:28] 
+[19/183] ANTÔNIO RICARDO SILVA DE LARA | https://www.leiloeslaraforster.com.br
+[09:43:28]   → ANTÔNIO RICARDO SILVA DE LARA | https://www.leiloeslaraforster.com.br
+[09:43:32]     HTTP sem resultados → Playwright
+[09:43:48]   sem_leilao | 0 imóveis | Total: 202
+[09:43:50] 
+[20/183] ARGEMIRO LUIZ FINATTO | https://www.finattoleiloes.com.br
+[09:43:50]   → ARGEMIRO LUIZ FINATTO | https://www.finattoleiloes.com.br
+[09:43:55]   ok | 3 imóveis | Total: 205
+[09:43:57] 
+[21/183] AUGUSTO PARMEGGIANI PESTANA MARQUES GOMES | https://www.pestanaleiloes.com.br
+[09:43:57]   → AUGUSTO PARMEGGIANI PESTANA MARQUES GOMES | https://www.pestanaleiloes.com.br
+[09:43:58]     JS-heavy → Playwright
+[09:44:18] 
+============================================================
+[09:44:18] RELATÓRIO | Total: 205 imóveis | Agora: AUGUSTO PARMEGGIANI PESTANA MARQUES GOMES
+[09:44:18]   ALESSANDRO FAHRION PINTO                     39
+[09:44:18]   ANDRESSA SEDREZ TERRES TONIAL FERREIRA       24
+[09:44:18]   ALEXANDRE RECH                               23
+[09:44:18]   ANDRÉ LUIZ WUITSCHIK                         23
+[09:44:18]   ANTÔNIO PEDRO PACHECO LOPES                  21
+[09:44:18]   ALEX WILLIAN HOPPE                           19
+[09:44:18]   ÁLVARO MARQUES TEIXEIRA                      15
+[09:44:18]   ANA MARIA DAL                                15
+[09:44:18]   ALFIO CARLOS AFFONSO ZALLI NETO               7
+[09:44:18]   ANDRÉ BAZACAS VELHO                           6
+[09:44:18]   ANTONIO ALEXANDRE RAOTA                       6
+[09:44:18]   ALEX FONSECA LOTTERMANN                       3
+[09:44:18]   ARGEMIRO LUIZ FINATTO                         3
+[09:44:18]   ANDRÉ ANTONIO FAUTH                           1
+[09:44:18]   ADEMIR MIGUEL CORRÊA                          0
+[09:44:18]   ALEXANDRE WEYH                                0
+[09:44:18]   ALEXSANDRO PEREIRA                            0
+[09:44:18]   ALFEU VALÉRIO IAMIN                           0
+[09:44:18]   ANDRÉ SOARES MENEGAT                          0
+[09:44:18]   ANTÔNIO RICARDO SILVA DE LARA                 0
+[09:44:18] ============================================================
+
+[09:44:36]   sem_leilao | 0 imóveis | Total: 205
+[09:44:38] 
+[22/183] BRENO LOUREIRO DE MENEZES | https://www.blmleiloes.com.br
+[09:44:38]   → BRENO LOUREIRO DE MENEZES | https://www.blmleiloes.com.br
+[09:45:38]   ok | 32 imóveis | Total: 237
+[09:45:40] 
+[23/183] BRUNO AGNELLO PEGORARO | https://www.pegoraroleiloes.com.br
+[09:45:40]   → BRUNO AGNELLO PEGORARO | https://www.pegoraroleiloes.com.br
+[09:45:41]     JS-heavy → Playwright
+[09:45:58]   sem_leilao | 0 imóveis | Total: 237
+[09:46:00] 
+[24/183] BRUNO FERNANDO MEIRELES CARDOSO | https://www.meirelesleiloes.com.br
+[09:46:00]   → BRUNO FERNANDO MEIRELES CARDOSO | https://www.meirelesleiloes.com.br
+[09:46:06]   ok | 1 imóveis | Total: 238
+[09:46:08] 
+[25/183] BRUNO HENRIQUE DOS SANTOS | https://www.nsleiloes.leilao.br
+[09:46:08]   → BRUNO HENRIQUE DOS SANTOS | https://www.nsleiloes.leilao.br
+[09:47:32]   ok | 42 imóveis | Total: 280
+[09:47:34] 
+[26/183] CAMILA LAIS CARGNELUTTI | https://www.cargneluttileiloes.com.br
+[09:47:34]   → CAMILA LAIS CARGNELUTTI | https://www.cargneluttileiloes.com.br
+[09:49:18] 
+============================================================
+[09:49:18] RELATÓRIO | Total: 280 imóveis | Agora: CAMILA LAIS CARGNELUTTI
+[09:49:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[09:49:18]   ALESSANDRO FAHRION PINTO                     39
+[09:49:18]   BRENO LOUREIRO DE MENEZES                    32
+[09:49:18]   ANDRESSA SEDREZ TERRES TONIAL FERREIRA       24
+[09:49:18]   ALEXANDRE RECH                               23
+[09:49:18]   ANDRÉ LUIZ WUITSCHIK                         23
+[09:49:18]   ANTÔNIO PEDRO PACHECO LOPES                  21
+[09:49:18]   ALEX WILLIAN HOPPE                           19
+[09:49:18]   ÁLVARO MARQUES TEIXEIRA                      15
+[09:49:18]   ANA MARIA DAL                                15
+[09:49:18]   ALFIO CARLOS AFFONSO ZALLI NETO               7
+[09:49:18]   ANDRÉ BAZACAS VELHO                           6
+[09:49:18]   ANTONIO ALEXANDRE RAOTA                       6
+[09:49:18]   ALEX FONSECA LOTTERMANN                       3
+[09:49:18]   ARGEMIRO LUIZ FINATTO                         3
+[09:49:18]   ANDRÉ ANTONIO FAUTH                           1
+[09:49:18]   BRUNO FERNANDO MEIRELES CARDOSO               1
+[09:49:18]   ADEMIR MIGUEL CORRÊA                          0
+[09:49:18]   ALEXANDRE WEYH                                0
+[09:49:18]   ALEXSANDRO PEREIRA                            0
+[09:49:18] ============================================================
+
+[09:49:28]   ok | 53 imóveis | Total: 333
+[09:49:30] 
+[27/183] CARLOS PINNA DA CONCEIÇÃO | https://www.cpkleiloes.com.br
+[09:49:30]   → CARLOS PINNA DA CONCEIÇÃO | https://www.cpkleiloes.com.br
+[09:49:50]   ok | 6 imóveis | Total: 339
+[09:49:52] 
+[28/183] CARMEN GOMES PIETOSO | https://www.pietosoleiloes.lel.br
+[09:49:52]   → CARMEN GOMES PIETOSO | https://www.pietosoleiloes.lel.br
+[09:52:51]   ok | 82 imóveis | Total: 421
+[09:52:53] 
+[29/183] CATIA FERNANDA ALIEVI TOPOROSKI | https://www.topoleiloes.com.br
+[09:52:53]   → CATIA FERNANDA ALIEVI TOPOROSKI | https://www.topoleiloes.com.br
+[09:52:55]     JS-heavy → Playwright
+[09:53:31]   sem_leilao | 0 imóveis | Total: 421
+[09:53:33] 
+[30/183] CATIELE BORGES LEFFA | https://www.leffaleiloes.com.br
+[09:53:33]   → CATIELE BORGES LEFFA | https://www.leffaleiloes.com.br
+[09:54:18] 
+============================================================
+[09:54:18] RELATÓRIO | Total: 421 imóveis | Agora: CATIELE BORGES LEFFA
+[09:54:18]   CARMEN GOMES PIETOSO                         82
+[09:54:18]   CAMILA LAIS CARGNELUTTI                      53
+[09:54:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[09:54:18]   ALESSANDRO FAHRION PINTO                     39
+[09:54:18]   BRENO LOUREIRO DE MENEZES                    32
+[09:54:18]   ANDRESSA SEDREZ TERRES TONIAL FERREIRA       24
+[09:54:18]   ALEXANDRE RECH                               23
+[09:54:18]   ANDRÉ LUIZ WUITSCHIK                         23
+[09:54:18]   ANTÔNIO PEDRO PACHECO LOPES                  21
+[09:54:18]   ALEX WILLIAN HOPPE                           19
+[09:54:18]   ÁLVARO MARQUES TEIXEIRA                      15
+[09:54:18]   ANA MARIA DAL                                15
+[09:54:18]   ALFIO CARLOS AFFONSO ZALLI NETO               7
+[09:54:18]   ANDRÉ BAZACAS VELHO                           6
+[09:54:18]   ANTONIO ALEXANDRE RAOTA                       6
+[09:54:18]   CARLOS PINNA DA CONCEIÇÃO                     6
+[09:54:18]   ALEX FONSECA LOTTERMANN                       3
+[09:54:18]   ARGEMIRO LUIZ FINATTO                         3
+[09:54:18]   ANDRÉ ANTONIO FAUTH                           1
+[09:54:18]   BRUNO FERNANDO MEIRELES CARDOSO               1
+[09:54:18] ============================================================
+
+[09:54:55]   ok | 43 imóveis | Total: 464
+[09:54:57] 
+[31/183] CIRA MARÍLIA FERLIN | https://www.aleiloeira.com.br
+[09:54:57]   → CIRA MARÍLIA FERLIN | https://www.aleiloeira.com.br
+[09:54:57]     [WARN] HTTP falhou (ConnectionError). Playwright...
+[09:54:58]   sem_leilao | 0 imóveis | Total: 464
+[09:55:00] 
+[32/183] CLADEMIR DOS SANTOS FLORES | https://www.clademirleiloeiro.com.br
+[09:55:00]   → CLADEMIR DOS SANTOS FLORES | https://www.clademirleiloeiro.com.br
+[09:55:56]   ok | 30 imóveis | Total: 494
+[09:55:58] 
+[33/183] CLECI AMABILE LEVY ZAGO | https://www.zagoleiloes.com.br
+[09:55:58]   → CLECI AMABILE LEVY ZAGO | https://www.zagoleiloes.com.br
+[09:56:46]   ok | 21 imóveis | Total: 515
+[09:56:48] 
+[34/183] CRISTIANE BORGUETTI MORAES LOPES | https://www.lanceja.com.br
+[09:56:48]   → CRISTIANE BORGUETTI MORAES LOPES | https://www.lanceja.com.br
+[09:57:02]   ok | 8 imóveis | Total: 523
+[09:57:04] 
+[35/183] CRISTIANO BRANCHIERI ESCOLA | https://www.cristianoescolaleiloes.com.br
+[09:57:04]   → CRISTIANO BRANCHIERI ESCOLA | https://www.cristianoescolaleiloes.com.br
+[09:57:18]   ok | 12 imóveis | Total: 535
+[09:57:20] 
+[36/183] CRISTIANO DA ROSA SCHONTAG | https://www.trileiloes.com.br
+[09:57:20]   → CRISTIANO DA ROSA SCHONTAG | https://www.trileiloes.com.br
+[09:58:41]   ok | 36 imóveis | Total: 571
+[09:58:43] 
+[37/183] CRISTINE KRIEGER | https://www.kriegerleiloes.com.br
+[09:58:43]   → CRISTINE KRIEGER | https://www.kriegerleiloes.com.br
+[09:58:44]     JS-heavy → Playwright
+[09:59:18] 
+============================================================
+[09:59:18] RELATÓRIO | Total: 571 imóveis | Agora: CRISTINE KRIEGER
+[09:59:18]   CARMEN GOMES PIETOSO                         82
+[09:59:18]   CAMILA LAIS CARGNELUTTI                      53
+[09:59:18]   CATIELE BORGES LEFFA                         43
+[09:59:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[09:59:18]   ALESSANDRO FAHRION PINTO                     39
+[09:59:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[09:59:18]   BRENO LOUREIRO DE MENEZES                    32
+[09:59:18]   CLADEMIR DOS SANTOS FLORES                   30
+[09:59:18]   ANDRESSA SEDREZ TERRES TONIAL FERREIRA       24
+[09:59:18]   ALEXANDRE RECH                               23
+[09:59:18]   ANDRÉ LUIZ WUITSCHIK                         23
+[09:59:18]   ANTÔNIO PEDRO PACHECO LOPES                  21
+[09:59:18]   CLECI AMABILE LEVY ZAGO                      21
+[09:59:18]   ALEX WILLIAN HOPPE                           19
+[09:59:18]   ÁLVARO MARQUES TEIXEIRA                      15
+[09:59:18]   ANA MARIA DAL                                15
+[09:59:18]   CRISTIANO BRANCHIERI ESCOLA                  12
+[09:59:18]   CRISTIANE BORGUETTI MORAES LOPES              8
+[09:59:18]   ALFIO CARLOS AFFONSO ZALLI NETO               7
+[09:59:18]   ANDRÉ BAZACAS VELHO                           6
+[09:59:18] ============================================================
+
+[09:59:22]   sem_leilao | 0 imóveis | Total: 571
+[09:59:24] 
+[38/183] DAGOBERTO SOLDATELLI | https://www.modeloimoveis.com
+[09:59:24]   → DAGOBERTO SOLDATELLI | https://www.modeloimoveis.com
+[09:59:26]     JS-heavy → Playwright
+[09:59:38]   sem_leilao | 0 imóveis | Total: 571
+[09:59:40] 
+[39/183] DAIANE FUCKS PELENTIR | https://www.agilileiloes.com.br
+[09:59:40]   → DAIANE FUCKS PELENTIR | https://www.agilileiloes.com.br
+[10:01:02]   ok | 37 imóveis | Total: 608
+[10:01:04] 
+[40/183] DANIEL COSTA MÜLLER | https://www.mullerleiloes.com.br
+[10:01:04]   → DANIEL COSTA MÜLLER | https://www.mullerleiloes.com.br
+[10:02:51]   ok | 51 imóveis | Total: 659
+[10:02:53] 
+[41/183] DANIEL ELIAS GARCIA | https://www.danielgarcialeiloes.com.br
+[10:02:53]   → DANIEL ELIAS GARCIA | https://www.danielgarcialeiloes.com.br
+[10:04:18] 
+============================================================
+[10:04:18] RELATÓRIO | Total: 659 imóveis | Agora: DANIEL ELIAS GARCIA
+[10:04:18]   CARMEN GOMES PIETOSO                         82
+[10:04:18]   CAMILA LAIS CARGNELUTTI                      53
+[10:04:18]   DANIEL COSTA MÜLLER                          51
+[10:04:18]   CATIELE BORGES LEFFA                         43
+[10:04:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[10:04:18]   ALESSANDRO FAHRION PINTO                     39
+[10:04:18]   DAIANE FUCKS PELENTIR                        37
+[10:04:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[10:04:18]   BRENO LOUREIRO DE MENEZES                    32
+[10:04:18]   CLADEMIR DOS SANTOS FLORES                   30
+[10:04:18]   ANDRESSA SEDREZ TERRES TONIAL FERREIRA       24
+[10:04:18]   ALEXANDRE RECH                               23
+[10:04:18]   ANDRÉ LUIZ WUITSCHIK                         23
+[10:04:18]   ANTÔNIO PEDRO PACHECO LOPES                  21
+[10:04:18]   CLECI AMABILE LEVY ZAGO                      21
+[10:04:18]   ALEX WILLIAN HOPPE                           19
+[10:04:18]   ÁLVARO MARQUES TEIXEIRA                      15
+[10:04:18]   ANA MARIA DAL                                15
+[10:04:18]   CRISTIANO BRANCHIERI ESCOLA                  12
+[10:04:18]   CRISTIANE BORGUETTI MORAES LOPES              8
+[10:04:18] ============================================================
+
+[10:04:40]   ok | 47 imóveis | Total: 706
+[10:04:42] 
+[42/183] DANIEL HAMOUI | https://www.dhleiloes.com.br
+[10:04:42]   → DANIEL HAMOUI | https://www.dhleiloes.com.br
+[10:09:18] 
+============================================================
+[10:09:18] RELATÓRIO | Total: 706 imóveis | Agora: DANIEL HAMOUI
+[10:09:18]   CARMEN GOMES PIETOSO                         82
+[10:09:18]   CAMILA LAIS CARGNELUTTI                      53
+[10:09:18]   DANIEL COSTA MÜLLER                          51
+[10:09:18]   DANIEL ELIAS GARCIA                          47
+[10:09:18]   CATIELE BORGES LEFFA                         43
+[10:09:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[10:09:18]   ALESSANDRO FAHRION PINTO                     39
+[10:09:18]   DAIANE FUCKS PELENTIR                        37
+[10:09:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[10:09:18]   BRENO LOUREIRO DE MENEZES                    32
+[10:09:18]   CLADEMIR DOS SANTOS FLORES                   30
+[10:09:18]   ANDRESSA SEDREZ TERRES TONIAL FERREIRA       24
+[10:09:18]   ALEXANDRE RECH                               23
+[10:09:18]   ANDRÉ LUIZ WUITSCHIK                         23
+[10:09:18]   ANTÔNIO PEDRO PACHECO LOPES                  21
+[10:09:18]   CLECI AMABILE LEVY ZAGO                      21
+[10:09:18]   ALEX WILLIAN HOPPE                           19
+[10:09:18]   ÁLVARO MARQUES TEIXEIRA                      15
+[10:09:18]   ANA MARIA DAL                                15
+[10:09:18]   CRISTIANO BRANCHIERI ESCOLA                  12
+[10:09:18] ============================================================
+
+[10:09:58]   ok | 200 imóveis | Total: 906
+[10:10:00] 
+[43/183] DANIEL LAZOWNIK DUARTE | https://www.dldleiloeiro.com.br
+[10:10:00]   → DANIEL LAZOWNIK DUARTE | https://www.dldleiloeiro.com.br
+[10:11:19]   ok | 43 imóveis | Total: 949
+[10:11:21] 
+[44/183] DANIEL SCHNEIDER CHAIEB | https://www.agenciadeleiloes.com.br
+[10:11:21]   → DANIEL SCHNEIDER CHAIEB | https://www.agenciadeleiloes.com.br
+[10:11:44]   ok | 7 imóveis | Total: 956
+[10:11:46] 
+[45/183] DAVI BORGES DE AQUINO | https://www.alfaleiloes.com/
+[10:11:46]   → DAVI BORGES DE AQUINO | https://www.alfaleiloes.com/
+[10:12:26]   ok | 12 imóveis | Total: 968
+[10:12:28] 
+[46/183] DÉBORA JANAÍNA MÜLLER CORTES | https://www.deboramullerleiloes.com.br
+[10:12:28]   → DÉBORA JANAÍNA MÜLLER CORTES | https://www.deboramullerleiloes.com.br
+[10:12:40]   ok | 3 imóveis | Total: 971
+[10:12:42] 
+[47/183] DÉBORA REGINA BARZ | https://www.deborabarzleiloes.com.br
+[10:12:42]   → DÉBORA REGINA BARZ | https://www.deborabarzleiloes.com.br
+[10:13:16]   ok | 9 imóveis | Total: 980
+[10:13:18] 
+[48/183] DEDIANA FARIAS | https://www.fariasleiloes.com.br
+[10:13:18]   → DEDIANA FARIAS | https://www.fariasleiloes.com.br
+[10:14:18]   ok | 24 imóveis | Total: 1004
+[10:14:18] 
+============================================================
+[10:14:18] RELATÓRIO | Total: 1004 imóveis | Agora: DEDIANA FARIAS
+[10:14:18]   DANIEL HAMOUI                               200
+[10:14:18]   CARMEN GOMES PIETOSO                         82
+[10:14:18]   CAMILA LAIS CARGNELUTTI                      53
+[10:14:18]   DANIEL COSTA MÜLLER                          51
+[10:14:18]   DANIEL ELIAS GARCIA                          47
+[10:14:18]   CATIELE BORGES LEFFA                         43
+[10:14:18]   DANIEL LAZOWNIK DUARTE                       43
+[10:14:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[10:14:18]   ALESSANDRO FAHRION PINTO                     39
+[10:14:18]   DAIANE FUCKS PELENTIR                        37
+[10:14:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[10:14:18]   BRENO LOUREIRO DE MENEZES                    32
+[10:14:18]   CLADEMIR DOS SANTOS FLORES                   30
+[10:14:18]   ANDRESSA SEDREZ TERRES TONIAL FERREIRA       24
+[10:14:18]   DEDIANA FARIAS                               24
+[10:14:18]   ALEXANDRE RECH                               23
+[10:14:18]   ANDRÉ LUIZ WUITSCHIK                         23
+[10:14:18]   ANTÔNIO PEDRO PACHECO LOPES                  21
+[10:14:18]   CLECI AMABILE LEVY ZAGO                      21
+[10:14:18]   ALEX WILLIAN HOPPE                           19
+[10:14:18] ============================================================
+
+[10:14:20] 
+[49/183] DENILSON KIEL | https://www.kielleiloes.com.br
+[10:14:20]   → DENILSON KIEL | https://www.kielleiloes.com.br
+[10:14:20]     JS-heavy → Playwright
+[10:15:01]   ok | 4 imóveis | Total: 1008
+[10:15:03] 
+[50/183] DENYS PYERRE DE OLIVEIRA | https://www.leje.com.br
+[10:15:03]   → DENYS PYERRE DE OLIVEIRA | https://www.leje.com.br
+[10:15:09]   ok | 3 imóveis | Total: 1011
+[10:15:11] 
+[51/183] DIEGO GONÇALVES ARAUJO | https://www.diegoaraujoleiloeiro.com.br
+[10:15:11]   → DIEGO GONÇALVES ARAUJO | https://www.diegoaraujoleiloeiro.com.br
+[10:15:21]     HTTP sem resultados → Playwright
+[10:18:32]   ok | 30 imóveis | Total: 1041
+[10:18:34] 
+[52/183] DIONIR BIANCHI | https://www.bianchileiloes.com.br
+[10:18:34]   → DIONIR BIANCHI | https://www.bianchileiloes.com.br
+[10:19:18] 
+============================================================
+[10:19:18] RELATÓRIO | Total: 1041 imóveis | Agora: DIONIR BIANCHI
+[10:19:18]   DANIEL HAMOUI                               200
+[10:19:18]   CARMEN GOMES PIETOSO                         82
+[10:19:18]   CAMILA LAIS CARGNELUTTI                      53
+[10:19:18]   DANIEL COSTA MÜLLER                          51
+[10:19:18]   DANIEL ELIAS GARCIA                          47
+[10:19:18]   CATIELE BORGES LEFFA                         43
+[10:19:18]   DANIEL LAZOWNIK DUARTE                       43
+[10:19:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[10:19:18]   ALESSANDRO FAHRION PINTO                     39
+[10:19:18]   DAIANE FUCKS PELENTIR                        37
+[10:19:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[10:19:18]   BRENO LOUREIRO DE MENEZES                    32
+[10:19:18]   CLADEMIR DOS SANTOS FLORES                   30
+[10:19:18]   DIEGO GONÇALVES ARAUJO                       30
+[10:19:18]   ANDRESSA SEDREZ TERRES TONIAL FERREIRA       24
+[10:19:18]   DEDIANA FARIAS                               24
+[10:19:18]   ALEXANDRE RECH                               23
+[10:19:18]   ANDRÉ LUIZ WUITSCHIK                         23
+[10:19:18]   ANTÔNIO PEDRO PACHECO LOPES                  21
+[10:19:18]   CLECI AMABILE LEVY ZAGO                      21
+[10:19:18] ============================================================
+
+[10:21:28]   ok | 78 imóveis | Total: 1119
+[10:21:30] 
+[53/183] DIORGENES VALÉRIO JORGE | https://www.djleilao.com.br
+[10:21:30]   → DIORGENES VALÉRIO JORGE | https://www.djleilao.com.br
+[10:22:16]   ok | 20 imóveis | Total: 1139
+[10:22:18] 
+[54/183] EBERTI GEORGE BERNARDI | https://www.siriusleiloes.com.br
+[10:22:18]   → EBERTI GEORGE BERNARDI | https://www.siriusleiloes.com.br
+[10:22:21]     HTTP sem resultados → Playwright
+[10:22:52]   sem_leilao | 0 imóveis | Total: 1139
+[10:22:54] 
+[55/183] EDERSON HARRIS | https://www.simleiloes.com.br
+[10:22:54]   → EDERSON HARRIS | https://www.simleiloes.com.br
+[10:22:59]     HTTP sem resultados → Playwright
+[10:23:34]   ok | 2 imóveis | Total: 1141
+[10:23:36] 
+[56/183] EDUARDO ABREU ALVES BARBOSA | https://www.bestleiloes.com.br
+[10:23:36]   → EDUARDO ABREU ALVES BARBOSA | https://www.bestleiloes.com.br
+[10:24:18] 
+============================================================
+[10:24:18] RELATÓRIO | Total: 1141 imóveis | Agora: EDUARDO ABREU ALVES BARBOSA
+[10:24:18]   DANIEL HAMOUI                               200
+[10:24:18]   CARMEN GOMES PIETOSO                         82
+[10:24:18]   DIONIR BIANCHI                               78
+[10:24:18]   CAMILA LAIS CARGNELUTTI                      53
+[10:24:18]   DANIEL COSTA MÜLLER                          51
+[10:24:18]   DANIEL ELIAS GARCIA                          47
+[10:24:18]   CATIELE BORGES LEFFA                         43
+[10:24:18]   DANIEL LAZOWNIK DUARTE                       43
+[10:24:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[10:24:18]   ALESSANDRO FAHRION PINTO                     39
+[10:24:18]   DAIANE FUCKS PELENTIR                        37
+[10:24:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[10:24:18]   BRENO LOUREIRO DE MENEZES                    32
+[10:24:18]   CLADEMIR DOS SANTOS FLORES                   30
+[10:24:18]   DIEGO GONÇALVES ARAUJO                       30
+[10:24:18]   ANDRESSA SEDREZ TERRES TONIAL FERREIRA       24
+[10:24:18]   DEDIANA FARIAS                               24
+[10:24:18]   ALEXANDRE RECH                               23
+[10:24:18]   ANDRÉ LUIZ WUITSCHIK                         23
+[10:24:18]   ANTÔNIO PEDRO PACHECO LOPES                  21
+[10:24:18] ============================================================
+
+[10:25:03]   ok | 32 imóveis | Total: 1173
+[10:25:05] 
+[57/183] EDUARDO FRONZA DE FARIAS | https://www.elevaleiloes.com.br
+[10:25:05]   → EDUARDO FRONZA DE FARIAS | https://www.elevaleiloes.com.br
+[10:25:18]   ok | 3 imóveis | Total: 1176
+[10:25:20] 
+[58/183] EDUARDO SCHMITZ | https://www.clicleiloes.com.br
+[10:25:20]   → EDUARDO SCHMITZ | https://www.clicleiloes.com.br
+[10:26:03]   ok | 10 imóveis | Total: 1186
+[10:26:05] 
+[59/183] EDUARDO VIVIAN | https://www.eduardovivian.com
+[10:26:05]   → EDUARDO VIVIAN | https://www.eduardovivian.com
+[10:28:42]   ok | 105 imóveis | Total: 1291
+[10:28:44] 
+[60/183] ELTON LUIZ SIMON | https://www.simonleiloes.com.br
+[10:28:44]   → ELTON LUIZ SIMON | https://www.simonleiloes.com.br
+[10:29:12]   ok | 8 imóveis | Total: 1299
+[10:29:14] 
+[61/183] ERNI CARLOS ORO | https://www.oroleiloes.lel.br
+[10:29:14]   → ERNI CARLOS ORO | https://www.oroleiloes.lel.br
+[10:29:18] 
+============================================================
+[10:29:18] RELATÓRIO | Total: 1299 imóveis | Agora: ERNI CARLOS ORO
+[10:29:18]   DANIEL HAMOUI                               200
+[10:29:18]   EDUARDO VIVIAN                              105
+[10:29:18]   CARMEN GOMES PIETOSO                         82
+[10:29:18]   DIONIR BIANCHI                               78
+[10:29:18]   CAMILA LAIS CARGNELUTTI                      53
+[10:29:18]   DANIEL COSTA MÜLLER                          51
+[10:29:18]   DANIEL ELIAS GARCIA                          47
+[10:29:18]   CATIELE BORGES LEFFA                         43
+[10:29:18]   DANIEL LAZOWNIK DUARTE                       43
+[10:29:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[10:29:18]   ALESSANDRO FAHRION PINTO                     39
+[10:29:18]   DAIANE FUCKS PELENTIR                        37
+[10:29:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[10:29:18]   BRENO LOUREIRO DE MENEZES                    32
+[10:29:18]   EDUARDO ABREU ALVES BARBOSA                  32
+[10:29:18]   CLADEMIR DOS SANTOS FLORES                   30
+[10:29:18]   DIEGO GONÇALVES ARAUJO                       30
+[10:29:18]   ANDRESSA SEDREZ TERRES TONIAL FERREIRA       24
+[10:29:18]   DEDIANA FARIAS                               24
+[10:29:18]   ALEXANDRE RECH                               23
+[10:29:18] ============================================================
+
+[10:30:33]   ok | 34 imóveis | Total: 1333
+[10:30:35] 
+[62/183] EUCLIDES MARASCHI JUNIOR | https://www.hastapublica.com.br
+[10:30:35]   → EUCLIDES MARASCHI JUNIOR | https://www.hastapublica.com.br
+[10:31:22]   ok | 23 imóveis | Total: 1356
+[10:31:24] 
+[63/183] EVA DELMINDA STANGHERLIN | https://www.evaleiloes.com.br
+[10:31:24]   → EVA DELMINDA STANGHERLIN | https://www.evaleiloes.com.br
+[10:31:27]     HTTP sem resultados → Playwright
+[10:31:39]   sem_leilao | 0 imóveis | Total: 1356
+[10:31:41] 
+[64/183] EVANDRO SCHAEFFER MUCK | https://www.muckleiloes.com.br
+[10:31:41]   → EVANDRO SCHAEFFER MUCK | https://www.muckleiloes.com.br
+[10:31:42]     [WARN] HTTP falhou (ConnectionError). Playwright...
+[10:31:42]   sem_leilao | 0 imóveis | Total: 1356
+[10:31:44] 
+[65/183] EVANDRO VIEGAS MARTINS | https://www.martinsleiloes.com.br
+[10:31:44]   → EVANDRO VIEGAS MARTINS | https://www.martinsleiloes.com.br
+[10:31:46]   offline | 0 imóveis | Total: 1356
+[10:31:48] 
+[66/183] FABIO GOMES PIETOSO | https://www.pietosoleiloes.com.br
+[10:31:48]   → FABIO GOMES PIETOSO | https://www.pietosoleiloes.com.br
+[10:34:14]   ok | 68 imóveis | Total: 1424
+[10:34:16] 
+[67/183] FABIO MARLON MACHADO | https://www.machadoleiloeiro.com.br
+[10:34:16]   → FABIO MARLON MACHADO | https://www.machadoleiloeiro.com.br
+[10:34:18] 
+============================================================
+[10:34:18] RELATÓRIO | Total: 1424 imóveis | Agora: FABIO MARLON MACHADO
+[10:34:18]   DANIEL HAMOUI                               200
+[10:34:18]   EDUARDO VIVIAN                              105
+[10:34:18]   CARMEN GOMES PIETOSO                         82
+[10:34:18]   DIONIR BIANCHI                               78
+[10:34:18]   FABIO GOMES PIETOSO                          68
+[10:34:18]   CAMILA LAIS CARGNELUTTI                      53
+[10:34:18]   DANIEL COSTA MÜLLER                          51
+[10:34:18]   DANIEL ELIAS GARCIA                          47
+[10:34:18]   CATIELE BORGES LEFFA                         43
+[10:34:18]   DANIEL LAZOWNIK DUARTE                       43
+[10:34:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[10:34:18]   ALESSANDRO FAHRION PINTO                     39
+[10:34:18]   DAIANE FUCKS PELENTIR                        37
+[10:34:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[10:34:18]   ERNI CARLOS ORO                              34
+[10:34:18]   BRENO LOUREIRO DE MENEZES                    32
+[10:34:18]   EDUARDO ABREU ALVES BARBOSA                  32
+[10:34:18]   CLADEMIR DOS SANTOS FLORES                   30
+[10:34:18]   DIEGO GONÇALVES ARAUJO                       30
+[10:34:18]   ANDRESSA SEDREZ TERRES TONIAL FERREIRA       24
+[10:34:18] ============================================================
+
+[10:35:22]   ok | 24 imóveis | Total: 1448
+[10:35:24] 
+[68/183] FÁBIO ROMAN ZANDONAI | https://www.italnet.com.br
+[10:35:24]   → FÁBIO ROMAN ZANDONAI | https://www.italnet.com.br
+[10:35:28]     HTTP sem resultados → Playwright
+[10:36:04]   sem_leilao | 0 imóveis | Total: 1448
+[10:36:06] 
+[69/183] FABIO SAMIR MACHADO | https://www.machadoleiloesrs.com.br
+[10:36:06]   → FABIO SAMIR MACHADO | https://www.machadoleiloesrs.com.br
+[10:37:05]   ok | 30 imóveis | Total: 1478
+[10:37:07] 
+[70/183] FELIPE ELEMAR SCHOLL | https://www.arnoldoleiloes.com.br
+[10:37:07]   → FELIPE ELEMAR SCHOLL | https://www.arnoldoleiloes.com.br
+[10:37:58]   ok | 16 imóveis | Total: 1494
+[10:38:00] 
+[71/183] FELIPE ROTTA | https://www.feliperottaleiloes.com.br
+[10:38:00]   → FELIPE ROTTA | https://www.feliperottaleiloes.com.br
+[10:38:01]     JS-heavy → Playwright
+[10:38:51]   ok | 6 imóveis | Total: 1500
+[10:38:53] 
+[72/183] FERNANDA TERRES DE PAULA | https://www.fernandaleiloes.lel.br
+[10:38:53]   → FERNANDA TERRES DE PAULA | https://www.fernandaleiloes.lel.br
+[10:39:18] 
+============================================================
+[10:39:18] RELATÓRIO | Total: 1500 imóveis | Agora: FERNANDA TERRES DE PAULA
+[10:39:18]   DANIEL HAMOUI                               200
+[10:39:18]   EDUARDO VIVIAN                              105
+[10:39:18]   CARMEN GOMES PIETOSO                         82
+[10:39:18]   DIONIR BIANCHI                               78
+[10:39:18]   FABIO GOMES PIETOSO                          68
+[10:39:18]   CAMILA LAIS CARGNELUTTI                      53
+[10:39:18]   DANIEL COSTA MÜLLER                          51
+[10:39:18]   DANIEL ELIAS GARCIA                          47
+[10:39:18]   CATIELE BORGES LEFFA                         43
+[10:39:18]   DANIEL LAZOWNIK DUARTE                       43
+[10:39:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[10:39:18]   ALESSANDRO FAHRION PINTO                     39
+[10:39:18]   DAIANE FUCKS PELENTIR                        37
+[10:39:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[10:39:18]   ERNI CARLOS ORO                              34
+[10:39:18]   BRENO LOUREIRO DE MENEZES                    32
+[10:39:18]   EDUARDO ABREU ALVES BARBOSA                  32
+[10:39:18]   CLADEMIR DOS SANTOS FLORES                   30
+[10:39:18]   DIEGO GONÇALVES ARAUJO                       30
+[10:39:18]   FABIO SAMIR MACHADO                          30
+[10:39:18] ============================================================
+
+[10:39:51]   ok | 21 imóveis | Total: 1521
+[10:39:53] 
+[73/183] FERNANDA VON ZUCCALMAGLIO | https://www.zuccalmaglioleiloes.com.br
+[10:39:53]   → FERNANDA VON ZUCCALMAGLIO | https://www.zuccalmaglioleiloes.com.br
+[10:40:40]   ok | 20 imóveis | Total: 1541
+[10:40:42] 
+[74/183] FERNANDO CAETANO MOREIRA FILHO | https://www.mgl.com.br
+[10:40:42]   → FERNANDO CAETANO MOREIRA FILHO | https://www.mgl.com.br
+[10:40:42]     JS-heavy → Playwright
+[10:40:55]   sem_leilao | 0 imóveis | Total: 1541
+[10:40:57] 
+[75/183] FLÁVIO BITTENCOURT GARCIA | https://www.flaviogarcia.lel.br
+[10:40:57]   → FLÁVIO BITTENCOURT GARCIA | https://www.flaviogarcia.lel.br
+[10:41:07]     HTTP sem resultados → Playwright
+[10:41:23]   sem_leilao | 0 imóveis | Total: 1541
+[10:41:25] 
+[76/183] FRANCISCO HILLESHEIM | https://www.alemaoleiloeiro.com.br
+[10:41:25]   → FRANCISCO HILLESHEIM | https://www.alemaoleiloeiro.com.br
+[10:42:53]   ok | 44 imóveis | Total: 1585
+[10:42:55] 
+[77/183] GABRIEL SILVA DA ROSA | https://www.gabrielleiloes.com.br
+[10:42:55]   → GABRIEL SILVA DA ROSA | https://www.gabrielleiloes.com.br
+[10:43:54]   ok | 27 imóveis | Total: 1612
+[10:43:56] 
+[78/183] GERSON ANOR BORIN DA SILVA NETO | https://www.santoseborinleiloes.com.br
+[10:43:56]   → GERSON ANOR BORIN DA SILVA NETO | https://www.santoseborinleiloes.com.br
+[10:44:18] 
+============================================================
+[10:44:18] RELATÓRIO | Total: 1612 imóveis | Agora: GERSON ANOR BORIN DA SILVA NETO
+[10:44:18]   DANIEL HAMOUI                               200
+[10:44:18]   EDUARDO VIVIAN                              105
+[10:44:18]   CARMEN GOMES PIETOSO                         82
+[10:44:18]   DIONIR BIANCHI                               78
+[10:44:18]   FABIO GOMES PIETOSO                          68
+[10:44:18]   CAMILA LAIS CARGNELUTTI                      53
+[10:44:18]   DANIEL COSTA MÜLLER                          51
+[10:44:18]   DANIEL ELIAS GARCIA                          47
+[10:44:18]   FRANCISCO HILLESHEIM                         44
+[10:44:18]   CATIELE BORGES LEFFA                         43
+[10:44:18]   DANIEL LAZOWNIK DUARTE                       43
+[10:44:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[10:44:18]   ALESSANDRO FAHRION PINTO                     39
+[10:44:18]   DAIANE FUCKS PELENTIR                        37
+[10:44:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[10:44:18]   ERNI CARLOS ORO                              34
+[10:44:18]   BRENO LOUREIRO DE MENEZES                    32
+[10:44:18]   EDUARDO ABREU ALVES BARBOSA                  32
+[10:44:18]   CLADEMIR DOS SANTOS FLORES                   30
+[10:44:18]   DIEGO GONÇALVES ARAUJO                       30
+[10:44:18] ============================================================
+
+[10:46:01]   ok | 67 imóveis | Total: 1679
+[10:46:03] 
+[79/183] GIANCARLO PETERLONGO LORENZINI MENEGOTTO | https://www.peterlongoleiloes.com.br
+[10:46:03]   → GIANCARLO PETERLONGO LORENZINI MENEGOTTO | https://www.peterlongoleiloes.com.br
+[10:49:18] 
+============================================================
+[10:49:18] RELATÓRIO | Total: 1679 imóveis | Agora: GIANCARLO PETERLONGO LORENZINI MENEGOTTO
+[10:49:18]   DANIEL HAMOUI                               200
+[10:49:18]   EDUARDO VIVIAN                              105
+[10:49:18]   CARMEN GOMES PIETOSO                         82
+[10:49:18]   DIONIR BIANCHI                               78
+[10:49:18]   FABIO GOMES PIETOSO                          68
+[10:49:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[10:49:18]   CAMILA LAIS CARGNELUTTI                      53
+[10:49:18]   DANIEL COSTA MÜLLER                          51
+[10:49:18]   DANIEL ELIAS GARCIA                          47
+[10:49:18]   FRANCISCO HILLESHEIM                         44
+[10:49:18]   CATIELE BORGES LEFFA                         43
+[10:49:18]   DANIEL LAZOWNIK DUARTE                       43
+[10:49:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[10:49:18]   ALESSANDRO FAHRION PINTO                     39
+[10:49:18]   DAIANE FUCKS PELENTIR                        37
+[10:49:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[10:49:18]   ERNI CARLOS ORO                              34
+[10:49:18]   BRENO LOUREIRO DE MENEZES                    32
+[10:49:18]   EDUARDO ABREU ALVES BARBOSA                  32
+[10:49:18]   CLADEMIR DOS SANTOS FLORES                   30
+[10:49:18] ============================================================
+
+[10:49:54]   ok | 119 imóveis | Total: 1798
+[10:49:56] 
+[80/183] GIBRALTAR PEDRO CIPRIANO VIDAL | https://www.vidalleiloes.com.br
+[10:49:56]   → GIBRALTAR PEDRO CIPRIANO VIDAL | https://www.vidalleiloes.com.br
+[10:50:38]   ok | 21 imóveis | Total: 1819
+[10:50:40] 
+[81/183] GILMAR THUME | https://www.gtleiloes.com.br
+[10:50:40]   → GILMAR THUME | https://www.gtleiloes.com.br
+[10:52:24]   ok | 64 imóveis | Total: 1883
+[10:52:26] 
+[82/183] GIOVANE SPANNER | https://www.gsleiloes.com.br
+[10:52:26]   → GIOVANE SPANNER | https://www.gsleiloes.com.br
+[10:52:31]     HTTP sem resultados → Playwright
+[10:52:45]   sem_leilao | 0 imóveis | Total: 1883
+[10:52:47] 
+[83/183] GIULIANO FERRONATO | https://www.clicleilao.com.br
+[10:52:47]   → GIULIANO FERRONATO | https://www.clicleilao.com.br
+[10:54:18] 
+============================================================
+[10:54:18] RELATÓRIO | Total: 1883 imóveis | Agora: GIULIANO FERRONATO
+[10:54:18]   DANIEL HAMOUI                               200
+[10:54:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[10:54:18]   EDUARDO VIVIAN                              105
+[10:54:18]   CARMEN GOMES PIETOSO                         82
+[10:54:18]   DIONIR BIANCHI                               78
+[10:54:18]   FABIO GOMES PIETOSO                          68
+[10:54:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[10:54:18]   GILMAR THUME                                 64
+[10:54:18]   CAMILA LAIS CARGNELUTTI                      53
+[10:54:18]   DANIEL COSTA MÜLLER                          51
+[10:54:18]   DANIEL ELIAS GARCIA                          47
+[10:54:18]   FRANCISCO HILLESHEIM                         44
+[10:54:18]   CATIELE BORGES LEFFA                         43
+[10:54:18]   DANIEL LAZOWNIK DUARTE                       43
+[10:54:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[10:54:18]   ALESSANDRO FAHRION PINTO                     39
+[10:54:18]   DAIANE FUCKS PELENTIR                        37
+[10:54:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[10:54:18]   ERNI CARLOS ORO                              34
+[10:54:18]   BRENO LOUREIRO DE MENEZES                    32
+[10:54:18] ============================================================
+
+[10:54:22]   ok | 39 imóveis | Total: 1922
+[10:54:24] 
+[84/183] GUILHERME DA COSTA | https://www.ckleiloes.com.br
+[10:54:24]   → GUILHERME DA COSTA | https://www.ckleiloes.com.br
+[10:54:38]   ok | 3 imóveis | Total: 1925
+[10:54:40] 
+[85/183] GUSTAVO EVALDO GAITSCH HUMOR | https://www.prhleiloes.com.br
+[10:54:40]   → GUSTAVO EVALDO GAITSCH HUMOR | https://www.prhleiloes.com.br
+[10:54:58]     HTTP sem resultados → Playwright
+[10:59:18] 
+============================================================
+[10:59:18] RELATÓRIO | Total: 1925 imóveis | Agora: GUSTAVO EVALDO GAITSCH HUMOR
+[10:59:18]   DANIEL HAMOUI                               200
+[10:59:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[10:59:18]   EDUARDO VIVIAN                              105
+[10:59:18]   CARMEN GOMES PIETOSO                         82
+[10:59:18]   DIONIR BIANCHI                               78
+[10:59:18]   FABIO GOMES PIETOSO                          68
+[10:59:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[10:59:18]   GILMAR THUME                                 64
+[10:59:18]   CAMILA LAIS CARGNELUTTI                      53
+[10:59:18]   DANIEL COSTA MÜLLER                          51
+[10:59:18]   DANIEL ELIAS GARCIA                          47
+[10:59:18]   FRANCISCO HILLESHEIM                         44
+[10:59:18]   CATIELE BORGES LEFFA                         43
+[10:59:18]   DANIEL LAZOWNIK DUARTE                       43
+[10:59:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[10:59:18]   ALESSANDRO FAHRION PINTO                     39
+[10:59:18]   GIULIANO FERRONATO                           39
+[10:59:18]   DAIANE FUCKS PELENTIR                        37
+[10:59:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[10:59:18]   ERNI CARLOS ORO                              34
+[10:59:18] ============================================================
+
+[11:00:15]   ok | 45 imóveis | Total: 1970
+[11:00:17] 
+[86/183] GUSTAVO TURANI | https://www.turanileiloes.com.br
+[11:00:17]   → GUSTAVO TURANI | https://www.turanileiloes.com.br
+[11:00:31]   ok | 5 imóveis | Total: 1975
+[11:00:33] 
+[87/183] HELCIO KRONBERG | https://www.kronbergleiloes.com.br
+[11:00:33]   → HELCIO KRONBERG | https://www.kronbergleiloes.com.br
+[11:00:37]     HTTP sem resultados → Playwright
+[11:00:51]   sem_leilao | 0 imóveis | Total: 1975
+[11:00:53] 
+[88/183] IRANI FLORES | https://www.leilaobrasil.com.br
+[11:00:53]   → IRANI FLORES | https://www.leilaobrasil.com.br
+[11:04:18] 
+============================================================
+[11:04:18] RELATÓRIO | Total: 1975 imóveis | Agora: IRANI FLORES
+[11:04:18]   DANIEL HAMOUI                               200
+[11:04:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[11:04:18]   EDUARDO VIVIAN                              105
+[11:04:18]   CARMEN GOMES PIETOSO                         82
+[11:04:18]   DIONIR BIANCHI                               78
+[11:04:18]   FABIO GOMES PIETOSO                          68
+[11:04:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[11:04:18]   GILMAR THUME                                 64
+[11:04:18]   CAMILA LAIS CARGNELUTTI                      53
+[11:04:18]   DANIEL COSTA MÜLLER                          51
+[11:04:18]   DANIEL ELIAS GARCIA                          47
+[11:04:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[11:04:18]   FRANCISCO HILLESHEIM                         44
+[11:04:18]   CATIELE BORGES LEFFA                         43
+[11:04:18]   DANIEL LAZOWNIK DUARTE                       43
+[11:04:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[11:04:18]   ALESSANDRO FAHRION PINTO                     39
+[11:04:18]   GIULIANO FERRONATO                           39
+[11:04:18]   DAIANE FUCKS PELENTIR                        37
+[11:04:18]   CRISTIANO DA ROSA SCHONTAG                   36
+[11:04:18] ============================================================
+
+[11:05:07]   ok | 146 imóveis | Total: 2121
+[11:05:09] 
+[89/183] IVAN LEOCI BARTMANN | https://www.bartmannleiloes.com.br
+[11:05:09]   → IVAN LEOCI BARTMANN | https://www.bartmannleiloes.com.br
+[11:05:57]   ok | 24 imóveis | Total: 2145
+[11:05:59] 
+[90/183] JACQUES JOCHIMS FERNANDES | https://www.milanleiloes.com.br
+[11:05:59]   → JACQUES JOCHIMS FERNANDES | https://www.milanleiloes.com.br
+[11:06:00]     JS-heavy → Playwright
+[11:06:33]   sem_leilao | 0 imóveis | Total: 2145
+[11:06:35] 
+[91/183] JEAN MIGUEL CORRÊA | https://www.casaforteleiloes.com.br
+[11:06:35]   → JEAN MIGUEL CORRÊA | https://www.casaforteleiloes.com.br
+[11:06:46]   ok | 2 imóveis | Total: 2147
+[11:06:48] 
+[92/183] JEFÉRSON BENEDETTO | https://www.benedettoleiloes.com.br
+[11:06:48]   → JEFÉRSON BENEDETTO | https://www.benedettoleiloes.com.br
+[11:06:52]   ok | 1 imóveis | Total: 2148
+[11:06:54] 
+[93/183] JEFFERSON HORTA BARBOSA RIBEIRO MENDES | https://www.mendesleiloes.com.br
+[11:06:54]   → JEFFERSON HORTA BARBOSA RIBEIRO MENDES | https://www.mendesleiloes.com.br
+[11:06:56]     HTTP sem resultados → Playwright
+[11:07:08]   sem_leilao | 0 imóveis | Total: 2148
+[11:07:10] 
+[94/183] JÉFFERSON TÁCIO FURLANETTO MIOTTI | https://www.miottileiloes.com.br
+[11:07:10]   → JÉFFERSON TÁCIO FURLANETTO MIOTTI | https://www.miottileiloes.com.br
+[11:07:12]     HTTP sem resultados → Playwright
+[11:07:22]   sem_leilao | 0 imóveis | Total: 2148
+[11:07:24] 
+[95/183] JEREMY WU SANTIAGO DA COSTA E SILVA | https://www.jeremyleiloes.com.br/
+[11:07:24]   → JEREMY WU SANTIAGO DA COSTA E SILVA | https://www.jeremyleiloes.com.br/
+[11:07:25]     JS-heavy → Playwright
+[11:07:41]   sem_leilao | 0 imóveis | Total: 2148
+[11:07:43] 
+[96/183] JOÃO GUILHERME CARGNELUTTI | https://www.jgcargneluttileiloes.com.br
+[11:07:43]   → JOÃO GUILHERME CARGNELUTTI | https://www.jgcargneluttileiloes.com.br
+[11:08:14]   ok | 12 imóveis | Total: 2160
+[11:08:16] 
+[97/183] JOÃO HONOR COIROLLO DE SOUZA | https://www.jhcleiloeirooficial.lel.br
+[11:08:16]   → JOÃO HONOR COIROLLO DE SOUZA | https://www.jhcleiloeirooficial.lel.br
+[11:08:52]   ok | 19 imóveis | Total: 2179
+[11:08:54] 
+[98/183] JOEL DA SILVA REIS | https://www.gramadoleiloes.com.br
+[11:08:54]   → JOEL DA SILVA REIS | https://www.gramadoleiloes.com.br
+[11:08:54]     [WARN] HTTP falhou (ConnectionError). Playwright...
+[11:08:55]   sem_leilao | 0 imóveis | Total: 2179
+[11:08:57] 
+[99/183] JOHN LEVY ZAGO AMARAL | https://www.levyleiloes.com.br
+[11:08:57]   → JOHN LEVY ZAGO AMARAL | https://www.levyleiloes.com.br
+[11:09:18] 
+============================================================
+[11:09:18] RELATÓRIO | Total: 2179 imóveis | Agora: JOHN LEVY ZAGO AMARAL
+[11:09:18]   DANIEL HAMOUI                               200
+[11:09:18]   IRANI FLORES                                146
+[11:09:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[11:09:18]   EDUARDO VIVIAN                              105
+[11:09:18]   CARMEN GOMES PIETOSO                         82
+[11:09:18]   DIONIR BIANCHI                               78
+[11:09:18]   FABIO GOMES PIETOSO                          68
+[11:09:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[11:09:18]   GILMAR THUME                                 64
+[11:09:18]   CAMILA LAIS CARGNELUTTI                      53
+[11:09:18]   DANIEL COSTA MÜLLER                          51
+[11:09:18]   DANIEL ELIAS GARCIA                          47
+[11:09:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[11:09:18]   FRANCISCO HILLESHEIM                         44
+[11:09:18]   CATIELE BORGES LEFFA                         43
+[11:09:18]   DANIEL LAZOWNIK DUARTE                       43
+[11:09:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[11:09:18]   ALESSANDRO FAHRION PINTO                     39
+[11:09:18]   GIULIANO FERRONATO                           39
+[11:09:18]   DAIANE FUCKS PELENTIR                        37
+[11:09:18] ============================================================
+
+[11:09:29]   ok | 12 imóveis | Total: 2191
+[11:09:31] 
+[100/183] JORGE ERLI RITTA | https://www.jritta.lel.br
+[11:09:31]   → JORGE ERLI RITTA | https://www.jritta.lel.br
+[11:10:47]   ok | 25 imóveis | Total: 2216
+[11:10:49] 
+[101/183] JORGE FERLIN DALE NOGARI DOS SANTOS | https://www.nogarileiloes.com.br
+[11:10:49]   → JORGE FERLIN DALE NOGARI DOS SANTOS | https://www.nogarileiloes.com.br
+[11:11:50]   ok | 21 imóveis | Total: 2237
+[11:11:52] 
+[102/183] JORGE SIDIRLEI DE GODOY BRASIL | https://www.jorgebrasil.lel.br/index.htm
+[11:11:52]   → JORGE SIDIRLEI DE GODOY BRASIL | https://www.jorgebrasil.lel.br/index.htm
+[11:11:55]     HTTP sem resultados → Playwright
+[11:12:05]   sem_leilao | 0 imóveis | Total: 2237
+[11:12:07] 
+[103/183] JORGE VINICIUS DE MOURA CORRÊA | https://www.renovarleiloes.com.br
+[11:12:07]   → JORGE VINICIUS DE MOURA CORRÊA | https://www.renovarleiloes.com.br
+[11:14:18] 
+============================================================
+[11:14:18] RELATÓRIO | Total: 2237 imóveis | Agora: JORGE VINICIUS DE MOURA CORRÊA
+[11:14:18]   DANIEL HAMOUI                               200
+[11:14:18]   IRANI FLORES                                146
+[11:14:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[11:14:18]   EDUARDO VIVIAN                              105
+[11:14:18]   CARMEN GOMES PIETOSO                         82
+[11:14:18]   DIONIR BIANCHI                               78
+[11:14:18]   FABIO GOMES PIETOSO                          68
+[11:14:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[11:14:18]   GILMAR THUME                                 64
+[11:14:18]   CAMILA LAIS CARGNELUTTI                      53
+[11:14:18]   DANIEL COSTA MÜLLER                          51
+[11:14:18]   DANIEL ELIAS GARCIA                          47
+[11:14:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[11:14:18]   FRANCISCO HILLESHEIM                         44
+[11:14:18]   CATIELE BORGES LEFFA                         43
+[11:14:18]   DANIEL LAZOWNIK DUARTE                       43
+[11:14:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[11:14:18]   ALESSANDRO FAHRION PINTO                     39
+[11:14:18]   GIULIANO FERRONATO                           39
+[11:14:18]   DAIANE FUCKS PELENTIR                        37
+[11:14:18] ============================================================
+
+[11:16:54]   ok | 134 imóveis | Total: 2371
+[11:16:56] 
+[104/183] JOSÉ CLÓVIS VAZ DE SOUZA | https://www.clovisleiloeiro.com.br
+[11:16:56]   → JOSÉ CLÓVIS VAZ DE SOUZA | https://www.clovisleiloeiro.com.br
+[11:18:29]   ok | 51 imóveis | Total: 2422
+[11:18:31] 
+[105/183] JOSÉ FERNANDO DE QUINA | https://www.qleilao.lel.br
+[11:18:31]   → JOSÉ FERNANDO DE QUINA | https://www.qleilao.lel.br
+[11:18:31]     JS-heavy → Playwright
+[11:19:18] 
+============================================================
+[11:19:18] RELATÓRIO | Total: 2422 imóveis | Agora: JOSÉ FERNANDO DE QUINA
+[11:19:18]   DANIEL HAMOUI                               200
+[11:19:18]   IRANI FLORES                                146
+[11:19:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[11:19:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[11:19:18]   EDUARDO VIVIAN                              105
+[11:19:18]   CARMEN GOMES PIETOSO                         82
+[11:19:18]   DIONIR BIANCHI                               78
+[11:19:18]   FABIO GOMES PIETOSO                          68
+[11:19:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[11:19:18]   GILMAR THUME                                 64
+[11:19:18]   CAMILA LAIS CARGNELUTTI                      53
+[11:19:18]   DANIEL COSTA MÜLLER                          51
+[11:19:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[11:19:18]   DANIEL ELIAS GARCIA                          47
+[11:19:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[11:19:18]   FRANCISCO HILLESHEIM                         44
+[11:19:18]   CATIELE BORGES LEFFA                         43
+[11:19:18]   DANIEL LAZOWNIK DUARTE                       43
+[11:19:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[11:19:18]   ALESSANDRO FAHRION PINTO                     39
+[11:19:18] ============================================================
+
+[11:20:42]   ok | 23 imóveis | Total: 2445
+[11:20:44] 
+[106/183] JOSÉ LÁZARO RIBEIRO MENEZES | https://www.mercadoleiloes.com.br
+[11:20:44]   → JOSÉ LÁZARO RIBEIRO MENEZES | https://www.mercadoleiloes.com.br
+[11:21:11]   ok | 14 imóveis | Total: 2459
+[11:21:13] 
+[107/183] JOSÉ LUIS PARDO SANTAYANA CARDOSO | https://www.santayanaleiloes.com.br
+[11:21:13]   → JOSÉ LUIS PARDO SANTAYANA CARDOSO | https://www.santayanaleiloes.com.br
+[11:22:03]   ok | 23 imóveis | Total: 2482
+[11:22:05] 
+[108/183] JOSEANE DE AVILA SCOTTO | https://www.leiloes.rs
+[11:22:05]   → JOSEANE DE AVILA SCOTTO | https://www.leiloes.rs
+[11:24:18] 
+============================================================
+[11:24:18] RELATÓRIO | Total: 2482 imóveis | Agora: JOSEANE DE AVILA SCOTTO
+[11:24:18]   DANIEL HAMOUI                               200
+[11:24:18]   IRANI FLORES                                146
+[11:24:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[11:24:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[11:24:18]   EDUARDO VIVIAN                              105
+[11:24:18]   CARMEN GOMES PIETOSO                         82
+[11:24:18]   DIONIR BIANCHI                               78
+[11:24:18]   FABIO GOMES PIETOSO                          68
+[11:24:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[11:24:18]   GILMAR THUME                                 64
+[11:24:18]   CAMILA LAIS CARGNELUTTI                      53
+[11:24:18]   DANIEL COSTA MÜLLER                          51
+[11:24:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[11:24:18]   DANIEL ELIAS GARCIA                          47
+[11:24:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[11:24:18]   FRANCISCO HILLESHEIM                         44
+[11:24:18]   CATIELE BORGES LEFFA                         43
+[11:24:18]   DANIEL LAZOWNIK DUARTE                       43
+[11:24:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[11:24:18]   ALESSANDRO FAHRION PINTO                     39
+[11:24:18] ============================================================
+
+[11:25:41]   ok | 112 imóveis | Total: 2594
+[11:25:43] 
+[109/183] JOSIANE NUNES SCHWEC PINOTTI | https://www.npleiloes.com.br
+[11:25:43]   → JOSIANE NUNES SCHWEC PINOTTI | https://www.npleiloes.com.br
+[11:25:44]     JS-heavy → Playwright
+[11:28:55]   ok | 26 imóveis | Total: 2620
+[11:28:57] 
+[110/183] JOYCE RIBEIRO | https://www.jrleiloes.com.br
+[11:28:57]   → JOYCE RIBEIRO | https://www.jrleiloes.com.br
+[11:29:03]   ok | 1 imóveis | Total: 2621
+[11:29:05] 
+[111/183] JUCENARA DE MELLO VIEIRA BORDIGNON | https://www.juleiloes.com.br
+[11:29:05]   → JUCENARA DE MELLO VIEIRA BORDIGNON | https://www.juleiloes.com.br
+[11:29:18] 
+============================================================
+[11:29:18] RELATÓRIO | Total: 2621 imóveis | Agora: JUCENARA DE MELLO VIEIRA BORDIGNON
+[11:29:18]   DANIEL HAMOUI                               200
+[11:29:18]   IRANI FLORES                                146
+[11:29:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[11:29:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[11:29:18]   JOSEANE DE AVILA SCOTTO                     112
+[11:29:18]   EDUARDO VIVIAN                              105
+[11:29:18]   CARMEN GOMES PIETOSO                         82
+[11:29:18]   DIONIR BIANCHI                               78
+[11:29:18]   FABIO GOMES PIETOSO                          68
+[11:29:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[11:29:18]   GILMAR THUME                                 64
+[11:29:18]   CAMILA LAIS CARGNELUTTI                      53
+[11:29:18]   DANIEL COSTA MÜLLER                          51
+[11:29:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[11:29:18]   DANIEL ELIAS GARCIA                          47
+[11:29:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[11:29:18]   FRANCISCO HILLESHEIM                         44
+[11:29:18]   CATIELE BORGES LEFFA                         43
+[11:29:18]   DANIEL LAZOWNIK DUARTE                       43
+[11:29:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[11:29:18] ============================================================
+
+[11:29:28]   ok | 6 imóveis | Total: 2627
+[11:29:30] 
+[112/183] LEANDRO FERRONATO | https://www.annex.com.br
+[11:29:30]   → LEANDRO FERRONATO | https://www.annex.com.br
+[11:29:33]     [WARN] HTTP falhou (SSLError). Playwright...
+[11:29:40]   sem_leilao | 0 imóveis | Total: 2627
+[11:29:42] 
+[113/183] LEOMAR KIRINUS | https://www.leomarkirinusleiloes.com.br
+[11:29:42]   → LEOMAR KIRINUS | https://www.leomarkirinusleiloes.com.br
+[11:30:33]   ok | 30 imóveis | Total: 2657
+[11:30:35] 
+[114/183] LEONARDO OLIVEIRA SALGUEIRO | https://www.salgueiroleiloes.com.br
+[11:30:35]   → LEONARDO OLIVEIRA SALGUEIRO | https://www.salgueiroleiloes.com.br
+[11:30:36]     [WARN] HTTP falhou (ConnectionError). Playwright...
+[11:30:37]   sem_leilao | 0 imóveis | Total: 2657
+[11:30:39] 
+[115/183] LEONIR ADELINO LUNELLI | https://www.leiloeirolunelli.com.br
+[11:30:39]   → LEONIR ADELINO LUNELLI | https://www.leiloeirolunelli.com.br
+[11:30:40]     JS-heavy → Playwright
+[11:31:14]   sem_leilao | 0 imóveis | Total: 2657
+[11:31:16] 
+[116/183] LISIANE ZEIFERT | https://www.bronzattoleiloes.com.br
+[11:31:16]   → LISIANE ZEIFERT | https://www.bronzattoleiloes.com.br
+[11:32:08]   ok | 24 imóveis | Total: 2681
+[11:32:10] 
+[117/183] LUAN UBIALLI | https://www.centralsuldeleiloes.com.br
+[11:32:10]   → LUAN UBIALLI | https://www.centralsuldeleiloes.com.br
+[11:32:11]     JS-heavy → Playwright
+[11:32:25]   sem_leilao | 0 imóveis | Total: 2681
+[11:32:27] 
+[118/183] LUANA VIDAL INEU | https://www.ineuleiloes.com.br/
+[11:32:28]   → LUANA VIDAL INEU | https://www.ineuleiloes.com.br/
+[11:32:31]     HTTP sem resultados → Playwright
+[11:32:48]   sem_leilao | 0 imóveis | Total: 2681
+[11:32:50] 
+[119/183] LUCAS ANDREATTA DE OLIVEIRA | https://www.leiloariasmart.com.br
+[11:32:50]   → LUCAS ANDREATTA DE OLIVEIRA | https://www.leiloariasmart.com.br
+[11:34:18] 
+============================================================
+[11:34:18] RELATÓRIO | Total: 2681 imóveis | Agora: LUCAS ANDREATTA DE OLIVEIRA
+[11:34:18]   DANIEL HAMOUI                               200
+[11:34:18]   IRANI FLORES                                146
+[11:34:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[11:34:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[11:34:18]   JOSEANE DE AVILA SCOTTO                     112
+[11:34:18]   EDUARDO VIVIAN                              105
+[11:34:18]   CARMEN GOMES PIETOSO                         82
+[11:34:18]   DIONIR BIANCHI                               78
+[11:34:18]   FABIO GOMES PIETOSO                          68
+[11:34:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[11:34:18]   GILMAR THUME                                 64
+[11:34:18]   CAMILA LAIS CARGNELUTTI                      53
+[11:34:18]   DANIEL COSTA MÜLLER                          51
+[11:34:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[11:34:18]   DANIEL ELIAS GARCIA                          47
+[11:34:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[11:34:18]   FRANCISCO HILLESHEIM                         44
+[11:34:18]   CATIELE BORGES LEFFA                         43
+[11:34:18]   DANIEL LAZOWNIK DUARTE                       43
+[11:34:18]   BRUNO HENRIQUE DOS SANTOS                    42
+[11:34:18] ============================================================
+
+[11:36:57]   ok | 95 imóveis | Total: 2776
+[11:36:59] 
+[120/183] LUCAS FERREIRA | https://www.leiloeirodian.com
+[11:36:59]   → LUCAS FERREIRA | https://www.leiloeirodian.com
+[11:37:05]     HTTP sem resultados → Playwright
+[11:37:20]   sem_leilao | 0 imóveis | Total: 2776
+[11:37:22] 
+[121/183] LUCI VERA PRIMAZ DOS REIS | https://www.luciverareisleiloes.com.br
+[11:37:22]   → LUCI VERA PRIMAZ DOS REIS | https://www.luciverareisleiloes.com.br
+[11:38:41]   ok | 36 imóveis | Total: 2812
+[11:38:43] 
+[122/183] LUCIANO SCHEID | https://www.scheidleiloes.com.br
+[11:38:43]   → LUCIANO SCHEID | https://www.scheidleiloes.com.br
+[11:38:53]     HTTP sem resultados → Playwright
+[11:39:18] 
+============================================================
+[11:39:18] RELATÓRIO | Total: 2812 imóveis | Agora: LUCIANO SCHEID
+[11:39:18]   DANIEL HAMOUI                               200
+[11:39:18]   IRANI FLORES                                146
+[11:39:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[11:39:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[11:39:18]   JOSEANE DE AVILA SCOTTO                     112
+[11:39:18]   EDUARDO VIVIAN                              105
+[11:39:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[11:39:18]   CARMEN GOMES PIETOSO                         82
+[11:39:18]   DIONIR BIANCHI                               78
+[11:39:18]   FABIO GOMES PIETOSO                          68
+[11:39:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[11:39:18]   GILMAR THUME                                 64
+[11:39:18]   CAMILA LAIS CARGNELUTTI                      53
+[11:39:18]   DANIEL COSTA MÜLLER                          51
+[11:39:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[11:39:18]   DANIEL ELIAS GARCIA                          47
+[11:39:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[11:39:18]   FRANCISCO HILLESHEIM                         44
+[11:39:18]   CATIELE BORGES LEFFA                         43
+[11:39:18]   DANIEL LAZOWNIK DUARTE                       43
+[11:39:18] ============================================================
+
+[11:39:27]   sem_leilao | 0 imóveis | Total: 2812
+[11:39:29] 
+[123/183] LUIS FILIPE GEYER FLORES | https://www.leiloeiros.lel.br
+[11:39:29]   → LUIS FILIPE GEYER FLORES | https://www.leiloeiros.lel.br
+[11:40:52]   ok | 25 imóveis | Total: 2837
+[11:40:54] 
+[124/183] LUIZ BARBOSA DE LIMA JUNIOR | https://www.ymail.com
+[11:40:54]   → LUIZ BARBOSA DE LIMA JUNIOR | https://www.ymail.com
+[11:40:57]     JS-heavy → Playwright
+[11:41:44]   sem_leilao | 0 imóveis | Total: 2837
+[11:41:46] 
+[125/183] LUIZ CARLOS DALE NOGARI DOS SANTOS | https://www.leilaosantos.com.br
+[11:41:46]   → LUIZ CARLOS DALE NOGARI DOS SANTOS | https://www.leilaosantos.com.br
+[11:42:07]   ok | 4 imóveis | Total: 2841
+[11:42:09] 
+[126/183] LUIZ FERNANDO MORAES DA CRUZ | https://www.santamarialeiloes.com.br
+[11:42:09]   → LUIZ FERNANDO MORAES DA CRUZ | https://www.santamarialeiloes.com.br
+[11:44:18] 
+============================================================
+[11:44:18] RELATÓRIO | Total: 2841 imóveis | Agora: LUIZ FERNANDO MORAES DA CRUZ
+[11:44:18]   DANIEL HAMOUI                               200
+[11:44:18]   IRANI FLORES                                146
+[11:44:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[11:44:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[11:44:18]   JOSEANE DE AVILA SCOTTO                     112
+[11:44:18]   EDUARDO VIVIAN                              105
+[11:44:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[11:44:18]   CARMEN GOMES PIETOSO                         82
+[11:44:18]   DIONIR BIANCHI                               78
+[11:44:18]   FABIO GOMES PIETOSO                          68
+[11:44:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[11:44:18]   GILMAR THUME                                 64
+[11:44:18]   CAMILA LAIS CARGNELUTTI                      53
+[11:44:18]   DANIEL COSTA MÜLLER                          51
+[11:44:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[11:44:18]   DANIEL ELIAS GARCIA                          47
+[11:44:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[11:44:18]   FRANCISCO HILLESHEIM                         44
+[11:44:18]   CATIELE BORGES LEFFA                         43
+[11:44:18]   DANIEL LAZOWNIK DUARTE                       43
+[11:44:18] ============================================================
+
+[11:45:26]   ok | 107 imóveis | Total: 2948
+[11:45:28] 
+[127/183] MARCELLO PEREIRA DE OLIVEIRA | https://www.mpleilao.com.br
+[11:45:28]   → MARCELLO PEREIRA DE OLIVEIRA | https://www.mpleilao.com.br
+[11:47:14]   ok | 54 imóveis | Total: 3002
+[11:47:16] 
+[128/183] MARCELO SOUZA SCHONARDIE | https://www.marceloleiloeiro.com.br
+[11:47:16]   → MARCELO SOUZA SCHONARDIE | https://www.marceloleiloeiro.com.br
+[11:49:18] 
+============================================================
+[11:49:18] RELATÓRIO | Total: 3002 imóveis | Agora: MARCELO SOUZA SCHONARDIE
+[11:49:18]   DANIEL HAMOUI                               200
+[11:49:18]   IRANI FLORES                                146
+[11:49:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[11:49:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[11:49:18]   JOSEANE DE AVILA SCOTTO                     112
+[11:49:18]   LUIZ FERNANDO MORAES DA CRUZ                107
+[11:49:18]   EDUARDO VIVIAN                              105
+[11:49:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[11:49:18]   CARMEN GOMES PIETOSO                         82
+[11:49:18]   DIONIR BIANCHI                               78
+[11:49:18]   FABIO GOMES PIETOSO                          68
+[11:49:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[11:49:18]   GILMAR THUME                                 64
+[11:49:18]   MARCELLO PEREIRA DE OLIVEIRA                 54
+[11:49:18]   CAMILA LAIS CARGNELUTTI                      53
+[11:49:18]   DANIEL COSTA MÜLLER                          51
+[11:49:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[11:49:18]   DANIEL ELIAS GARCIA                          47
+[11:49:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[11:49:18]   FRANCISCO HILLESHEIM                         44
+[11:49:18] ============================================================
+
+[11:50:54]   ok | 145 imóveis | Total: 3147
+[11:50:56] 
+[129/183] MARCELO TREVISAN | https://www.trevisanleiloes.com.br
+[11:50:56]   → MARCELO TREVISAN | https://www.trevisanleiloes.com.br
+[11:51:48]   ok | 26 imóveis | Total: 3173
+[11:51:50] 
+[130/183] MARCIANO BARBIERI | https://www.leiloeirobarbieri.com.br
+[11:51:50]   → MARCIANO BARBIERI | https://www.leiloeirobarbieri.com.br
+[11:52:33]   ok | 15 imóveis | Total: 3188
+[11:52:35] 
+[131/183] MARCIANO MAURO PAGLIARINI | https://www.pagliarinileiloes.com.br
+[11:52:35]   → MARCIANO MAURO PAGLIARINI | https://www.pagliarinileiloes.com.br
+[11:52:36]     JS-heavy → Playwright
+[11:52:53]   sem_leilao | 0 imóveis | Total: 3188
+[11:52:55] 
+[132/183] MÁRCIO ANDRÉ KOETZ FLESCH | https://www.leiloesdosul.com.br
+[11:52:55]   → MÁRCIO ANDRÉ KOETZ FLESCH | https://www.leiloesdosul.com.br
+[11:53:11]     [WARN] HTTP falhou (ConnectTimeout). Playwright...
+[11:54:18] 
+============================================================
+[11:54:18] RELATÓRIO | Total: 3188 imóveis | Agora: MÁRCIO ANDRÉ KOETZ FLESCH
+[11:54:18]   DANIEL HAMOUI                               200
+[11:54:18]   IRANI FLORES                                146
+[11:54:18]   MARCELO SOUZA SCHONARDIE                    145
+[11:54:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[11:54:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[11:54:18]   JOSEANE DE AVILA SCOTTO                     112
+[11:54:18]   LUIZ FERNANDO MORAES DA CRUZ                107
+[11:54:18]   EDUARDO VIVIAN                              105
+[11:54:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[11:54:18]   CARMEN GOMES PIETOSO                         82
+[11:54:18]   DIONIR BIANCHI                               78
+[11:54:18]   FABIO GOMES PIETOSO                          68
+[11:54:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[11:54:18]   GILMAR THUME                                 64
+[11:54:18]   MARCELLO PEREIRA DE OLIVEIRA                 54
+[11:54:18]   CAMILA LAIS CARGNELUTTI                      53
+[11:54:18]   DANIEL COSTA MÜLLER                          51
+[11:54:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[11:54:18]   DANIEL ELIAS GARCIA                          47
+[11:54:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[11:54:18] ============================================================
+
+[11:56:21]   sem_leilao | 0 imóveis | Total: 3188
+[11:56:23] 
+[133/183] MARCOS ROBERTO FRACASSO | https://www.mafraleiloes.com.br
+[11:56:23]   → MARCOS ROBERTO FRACASSO | https://www.mafraleiloes.com.br
+[11:56:24]     JS-heavy → Playwright
+[11:56:41]   sem_leilao | 0 imóveis | Total: 3188
+[11:56:43] 
+[134/183] MARCOS VINICIUS MENEZES QUADROS | https://www.arremate.lel.br
+[11:56:43]   → MARCOS VINICIUS MENEZES QUADROS | https://www.arremate.lel.br
+[11:56:47]     HTTP sem resultados → Playwright
+[11:56:58]   sem_leilao | 0 imóveis | Total: 3188
+[11:57:00] 
+[135/183] MARCUS VINICIUS YOSHIMI UEBARA | https://www.destakleiloes.com.br
+[11:57:00]   → MARCUS VINICIUS YOSHIMI UEBARA | https://www.destakleiloes.com.br
+[11:57:05]   ok | 2 imóveis | Total: 3190
+[11:57:07] 
+[136/183] MÁRIO LESSA FREITAS FILHO | https://www.lessaleiloes.com.br
+[11:57:07]   → MÁRIO LESSA FREITAS FILHO | https://www.lessaleiloes.com.br
+[11:58:15]   ok | 41 imóveis | Total: 3231
+[11:58:17] 
+[137/183] MARITANA COPATTI LAUERMANN | https://www.leiloeiramcl.com.br
+[11:58:17]   → MARITANA COPATTI LAUERMANN | https://www.leiloeiramcl.com.br
+[11:58:24]     HTTP sem resultados → Playwright
+[11:59:09]   sem_leilao | 0 imóveis | Total: 3231
+[11:59:11] 
+[138/183] MAURÍCIO GEHM | https://www.mgleiloes-rs.com.br
+[11:59:11]   → MAURÍCIO GEHM | https://www.mgleiloes-rs.com.br
+[11:59:18] 
+============================================================
+[11:59:18] RELATÓRIO | Total: 3231 imóveis | Agora: MAURÍCIO GEHM
+[11:59:18]   DANIEL HAMOUI                               200
+[11:59:18]   IRANI FLORES                                146
+[11:59:18]   MARCELO SOUZA SCHONARDIE                    145
+[11:59:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[11:59:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[11:59:18]   JOSEANE DE AVILA SCOTTO                     112
+[11:59:18]   LUIZ FERNANDO MORAES DA CRUZ                107
+[11:59:18]   EDUARDO VIVIAN                              105
+[11:59:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[11:59:18]   CARMEN GOMES PIETOSO                         82
+[11:59:18]   DIONIR BIANCHI                               78
+[11:59:18]   FABIO GOMES PIETOSO                          68
+[11:59:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[11:59:18]   GILMAR THUME                                 64
+[11:59:18]   MARCELLO PEREIRA DE OLIVEIRA                 54
+[11:59:18]   CAMILA LAIS CARGNELUTTI                      53
+[11:59:18]   DANIEL COSTA MÜLLER                          51
+[11:59:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[11:59:18]   DANIEL ELIAS GARCIA                          47
+[11:59:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[11:59:18] ============================================================
+
+[11:59:27]     [WARN] HTTP falhou (ReadTimeout). Playwright...
+[12:00:45]   ok | 14 imóveis | Total: 3245
+[12:00:47] 
+[139/183] MAURÍCIO RODRIGO BACK | http://www.backleiloes.com.br
+[12:00:47]   → MAURÍCIO RODRIGO BACK | http://www.backleiloes.com.br
+[12:01:19]   ok | 11 imóveis | Total: 3256
+[12:01:21] 
+[140/183] MICHELE PACHECO DA ROSA SANDOR | https://www.michelesandorleiloes.com.br
+[12:01:21]   → MICHELE PACHECO DA ROSA SANDOR | https://www.michelesandorleiloes.com.br
+[12:01:35]   ok | 3 imóveis | Total: 3259
+[12:01:37] 
+[141/183] MICHELLI FELINI GAL LOPES | https://www.michellileiloes.com.br
+[12:01:37]   → MICHELLI FELINI GAL LOPES | https://www.michellileiloes.com.br
+[12:02:19]   ok | 20 imóveis | Total: 3279
+[12:02:21] 
+[142/183] MOUZAR BASTON FILHO | https://bastonleiloes.leilao.br/
+[12:02:21]   → MOUZAR BASTON FILHO | https://bastonleiloes.leilao.br/
+[12:02:23]     HTTP sem resultados → Playwright
+[12:02:37]   sem_leilao | 0 imóveis | Total: 3279
+[12:02:39] 
+[143/183] MOYSES PEDROSO DE MORAES | https://www.moraesleiloes.com.br
+[12:02:39]   → MOYSES PEDROSO DE MORAES | https://www.moraesleiloes.com.br
+[12:03:40]   ok | 26 imóveis | Total: 3305
+[12:03:42] 
+[144/183] NAIO DE FREITAS RAUPP | https://www.rauppleiloes.com.br
+[12:03:42]   → NAIO DE FREITAS RAUPP | https://www.rauppleiloes.com.br
+[12:04:18] 
+============================================================
+[12:04:18] RELATÓRIO | Total: 3305 imóveis | Agora: NAIO DE FREITAS RAUPP
+[12:04:18]   DANIEL HAMOUI                               200
+[12:04:18]   IRANI FLORES                                146
+[12:04:18]   MARCELO SOUZA SCHONARDIE                    145
+[12:04:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[12:04:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[12:04:18]   JOSEANE DE AVILA SCOTTO                     112
+[12:04:18]   LUIZ FERNANDO MORAES DA CRUZ                107
+[12:04:18]   EDUARDO VIVIAN                              105
+[12:04:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[12:04:18]   CARMEN GOMES PIETOSO                         82
+[12:04:18]   DIONIR BIANCHI                               78
+[12:04:18]   FABIO GOMES PIETOSO                          68
+[12:04:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[12:04:18]   GILMAR THUME                                 64
+[12:04:18]   MARCELLO PEREIRA DE OLIVEIRA                 54
+[12:04:18]   CAMILA LAIS CARGNELUTTI                      53
+[12:04:18]   DANIEL COSTA MÜLLER                          51
+[12:04:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[12:04:18]   DANIEL ELIAS GARCIA                          47
+[12:04:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[12:04:18] ============================================================
+
+[12:04:38]     HTTP sem resultados → Playwright
+[12:05:31]   sem_leilao | 0 imóveis | Total: 3305
+[12:05:33] 
+[145/183] NELSON BERTOLUCI SANTOS | https://www.sinos.net
+[12:05:33]   → NELSON BERTOLUCI SANTOS | https://www.sinos.net
+[12:05:48]     [WARN] HTTP falhou (ConnectTimeout). Playwright...
+[12:08:38]   sem_leilao | 0 imóveis | Total: 3305
+[12:08:40] 
+[146/183] NORTON JOCHIMS FERNANDES | https://www.nortonleiloes.com.br
+[12:08:40]   → NORTON JOCHIMS FERNANDES | https://www.nortonleiloes.com.br
+[12:08:55]     [WARN] HTTP falhou (ConnectTimeout). Playwright...
+[12:09:18] 
+============================================================
+[12:09:18] RELATÓRIO | Total: 3305 imóveis | Agora: NORTON JOCHIMS FERNANDES
+[12:09:18]   DANIEL HAMOUI                               200
+[12:09:18]   IRANI FLORES                                146
+[12:09:18]   MARCELO SOUZA SCHONARDIE                    145
+[12:09:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[12:09:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[12:09:18]   JOSEANE DE AVILA SCOTTO                     112
+[12:09:18]   LUIZ FERNANDO MORAES DA CRUZ                107
+[12:09:18]   EDUARDO VIVIAN                              105
+[12:09:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[12:09:18]   CARMEN GOMES PIETOSO                         82
+[12:09:18]   DIONIR BIANCHI                               78
+[12:09:18]   FABIO GOMES PIETOSO                          68
+[12:09:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[12:09:18]   GILMAR THUME                                 64
+[12:09:18]   MARCELLO PEREIRA DE OLIVEIRA                 54
+[12:09:18]   CAMILA LAIS CARGNELUTTI                      53
+[12:09:18]   DANIEL COSTA MÜLLER                          51
+[12:09:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[12:09:18]   DANIEL ELIAS GARCIA                          47
+[12:09:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[12:09:18] ============================================================
+
+[12:11:45]   sem_leilao | 0 imóveis | Total: 3305
+[12:11:47] 
+[147/183] ODICLÉSIO JAISON STORCHIO | https://www.oesteleiloes.com.br
+[12:11:47]   → ODICLÉSIO JAISON STORCHIO | https://www.oesteleiloes.com.br
+[12:11:48]     JS-heavy → Playwright
+[12:12:00]   sem_leilao | 0 imóveis | Total: 3305
+[12:12:02] 
+[148/183] ODILSON FUMAGALLI AVILA | https://www.fumagallileiloes.com.br
+[12:12:02]   → ODILSON FUMAGALLI AVILA | https://www.fumagallileiloes.com.br
+[12:12:52]   ok | 23 imóveis | Total: 3328
+[12:12:54] 
+[149/183] PAULO ALEXANDRE HEISLER | http://www.bidgo.com.br
+[12:12:54]   → PAULO ALEXANDRE HEISLER | http://www.bidgo.com.br
+[12:13:47]   ok | 15 imóveis | Total: 3343
+[12:13:49] 
+[150/183] PEDRO DO PRADO UTZIG | https://www.utzigleiloes.com.br
+[12:13:49]   → PEDRO DO PRADO UTZIG | https://www.utzigleiloes.com.br
+[12:14:00]   ok | 2 imóveis | Total: 3345
+[12:14:02] 
+[151/183] PEDRO MESQUITA DA CRUZ | https://www.evolveleiloes.com
+[12:14:02]   → PEDRO MESQUITA DA CRUZ | https://www.evolveleiloes.com
+[12:14:03]     [WARN] HTTP falhou (ConnectionError). Playwright...
+[12:14:04]   sem_leilao | 0 imóveis | Total: 3345
+[12:14:06] 
+[152/183] RAFAEL CERETTA ALEGRANZZI | https://www.alegranzzileiloes.com.br
+[12:14:06]   → RAFAEL CERETTA ALEGRANZZI | https://www.alegranzzileiloes.com.br
+[12:14:18] 
+============================================================
+[12:14:18] RELATÓRIO | Total: 3345 imóveis | Agora: RAFAEL CERETTA ALEGRANZZI
+[12:14:18]   DANIEL HAMOUI                               200
+[12:14:18]   IRANI FLORES                                146
+[12:14:18]   MARCELO SOUZA SCHONARDIE                    145
+[12:14:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[12:14:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[12:14:18]   JOSEANE DE AVILA SCOTTO                     112
+[12:14:18]   LUIZ FERNANDO MORAES DA CRUZ                107
+[12:14:18]   EDUARDO VIVIAN                              105
+[12:14:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[12:14:18]   CARMEN GOMES PIETOSO                         82
+[12:14:18]   DIONIR BIANCHI                               78
+[12:14:18]   FABIO GOMES PIETOSO                          68
+[12:14:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[12:14:18]   GILMAR THUME                                 64
+[12:14:18]   MARCELLO PEREIRA DE OLIVEIRA                 54
+[12:14:18]   CAMILA LAIS CARGNELUTTI                      53
+[12:14:18]   DANIEL COSTA MÜLLER                          51
+[12:14:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[12:14:18]   DANIEL ELIAS GARCIA                          47
+[12:14:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[12:14:18] ============================================================
+
+[12:14:21]   ok | 3 imóveis | Total: 3348
+[12:14:23] 
+[153/183] RANGEL MACHADO | https://www.rangelleiloes.com.br
+[12:14:23]   → RANGEL MACHADO | https://www.rangelleiloes.com.br
+[12:16:08]     HTTP sem resultados → Playwright
+[12:16:50]   sem_leilao | 0 imóveis | Total: 3348
+[12:16:52] 
+[154/183] RENAN SOUZA SILVA | https://www.souzasilvaleiloes.com.br
+[12:16:52]   → RENAN SOUZA SILVA | https://www.souzasilvaleiloes.com.br
+[12:16:55]     HTTP sem resultados → Playwright
+[12:17:43]   ok | 8 imóveis | Total: 3356
+[12:17:45] 
+[155/183] RENATO SCHLOBACH MOYSES | https://www.rmoyses.com.br
+[12:17:45]   → RENATO SCHLOBACH MOYSES | https://www.rmoyses.com.br
+[12:17:46]     JS-heavy → Playwright
+[12:19:18] 
+============================================================
+[12:19:18] RELATÓRIO | Total: 3356 imóveis | Agora: RENATO SCHLOBACH MOYSES
+[12:19:18]   DANIEL HAMOUI                               200
+[12:19:18]   IRANI FLORES                                146
+[12:19:18]   MARCELO SOUZA SCHONARDIE                    145
+[12:19:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[12:19:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[12:19:18]   JOSEANE DE AVILA SCOTTO                     112
+[12:19:18]   LUIZ FERNANDO MORAES DA CRUZ                107
+[12:19:18]   EDUARDO VIVIAN                              105
+[12:19:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[12:19:18]   CARMEN GOMES PIETOSO                         82
+[12:19:18]   DIONIR BIANCHI                               78
+[12:19:18]   FABIO GOMES PIETOSO                          68
+[12:19:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[12:19:18]   GILMAR THUME                                 64
+[12:19:18]   MARCELLO PEREIRA DE OLIVEIRA                 54
+[12:19:18]   CAMILA LAIS CARGNELUTTI                      53
+[12:19:18]   DANIEL COSTA MÜLLER                          51
+[12:19:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[12:19:18]   DANIEL ELIAS GARCIA                          47
+[12:19:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[12:19:18] ============================================================
+
+[12:21:53]   ok | 39 imóveis | Total: 3395
+[12:21:55] 
+[156/183] RENI JOSÉ BONFANDINI | https://www.leiloesbonfadini.com.br
+[12:21:55]   → RENI JOSÉ BONFANDINI | https://www.leiloesbonfadini.com.br
+[12:22:08]     HTTP sem resultados → Playwright
+[12:22:25]   sem_leilao | 0 imóveis | Total: 3395
+[12:22:27] 
+[157/183] ROBERTA POSSANI ZAGO | https://www.rzleiloes.com.br
+[12:22:27]   → ROBERTA POSSANI ZAGO | https://www.rzleiloes.com.br
+[12:22:44]     [WARN] HTTP falhou (ReadTimeout). Playwright...
+[12:23:19]   sem_leilao | 0 imóveis | Total: 3395
+[12:23:21] 
+[158/183] RODOLFO DA ROSA SCHONTAG | https://www.leiloeiropublico.com.br
+[12:23:21]   → RODOLFO DA ROSA SCHONTAG | https://www.leiloeiropublico.com.br
+[12:23:34]   ok | 8 imóveis | Total: 3403
+[12:23:36] 
+[159/183] RODRIGO ZAGO SZORTYKA | https://www.szortykaleiloes.com.br
+[12:23:36]   → RODRIGO ZAGO SZORTYKA | https://www.szortykaleiloes.com.br
+[12:24:18] 
+============================================================
+[12:24:18] RELATÓRIO | Total: 3403 imóveis | Agora: RODRIGO ZAGO SZORTYKA
+[12:24:18]   DANIEL HAMOUI                               200
+[12:24:18]   IRANI FLORES                                146
+[12:24:18]   MARCELO SOUZA SCHONARDIE                    145
+[12:24:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[12:24:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[12:24:18]   JOSEANE DE AVILA SCOTTO                     112
+[12:24:18]   LUIZ FERNANDO MORAES DA CRUZ                107
+[12:24:18]   EDUARDO VIVIAN                              105
+[12:24:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[12:24:18]   CARMEN GOMES PIETOSO                         82
+[12:24:18]   DIONIR BIANCHI                               78
+[12:24:18]   FABIO GOMES PIETOSO                          68
+[12:24:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[12:24:18]   GILMAR THUME                                 64
+[12:24:18]   MARCELLO PEREIRA DE OLIVEIRA                 54
+[12:24:18]   CAMILA LAIS CARGNELUTTI                      53
+[12:24:18]   DANIEL COSTA MÜLLER                          51
+[12:24:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[12:24:18]   DANIEL ELIAS GARCIA                          47
+[12:24:18]   GUSTAVO EVALDO GAITSCH HUMOR                 45
+[12:24:18] ============================================================
+
+[12:26:12]   ok | 73 imóveis | Total: 3476
+[12:26:14] 
+[160/183] ROMEU HERTER | http://www.romeuherter.com.br/
+[12:26:14]   → ROMEU HERTER | http://www.romeuherter.com.br/
+[12:26:22]     HTTP sem resultados → Playwright
+[12:26:56]   sem_leilao | 0 imóveis | Total: 3476
+[12:26:58] 
+[161/183] RUBEM RODRIGUES GARCIA | https://www.rubemgarcia.com.br
+[12:26:58]   → RUBEM RODRIGUES GARCIA | https://www.rubemgarcia.com.br
+[12:27:41]   ok | 18 imóveis | Total: 3494
+[12:27:43] 
+[162/183] RUDIVAL ALMEIDA GOMES JUNIOR | https://www.vipleiloes.com.br
+[12:27:43]   → RUDIVAL ALMEIDA GOMES JUNIOR | https://www.vipleiloes.com.br
+[12:28:26]   ok | 33 imóveis | Total: 3527
+[12:28:28] 
+[163/183] RUI CESAR FERNANDES PINTO | https://www.ruipintoleiloeiro.com.br
+[12:28:28]   → RUI CESAR FERNANDES PINTO | https://www.ruipintoleiloeiro.com.br
+[12:28:29]     JS-heavy → Playwright
+[12:29:04]   sem_leilao | 0 imóveis | Total: 3527
+[12:29:06] 
+[164/183] SANDRA REGINA WONTROBA | https://www.swleiloes.com.br
+[12:29:06]   → SANDRA REGINA WONTROBA | https://www.swleiloes.com.br
+[12:29:18] 
+============================================================
+[12:29:18] RELATÓRIO | Total: 3527 imóveis | Agora: SANDRA REGINA WONTROBA
+[12:29:18]   DANIEL HAMOUI                               200
+[12:29:18]   IRANI FLORES                                146
+[12:29:18]   MARCELO SOUZA SCHONARDIE                    145
+[12:29:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[12:29:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[12:29:18]   JOSEANE DE AVILA SCOTTO                     112
+[12:29:18]   LUIZ FERNANDO MORAES DA CRUZ                107
+[12:29:18]   EDUARDO VIVIAN                              105
+[12:29:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[12:29:18]   CARMEN GOMES PIETOSO                         82
+[12:29:18]   DIONIR BIANCHI                               78
+[12:29:18]   RODRIGO ZAGO SZORTYKA                        73
+[12:29:18]   FABIO GOMES PIETOSO                          68
+[12:29:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[12:29:18]   GILMAR THUME                                 64
+[12:29:18]   MARCELLO PEREIRA DE OLIVEIRA                 54
+[12:29:18]   CAMILA LAIS CARGNELUTTI                      53
+[12:29:18]   DANIEL COSTA MÜLLER                          51
+[12:29:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[12:29:18]   DANIEL ELIAS GARCIA                          47
+[12:29:18] ============================================================
+
+[12:29:34]   ok | 12 imóveis | Total: 3539
+[12:29:36] 
+[165/183] SÉRGIO AUGUSTO DOS SANTOS | https://www.saleiloes.leilao.br
+[12:29:36]   → SÉRGIO AUGUSTO DOS SANTOS | https://www.saleiloes.leilao.br
+[12:29:37]     [WARN] HTTP falhou (ConnectionError). Playwright...
+[12:29:38]   sem_leilao | 0 imóveis | Total: 3539
+[12:29:40] 
+[166/183] SÉRGIO LIPINSKI BRANDÃO JUNIOR | https://www.lipinskileiloes.com.br
+[12:29:40]   → SÉRGIO LIPINSKI BRANDÃO JUNIOR | https://www.lipinskileiloes.com.br
+[12:30:11]   ok | 9 imóveis | Total: 3548
+[12:30:13] 
+[167/183] SÉRGIO ROBERTO PIMENTEL SCHOLANTE | https://www.scholante.com.br
+[12:30:13]   → SÉRGIO ROBERTO PIMENTEL SCHOLANTE | https://www.scholante.com.br
+[12:30:44]   ok | 10 imóveis | Total: 3558
+[12:30:46] 
+[168/183] SIDNEY BELARMINO FERREIRA JUNIOR | https://www.sfleiloes.com.br
+[12:30:46]   → SIDNEY BELARMINO FERREIRA JUNIOR | https://www.sfleiloes.com.br
+[12:30:48]     JS-heavy → Playwright
+[12:31:23]   sem_leilao | 0 imóveis | Total: 3558
+[12:31:25] 
+[169/183] SILVIO LUCIAN | https://www.lucianleiloes.com.br
+[12:31:25]   → SILVIO LUCIAN | https://www.lucianleiloes.com.br
+[12:31:39]   ok | 8 imóveis | Total: 3566
+[12:31:41] 
+[170/183] SOLANGE FIORAVANTE COSTA SALMAN | https://www.costasalmanleiloes.com.br
+[12:31:41]   → SOLANGE FIORAVANTE COSTA SALMAN | https://www.costasalmanleiloes.com.br
+[12:32:13]   ok | 15 imóveis | Total: 3581
+[12:32:15] 
+[171/183] THAIS CRISTINA KICH | https://www.megaleiloes.com.br
+[12:32:15]   → THAIS CRISTINA KICH | https://www.megaleiloes.com.br
+[12:32:48]   ok | 18 imóveis | Total: 3599
+[12:32:50] 
+[172/183] TIAGO TESSLER BLECHER | https://www.webleiloes.com.br
+[12:32:50]   → TIAGO TESSLER BLECHER | https://www.webleiloes.com.br
+[12:34:18] 
+============================================================
+[12:34:18] RELATÓRIO | Total: 3599 imóveis | Agora: TIAGO TESSLER BLECHER
+[12:34:18]   DANIEL HAMOUI                               200
+[12:34:18]   IRANI FLORES                                146
+[12:34:18]   MARCELO SOUZA SCHONARDIE                    145
+[12:34:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[12:34:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[12:34:18]   JOSEANE DE AVILA SCOTTO                     112
+[12:34:18]   LUIZ FERNANDO MORAES DA CRUZ                107
+[12:34:18]   EDUARDO VIVIAN                              105
+[12:34:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[12:34:18]   CARMEN GOMES PIETOSO                         82
+[12:34:18]   DIONIR BIANCHI                               78
+[12:34:18]   RODRIGO ZAGO SZORTYKA                        73
+[12:34:18]   FABIO GOMES PIETOSO                          68
+[12:34:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[12:34:18]   GILMAR THUME                                 64
+[12:34:18]   MARCELLO PEREIRA DE OLIVEIRA                 54
+[12:34:18]   CAMILA LAIS CARGNELUTTI                      53
+[12:34:18]   DANIEL COSTA MÜLLER                          51
+[12:34:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[12:34:18]   DANIEL ELIAS GARCIA                          47
+[12:34:18] ============================================================
+
+[12:37:57]   ok | 171 imóveis | Total: 3770
+[12:37:59] 
+[173/183] VAGNER JOCHIMS | https://www.grandesleiloes.com.br
+[12:37:59]   → VAGNER JOCHIMS | https://www.grandesleiloes.com.br
+[12:39:18] 
+============================================================
+[12:39:18] RELATÓRIO | Total: 3770 imóveis | Agora: VAGNER JOCHIMS
+[12:39:18]   DANIEL HAMOUI                               200
+[12:39:18]   TIAGO TESSLER BLECHER                       171
+[12:39:18]   IRANI FLORES                                146
+[12:39:18]   MARCELO SOUZA SCHONARDIE                    145
+[12:39:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[12:39:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[12:39:18]   JOSEANE DE AVILA SCOTTO                     112
+[12:39:18]   LUIZ FERNANDO MORAES DA CRUZ                107
+[12:39:18]   EDUARDO VIVIAN                              105
+[12:39:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[12:39:18]   CARMEN GOMES PIETOSO                         82
+[12:39:18]   DIONIR BIANCHI                               78
+[12:39:18]   RODRIGO ZAGO SZORTYKA                        73
+[12:39:18]   FABIO GOMES PIETOSO                          68
+[12:39:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[12:39:18]   GILMAR THUME                                 64
+[12:39:18]   MARCELLO PEREIRA DE OLIVEIRA                 54
+[12:39:18]   CAMILA LAIS CARGNELUTTI                      53
+[12:39:18]   DANIEL COSTA MÜLLER                          51
+[12:39:18]   JOSÉ CLÓVIS VAZ DE SOUZA                     51
+[12:39:18] ============================================================
+
+[12:40:19]   ok | 64 imóveis | Total: 3834
+[12:40:21] 
+[174/183] VALDINEI GENEROSO SILVEIRA | https://www.vsleiloes.com
+[12:40:21]   → VALDINEI GENEROSO SILVEIRA | https://www.vsleiloes.com
+[12:41:11]   ok | 29 imóveis | Total: 3863
+[12:41:13] 
+[175/183] VALDOMIRO BIS | https://www.bisleiloeiro.com.br
+[12:41:13]   → VALDOMIRO BIS | https://www.bisleiloeiro.com.br
+[12:41:26]   ok | 3 imóveis | Total: 3866
+[12:41:28] 
+[176/183] VANESSA GOELZER DE ARAÚJO VARGAS E PINTO | https://www.vargasepintoleiloes.com.br
+[12:41:28]   → VANESSA GOELZER DE ARAÚJO VARGAS E PINTO | https://www.vargasepintoleiloes.com.br
+[12:41:35]   ok | 2 imóveis | Total: 3868
+[12:41:37] 
+[177/183] VERÔNICA TELLES ARAÚJO SILVA SOARES | http://veronicaleiloes.com.br
+[12:41:37]   → VERÔNICA TELLES ARAÚJO SILVA SOARES | http://veronicaleiloes.com.br
+[12:41:58]   ok | 6 imóveis | Total: 3874
+[12:42:00] 
+[178/183] VICTOR ALBERTO SEVERINO FRAZÃO | https://www.sfrazao.com.br
+[12:42:00]   → VICTOR ALBERTO SEVERINO FRAZÃO | https://www.sfrazao.com.br
+[12:42:04]     HTTP sem resultados → Playwright
+[12:42:23]   sem_leilao | 0 imóveis | Total: 3874
+[12:42:25] 
+[179/183] VILMAR BERTONCELLO | https://www.bertoncello.lel.br
+[12:42:25]   → VILMAR BERTONCELLO | https://www.bertoncello.lel.br
+[12:42:26]     JS-heavy → Playwright
+[12:43:46]   ok | 5 imóveis | Total: 3879
+[12:43:48] 
+[180/183] VITOR HUGO ANTUNES FARIAS | https://www.outlook.com.br
+[12:43:48]   → VITOR HUGO ANTUNES FARIAS | https://www.outlook.com.br
+[12:43:50]     JS-heavy → Playwright
+[12:44:18] 
+============================================================
+[12:44:18] RELATÓRIO | Total: 3879 imóveis | Agora: VITOR HUGO ANTUNES FARIAS
+[12:44:18]   DANIEL HAMOUI                               200
+[12:44:18]   TIAGO TESSLER BLECHER                       171
+[12:44:18]   IRANI FLORES                                146
+[12:44:18]   MARCELO SOUZA SCHONARDIE                    145
+[12:44:18]   JORGE VINICIUS DE MOURA CORRÊA              134
+[12:44:18]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[12:44:18]   JOSEANE DE AVILA SCOTTO                     112
+[12:44:18]   LUIZ FERNANDO MORAES DA CRUZ                107
+[12:44:18]   EDUARDO VIVIAN                              105
+[12:44:18]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[12:44:18]   CARMEN GOMES PIETOSO                         82
+[12:44:18]   DIONIR BIANCHI                               78
+[12:44:18]   RODRIGO ZAGO SZORTYKA                        73
+[12:44:18]   FABIO GOMES PIETOSO                          68
+[12:44:18]   GERSON ANOR BORIN DA SILVA NETO              67
+[12:44:18]   GILMAR THUME                                 64
+[12:44:18]   VAGNER JOCHIMS                               64
+[12:44:18]   MARCELLO PEREIRA DE OLIVEIRA                 54
+[12:44:18]   CAMILA LAIS CARGNELUTTI                      53
+[12:44:18]   DANIEL COSTA MÜLLER                          51
+[12:44:18] ============================================================
+
+[12:44:46]   ok | 1 imóveis | Total: 3880
+[12:44:48] 
+[181/183] VIVIANE TEIXEIRA PRATES HALLAL | https://www.hallalleiloes.com.br
+[12:44:48]   → VIVIANE TEIXEIRA PRATES HALLAL | https://www.hallalleiloes.com.br
+[12:44:48]     [WARN] HTTP falhou (ConnectionError). Playwright...
+[12:44:49]   sem_leilao | 0 imóveis | Total: 3880
+[12:44:51] 
+[182/183] VOLNEI ZACCARIAS | https://www.zaccariasleiloes.com.br
+[12:44:51]   → VOLNEI ZACCARIAS | https://www.zaccariasleiloes.com.br
+[12:46:28]   ok | 43 imóveis | Total: 3923
+[12:46:30] 
+[183/183] WENDEL MACHADO GARCIA | https://www.wendelgarcia.com.br
+[12:46:30]   → WENDEL MACHADO GARCIA | https://www.wendelgarcia.com.br
+[12:47:17]   ok | 23 imóveis | Total: 3946
+[12:47:19] 
+============================================================
+[12:47:19] CONCLUÍDO: 3946 imóveis de 183 sites
+[12:47:19] 
+============================================================
+[12:47:19] RELATÓRIO | Total: 3946 imóveis | Agora: WENDEL MACHADO GARCIA
+[12:47:19]   DANIEL HAMOUI                               200
+[12:47:19]   TIAGO TESSLER BLECHER                       171
+[12:47:19]   IRANI FLORES                                146
+[12:47:19]   MARCELO SOUZA SCHONARDIE                    145
+[12:47:19]   JORGE VINICIUS DE MOURA CORRÊA              134
+[12:47:19]   GIANCARLO PETERLONGO LORENZINI MENEGOTTO    119
+[12:47:19]   JOSEANE DE AVILA SCOTTO                     112
+[12:47:19]   LUIZ FERNANDO MORAES DA CRUZ                107
+[12:47:19]   EDUARDO VIVIAN                              105
+[12:47:19]   LUCAS ANDREATTA DE OLIVEIRA                  95
+[12:47:19]   CARMEN GOMES PIETOSO                         82
+[12:47:19]   DIONIR BIANCHI                               78
+[12:47:19]   RODRIGO ZAGO SZORTYKA                        73
+[12:47:19]   FABIO GOMES PIETOSO                          68
+[12:47:19]   GERSON ANOR BORIN DA SILVA NETO              67
+[12:47:19]   GILMAR THUME                                 64
+[12:47:19]   VAGNER JOCHIMS                               64
+[12:47:19]   MARCELLO PEREIRA DE OLIVEIRA                 54
+[12:47:19]   CAMILA LAIS CARGNELUTTI                      53
+[12:47:19]   DANIEL COSTA MÜLLER                          51
+[12:47:19] ============================================================
+
+[12:47:19] [CSV] Imóveis: imoveis_jucisrs_2026-06-08.csv (3946 registros)
+[12:47:19] 
+[SQLite] Importando 3946 imóveis...
+[12:47:19]   SQLite: 3629 inseridos, 317 já existiam
+[12:47:19] 
+[PostgreSQL] Importando 3946 imóveis via Docker...
+[12:47:22] [INFO] 3946 registros
+  fonte_id=949
+  ERR: A string literal cannot contain NUL (0x00) characters.
+  ERR: A string literal cannot contain NUL (0x00) characters.
+  ERR: A string literal cannot contain NUL (0x00) characters.
+[OK] 3862 inseridos, 0 atualizados, 84 erros
+[12:47:22] 
+[Pós-processamento]
+[12:47:26]   cd /app && python run.py classificar --limite 2000: Classificando até 2000 imóveis...
+Classificação concluída.
+[12:47:31]   cd /app && python run.py normalizar-cidades: s corrigidas      │ 110   │
+│ Não resolvidas          │ 688   │
+└─────────────────────────┴───────┘
+[12:47:33]   cd /app && python run.py deduplicar: │
+│ Total                       │ 1408        │
+└─────────────────────────────┴─────────────┘
+[12:47:33] 
+[ERROS]
+[12:47:33]   Nenhum erro registrado.
+[12:47:33] 
+[RESUMO FINAL]
+[12:47:33]   Sites processados: 183
+[12:47:33]   Sites OK: 128 | Sem leilão: 55 | Erro: 0
+[12:47:33]   Total imóveis: 3946
+[12:47:33]   CSV leiloeiros: csv/leiloeiros_jucisrs_2026-06-08.csv
+[12:47:33]   CSV imóveis: csv/imoveis_jucisrs_2026-06-08.csv

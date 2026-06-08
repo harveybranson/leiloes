@@ -1,0 +1,598 @@
+[08:04:55] ============================================================
+[08:04:55] JUCEMS Scraper iniciado — 2026-06-08 08:04:55
+[08:04:55] ============================================================
+[08:04:55] Parseando arquivo TXT: jucems_leiloeiros.txt
+[08:04:55]   TXT: 55 leiloeiros Regular encontrados
+[08:04:55] Buscando lista oficial JUCEMS em https://www.jucems.ms.gov.br/empresas/controles-especiais/agentes-auxiliares/leiloeiros/ ...
+[08:04:56]   JUCEMS online: 80 registros encontrados
+[08:04:56]   Total merged: 60 | com site: 51
+[08:04:56] 
+Total leiloeiros Regular: 60
+[08:04:56]   Com site (únicos): 49
+[08:04:56]   Sem site: 9
+[08:04:56] [CSV] Leiloeiros: C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\leiloeiros_jucems_2026-06-08.csv (60 registros)
+[08:04:56] 
+[1/49] TARCILIO LEITE | https://www.casadeleiloes.com.br
+[08:04:56]   → Scraping: TARCILIO LEITE | https://www.casadeleiloes.com.br
+[08:05:16]   Status: ok | 13 imóveis | Total: 13
+[08:05:18] 
+[2/49] CONCEIÇÃO MARIA FIXER | https://www.mariafixerleiloes.com.br
+[08:05:18]   → Scraping: CONCEIÇÃO MARIA FIXER | https://www.mariafixerleiloes.com.br
+[08:05:22]     HTTP sem resultados. Tentando Playwright...
+[08:09:29]   Status: ok | 28 imóveis | Total: 41
+[08:09:31] 
+[3/49] ILTO ANTONIO MARTINS | https://www.vialeiloes.com.br
+[08:09:31]   → Scraping: ILTO ANTONIO MARTINS | https://www.vialeiloes.com.br
+[08:09:56] 
+============================================================
+[08:09:56] RELATÓRIO PARCIAL | Total: 41 imóveis | Agora: ILTO ANTONIO MARTINS
+[08:09:56]   CONCEIÇÃO MARIA FIXER                      28 imóveis
+[08:09:56]   TARCILIO LEITE                             13 imóveis
+[08:09:56] ============================================================
+
+[08:10:07]   Status: ok | 27 imóveis | Total: 68
+[08:10:09] 
+[4/49] REGINA AUDE LEITE DE ARAUJO SILVA | https://www.reginaaudeleiloes.com.br
+[08:10:09]   → Scraping: REGINA AUDE LEITE DE ARAUJO SILVA | https://www.reginaaudeleiloes.com.br
+[08:10:25]   Status: ok | 7 imóveis | Total: 75
+[08:10:27] 
+[5/49] MARIDULCE SANFELICE SIMEI | https://www.msleiloes.com.br
+[08:10:27]   → Scraping: MARIDULCE SANFELICE SIMEI | https://www.msleiloes.com.br
+[08:10:30]     HTTP sem resultados. Tentando Playwright...
+[08:10:42]   Status: sem_leilao | 0 imóveis | Total: 75
+[08:10:44] 
+[6/49] APARECIDA MARIA FIXER | https://www.cidafixerleiloes.com.br
+[08:10:44]   → Scraping: APARECIDA MARIA FIXER | https://www.cidafixerleiloes.com.br
+[08:10:49]     HTTP sem resultados. Tentando Playwright...
+[08:13:44]   Status: ok | 19 imóveis | Total: 94
+[08:13:46] 
+[7/49] MARCELO CARNEIRO BERNARDELLI | https://www.marcaleiloes.com.br
+[08:13:46]   → Scraping: MARCELO CARNEIRO BERNARDELLI | https://www.marcaleiloes.com.br
+[08:14:42]   Status: ok | 26 imóveis | Total: 120
+[08:14:44] 
+[8/49] HELDER PEREIRA DE FIGUEIREDO JUNIOR | https://www.ipcleiloes.com.br
+[08:14:44]   → Scraping: HELDER PEREIRA DE FIGUEIREDO JUNIOR | https://www.ipcleiloes.com.br
+[08:14:50]   Status: ok | 2 imóveis | Total: 122
+[08:14:52] 
+[9/49] MOUZAR BASTON FILHO | https://www.bastonleiloes.com.br
+[08:14:52]   → Scraping: MOUZAR BASTON FILHO | https://www.bastonleiloes.com.br
+[08:14:56]     HTTP sem resultados. Tentando Playwright...
+[08:14:56] 
+============================================================
+[08:14:56] RELATÓRIO PARCIAL | Total: 122 imóveis | Agora: MOUZAR BASTON FILHO
+[08:14:56]   CONCEIÇÃO MARIA FIXER                      28 imóveis
+[08:14:56]   ILTO ANTONIO MARTINS                       27 imóveis
+[08:14:56]   MARCELO CARNEIRO BERNARDELLI               26 imóveis
+[08:14:56]   APARECIDA MARIA FIXER                      19 imóveis
+[08:14:56]   TARCILIO LEITE                             13 imóveis
+[08:14:56]   REGINA AUDE LEITE DE ARAUJO SILVA           7 imóveis
+[08:14:56]   HELDER PEREIRA DE FIGUEIREDO JUNIOR         2 imóveis
+[08:14:56]   MARIDULCE SANFELICE SIMEI                   0 imóveis
+[08:14:56] ============================================================
+
+[08:15:08]   Status: sem_leilao | 0 imóveis | Total: 122
+[08:15:10] 
+[10/49] GUSTAVO CORREA PEREIRA DA SILVA | https://www.leiloesonlinems.com.br
+[08:15:10]   → Scraping: GUSTAVO CORREA PEREIRA DA SILVA | https://www.leiloesonlinems.com.br
+[08:15:34]   Status: ok | 17 imóveis | Total: 139
+[08:15:36] 
+[11/49] BRUNO BARRETO SANCHES | https://www.barretoleiloes.com.br
+[08:15:36]   → Scraping: BRUNO BARRETO SANCHES | https://www.barretoleiloes.com.br
+[08:15:36]     JS-heavy detectado. Usando Playwright...
+[08:18:41]   Status: ok | 19 imóveis | Total: 158
+[08:18:43] 
+[12/49] MILENA ROSA DI GIACOMO ADRI FAVERÃO | https://www.megaleiloes.com.br/ms
+[08:18:43]   → Scraping: MILENA ROSA DI GIACOMO ADRI FAVERÃO | https://www.megaleiloes.com.br/ms
+[08:18:54]   Status: ok | 4 imóveis | Total: 162
+[08:18:56] 
+[13/49] ALEX WILLIAN HOPPE | https://www.hoppeleiloes.com.br
+[08:18:56]   → Scraping: ALEX WILLIAN HOPPE | https://www.hoppeleiloes.com.br
+[08:18:56]     JS-heavy detectado. Usando Playwright...
+[08:19:56] 
+============================================================
+[08:19:56] RELATÓRIO PARCIAL | Total: 162 imóveis | Agora: ALEX WILLIAN HOPPE
+[08:19:56]   CONCEIÇÃO MARIA FIXER                      28 imóveis
+[08:19:56]   ILTO ANTONIO MARTINS                       27 imóveis
+[08:19:56]   MARCELO CARNEIRO BERNARDELLI               26 imóveis
+[08:19:56]   APARECIDA MARIA FIXER                      19 imóveis
+[08:19:56]   BRUNO BARRETO SANCHES                      19 imóveis
+[08:19:56]   GUSTAVO CORREA PEREIRA DA SILVA            17 imóveis
+[08:19:56]   TARCILIO LEITE                             13 imóveis
+[08:19:56]   REGINA AUDE LEITE DE ARAUJO SILVA           7 imóveis
+[08:19:56]   MILENA ROSA DI GIACOMO ADRI FAVERÃO         4 imóveis
+[08:19:56]   HELDER PEREIRA DE FIGUEIREDO JUNIOR         2 imóveis
+[08:19:56]   MARIDULCE SANFELICE SIMEI                   0 imóveis
+[08:19:56]   MOUZAR BASTON FILHO                         0 imóveis
+[08:19:56] ============================================================
+
+[08:21:46]   Status: ok | 19 imóveis | Total: 181
+[08:21:48] 
+[14/49] CESAR JUNIOR BRITO | https://www.britoleiloes.com.br
+[08:21:48]   → Scraping: CESAR JUNIOR BRITO | https://www.britoleiloes.com.br
+[08:21:48]     [WARN] HTTP falhou (HTTPSConnectionPool(host='www.britoleiloes.com.br', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("HTTPSConnection(host='www.britoleiloes.com.br', port=443): Failed to resolve 'www.britoleiloes.com.br' ([Errno 11001] getaddrinfo failed)"))). Tentando Playwright...
+[08:21:49]   Status: sem_leilao | 0 imóveis | Total: 181
+[08:21:51] 
+[15/49] POLIANA MIKEJEVS CALÇA | https://www.polileiloes.com.br
+[08:21:51]   → Scraping: POLIANA MIKEJEVS CALÇA | https://www.polileiloes.com.br
+[08:21:52]     JS-heavy detectado. Usando Playwright...
+[08:22:20]   Status: ok | 2 imóveis | Total: 183
+[08:22:22] 
+[16/49] ERICO LAGES SOARES | https://www.ericoleiloes.com.br
+[08:22:22]   → Scraping: ERICO LAGES SOARES | https://www.ericoleiloes.com.br
+[08:22:23]     [WARN] HTTP falhou (HTTPSConnectionPool(host='www.ericoleiloes.com.br', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("HTTPSConnection(host='www.ericoleiloes.com.br', port=443): Failed to resolve 'www.ericoleiloes.com.br' ([Errno 11001] getaddrinfo failed)"))). Tentando Playwright...
+[08:22:24]   Status: sem_leilao | 0 imóveis | Total: 183
+[08:22:26] 
+[17/49] MAURICIO SAMBUGARI APPOLINARIO | https://www.selectleiloes.com.br
+[08:22:26]   → Scraping: MAURICIO SAMBUGARI APPOLINARIO | https://www.selectleiloes.com.br
+[08:22:39]   Status: ok | 4 imóveis | Total: 187
+[08:22:41] 
+[18/49] JOÃO GABRIEL DA SILVA E OLIVEIRA | https://www.ibecleiloes.com.br
+[08:22:41]   → Scraping: JOÃO GABRIEL DA SILVA E OLIVEIRA | https://www.ibecleiloes.com.br
+[08:23:02]   Status: ok | 9 imóveis | Total: 196
+[08:23:04] 
+[19/49] ANDRE MARIO ARAUJO | https://www.andrearaujoleiloes.com.br
+[08:23:04]   → Scraping: ANDRE MARIO ARAUJO | https://www.andrearaujoleiloes.com.br
+[08:23:06]     HTTP sem resultados. Tentando Playwright...
+[08:23:18]   Status: sem_leilao | 0 imóveis | Total: 196
+[08:23:20] 
+[20/49] FRANCISCO VILANOVA ALVES | https://www.euroleiloes.com.br
+[08:23:20]   → Scraping: FRANCISCO VILANOVA ALVES | https://www.euroleiloes.com.br
+[08:23:20]     [WARN] HTTP falhou (HTTPSConnectionPool(host='www.euroleiloes.com.br', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("HTTPSConnection(host='www.euroleiloes.com.br', port=443): Failed to resolve 'www.euroleiloes.com.br' ([Errno 11001] getaddrinfo failed)"))). Tentando Playwright...
+[08:23:21]   Status: sem_leilao | 0 imóveis | Total: 196
+[08:23:23] 
+[21/49] FERNANDO JOSE CERELLO GONÇALVES PEREIRA | https://www.megaleiloes.com.br
+[08:23:23]   → Scraping: FERNANDO JOSE CERELLO GONÇALVES PEREIRA | https://www.megaleiloes.com.br
+[08:23:56]   Status: ok | 18 imóveis | Total: 214
+[08:23:58] 
+[22/49] DAVI BORGES DE AQUINO | https://www.alfaleiloes.com
+[08:23:58]   → Scraping: DAVI BORGES DE AQUINO | https://www.alfaleiloes.com
+[08:24:37]   Status: ok | 12 imóveis | Total: 226
+[08:24:39] 
+[23/49] DORA PLAT | https://www.portalzuk.com.br
+[08:24:39]   → Scraping: DORA PLAT | https://www.portalzuk.com.br
+[08:24:44]   Status: ok | 3 imóveis | Total: 229
+[08:24:46] 
+[24/49] ANA CLAUDIA BLASCZYK | https://www.planaltoleiloes.com.br
+[08:24:46]   → Scraping: ANA CLAUDIA BLASCZYK | https://www.planaltoleiloes.com.br
+[08:24:50]     HTTP sem resultados. Tentando Playwright...
+[08:24:56] 
+============================================================
+[08:24:56] RELATÓRIO PARCIAL | Total: 229 imóveis | Agora: ANA CLAUDIA BLASCZYK
+[08:24:56]   CONCEIÇÃO MARIA FIXER                      28 imóveis
+[08:24:56]   ILTO ANTONIO MARTINS                       27 imóveis
+[08:24:56]   MARCELO CARNEIRO BERNARDELLI               26 imóveis
+[08:24:56]   APARECIDA MARIA FIXER                      19 imóveis
+[08:24:56]   BRUNO BARRETO SANCHES                      19 imóveis
+[08:24:56]   ALEX WILLIAN HOPPE                         19 imóveis
+[08:24:56]   FERNANDO JOSE CERELLO GONÇALVES PEREIRA    18 imóveis
+[08:24:56]   GUSTAVO CORREA PEREIRA DA SILVA            17 imóveis
+[08:24:56]   TARCILIO LEITE                             13 imóveis
+[08:24:56]   DAVI BORGES DE AQUINO                      12 imóveis
+[08:24:56]   JOÃO GABRIEL DA SILVA E OLIVEIRA            9 imóveis
+[08:24:56]   REGINA AUDE LEITE DE ARAUJO SILVA           7 imóveis
+[08:24:56]   MILENA ROSA DI GIACOMO ADRI FAVERÃO         4 imóveis
+[08:24:56]   MAURICIO SAMBUGARI APPOLINARIO              4 imóveis
+[08:24:56]   DORA PLAT                                   3 imóveis
+[08:24:56]   HELDER PEREIRA DE FIGUEIREDO JUNIOR         2 imóveis
+[08:24:56]   POLIANA MIKEJEVS CALÇA                      2 imóveis
+[08:24:56]   MARIDULCE SANFELICE SIMEI                   0 imóveis
+[08:24:56]   MOUZAR BASTON FILHO                         0 imóveis
+[08:24:56]   CESAR JUNIOR BRITO                          0 imóveis
+[08:24:56]   ERICO LAGES SOARES                          0 imóveis
+[08:24:56]   ANDRE MARIO ARAUJO                          0 imóveis
+[08:24:56]   FRANCISCO VILANOVA ALVES                    0 imóveis
+[08:24:56] ============================================================
+
+[08:25:21]   Status: ok | 2 imóveis | Total: 231
+[08:25:23] 
+[25/49] ERICO SOBRAL SOARES | https://www.ericosobral.com.br
+[08:25:23]   → Scraping: ERICO SOBRAL SOARES | https://www.ericosobral.com.br
+[08:25:40]   Status: ok | 4 imóveis | Total: 235
+[08:25:42] 
+[26/49] HERCULES VALAZUELA COUTINHO | https://www.hcleiloes.com.br
+[08:25:42]   → Scraping: HERCULES VALAZUELA COUTINHO | https://www.hcleiloes.com.br
+[08:25:51]   Status: ok | 3 imóveis | Total: 238
+[08:25:53] 
+[27/49] MIKE DUTRA FLEITAS | https://www.mikedutraleiloeiro.com.br
+[08:25:53]   → Scraping: MIKE DUTRA FLEITAS | https://www.mikedutraleiloeiro.com.br
+[08:25:53]     [WARN] HTTP falhou (HTTPSConnectionPool(host='www.mikedutraleiloeiro.com.br', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("HTTPSConnection(host='www.mikedutraleiloeiro.com.br', port=443): Failed to resolve 'www.mikedutraleiloeiro.com.br' ([Errno 11001] getaddrinfo failed)"))). Tentando Playwright...
+[08:25:54]   Status: sem_leilao | 0 imóveis | Total: 238
+[08:25:56] 
+[28/49] IGOR ALEXANDRE DE SOUZA SILVA | https://www.desouzaleiloes.com.br
+[08:25:56]   → Scraping: IGOR ALEXANDRE DE SOUZA SILVA | https://www.desouzaleiloes.com.br
+[08:26:00]     HTTP sem resultados. Tentando Playwright...
+[08:28:14]   Status: ok | 14 imóveis | Total: 252
+[08:28:16] 
+[29/49] MARCOS RODRIGO CUSTODIO SOARES | https://www.custodioleiloes.com.br
+[08:28:16]   → Scraping: MARCOS RODRIGO CUSTODIO SOARES | https://www.custodioleiloes.com.br
+[08:28:18]     HTTP sem resultados. Tentando Playwright...
+[08:28:30]   Status: sem_leilao | 0 imóveis | Total: 252
+[08:28:32] 
+[30/49] RODRIGO SCHMITZ | https://www.hammer.lel.br
+[08:28:32]   → Scraping: RODRIGO SCHMITZ | https://www.hammer.lel.br
+[08:29:49]   Status: ok | 35 imóveis | Total: 287
+[08:29:51] 
+[31/49] ALGLECIO BUENO DA SILVA | https://www.leiloesgoias.com.br
+[08:29:51]   → Scraping: ALGLECIO BUENO DA SILVA | https://www.leiloesgoias.com.br
+[08:29:56] 
+============================================================
+[08:29:56] RELATÓRIO PARCIAL | Total: 287 imóveis | Agora: ALGLECIO BUENO DA SILVA
+[08:29:56]   RODRIGO SCHMITZ                            35 imóveis
+[08:29:56]   CONCEIÇÃO MARIA FIXER                      28 imóveis
+[08:29:56]   ILTO ANTONIO MARTINS                       27 imóveis
+[08:29:56]   MARCELO CARNEIRO BERNARDELLI               26 imóveis
+[08:29:56]   APARECIDA MARIA FIXER                      19 imóveis
+[08:29:56]   BRUNO BARRETO SANCHES                      19 imóveis
+[08:29:56]   ALEX WILLIAN HOPPE                         19 imóveis
+[08:29:56]   FERNANDO JOSE CERELLO GONÇALVES PEREIRA    18 imóveis
+[08:29:56]   GUSTAVO CORREA PEREIRA DA SILVA            17 imóveis
+[08:29:56]   IGOR ALEXANDRE DE SOUZA SILVA              14 imóveis
+[08:29:56]   TARCILIO LEITE                             13 imóveis
+[08:29:56]   DAVI BORGES DE AQUINO                      12 imóveis
+[08:29:56]   JOÃO GABRIEL DA SILVA E OLIVEIRA            9 imóveis
+[08:29:56]   REGINA AUDE LEITE DE ARAUJO SILVA           7 imóveis
+[08:29:56]   MILENA ROSA DI GIACOMO ADRI FAVERÃO         4 imóveis
+[08:29:56]   MAURICIO SAMBUGARI APPOLINARIO              4 imóveis
+[08:29:56]   ERICO SOBRAL SOARES                         4 imóveis
+[08:29:56]   DORA PLAT                                   3 imóveis
+[08:29:56]   HERCULES VALAZUELA COUTINHO                 3 imóveis
+[08:29:56]   HELDER PEREIRA DE FIGUEIREDO JUNIOR         2 imóveis
+[08:29:56]   POLIANA MIKEJEVS CALÇA                      2 imóveis
+[08:29:56]   ANA CLAUDIA BLASCZYK                        2 imóveis
+[08:29:56]   MARIDULCE SANFELICE SIMEI                   0 imóveis
+[08:29:56]   MOUZAR BASTON FILHO                         0 imóveis
+[08:29:56]   CESAR JUNIOR BRITO                          0 imóveis
+[08:29:56]   ERICO LAGES SOARES                          0 imóveis
+[08:29:56]   ANDRE MARIO ARAUJO                          0 imóveis
+[08:29:56]   FRANCISCO VILANOVA ALVES                    0 imóveis
+[08:29:56]   MIKE DUTRA FLEITAS                          0 imóveis
+[08:29:56]   MARCOS RODRIGO CUSTODIO SOARES              0 imóveis
+[08:29:56] ============================================================
+
+[08:30:41]   Status: ok | 25 imóveis | Total: 312
+[08:30:43] 
+[32/49] CARLO FERRARI | https://www.carloferrarileiloes.com.br
+[08:30:43]   → Scraping: CARLO FERRARI | https://www.carloferrarileiloes.com.br
+[08:30:48]     HTTP sem resultados. Tentando Playwright...
+[08:32:15]   Status: ok | 12 imóveis | Total: 324
+[08:32:17] 
+[33/49] DENYS PYERRE DE OLIVEIRA | https://www.leje.com.br
+[08:32:17]   → Scraping: DENYS PYERRE DE OLIVEIRA | https://www.leje.com.br
+[08:32:22]   Status: ok | 3 imóveis | Total: 327
+[08:32:24] 
+[34/49] HELCIO KRONBERG | https://www.kronbergleiloes.com.br
+[08:32:24]   → Scraping: HELCIO KRONBERG | https://www.kronbergleiloes.com.br
+[08:32:39]     [WARN] HTTP falhou (HTTPSConnectionPool(host='www.kronbergleiloes.com.br', port=443): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.kronbergleiloes.com.br', port=443) at 0x2850fa9f390>, 'Connection to www.kronbergleiloes.com.br timed out. (connect timeout=15)'))). Tentando Playwright...
+[08:34:56] 
+============================================================
+[08:34:56] RELATÓRIO PARCIAL | Total: 327 imóveis | Agora: HELCIO KRONBERG
+[08:34:56]   RODRIGO SCHMITZ                            35 imóveis
+[08:34:56]   CONCEIÇÃO MARIA FIXER                      28 imóveis
+[08:34:56]   ILTO ANTONIO MARTINS                       27 imóveis
+[08:34:56]   MARCELO CARNEIRO BERNARDELLI               26 imóveis
+[08:34:56]   ALGLECIO BUENO DA SILVA                    25 imóveis
+[08:34:56]   APARECIDA MARIA FIXER                      19 imóveis
+[08:34:56]   BRUNO BARRETO SANCHES                      19 imóveis
+[08:34:56]   ALEX WILLIAN HOPPE                         19 imóveis
+[08:34:56]   FERNANDO JOSE CERELLO GONÇALVES PEREIRA    18 imóveis
+[08:34:56]   GUSTAVO CORREA PEREIRA DA SILVA            17 imóveis
+[08:34:56]   IGOR ALEXANDRE DE SOUZA SILVA              14 imóveis
+[08:34:56]   TARCILIO LEITE                             13 imóveis
+[08:34:56]   DAVI BORGES DE AQUINO                      12 imóveis
+[08:34:56]   CARLO FERRARI                              12 imóveis
+[08:34:56]   JOÃO GABRIEL DA SILVA E OLIVEIRA            9 imóveis
+[08:34:56]   REGINA AUDE LEITE DE ARAUJO SILVA           7 imóveis
+[08:34:56]   MILENA ROSA DI GIACOMO ADRI FAVERÃO         4 imóveis
+[08:34:56]   MAURICIO SAMBUGARI APPOLINARIO              4 imóveis
+[08:34:56]   ERICO SOBRAL SOARES                         4 imóveis
+[08:34:56]   DORA PLAT                                   3 imóveis
+[08:34:56]   HERCULES VALAZUELA COUTINHO                 3 imóveis
+[08:34:56]   DENYS PYERRE DE OLIVEIRA                    3 imóveis
+[08:34:56]   HELDER PEREIRA DE FIGUEIREDO JUNIOR         2 imóveis
+[08:34:56]   POLIANA MIKEJEVS CALÇA                      2 imóveis
+[08:34:56]   ANA CLAUDIA BLASCZYK                        2 imóveis
+[08:34:56]   MARIDULCE SANFELICE SIMEI                   0 imóveis
+[08:34:56]   MOUZAR BASTON FILHO                         0 imóveis
+[08:34:56]   CESAR JUNIOR BRITO                          0 imóveis
+[08:34:56]   ERICO LAGES SOARES                          0 imóveis
+[08:34:56]   ANDRE MARIO ARAUJO                          0 imóveis
+[08:34:56]   FRANCISCO VILANOVA ALVES                    0 imóveis
+[08:34:56]   MIKE DUTRA FLEITAS                          0 imóveis
+[08:34:56]   MARCOS RODRIGO CUSTODIO SOARES              0 imóveis
+[08:34:56] ============================================================
+
+[08:35:50]   Status: sem_leilao | 0 imóveis | Total: 327
+[08:35:52] 
+[35/49] CECILIA DELZEIR SOBRINHO | https://www.ceciliadelzeirleiloes.com.br
+[08:35:52]   → Scraping: CECILIA DELZEIR SOBRINHO | https://www.ceciliadelzeirleiloes.com.br
+[08:36:27]   Status: ok | 18 imóveis | Total: 345
+[08:36:29] 
+[36/49] RODRIGO APARECIDO RIGOLON DA SILVA | https://www.rigolonleiloes.com.br
+[08:36:29]   → Scraping: RODRIGO APARECIDO RIGOLON DA SILVA | https://www.rigolonleiloes.com.br
+[08:36:34]     HTTP sem resultados. Tentando Playwright...
+[08:39:56] 
+============================================================
+[08:39:56] RELATÓRIO PARCIAL | Total: 345 imóveis | Agora: RODRIGO APARECIDO RIGOLON DA SILVA
+[08:39:56]   RODRIGO SCHMITZ                            35 imóveis
+[08:39:56]   CONCEIÇÃO MARIA FIXER                      28 imóveis
+[08:39:56]   ILTO ANTONIO MARTINS                       27 imóveis
+[08:39:56]   MARCELO CARNEIRO BERNARDELLI               26 imóveis
+[08:39:56]   ALGLECIO BUENO DA SILVA                    25 imóveis
+[08:39:56]   APARECIDA MARIA FIXER                      19 imóveis
+[08:39:56]   BRUNO BARRETO SANCHES                      19 imóveis
+[08:39:56]   ALEX WILLIAN HOPPE                         19 imóveis
+[08:39:56]   FERNANDO JOSE CERELLO GONÇALVES PEREIRA    18 imóveis
+[08:39:56]   CECILIA DELZEIR SOBRINHO                   18 imóveis
+[08:39:56]   GUSTAVO CORREA PEREIRA DA SILVA            17 imóveis
+[08:39:56]   IGOR ALEXANDRE DE SOUZA SILVA              14 imóveis
+[08:39:56]   TARCILIO LEITE                             13 imóveis
+[08:39:56]   DAVI BORGES DE AQUINO                      12 imóveis
+[08:39:56]   CARLO FERRARI                              12 imóveis
+[08:39:56]   JOÃO GABRIEL DA SILVA E OLIVEIRA            9 imóveis
+[08:39:56]   REGINA AUDE LEITE DE ARAUJO SILVA           7 imóveis
+[08:39:56]   MILENA ROSA DI GIACOMO ADRI FAVERÃO         4 imóveis
+[08:39:56]   MAURICIO SAMBUGARI APPOLINARIO              4 imóveis
+[08:39:56]   ERICO SOBRAL SOARES                         4 imóveis
+[08:39:56]   DORA PLAT                                   3 imóveis
+[08:39:56]   HERCULES VALAZUELA COUTINHO                 3 imóveis
+[08:39:56]   DENYS PYERRE DE OLIVEIRA                    3 imóveis
+[08:39:56]   HELDER PEREIRA DE FIGUEIREDO JUNIOR         2 imóveis
+[08:39:56]   POLIANA MIKEJEVS CALÇA                      2 imóveis
+[08:39:56]   ANA CLAUDIA BLASCZYK                        2 imóveis
+[08:39:56]   MARIDULCE SANFELICE SIMEI                   0 imóveis
+[08:39:56]   MOUZAR BASTON FILHO                         0 imóveis
+[08:39:56]   CESAR JUNIOR BRITO                          0 imóveis
+[08:39:56]   ERICO LAGES SOARES                          0 imóveis
+[08:39:56]   ANDRE MARIO ARAUJO                          0 imóveis
+[08:39:56]   FRANCISCO VILANOVA ALVES                    0 imóveis
+[08:39:56]   MIKE DUTRA FLEITAS                          0 imóveis
+[08:39:56]   MARCOS RODRIGO CUSTODIO SOARES              0 imóveis
+[08:39:56]   HELCIO KRONBERG                             0 imóveis
+[08:39:56] ============================================================
+
+[08:40:59]   Status: ok | 35 imóveis | Total: 380
+[08:41:01] 
+[37/49] LUIS GUILHERME TENORIO DE ARAUJO SILVA | https://www.tenorioleiloes.com.br
+[08:41:01]   → Scraping: LUIS GUILHERME TENORIO DE ARAUJO SILVA | https://www.tenorioleiloes.com.br
+[08:41:06]     HTTP sem resultados. Tentando Playwright...
+[08:41:19]   Status: sem_leilao | 0 imóveis | Total: 380
+[08:41:21] 
+[38/49] PATRICIA PIMENTEL GROCOSKI COSTA | https://www.pimentelleiloes.com.br
+[08:41:21]   → Scraping: PATRICIA PIMENTEL GROCOSKI COSTA | https://www.pimentelleiloes.com.br
+[08:41:56]   Status: ok | 14 imóveis | Total: 394
+[08:41:58] 
+[39/49] FLARES AGUIAR DA SILVA | https://www.faleiloes.com.br
+[08:41:58]   → Scraping: FLARES AGUIAR DA SILVA | https://www.faleiloes.com.br
+[08:43:04]   Status: ok | 18 imóveis | Total: 412
+[08:43:06] 
+[40/49] FABIO MARLON MACHADO | https://www.machadoleiloeiro.com.br
+[08:43:06]   → Scraping: FABIO MARLON MACHADO | https://www.machadoleiloeiro.com.br
+[08:44:12]   Status: ok | 24 imóveis | Total: 436
+[08:44:14] 
+[41/49] VLADMIR OLIANI | https://www.leiloesaguiar.com.br
+[08:44:14]   → Scraping: VLADMIR OLIANI | https://www.leiloesaguiar.com.br
+[08:44:56] 
+============================================================
+[08:44:56] RELATÓRIO PARCIAL | Total: 436 imóveis | Agora: VLADMIR OLIANI
+[08:44:56]   RODRIGO SCHMITZ                            35 imóveis
+[08:44:56]   RODRIGO APARECIDO RIGOLON DA SILVA         35 imóveis
+[08:44:56]   CONCEIÇÃO MARIA FIXER                      28 imóveis
+[08:44:56]   ILTO ANTONIO MARTINS                       27 imóveis
+[08:44:56]   MARCELO CARNEIRO BERNARDELLI               26 imóveis
+[08:44:56]   ALGLECIO BUENO DA SILVA                    25 imóveis
+[08:44:56]   FABIO MARLON MACHADO                       24 imóveis
+[08:44:56]   APARECIDA MARIA FIXER                      19 imóveis
+[08:44:56]   BRUNO BARRETO SANCHES                      19 imóveis
+[08:44:56]   ALEX WILLIAN HOPPE                         19 imóveis
+[08:44:56]   FERNANDO JOSE CERELLO GONÇALVES PEREIRA    18 imóveis
+[08:44:56]   CECILIA DELZEIR SOBRINHO                   18 imóveis
+[08:44:56]   FLARES AGUIAR DA SILVA                     18 imóveis
+[08:44:56]   GUSTAVO CORREA PEREIRA DA SILVA            17 imóveis
+[08:44:56]   IGOR ALEXANDRE DE SOUZA SILVA              14 imóveis
+[08:44:56]   PATRICIA PIMENTEL GROCOSKI COSTA           14 imóveis
+[08:44:56]   TARCILIO LEITE                             13 imóveis
+[08:44:56]   DAVI BORGES DE AQUINO                      12 imóveis
+[08:44:56]   CARLO FERRARI                              12 imóveis
+[08:44:56]   JOÃO GABRIEL DA SILVA E OLIVEIRA            9 imóveis
+[08:44:56]   REGINA AUDE LEITE DE ARAUJO SILVA           7 imóveis
+[08:44:56]   MILENA ROSA DI GIACOMO ADRI FAVERÃO         4 imóveis
+[08:44:56]   MAURICIO SAMBUGARI APPOLINARIO              4 imóveis
+[08:44:56]   ERICO SOBRAL SOARES                         4 imóveis
+[08:44:56]   DORA PLAT                                   3 imóveis
+[08:44:56]   HERCULES VALAZUELA COUTINHO                 3 imóveis
+[08:44:56]   DENYS PYERRE DE OLIVEIRA                    3 imóveis
+[08:44:56]   HELDER PEREIRA DE FIGUEIREDO JUNIOR         2 imóveis
+[08:44:56]   POLIANA MIKEJEVS CALÇA                      2 imóveis
+[08:44:56]   ANA CLAUDIA BLASCZYK                        2 imóveis
+[08:44:56]   MARIDULCE SANFELICE SIMEI                   0 imóveis
+[08:44:56]   MOUZAR BASTON FILHO                         0 imóveis
+[08:44:56]   CESAR JUNIOR BRITO                          0 imóveis
+[08:44:56]   ERICO LAGES SOARES                          0 imóveis
+[08:44:56]   ANDRE MARIO ARAUJO                          0 imóveis
+[08:44:56]   FRANCISCO VILANOVA ALVES                    0 imóveis
+[08:44:56]   MIKE DUTRA FLEITAS                          0 imóveis
+[08:44:56]   MARCOS RODRIGO CUSTODIO SOARES              0 imóveis
+[08:44:56]   HELCIO KRONBERG                             0 imóveis
+[08:44:56]   LUIS GUILHERME TENORIO DE ARAUJO SILVA      0 imóveis
+[08:44:56] ============================================================
+
+[08:45:35]   Status: ok | 39 imóveis | Total: 475
+[08:45:37] 
+[42/49] LUCAS ANDREATTA DE OLIVEIRA | https://www.leiloariasmart.com.br
+[08:45:37]   → Scraping: LUCAS ANDREATTA DE OLIVEIRA | https://www.leiloariasmart.com.br
+[08:49:29]   Status: ok | 91 imóveis | Total: 566
+[08:49:31] 
+[43/49] BRUNA CRISTINA SOARES | https://www.soaresleiloes.com.br
+[08:49:31]   → Scraping: BRUNA CRISTINA SOARES | https://www.soaresleiloes.com.br
+[08:49:31]     [WARN] HTTP falhou (HTTPSConnectionPool(host='www.soaresleiloes.com.br', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("HTTPSConnection(host='www.soaresleiloes.com.br', port=443): Failed to resolve 'www.soaresleiloes.com.br' ([Errno 11001] getaddrinfo failed)"))). Tentando Playwright...
+[08:49:32]   Status: sem_leilao | 0 imóveis | Total: 566
+[08:49:34] 
+[44/49] ABIEL ISMAEL DUARTE DOS SANTOS | https://www.manaleiloes.com.br
+[08:49:34]   → Scraping: ABIEL ISMAEL DUARTE DOS SANTOS | https://www.manaleiloes.com.br
+[08:49:34]     [WARN] HTTP falhou (HTTPSConnectionPool(host='www.manaleiloes.com.br', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("HTTPSConnection(host='www.manaleiloes.com.br', port=443): Failed to resolve 'www.manaleiloes.com.br' ([Errno 11001] getaddrinfo failed)"))). Tentando Playwright...
+[08:49:36]   Status: sem_leilao | 0 imóveis | Total: 566
+[08:49:38] 
+[45/49] LETICIA DE ANDRADE VERRONE | https://www.ricoleiloes.com.br
+[08:49:38]   → Scraping: LETICIA DE ANDRADE VERRONE | https://www.ricoleiloes.com.br
+[08:49:56] 
+============================================================
+[08:49:56] RELATÓRIO PARCIAL | Total: 566 imóveis | Agora: LETICIA DE ANDRADE VERRONE
+[08:49:56]   LUCAS ANDREATTA DE OLIVEIRA                91 imóveis
+[08:49:56]   VLADMIR OLIANI                             39 imóveis
+[08:49:56]   RODRIGO SCHMITZ                            35 imóveis
+[08:49:56]   RODRIGO APARECIDO RIGOLON DA SILVA         35 imóveis
+[08:49:56]   CONCEIÇÃO MARIA FIXER                      28 imóveis
+[08:49:56]   ILTO ANTONIO MARTINS                       27 imóveis
+[08:49:56]   MARCELO CARNEIRO BERNARDELLI               26 imóveis
+[08:49:56]   ALGLECIO BUENO DA SILVA                    25 imóveis
+[08:49:56]   FABIO MARLON MACHADO                       24 imóveis
+[08:49:56]   APARECIDA MARIA FIXER                      19 imóveis
+[08:49:56]   BRUNO BARRETO SANCHES                      19 imóveis
+[08:49:56]   ALEX WILLIAN HOPPE                         19 imóveis
+[08:49:56]   FERNANDO JOSE CERELLO GONÇALVES PEREIRA    18 imóveis
+[08:49:56]   CECILIA DELZEIR SOBRINHO                   18 imóveis
+[08:49:56]   FLARES AGUIAR DA SILVA                     18 imóveis
+[08:49:56]   GUSTAVO CORREA PEREIRA DA SILVA            17 imóveis
+[08:49:56]   IGOR ALEXANDRE DE SOUZA SILVA              14 imóveis
+[08:49:56]   PATRICIA PIMENTEL GROCOSKI COSTA           14 imóveis
+[08:49:56]   TARCILIO LEITE                             13 imóveis
+[08:49:56]   DAVI BORGES DE AQUINO                      12 imóveis
+[08:49:56]   CARLO FERRARI                              12 imóveis
+[08:49:56]   JOÃO GABRIEL DA SILVA E OLIVEIRA            9 imóveis
+[08:49:56]   REGINA AUDE LEITE DE ARAUJO SILVA           7 imóveis
+[08:49:56]   MILENA ROSA DI GIACOMO ADRI FAVERÃO         4 imóveis
+[08:49:56]   MAURICIO SAMBUGARI APPOLINARIO              4 imóveis
+[08:49:56]   ERICO SOBRAL SOARES                         4 imóveis
+[08:49:56]   DORA PLAT                                   3 imóveis
+[08:49:56]   HERCULES VALAZUELA COUTINHO                 3 imóveis
+[08:49:56]   DENYS PYERRE DE OLIVEIRA                    3 imóveis
+[08:49:56]   HELDER PEREIRA DE FIGUEIREDO JUNIOR         2 imóveis
+[08:49:56]   POLIANA MIKEJEVS CALÇA                      2 imóveis
+[08:49:56]   ANA CLAUDIA BLASCZYK                        2 imóveis
+[08:49:56]   MARIDULCE SANFELICE SIMEI                   0 imóveis
+[08:49:56]   MOUZAR BASTON FILHO                         0 imóveis
+[08:49:56]   CESAR JUNIOR BRITO                          0 imóveis
+[08:49:56]   ERICO LAGES SOARES                          0 imóveis
+[08:49:56]   ANDRE MARIO ARAUJO                          0 imóveis
+[08:49:56]   FRANCISCO VILANOVA ALVES                    0 imóveis
+[08:49:56]   MIKE DUTRA FLEITAS                          0 imóveis
+[08:49:56]   MARCOS RODRIGO CUSTODIO SOARES              0 imóveis
+[08:49:56]   HELCIO KRONBERG                             0 imóveis
+[08:49:56]   LUIS GUILHERME TENORIO DE ARAUJO SILVA      0 imóveis
+[08:49:56]   BRUNA CRISTINA SOARES                       0 imóveis
+[08:49:56]   ABIEL ISMAEL DUARTE DOS SANTOS              0 imóveis
+[08:49:56] ============================================================
+
+[08:50:22]   Status: ok | 15 imóveis | Total: 581
+[08:50:24] 
+[46/49] VANESSA GOELZER DE ARAUJO VARGAS E PINTO | https://www.vargasepintoleiloes.com
+[08:50:24]   → Scraping: VANESSA GOELZER DE ARAUJO VARGAS E PINTO | https://www.vargasepintoleiloes.com
+[08:50:24]     [WARN] HTTP falhou (HTTPSConnectionPool(host='www.vargasepintoleiloes.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("HTTPSConnection(host='www.vargasepintoleiloes.com', port=443): Failed to resolve 'www.vargasepintoleiloes.com' ([Errno 11001] getaddrinfo failed)"))). Tentando Playwright...
+[08:50:25]   Status: sem_leilao | 0 imóveis | Total: 581
+[08:50:27] 
+[47/49] REINALDO RODRIGUES PERDOMO | https://www.rpleiloes.com.br
+[08:50:27]   → Scraping: REINALDO RODRIGUES PERDOMO | https://www.rpleiloes.com.br
+[08:50:33]   Status: ok | 3 imóveis | Total: 584
+[08:50:35] 
+[48/49] ELTON LUIZ SIMON | https://www.simonleiloes.com.br
+[08:50:35]   → Scraping: ELTON LUIZ SIMON | https://www.simonleiloes.com.br
+[08:51:03]   Status: ok | 8 imóveis | Total: 592
+[08:51:05] 
+[49/49] FERNANDO CAETANO MOREIRA FILHO | https://www.fernandoleiloeiro.com.br
+[08:51:05]   → Scraping: FERNANDO CAETANO MOREIRA FILHO | https://www.fernandoleiloeiro.com.br
+[08:51:08]   Status: ok | 1 imóveis | Total: 593
+[08:51:10] 
+============================================================
+[08:51:10] SCRAPING CONCLUÍDO: 593 imóveis de 49 sites
+[08:51:10] 
+============================================================
+[08:51:10] RELATÓRIO PARCIAL | Total: 593 imóveis | Agora: FERNANDO CAETANO MOREIRA FILHO
+[08:51:10]   LUCAS ANDREATTA DE OLIVEIRA                91 imóveis
+[08:51:10]   VLADMIR OLIANI                             39 imóveis
+[08:51:10]   RODRIGO SCHMITZ                            35 imóveis
+[08:51:10]   RODRIGO APARECIDO RIGOLON DA SILVA         35 imóveis
+[08:51:10]   CONCEIÇÃO MARIA FIXER                      28 imóveis
+[08:51:10]   ILTO ANTONIO MARTINS                       27 imóveis
+[08:51:10]   MARCELO CARNEIRO BERNARDELLI               26 imóveis
+[08:51:10]   ALGLECIO BUENO DA SILVA                    25 imóveis
+[08:51:10]   FABIO MARLON MACHADO                       24 imóveis
+[08:51:10]   APARECIDA MARIA FIXER                      19 imóveis
+[08:51:10]   BRUNO BARRETO SANCHES                      19 imóveis
+[08:51:10]   ALEX WILLIAN HOPPE                         19 imóveis
+[08:51:10]   FERNANDO JOSE CERELLO GONÇALVES PEREIRA    18 imóveis
+[08:51:10]   CECILIA DELZEIR SOBRINHO                   18 imóveis
+[08:51:10]   FLARES AGUIAR DA SILVA                     18 imóveis
+[08:51:10]   GUSTAVO CORREA PEREIRA DA SILVA            17 imóveis
+[08:51:10]   LETICIA DE ANDRADE VERRONE                 15 imóveis
+[08:51:10]   IGOR ALEXANDRE DE SOUZA SILVA              14 imóveis
+[08:51:10]   PATRICIA PIMENTEL GROCOSKI COSTA           14 imóveis
+[08:51:10]   TARCILIO LEITE                             13 imóveis
+[08:51:10]   DAVI BORGES DE AQUINO                      12 imóveis
+[08:51:10]   CARLO FERRARI                              12 imóveis
+[08:51:10]   JOÃO GABRIEL DA SILVA E OLIVEIRA            9 imóveis
+[08:51:10]   ELTON LUIZ SIMON                            8 imóveis
+[08:51:10]   REGINA AUDE LEITE DE ARAUJO SILVA           7 imóveis
+[08:51:10]   MILENA ROSA DI GIACOMO ADRI FAVERÃO         4 imóveis
+[08:51:10]   MAURICIO SAMBUGARI APPOLINARIO              4 imóveis
+[08:51:10]   ERICO SOBRAL SOARES                         4 imóveis
+[08:51:10]   DORA PLAT                                   3 imóveis
+[08:51:10]   HERCULES VALAZUELA COUTINHO                 3 imóveis
+[08:51:10]   DENYS PYERRE DE OLIVEIRA                    3 imóveis
+[08:51:10]   REINALDO RODRIGUES PERDOMO                  3 imóveis
+[08:51:10]   HELDER PEREIRA DE FIGUEIREDO JUNIOR         2 imóveis
+[08:51:10]   POLIANA MIKEJEVS CALÇA                      2 imóveis
+[08:51:10]   ANA CLAUDIA BLASCZYK                        2 imóveis
+[08:51:10]   FERNANDO CAETANO MOREIRA FILHO              1 imóveis
+[08:51:10]   MARIDULCE SANFELICE SIMEI                   0 imóveis
+[08:51:10]   MOUZAR BASTON FILHO                         0 imóveis
+[08:51:10]   CESAR JUNIOR BRITO                          0 imóveis
+[08:51:10]   ERICO LAGES SOARES                          0 imóveis
+[08:51:10]   ANDRE MARIO ARAUJO                          0 imóveis
+[08:51:10]   FRANCISCO VILANOVA ALVES                    0 imóveis
+[08:51:10]   MIKE DUTRA FLEITAS                          0 imóveis
+[08:51:10]   MARCOS RODRIGO CUSTODIO SOARES              0 imóveis
+[08:51:10]   HELCIO KRONBERG                             0 imóveis
+[08:51:10]   LUIS GUILHERME TENORIO DE ARAUJO SILVA      0 imóveis
+[08:51:10]   BRUNA CRISTINA SOARES                       0 imóveis
+[08:51:10]   ABIEL ISMAEL DUARTE DOS SANTOS              0 imóveis
+[08:51:10]   VANESSA GOELZER DE ARAUJO VARGAS E PINTO    0 imóveis
+[08:51:10] ============================================================
+
+[08:51:10] [CSV] Imóveis: C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_jucems_2026-06-08.csv (593 registros)
+[08:51:10] 
+[SQLite] Importando 593 imóveis...
+[08:51:10]   SQLite: 514 inseridos, 79 já existiam
+[08:51:10] 
+[PostgreSQL] Importando 593 imóveis...
+[08:51:10]   fonte_id JUCEMS = 946
+[08:51:10]   [ERR lote 0] [WinError 206] O nome do arquivo ou a extensão é muito grande
+[08:51:10]   Lote 1: 0 inseridos, 0 atualizados, 50 erros
+[08:51:10]   [ERR lote 50] [WinError 206] O nome do arquivo ou a extensão é muito grande
+[08:51:10]   [ERR lote 100] [WinError 206] O nome do arquivo ou a extensão é muito grande
+[08:51:10]   Lote 3: 0 inseridos, 0 atualizados, 150 erros
+[08:51:10]   [ERR lote 150] [WinError 206] O nome do arquivo ou a extensão é muito grande
+[08:51:10]   [ERR lote 200] [WinError 206] O nome do arquivo ou a extensão é muito grande
+[08:51:10]   Lote 5: 0 inseridos, 0 atualizados, 250 erros
+[08:51:10]   [ERR lote 250] [WinError 206] O nome do arquivo ou a extensão é muito grande
+[08:51:10]   [ERR lote 300] [WinError 206] O nome do arquivo ou a extensão é muito grande
+[08:51:10]   Lote 7: 0 inseridos, 0 atualizados, 350 erros
+[08:51:10]   [ERR lote 350] [WinError 206] O nome do arquivo ou a extensão é muito grande
+[08:51:10]   [ERR lote 400] [WinError 206] O nome do arquivo ou a extensão é muito grande
+[08:51:10]   Lote 9: 0 inseridos, 0 atualizados, 450 erros
+[08:51:10]   [ERR lote 450] [WinError 206] O nome do arquivo ou a extensão é muito grande
+[08:51:10]   [ERR lote 500] [WinError 206] O nome do arquivo ou a extensão é muito grande
+[08:51:10]   Lote 11: 0 inseridos, 0 atualizados, 550 erros
+[08:51:10]   [ERR lote 550] [WinError 206] O nome do arquivo ou a extensão é muito grande
+[08:51:10]   PostgreSQL: 0 inseridos, 0 atualizados, 593 erros
+[08:51:10] 
+[ERROS REGISTRADOS]
+[08:51:10]   Nenhum erro registrado.
+[08:51:10] 
+[CONCLUSÃO]
+[08:51:10]   Leiloeiros processados: 49
+[08:51:10]   Sites com imóveis: 36
+[08:51:10]   Sites sem leilão ativo: 13
+[08:51:10]   Sites com erro: 0
+[08:51:10]   Total de imóveis: 593
+[08:51:10]   CSV: csv/imoveis_jucems_2026-06-08.csv
+[08:51:10]   CSV: csv/leiloeiros_jucems_2026-06-08.csv

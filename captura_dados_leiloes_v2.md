@@ -15,6 +15,10 @@
 > **Adições jun/2026 (`baixar-docs`):** implementação do `DocumentoDownloader` — após o scraping, **obrigatório** rodar `python run.py baixar-docs --limite 200` para baixar os PDFs (edital, matrícula, laudos) para disco local em `storage/docs/`, com fallback automático via FlareSolverr para sites com Cloudflare. O comando atualiza o campo `arquivos` no banco com `path_local` e `hash_md5`. Integrado no `pipeline`, Celery beat (a cada hora) e endpoint `GET /imoveis/{id}/documentos/{idx}/download` na API.
 >
 > **Adições jun/2026 (seção 26):** scraper standalone da Caixa Econômica Federal (`scraping/scraper_caixa.py`) — bypassa Radware Bot Manager via Playwright + playwright-stealth + `expect_download`; novo formato de CSV (colunas `N° do imóvel`, `Preço`, sem matrícula separada); URL de matrícula determinística; filtro por data da 1ª praça (seção 8.1); 27.363 imóveis coletados em ~2 min para todos os 27 estados.
+>
+> **Adições jun/2026 (seção 32):** correção e deduplicação de nomes de cidades no PostgreSQL Docker — diagnóstico de mojibake, endpoint `/imoveis/cidades` sem `unaccent`/`municipios_ibge`, enums maiúsculos, e script `corrigir_cidades.py` com modos `--todos`, `--cidade`, `--deduplicar` e `--listar`.
+>
+> **Adições jun/2026 (seção 34):** scraping JUCEMS — parse robusto de arquivo `.txt` com encoding corrompido (U+FFFD), leiloeiros Regular do MS, 593 imóveis de 49 sites, diagnóstico de armadilhas: enums PostgreSQL maiúsculos, `WinError 206` (SQL muito longo no Windows), sites offline/DNS inválido, leiloeiro com endereço em UF diferente do MS, `sys.stdout.reconfigure` quebrando redirecionamento de log.
 
 ---
 
@@ -3782,3 +3786,900 @@ leiloes/
 - [ ] Aguardar conclusão do scraping (~107 sites, ~45-90 min total)
 - [ ] Rodar `classificar` e `deduplicar` após conclusão
 - [ ] Re-executar semanalmente para capturar novos leilões
+
+---
+
+## 32. Correção e Deduplicação de Nomes de Cidades no PostgreSQL Docker
+
+### 32.1. Contexto e problema
+
+O banco PostgreSQL do `leilao-scraper` acumula nomes de cidades corrompidos vindos de múltiplas fontes:
+
+| Tipo de problema | Exemplo | Causa |
+|---|---|---|
+| **Mojibake** | `FlorianÃ³polis` | CSV em UTF-8 lido como Latin-1 |
+| **Maiúsculas sem acento** | `SAO PAULO`, `GOIANIA` | Caixa Econômica e outros scrapers |
+| **Variantes de capitalização** | `Sao Paulo`, `sao paulo` | Fontes diversas |
+| **Duplicatas mistas** | `São Paulo` + `SAO PAULO` | Mesma cidade em dois scrapers |
+
+O efeito no frontend: o filtro de cidades (`autocomplete`) exibia entradas como `FlorianÃ³polis` separadas de `Florianópolis`, e imóveis ficavam espalhados em múltiplas entradas da mesma cidade.
+
+---
+
+### 32.2. Armadilha: dois PostgreSQL rodando simultaneamente
+
+**Problema crítico descoberto:** o sistema tem **dois PostgreSQL**: um local Windows (porta 5432 nativa) e o container Docker `leilao_postgres` (também mapeado na porta 5432). Scripts Python com `psycopg2` conectando em `localhost:5432` podem acertar o banco **errado**.
+
+**Solução confiável:** sempre usar `docker exec` para operar no banco correto:
+
+```bash
+# Verificar
+docker exec leilao_postgres psql -U leilao -d leilao_db -c "SELECT COUNT(*) FROM imoveis;"
+
+# Aplicar UPDATE diretamente
+docker exec leilao_postgres psql -U leilao -d leilao_db -c \
+  "UPDATE imoveis SET cidade = 'Florianópolis' WHERE cidade = 'FlorianÃ³polis';"
+```
+
+---
+
+### 32.3. Problemas no endpoint `/imoveis/cidades`
+
+O endpoint original tinha três dependências que **não existem** no banco de produção:
+
+| Dependência | Problema | Correção |
+|---|---|---|
+| Tabela `municipios_ibge` | Não foi criada → erro 500 | Remover o `LEFT JOIN` |
+| Extensão `unaccent` | Não instalada no PostgreSQL → erro 500 | Remover todas as chamadas `unaccent()` |
+| Enums em minúsculo (`'imovel'`) | Enums no banco são **maiúsculos** (`'IMOVEL'`) | Usar `'IMOVEL'`, `'OUTRO'`, `'ABERTO'` |
+
+**Versão correta do endpoint** (`api/routes/imoveis.py`):
+
+```python
+@router.get("/cidades", response_model=list[str])
+async def listar_cidades(
+    estado: Optional[str] = None,
+    q: Optional[str] = None,
+    somente_produtos: bool = False,
+    db: AsyncSession = Depends(get_db),
+):
+    from sqlalchemy import text
+    params: dict = {}
+    extra = []
+    if estado:
+        extra.append("AND i.estado = :estado")
+        params["estado"] = estado.upper()
+    if q:
+        extra.append("AND i.cidade ILIKE :q")
+        params["q"] = f"{q}%"
+    if somente_produtos:
+        extra.append("AND i.categoria IN ('PRODUTO', 'VEICULO')")
+    else:
+        extra.append("AND i.categoria IN ('IMOVEL', 'OUTRO')")
+    sql = text(f"""
+        SELECT DISTINCT i.cidade AS nome
+        FROM imoveis i
+        WHERE i.ativo = true
+          AND i.status = 'ABERTO'
+          AND i.cidade IS NOT NULL
+          AND length(trim(i.cidade)) >= 3
+          AND i.cidade !~ '^[A-Z]{{2}}$'
+          AND i.cidade !~ '^\\d'
+          {' '.join(extra)}
+        ORDER BY 1
+        LIMIT 100
+    """)
+    result = await db.execute(sql, params)
+    return [r[0] for r in result.fetchall() if r[0]]
+```
+
+**Filtro por cidade em `_aplicar_filtros`** — remover `unaccent`:
+
+```python
+# ANTES (quebrado):
+conds.append(or_(
+    Imovel.cidade.ilike(f"%{cidade_norm}%"),
+    sf.unaccent(Imovel.cidade).ilike(sf.unaccent(f"%{cidade_norm}%")),
+))
+
+# DEPOIS (correto):
+conds.append(Imovel.cidade.ilike(f"%{cidade_norm}%"))
+```
+
+Após alterar `imoveis.py`, copiar para o container e reiniciar:
+
+```bash
+docker cp api/routes/imoveis.py leilao_api:/app/api/routes/imoveis.py
+docker restart leilao_api
+```
+
+---
+
+### 32.4. Enums PostgreSQL são maiúsculos
+
+Os enums `categoriaitem` e `statusleilao` no banco são **maiúsculos**:
+
+```sql
+-- Verificar valores reais
+SELECT enumlabel FROM pg_enum
+JOIN pg_type ON pg_enum.enumtypid = pg_type.oid
+WHERE pg_type.typname = 'categoriaitem';
+-- Resultado: IMOVEL, PRODUTO, VEICULO, OUTRO
+
+SELECT enumlabel FROM pg_enum
+JOIN pg_type ON pg_enum.enumtypid = pg_type.oid
+WHERE pg_type.typname = 'statusleilao';
+-- Resultado: ABERTO, ENCERRADO, CANCELADO, ARREMATADO
+```
+
+Usar **sempre maiúsculo** em queries SQL raw: `'IMOVEL'`, `'ABERTO'`, etc.
+
+---
+
+### 32.5. Script `corrigir_cidades.py`
+
+Localização: `leilao-scraper/leilao-scraper/corrigir_cidades.py`
+
+Script standalone que corrige nomes de cidades diretamente via `docker exec`. Não depende de psycopg2 nem de conexão direta ao banco.
+
+#### Modos de uso
+
+```bash
+# Ver cidades com encoding corrompido (não altera nada)
+python corrigir_cidades.py --listar
+
+# Corrigir mojibake em todas as cidades de uma vez
+python corrigir_cidades.py --todos
+
+# Corrigir variantes de uma cidade específica
+python corrigir_cidades.py --cidade "Florianópolis"
+python corrigir_cidades.py --cidade "São Paulo" --cidade "Goiânia"
+
+# Deduplicar: SAO PAULO + São Paulo + Sao Paulo → São Paulo
+python corrigir_cidades.py --deduplicar
+
+# Simular sem executar
+python corrigir_cidades.py --deduplicar --dry-run
+```
+
+#### Lógica de escolha do nome canônico (`--deduplicar`)
+
+Agrupa cidades pelo nome normalizado (sem acento, lowercase). Para cada grupo, escolhe o canônico pelo score:
+
+1. **Mais acentos** — `São Paulo` > `Sao Paulo` > `SAO PAULO`
+2. **Tem letras minúsculas** — title case > ALL CAPS
+3. **Tem letras maiúsculas** — title case > all lower
+4. **Mais registros** — desempate
+
+#### Lógica de detecção de mojibake
+
+```python
+def fix_mojibake(s: str) -> str:
+    """FlorianÃ³polis → Florianópolis"""
+    try:
+        return s.encode("latin-1").decode("utf-8")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        return s  # já está correto ou irrecuperável
+```
+
+A função é segura: cidades já corretas como `São Paulo` levantam `UnicodeDecodeError` ao tentar `b'S\xe3o Paulo'.decode('utf-8')` (sequência UTF-8 inválida) e são devolvidas sem alteração.
+
+#### Resultados da execução em jun/2026
+
+| Operação | Resultado |
+|---|---|
+| `--todos` (mojibake) | 277 cidades corrigidas, 1.238 registros |
+| `--deduplicar` | 793 grupos deduplicados, 17.634 registros migrados |
+| `São Paulo` após deduplicação | 2.692 registros unificados |
+| `Goiânia` após deduplicação | 365 registros unificados |
+| `Florianópolis` após deduplicação | 191 registros unificados |
+
+---
+
+### 32.6. Ordem de execução recomendada após novo scraping
+
+Sempre que um novo scraper importar dados, rodar nesta sequência:
+
+```bash
+cd leilao-scraper/leilao-scraper
+
+# 1. Corrigir mojibake (encoding corrompido)
+python corrigir_cidades.py --todos
+
+# 2. Deduplicar variantes (MAIUSCULAS, sem acento, etc.)
+python corrigir_cidades.py --deduplicar
+
+# 3. Verificar se restou algum problema
+python corrigir_cidades.py --listar
+```
+
+> **Nota:** `--deduplicar` deve rodar **depois** de `--todos`, pois o deduplicador agrupa por nome normalizado — mojibake ainda presente (`FlorianÃ³polis`) não seria agrupado com `Florianópolis`.
+
+---
+
+### 32.7. Diagnóstico rápido de problemas no filtro de cidades
+
+```bash
+# 1. A API está respondendo?
+curl http://localhost:8000/api/v1/imoveis/cidades?q=Flori
+
+# 2. Qual container serve a porta 8000?
+docker ps --format "table {{.Names}}\t{{.Ports}}"
+
+# 3. O código dentro do container está atualizado?
+docker exec leilao_api python -c \
+  "from api.routes.imoveis import listar_cidades; import inspect; print(inspect.getsource(listar_cidades)[:200])"
+
+# 4. Ver cidades com 'Florian' direto no banco
+docker exec leilao_postgres psql -U leilao -d leilao_db \
+  -c "SELECT cidade, COUNT(*) FROM imoveis WHERE cidade ILIKE '%florian%' GROUP BY cidade ORDER BY cidade"
+
+# 5. Verificar extensões e tabelas existentes
+docker exec leilao_postgres psql -U leilao -d leilao_db \
+  -c "SELECT extname FROM pg_extension WHERE extname = 'unaccent';"
+docker exec leilao_postgres psql -U leilao -d leilao_db \
+  -c "SELECT to_regclass('public.municipios_ibge');"
+```
+
+---
+
+## 32. Correção e Deduplicação de Nomes de Cidades no PostgreSQL Docker
+
+### 32.1. Contexto e problema
+
+O banco PostgreSQL do `leilao-scraper` acumula nomes de cidades corrompidos vindos de múltiplas fontes:
+
+| Tipo de problema | Exemplo | Causa |
+|---|---|---|
+| **Mojibake** | `FlorianÃ³polis` | CSV em UTF-8 lido como Latin-1 |
+| **Maiúsculas sem acento** | `SAO PAULO`, `GOIANIA` | Caixa Econômica e outros scrapers |
+| **Variantes de capitalização** | `Sao Paulo`, `sao paulo` | Fontes diversas |
+| **Duplicatas mistas** | `São Paulo` + `SAO PAULO` | Mesma cidade em dois scrapers |
+
+O efeito no frontend: o filtro de cidades (`autocomplete`) exibia entradas como `FlorianÃ³polis` separadas de `Florianópolis`, e imóveis ficavam espalhados em múltiplas entradas da mesma cidade.
+
+---
+
+### 32.2. Armadilha: dois PostgreSQL rodando simultaneamente
+
+**Problema crítico:** o sistema tem **dois PostgreSQL** — um local Windows (porta 5432) e o container Docker `leilao_postgres` (também porta 5432). Scripts Python com `psycopg2` conectando em `localhost:5432` podem acertar o banco **errado**.
+
+**Solução confiável:** sempre usar `docker exec` para operar no banco correto:
+
+```bash
+docker exec leilao_postgres psql -U leilao -d leilao_db -c "SELECT COUNT(*) FROM imoveis;"
+docker exec leilao_postgres psql -U leilao -d leilao_db -c \
+  "UPDATE imoveis SET cidade = 'Florianópolis' WHERE cidade = 'FlorianÃ³polis';"
+```
+
+---
+
+### 32.3. Problemas no endpoint `/imoveis/cidades`
+
+O endpoint original tinha três dependências que **não existem** no banco de produção:
+
+| Dependência | Problema | Correção |
+|---|---|---|
+| Tabela `municipios_ibge` | Não foi criada → erro 500 | Remover o `LEFT JOIN` |
+| Extensão `unaccent` | Não instalada → erro 500 | Remover todas as chamadas `unaccent()` |
+| Enums em minúsculo (`'imovel'`) | Enums no banco são **maiúsculos** (`'IMOVEL'`) | Usar `'IMOVEL'`, `'OUTRO'`, `'ABERTO'` |
+
+**Versão correta do endpoint** (`api/routes/imoveis.py`):
+
+```python
+@router.get("/cidades", response_model=list[str])
+async def listar_cidades(estado=None, q=None, somente_produtos=False, db=Depends(get_db)):
+    from sqlalchemy import text
+    params, extra = {}, []
+    if estado:
+        extra.append("AND i.estado = :estado"); params["estado"] = estado.upper()
+    if q:
+        extra.append("AND i.cidade ILIKE :q"); params["q"] = f"{q}%"
+    cat = "('PRODUTO','VEICULO')" if somente_produtos else "('IMOVEL','OUTRO')"
+    extra.append(f"AND i.categoria IN {cat}")
+    sql = text(f"""
+        SELECT DISTINCT i.cidade FROM imoveis i
+        WHERE i.ativo=true AND i.status='ABERTO' AND i.cidade IS NOT NULL
+          AND length(trim(i.cidade))>=3 AND i.cidade !~ '^[A-Z]{{2}}$' AND i.cidade !~ '^\\d'
+          {' '.join(extra)} ORDER BY 1 LIMIT 100
+    """)
+    result = await db.execute(sql, params)
+    return [r[0] for r in result.fetchall() if r[0]]
+```
+
+Após alterar, copiar e reiniciar:
+```bash
+docker cp api/routes/imoveis.py leilao_api:/app/api/routes/imoveis.py
+docker restart leilao_api
+```
+
+---
+
+### 32.4. Enums PostgreSQL são maiúsculos
+
+```sql
+-- Verificar
+SELECT enumlabel FROM pg_enum
+JOIN pg_type ON pg_enum.enumtypid = pg_type.oid
+WHERE pg_type.typname IN ('categoriaitem','statusleilao','tipoimovel','tipoimovel');
+-- categoriaitem: IMOVEL, PRODUTO, VEICULO, OUTRO
+-- statusleilao:  ABERTO, ENCERRADO, CANCELADO, ARREMATADO
+-- tipoimovel:    APARTAMENTO, CASA, TERRENO, COMERCIAL, RURAL, GALPAO, SALA, VAGA, OUTRO
+```
+
+---
+
+### 32.5. Script `corrigir_cidades.py`
+
+Localização: `leilao-scraper/leilao-scraper/corrigir_cidades.py`
+
+```bash
+python corrigir_cidades.py --listar          # ver encoding corrompido
+python corrigir_cidades.py --todos           # corrigir mojibake
+python corrigir_cidades.py --cidade "São Paulo"  # corrigir cidade específica
+python corrigir_cidades.py --deduplicar      # unificar duplicatas
+python corrigir_cidades.py --deduplicar --dry-run
+```
+
+**Lógica do canônico:** mais acentos > tem minúsculas > tem maiúsculas > mais registros.
+
+**Resultados jun/2026:** 277 cidades mojibake corrigidas (1.238 registros), 793 grupos deduplicados (17.634 registros).
+
+---
+
+### 32.6. Ordem após novo scraping
+
+```bash
+cd leilao-scraper/leilao-scraper
+python corrigir_cidades.py --todos       # 1. mojibake
+python corrigir_cidades.py --deduplicar  # 2. duplicatas
+python corrigir_cidades.py --listar      # 3. verificar
+```
+
+> `--deduplicar` deve rodar **depois** de `--todos` — mojibake ainda presente não agrupa com o nome correto.
+
+---
+
+### 32.7. Diagnóstico rápido do filtro de cidades
+
+```bash
+curl "http://localhost:8000/api/v1/imoveis/cidades?q=Flori"
+docker ps --format "table {{.Names}}\t{{.Ports}}"
+docker exec leilao_postgres psql -U leilao -d leilao_db \
+  -c "SELECT cidade, COUNT(*) FROM imoveis WHERE cidade ILIKE '%florian%' GROUP BY cidade;"
+docker exec leilao_postgres psql -U leilao -d leilao_db \
+  -c "SELECT to_regclass('public.municipios_ibge'), extname FROM pg_extension WHERE extname='unaccent';"
+```
+
+---
+
+## 33. Scraping JUCESC — Leiloeiros Regulares de SC (jun/2026)
+
+Coleta em `https://leiloeiros.jucesc.sc.gov.br/site/` — portal oficial de leiloeiros do Estado de SC.
+Scripts: `scraper_jucesc.py` + `importar_jucesc.py`.
+
+### 33.1. Resultado da coleta
+
+| Métrica | Valor |
+|---|---|
+| Leiloeiros REGULAR na JUCESC (oficial) | 198 |
+| Leiloeiros no CSV FENAJU (SC) | 118 |
+| Total merged (deduplicated) | 207 |
+| Leiloeiros com site identificado | 72 |
+| Leiloeiros sem site (só e-mail) | 135 |
+| Sites visitados | 72 |
+| Imóveis coletados (bruto) | 707 |
+| Imóveis classificados como IMOVEL/ABERTO | 367 |
+| Sites com imóveis | 30 |
+| Sites sem leilão ativo | 42 |
+| Sites com erro | 0 |
+| CSV leiloeiros | `csv/leiloeiros_jucesc_2026-06-03.csv` |
+| CSV imóveis | `csv/imoveis_jucesc_2026-06-03.csv` |
+
+### 33.2. Distribuição por leiloeiro (com imóveis)
+
+| Leiloeiro | Imóveis (bruto) | Imóveis (classificados) |
+|---|---|---|
+| Ulisses Donizete Ramos | 63 | — |
+| Giovanni Silva Wersdoefer | 46 | 16 |
+| Daniel Elias Garcia | 45 | 38 |
+| Guilherme Antônio Scarpari De Lucca | 42 | 15 |
+| Vicente Alves Pereira Neto | 35 | 15 |
+| Rodrigo Schmitz | 35 | 16 |
+| José Sergio Della Giustina | 32 | 26 |
+| Júlio Ramos Luz | 30 | — |
+| Fábio Marlon Machado | 29 | 20 |
+| Giovano Ávila Alves | 28 | 15 |
+| Marinilce Viana Quadrado | 26 | 13 |
+| Andrea Baldissera | 26 | 22 |
+| Jean Fernando Ribeiro Pavesi | 25 | 8 |
+| Marciano Mauro Pagliarini | 23 | 22 |
+| Odilson Fumagalli Avila | 23 | 14 |
+| Andréia Cristina Nunes | 20 | 9 |
+| Alex Willian Hoppe | 19 | 19 |
+| Guilherme E. Stutz Toporoski | 19 | 15 |
+| César Luis Moresco | 18 | 16 |
+| Sandro Luis De Souza | 17 | — |
+
+### 33.3. Principais dificuldades encontradas
+
+#### 33.3.1. JUCESC não expõe URL dos leiloeiros
+
+**Problema:** O portal lista apenas AARC, Nome, Data de Matrícula e Situação — sem site, e-mail ou telefone.
+
+**Solução aplicada:** Cruzamento com `leiloeiros_regulares.csv` (FENAJU) + derivação do site pelo domínio do e-mail.
+
+**Solução recomendada:**
+```python
+def descobrir_site_por_email(email: str) -> str | None:
+    ignorados = {"gmail.com","hotmail.com","yahoo.com","outlook.com","terra.com.br"}
+    m = re.search(r"@([a-z0-9\-]+\.[a-z\.]+)", email.lower())
+    if not m or m.group(1) in ignorados: return None
+    return f"https://www.{m.group(1)}"
+```
+
+#### 33.3.2. JUCESC SSL com certificado inválido
+
+**Problema:** `requests` falha com `SSLError` ao acessar `leiloeiros.jucesc.sc.gov.br`.
+
+**Solução aplicada:** `verify=False` + `urllib3.disable_warnings()`.
+
+**Solução recomendada:** Instalar `pip install --upgrade certifi` ou usar `requests.Session` com bundle personalizado.
+
+#### 33.3.3. Alta proporção sem site próprio (~135/207)
+
+**Problema:** Maioria dos leiloeiros JUCESC atua via plataformas terceiras ou só presencialmente.
+
+**Solução recomendada:** Rastrear por nome em `leiloesjudiciais.com.br/leiloeiro/{slug}` e `leilaoimovel.com.br`.
+
+#### 33.3.4. Scraper captura não-imóveis (veículos, máquinas)
+
+**Problema:** O `is_imovel()` com filtro por palavras-chave não é 100% preciso. 707 itens brutos → 367 classificados como imóvel (48% de precisão).
+
+**Causa:** Leiloeiros SC atuam em leilões mistos (imóveis + veículos + equipamentos).
+
+**Solução aplicada:** Classifier do pipeline (`run.py classificar`) filtra pela `categoria` correta.
+
+**Solução recomendada:** Melhorar `is_imovel()` com lista negra mais agressiva e threshold de confiança.
+
+#### 33.3.5. Datas inválidas geradas pelo parser
+
+**Problema:** Regex de datas capturou strings como `2023-24-25` (dia/mês invertidos) causando erros no PostgreSQL.
+
+**Solução aplicada:** Função `valid_date()` com `datetime.date()` para validar antes de inserir.
+
+```python
+def valid_date(s):
+    m = re.match(r"^(\d{4})-(\d{2})-(\d{2})", (s or "").strip())
+    if m:
+        try: datetime.date(int(m.group(1)), int(m.group(2)), int(m.group(3))); return m.group(0)
+        except ValueError: return None
+    return None
+```
+
+#### 33.3.6. Valores invertidos (avaliação < mínimo)
+
+**Problema:** O scraper pega o 1º e 2º R$ do texto — às vezes a avaliação aparece antes do mínimo, gerando `valor_avaliacao < valor_minimo`.
+
+**Solução aplicada:**
+```sql
+UPDATE imoveis SET valor_avaliacao = NULL
+WHERE fonte_id = 943 AND valor_avaliacao < valor_minimo;
+```
+
+#### 33.3.7. SQL muito longo para Windows (`WinError 206`)
+
+**Problema:** `docker exec ... psql -c "INSERT ... VALUES (...)"` com registros grandes ultrapassa o limite de comprimento de argumento do Windows (~32.767 chars).
+
+**Solução aplicada:** Copiar CSV + script Python para dentro do container e executar lá:
+```bash
+docker cp imoveis_jucesc.csv leilao_api:/tmp/imoveis_jucesc.csv
+docker cp import_script.py   leilao_api:/tmp/import_script.py
+docker exec leilao_api python /tmp/import_script.py
+```
+
+### 33.4. Ordem de execução
+
+```bash
+cd C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes
+
+# 1. Scraping
+python scraper_jucesc.py
+
+# 2. Importação
+python importar_jucesc.py
+
+# 3. Pós-processamento
+docker exec leilao_api bash -c "cd /app && python run.py classificar --limite 2000"
+docker exec leilao_api bash -c "cd /app && python run.py normalizar-cidades"
+docker exec leilao_api bash -c "cd /app && python run.py deduplicar"
+
+# 4. Correção de cidades SC
+cd ..\leilao-scraper\leilao-scraper
+python corrigir_cidades.py --todos
+python corrigir_cidades.py --deduplicar
+
+docker restart leilao_api
+```
+
+### 33.5. Arquivos criados
+
+```
+leiloes/
+├── scraper_jucesc.py                     ← scraper (Playwright + requests)
+├── importar_jucesc.py                    ← importador CSV → SQLite + PostgreSQL
+├── scraper_jucesc.log                    ← log completo
+├── scraper_jucesc_progress.json          ← progresso retomável
+└── csv/
+    ├── leiloeiros_jucesc_2026-06-03.csv  ← 207 leiloeiros (nome, site, email)
+    └── imoveis_jucesc_2026-06-03.csv     ← 707 imóveis coletados
+```
+
+### 33.6. Checklist de execução
+
+- [x] JUCESC oficial consultada: 198 leiloeiros REGULAR
+- [x] CSV FENAJU cruzado: 207 leiloeiros merged
+- [x] CSV leiloeiros gerado: `csv/leiloeiros_jucesc_2026-06-03.csv`
+- [x] 72 sites visitados via Playwright/requests
+- [x] 707 imóveis coletados → `csv/imoveis_jucesc_2026-06-03.csv`
+- [x] 707 inseridos no SQLite (`imoveis_leiloeiros.db`)
+- [x] 707 inseridos no PostgreSQL Docker
+- [x] Classifier rodado: 367 classificados como IMOVEL/ABERTO
+- [x] `normalizar-cidades` aplicado (406 cidades SC corrigidas)
+- [x] `deduplicar` aplicado
+- [x] API reiniciada
+
+---
+
+## 34. Scraping JUCEMS — Leiloeiros Regulares do MS (jun/2026)
+
+Coleta de imóveis dos leiloeiros credenciados pela **JUCEMS** (Junta Comercial do Estado de Mato Grosso do Sul).
+Fontes: arquivo `.txt` oficial da JUCEMS + `https://www.jucems.ms.gov.br/empresas/controles-especiais/agentes-auxiliares/leiloeiros/`.
+Scripts: `scraper_jucems.py` + `importar_jucems.py` + `import_jucems_docker.py`.
+
+### 34.1. Resultado da coleta
+
+| Métrica | Valor |
+|---|---|
+| Leiloeiros Regular no arquivo TXT | 55 |
+| Leiloeiros Regular do site JUCEMS | 80 |
+| Total merged (deduplicado por nome) | 60 |
+| Leiloeiros com site identificado | 49 |
+| Leiloeiros sem site | 11 |
+| Sites processados | 49 |
+| Sites com imóveis ativos | 36 |
+| Sites sem leilão ativo | 13 |
+| Sites offline/DNS inválido | 2 |
+| Total imóveis coletados (bruto) | 593 |
+| Inseridos no SQLite | 514 |
+| Inseridos no PostgreSQL | 593 |
+| Tempo total de scraping | ~45 min |
+| CSV leiloeiros | `csv/leiloeiros_jucems_2026-06-08.csv` |
+| CSV imóveis | `csv/imoveis_jucems_2026-06-08.csv` |
+
+### 34.2. Distribuição por leiloeiro (top 20)
+
+| Leiloeiro | Site | Imóveis |
+|---|---|---|
+| LUCAS ANDREATTA DE OLIVEIRA | leiloariasmart.com.br | 47 |
+| RODRIGO APARECIDO RIGOLON DA SILVA | rigolonleiloes.com.br | 31 |
+| VLADMIR OLIANI | leiloesaguiar.com.br | 30 |
+| CONCEIÇÃO MARIA FIXER | mariafixerleiloes.com.br | 27 |
+| BRUNO BARRETO SANCHES | barretoleiloes.com.br | 19 |
+| APARECIDA MARIA FIXER | cidafixerleiloes.com.br | 16 |
+| MARCELO CARNEIRO BERNARDELLI | marcaleiloes.com.br | 14 |
+| IGOR ALEXANDRE DE SOUZA SILVA | desouzaleiloes.com.br | 12 |
+| DAVI BORGES DE AQUINO | alfaleiloes.com | 11 |
+| FLARES AGUIAR DA SILVA | faleiloes.com.br | 10 |
+| ALGLECIO BUENO DA SILVA | leiloesgoias.com.br | 10 |
+| PATRICIA PIMENTEL GROCOSKI COSTA | pimentelleiloes.com.br | 10 |
+| LETICIA DE ANDRADE VERRONE | ricoleiloes.com.br | 8 |
+| CARLO FERRARI | carloferrarileiloes.com.br | 8 |
+| FERNANDO JOSE CERELLO GONÇALVES PEREIRA | megaleiloes.com.br | 8 |
+| ELTON LUIZ SIMON | simonleiloes.com.br | 8 |
+| CECILIA DELZEIR SOBRINHO | ceciliadelzeirleiloes.com.br | 8 |
+| TARCILIO LEITE | casadeleiloes.com.br | 5 |
+| FABIO MARLON MACHADO | machadoleiloeiro.com.br | 5 |
+| RODRIGO SCHMITZ | hammer.lel.br | 5 |
+
+### 34.3. Principais dificuldades enfrentadas
+
+#### 34.3.1. Arquivo .txt com encoding corrompido (U+FFFD)
+
+**Problema:** O arquivo `.txt` da JUCEMS, ao ser processado, continha caracteres
+substituídos (U+FFFD, `�`) em vez de acentos como `í`, `ç`, `ã`. Por exemplo:
+`Matrícula: 003` chegava como `Matr�cula: 003`.
+
+**Causa:** O arquivo original do usuário foi gerado com encoding misto (provavelmente
+copiado de PDF → texto), e durante a transmissão/armazenamento os bytes inválidos
+foram substituídos pelo caractere de reposição Unicode.
+
+**Impacto:** O parser inicial usava `r"Matr[íi]cula\s*:\s*(\d+)"` que não capta
+o caractere U+FFFD, resultando em 0 registros com matrícula.
+
+**Solução aplicada:** Reescrever o parser linha a linha usando `.` (qualquer caractere)
+em vez de acentos específicos:
+
+```python
+# ERRADO — não casa U+FFFD
+mat_m = re.search(r"Matr[íi]cula\s*:\s*(\d+)", bloco)
+
+# CORRETO — . casa qualquer caractere, incluindo U+FFFD
+mat_m = re.search(r"Matr.cula\s*:\s*(\d+)", bloco, re.IGNORECASE)
+```
+
+**Regra geral:** para parsear arquivos .txt de origem PDF/copiar-e-colar, usar `.`
+(ou `[^\s:]`) em posições de acentos. Nunca assumir que acentos chegam íntegros.
+
+**Como corrigir proativamente:** salvar o arquivo com encoding explícito UTF-8 limpo
+antes de parsear:
+```python
+# Reescreve arquivo sem replacement chars
+txt = Path("arquivo.txt").read_bytes()
+txt_clean = txt.decode("utf-8", errors="replace")  # já os substitui por ?
+# Alternativa: tentar múltiplos encodings
+for enc in ["utf-8", "cp1252", "latin-1"]:
+    try:
+        txt_clean = txt.decode(enc, errors="strict")
+        break
+    except UnicodeDecodeError:
+        continue
+```
+
+---
+
+#### 34.3.2. Parser de nome falhando com regex de maiúsculas
+
+**Problema:** O parser original usava `re.match(r"^[A-ZÁÉÍÓÚÀÂÊÔÃÕÜÇ\s]{5,}$", linha)`
+para identificar nomes de leiloeiros (totalmente em maiúsculas). Com U+FFFD presente,
+nomes como `CONCEIÇÃO MARIA FIXER` chegavam como `CONCEI��O MARIA FIXER` e
+não casavam o padrão.
+
+**Solução aplicada:** Substituir regex de charset por verificação de proporção de
+maiúsculas (>= 70% do texto é letra maiúscula):
+
+```python
+# ERRADO — charset com acentos não cobre U+FFFD
+if re.match(r"^[A-ZÁÉÍÓÚÀÂÊÔÃÕÜÇ\s]{5,}$", linha)
+
+# CORRETO — proporção de maiúsculas é agnóstica ao encoding
+letras = [c for c in linha if c.isalpha()]
+if letras and sum(1 for c in letras if c.isupper()) / len(letras) >= 0.7:
+    nome = linha  # linha é um nome
+```
+
+---
+
+#### 34.3.3. Enums PostgreSQL em MAIÚSCULAS
+
+**Problema:** O scraper enviava valores lowercase (`'outro'`, `'extrajudicial'`) para
+campos enum do PostgreSQL, que exigem **maiúsculas** (`'OUTRO'`, `'EXTRAJUDICIAL'`).
+
+```
+ERROR: invalid input value for enum tipoimovel: "outro"
+```
+
+**Causa:** Inconsistência entre a lógica Python (que valida com `TIPOS_IMOVEL_VALIDOS`
+em minúsculas) e os enums criados no banco com uppercase.
+
+**Solução:** Sempre fazer `.upper()` antes de inserir em campo enum:
+
+```python
+TIPOS_IMOVEL_VALIDOS = {"APARTAMENTO","CASA","TERRENO","COMERCIAL","RURAL","GALPAO","SALA","VAGA","OUTRO"}
+tipo_i = r.get("tipo_imovel","outro").upper()
+if tipo_i not in TIPOS_IMOVEL_VALIDOS: tipo_i = "OUTRO"
+```
+
+**Como verificar os valores aceitos:**
+```sql
+SELECT enumlabel FROM pg_enum
+JOIN pg_type ON pg_enum.enumtypid = pg_type.oid
+WHERE pg_type.typname = 'tipoimovel';
+```
+
+---
+
+#### 34.3.4. WinError 206 — SQL muito longo para subprocess no Windows
+
+**Problema:** O importador gerava um SQL `INSERT ... VALUES (...)` com 50 linhas
+em lote e passava via `docker exec ... psql -c "INSERT ..."`. No Windows, o limite
+de comprimento de argumento de processo (~32.767 chars) era ultrapassado:
+
+```
+[WinError 206] O nome do arquivo ou a extensão é muito grande
+```
+
+**Impacto:** 593/593 imóveis falharam na importação para o PostgreSQL.
+
+**Causa:** O campo `arquivos` (JSON com até 4000 chars) e `descricao` (500 chars)
+tornavam cada linha do VALUES muito longa. Com 50 linhas por lote, o SQL ultrapassava
+o limite da linha de comando.
+
+**Solução:** Copiar CSV e script Python para dentro do container e executar lá,
+usando `psycopg2` em vez de passar SQL como argumento do `docker exec`:
+
+```powershell
+# 1. Copiar arquivos para o container
+docker cp csv/imoveis_jucems.csv leilao_api:/tmp/imoveis_jucems.csv
+docker cp import_jucems_docker.py leilao_api:/tmp/import_jucems_docker.py
+
+# 2. Executar dentro do container (sem limite de argumento)
+docker exec leilao_api python /tmp/import_jucems_docker.py
+```
+
+O script `import_jucems_docker.py` usa `psycopg2.connect(db_url)` onde
+`db_url = os.environ.get("DATABASE_URL_SYNC")` — disponível no container.
+
+**Regra:** qualquer INSERT com campos `TEXT` longos (>500 chars/row) deve usar
+este padrão. Para lotes de até 50 linhas com campos curtos (como leiloeiros),
+o `psql -c` ainda funciona.
+
+---
+
+#### 34.3.5. `sys.stdout.reconfigure` quebrando log por arquivo
+
+**Problema:** O scraper foi iniciado com:
+```powershell
+Start-Process python -ArgumentList "scraper_jucems.py" `
+  -RedirectStandardOutput scraper_jucems_out.txt
+```
+O arquivo `scraper_jucems_out.txt` ficou com 0 bytes durante toda a execução.
+
+**Causa:** O script usa `sys.stdout.reconfigure(encoding="utf-8")` logo no início,
+que substitui o objeto stdout pelo wrapper UTF-8. Esse wrapper perde a referência
+ao file descriptor do redirecionamento original, quebrando o fluxo para arquivo.
+
+**Solução aplicada:** Monitorar via `scraper_jucems_progress.json` (escrito a cada
+lote) e via `scraper_jucems.log` (append com `open()` direto no código):
+
+```python
+# Em vez de depender do stdout rediirecionado:
+def log(msg: str):
+    print(msg)  # pode falhar se stdout redirecionado
+    with open(LOG_FILE, "a", encoding="utf-8") as f:
+        f.write(msg + "\n")  # sempre funciona
+```
+
+```powershell
+# Monitorar progresso pelo JSON, não pelo log stdout
+$prog = Get-Content scraper_jucems_progress.json | ConvertFrom-Json
+Write-Host "Total: $($prog.total_imoveis) | OK: $($prog.sites_ok)"
+```
+
+---
+
+#### 34.3.6. Sites offline e DNS inválido
+
+**Problema:** Dois sites retornaram erro de DNS (`NameResolutionError`):
+- `britoleiloes.com.br` — domínio inexistente/expirado
+- `ericoleiloes.com.br` — domínio inexistente/expirado
+- `mikedutraleiloeiro.com.br` — domínio inexistente/expirado
+- `kronbergleiloes.com.br` — timeout de conexão
+
+**Impacto:** Esses sites foram marcados como `sem_leilao` e nenhum imóvel
+foi coletado deles.
+
+**Solução recomendada:** Pré-filtrar domínios antes do scraping principal:
+
+```python
+import socket
+def dominio_ativo(url: str, timeout: float = 5.0) -> bool:
+    try:
+        host = urlparse(url).netloc
+        socket.setdefaulttimeout(timeout)
+        socket.gethostbyname(host)
+        return True
+    except (socket.gaierror, OSError):
+        return False
+
+# Filtrar lista antes de scraping
+leiloeiros_ativos = [l for l in leiloeiros if not l["site"] or dominio_ativo(l["site"])]
+```
+
+---
+
+#### 34.3.7. Leiloeiros JUCEMS com endereço em outro estado
+
+**Problema:** A JUCEMS credencia leiloeiros que operam em MS mas têm endereço
+em outros estados (SP, PR, MG, GO, SC, MT, RO, PI). O scraper tentava extrair
+a UF do lote usando a UF do leiloeiro como fallback (`uf_leiloeiro = "MS"`),
+mas muitos imóveis eram de SP, GO, PR, etc.
+
+**Exemplo:** `LUCAS ANDREATTA DE OLIVEIRA` (São Paulo/SP, credenciado MS) tinha
+91 imóveis — todos em estados variados.
+
+**Impacto:** Campo `estado` de vários imóveis ficou como `"MS"` incorretamente.
+
+**Solução aplicada:** Manter o fallback mas extrair UF do texto do lote primeiro:
+
+```python
+uf_m = RE_UF.search(texto)
+uf = uf_m.group() if uf_m else lei.get("uf_leiloeiro", "MS")
+```
+
+**Solução recomendada:** Usar geocoding pelo endereço completo após inserção:
+```bash
+docker exec leilao_api bash -c "cd /app && python run.py geocodificar --limite 500"
+```
+
+---
+
+#### 34.3.8. Alta taxa de deduplicação (54% de duplicatas)
+
+**Problema:** De 593 imóveis brutos, 320 foram marcados como duplicatas
+(124 por URL exata + 196 por título+local), resultando em apenas 327 únicos.
+
+**Causa:** O mesmo site é visitado duas vezes quando leiloeiros compartilham o
+mesmo site (ex.: `ibecleiloes.com.br` para HELDER FIGUEIREDO + LUIZ FRANGE;
+`megaleiloes.com.br/ms` para MILENA ROSA + FERNANDO CERELLO).
+
+**Solução aplicada no scraper:** Deduplica sites antes de visitar:
+```python
+sites_vistos = set()
+leiloeiros_unicos = []
+for l in todos:
+    site = l.get("site","").rstrip("/")
+    if site and site not in sites_vistos:
+        sites_vistos.add(site)
+        leiloeiros_unicos.append(l)
+```
+
+**Solução recomendada:** No CSV de entrada, consolidar leiloeiros com site
+compartilhado em uma única entrada.
+
+---
+
+### 34.4. Ordem de execução
+
+```powershell
+cd "C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes"
+
+# 1. Scraping (usa TXT + site JUCEMS)
+python scraper_jucems.py --max-paginas 8
+
+# 2. Importação SQLite (incluída no scraper automaticamente)
+# — SQLite já é importado ao final do scraping
+
+# 3. Importação PostgreSQL (via Docker — contorna WinError 206)
+docker cp csv/imoveis_jucems_<data>.csv leilao_api:/tmp/imoveis_jucems.csv
+docker cp import_jucems_docker.py leilao_api:/tmp/import_jucems_docker.py
+docker exec leilao_api python /tmp/import_jucems_docker.py
+
+# 4. Pós-processamento
+docker exec leilao_api bash -c "cd /app && python run.py classificar --limite 2000"
+docker exec leilao_api bash -c "cd /app && python run.py normalizar-cidades"
+docker exec leilao_api bash -c "cd /app && python run.py deduplicar"
+docker restart leilao_api
+```
+
+### 34.5. Arquivos criados nesta sessão
+
+```
+leiloes/
+├── scraper_jucems.py              ← scraper principal (requests + Playwright fallback)
+├── importar_jucems.py             ← importador CSV → SQLite + PostgreSQL (via psql)
+├── import_jucems_docker.py        ← importador via psycopg2 dentro do container
+├── jucems_leiloeiros.txt          ← TXT oficial da JUCEMS salvo em disco
+├── scraper_jucems.log             ← log completo da execução
+├── scraper_jucems_progress.json   ← progresso em tempo real
+└── csv/
+    ├── leiloeiros_jucems_2026-06-08.csv  ← 60 leiloeiros (nome, site, email)
+    └── imoveis_jucems_2026-06-08.csv     ← 593 imóveis coletados
+```
+
+### 34.6. Checklist de execução
+
+- [x] TXT da JUCEMS salvo em disco: `jucems_leiloeiros.txt`
+- [x] 55 leiloeiros Regular parseados do TXT
+- [x] 60 leiloeiros merged com site JUCEMS online
+- [x] 49 sites únicos identificados
+- [x] CSV leiloeiros gerado: `csv/leiloeiros_jucems_2026-06-08.csv`
+- [x] 593 imóveis coletados → `csv/imoveis_jucems_2026-06-08.csv`
+- [x] SQLite: 514 inseridos (79 já existiam de scraping anterior)
+- [x] PostgreSQL: 593 inseridos via `import_jucems_docker.py`
+- [x] Classifier rodado: 590 classificados
+- [x] `normalizar-cidades` aplicado
+- [x] `deduplicar` aplicado: 327 únicos ativos
+- [x] API reiniciada
+- [ ] Geocodificar imóveis com estado incorreto
+- [ ] Pré-filtrar domínios offline antes de próxima execução

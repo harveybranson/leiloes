@@ -5743,3 +5743,205 @@ Adicionar ao final do checklist de qualquer seção de scraping deste documento:
 3. Rodar `python run.py deduplicar` para remover duplicatas.
 4. Rodar `python run.py baixar-docs --limite 200` para baixar PDFs (editais/matrículas).
 5. Agendar re-scraping semanal com `CronCreate` para manter base atualizada.
+
+
+---
+
+## Sessão de Scraping JUCEPAR — 2026-06-08
+
+### Resumo
+- **Duração:** 2h 15m 18s
+- **Total imóveis coletados:** 2004
+- **Sites com resultados:** 82
+- **Sites sem leilão ativo:** 28
+- **Sites com erro:** 0
+
+### Imóveis por leiloeiro
+
+| Leiloeiro | Imóveis |
+|-----------|---------|
+| JEFFERSON ADRIANO DA COSTA | 223 |
+| MURILO PAES LOPES LOURENÇO | 210 |
+| RAFAEL CERETTA ALEGRANZZI | 137 |
+| GIANCARLO PETERLONGO LORENZINI MENEGOTTO | 123 |
+| DANIEL ELIAS GARCIA | 68 |
+| ANA CAROLINA ZANINETTI ROSA | 62 |
+| CATIELE BORGES LEFFA | 57 |
+| DIEGO COSTA MULLER | 51 |
+| EDUARDO JESUS BORDIGNON | 51 |
+| GIORDANO BRUNO COAN AMADOR | 47 |
+| PAULO ROBERTO NAKAKOGUE | 41 |
+| LUIZ EGIDIO CRUZ MEDEIROS | 40 |
+| RENATO SCHLOBACH MOYSÉS | 40 |
+| FABIO MARLON MACHADO | 39 |
+| RODRIGO APARECIDO RIGOLON DA SILVA | 36 |
+| JONEY MARCELO LOPES FERREIRA | 34 |
+| JOACIR MONZON POUEY | 33 |
+| PATRÍCIA PIMENTEL GROCOSKI COSTA | 32 |
+| CAMILA PADILHA PRESOTTO | 29 |
+| LUIZ CARLOS DALL'AGNOL | 29 |
+| JOÃO VITOR MARTINS FERREIRA | 28 |
+| JORGE MARCO AURELIO BIAVATI | 28 |
+| CLEVER ELMES MILANI | 26 |
+| RAFAEL GALVANI FERREIRA | 26 |
+| ANTONIO MAGNO JACOB DA ROCHA | 24 |
+| DIEGO WOLF DE OLIVEIRA | 24 |
+| JOSE FERNANDO DE QUINA | 23 |
+| EDUARDO SCHMITZ | 22 |
+| FÁBIO GONÇALVES BARBOSA | 21 |
+| JAQUELINE SPERANÇA | 21 |
+| ARTUR NOGARI DOS SANTOS | 20 |
+| CAROLINE DE SOUSA RIBAS | 20 |
+| DANIEL OLIVEIRA JUNIOR | 20 |
+| RUDIVAL ALMEIDA GOMES JUNIOR | 20 |
+| BRUNO BARRETO SANCHES | 19 |
+| ALEX WILLIAN HOPPE | 18 |
+| APARECIDA MARIA FIXER | 18 |
+| JORGE VITORIO ESPOLADOR | 14 |
+| JOSECELLI KILDARE FRAGA GOMES | 14 |
+| HELTON ROGERIO VERRI VENTRILHO | 13 |
+| DAVI BORGES DE AQUINO | 12 |
+| SPENCER D'AVILA FOGAGNOLI | 12 |
+| BRUNO HENRIQUE LOPES | 11 |
+| GILSON KENITI INUMARU | 11 |
+| JOÃO LUIZ DE OLIVEIRA | 11 |
+| LEONICE FIXER | 11 |
+| MARIA FILOMENA PLANAS SERRANO | 11 |
+| GELSON BOURSCHIET | 10 |
+| JAIR VICENTE MARTINS | 10 |
+| ELTON LUIZ SIMON | 9 |
+| CONRADO AUGUSTO CARVALHO DE MAGALHÃES | 8 |
+| CRISTIANE BORGUETTI MORAES LOPES | 8 |
+| LEVY DOS SANTOS MORAES FILHO | 7 |
+| ALEXANDRE AUGUSTO DOS SANTOS SABBAG | 6 |
+| DEYSE SCHEERER PIETNOZKA KULTZ | 6 |
+| PAULO SETSUO NAKAKOGUE | 6 |
+| ADYEL MARQUES DE PAULA | 5 |
+| RAFAEL DANIELEWICZ | 5 |
+| LUCAS EDUARDO DALCANALE | 4 |
+| LUIZ FERNANDO FAVARETO | 4 |
+| MARCOS ANTÔNIO TULIO | 4 |
+| CAROLINE FERREIRA BARBOZA | 3 |
+| DORA PLAT | 3 |
+| ADALBERTO SCHERER FILHO | 2 |
+| GALVÃO ADENYR LOPES JUNIOR | 2 |
+| LELIA MARIA DE PAULA LENZ CESAR | 2 |
+| PEDRO LERNER KRONBERG | 2 |
+| POLIANA MIKEJEVS CALÇA | 2 |
+| VANESSA GOELZER DE ARAÚJO VARGAS E PINTO | 2 |
+| WERNO KLÖCKNER JÚNIOR | 2 |
+| CLAUDIO CESAR KUSS | 1 |
+| ERICK SOARES TELES | 1 |
+| FERNANDO CAETANO MOREIRA FILHO | 1 |
+| FERNANDO DE OLIVEIRA KUSS | 1 |
+| JONAS GABRIEL ANTUNES MOREIRA | 1 |
+| JOYCE RIBEIRO | 1 |
+| JUNIOR CESAR DA SILVA | 1 |
+| LUCAS RAFAEL ANTUNES MOREIRA | 1 |
+| LUIZ BARBOSA DE LIMA JUNIOR | 1 |
+| MARILAINE BORGES DE PAULA | 1 |
+| MAURICIO SAMBUGARI APPOLINARIO | 1 |
+| NEWTON JORGE GONÇALVES DE OLIVEIRA | 1 |
+| ADRIANO MELNISKI | 0 |
+| ALEX SANDRO VIEIRA FELIX | 0 |
+| ARTHUR FERREIRA NUNES | 0 |
+| AUGUSTO PARMEGGIANI PESTANA M. GOMES | 0 |
+| BEATRIZ SILVA CARVALHO | 0 |
+| CAMILA DE MOURA GAIA PELLISSARI | 0 |
+| CATIA FERNANDA ALIEVI TOPOROSKI | 0 |
+| DANIEL RIBAS ROSA FRAHM | 0 |
+| FLAVIA KLOCKNER RODRIGUES | 0 |
+| GILBERTO RUIZ GUILHEN | 0 |
+| GUILHERME EDUARDO STUTZ TOPOROSKI | 0 |
+| GUSTAVO MORETTO GUIMARÃES DE OLIVEIRA | 0 |
+| HELCIO KRONBERG | 0 |
+| HELOÍSE SANTI LOCATELLI | 0 |
+| ISABELLA KATARINA SCHACKER PERACCHI | 0 |
+| JAQUELINE CHRISTIANNI STRYK VARDANA | 0 |
+| JEREMY WU SANTIAGO DA COSTA E SILVA | 0 |
+| LUIZ RAFAEL LEMUCHI DE LIMA | 0 |
+| MARCELO SOARES DE OLIVEIRA | 0 |
+| MARCIANO MAURO PAGLIARINI | 0 |
+| MIGUEL DONHA JUNIOR | 0 |
+| NICOLAS TADASHI MATSUNE | 0 |
+| OTAVIO LAURO SODRE SANTORO | 0 |
+| PLINIO BARROSO DE CASTRO FILHO | 0 |
+| RAIMUNDO MAGALHAES DE MORAES | 0 |
+| RICARDO FERREIRA GOMES | 0 |
+| RUBENS HENRIQUE DE CASTRO | 0 |
+| SIDNEY BELARMINO FERREIRA JUNIOR | 0 |
+
+### Principais Dificuldades Encontradas
+
+#### Sites SPA/JavaScript (JS-heavy) (28 sites)
+**Causa:** Site renderiza conteúdo via JavaScript — usa Playwright automaticamente
+
+Sites afetados:
+- `https://www.schererleiloes.com.br` (ADALBERTO SCHERER FILHO): SPA detectado — usando Playwright
+- `https://www.amleiloeiro.com.br` (ADRIANO MELNISKI): SPA detectado — usando Playwright
+- `https://www.alleiloes.com.br` (ALEX SANDRO VIEIRA FELIX): SPA detectado — usando Playwright
+- `https://www.hoppeleiloes.com.br` (ALEX WILLIAN HOPPE): SPA detectado — usando Playwright
+- `https://www.barretoleiloes.com.br` (BRUNO BARRETO SANCHES): SPA detectado — usando Playwright
+- `https://www.presottoleiloes.com.br` (CAMILA PADILHA PRESOTTO): SPA detectado — usando Playwright
+- `https://www.bzleiloes.com.br` (CAROLINE FERREIRA BARBOZA): SPA detectado — usando Playwright
+- `https://www.aleiloeira.leilao.br` (CATIA FERNANDA ALIEVI TOPOROSKI): SPA detectado — usando Playwright
+- `https://www.milanileiloes.com.br` (CLEVER ELMES MILANI): SPA detectado — usando Playwright
+- `https://www.topoleiloes.com.br` (GUILHERME EDUARDO STUTZ TOPOROSKI): SPA detectado — usando Playwright
+- ... e mais 18 sites
+
+#### Sem lotes/imóveis ativos (26 sites)
+**Causa:** Leiloeiro sem leilão em andamento no momento do scraping
+
+Sites afetados:
+- `https://www.amleiloeiro.com.br` (ADRIANO MELNISKI): Nenhum lote/imóvel encontrado mesmo com Playwright
+- `https://www.alleiloes.com.br` (ALEX SANDRO VIEIRA FELIX): Nenhum lote/imóvel encontrado mesmo com Playwright
+- `https://www.arthurnunesleiloes.com.br` (ARTHUR FERREIRA NUNES): Nenhum lote/imóvel encontrado mesmo com Playwright
+- `https://www.grupocarvalholeiloes.com.br` (BEATRIZ SILVA CARVALHO): Nenhum lote/imóvel encontrado mesmo com Playwright
+- `https://www.camilagaialeiloes.com.br` (CAMILA DE MOURA GAIA PELLISSARI): Nenhum lote/imóvel encontrado mesmo com Playwright
+- `https://www.aleiloeira.leilao.br` (CATIA FERNANDA ALIEVI TOPOROSKI): Nenhum lote/imóvel encontrado mesmo com Playwright
+- `https://www.fkleiloes.com.br` (FLAVIA KLOCKNER RODRIGUES): Nenhum lote/imóvel encontrado mesmo com Playwright
+- `https://www.ggleiloes.com.br` (GILBERTO RUIZ GUILHEN): Nenhum lote/imóvel encontrado mesmo com Playwright
+- `https://www.topoleiloes.com.br` (GUILHERME EDUARDO STUTZ TOPOROSKI): Nenhum lote/imóvel encontrado mesmo com Playwright
+- `https://www.gustavomorettoleiloeiro.com.br` (GUSTAVO MORETTO GUIMARÃES DE OLIVEIRA): Nenhum lote/imóvel encontrado mesmo com Playwright
+- ... e mais 16 sites
+
+#### HTTP retorna 0 lotes mas Playwright encontra (18 sites)
+**Causa:** Anti-bot básico contra requests Python — Playwright contorna
+
+Sites afetados:
+- `https://www.rochaleiloes.com.br` (ANTONIO MAGNO JACOB DA ROCHA): HTTP retornou 0 lotes, Playwright encontrou 24
+- `https://www.cidafixerleiloes.com.br` (APARECIDA MARIA FIXER): HTTP retornou 0 lotes, Playwright encontrou 18
+- `https://www.brunoleiloes.com.br` (BRUNO HENRIQUE LOPES): HTTP retornou 0 lotes, Playwright encontrou 11
+- `https://www.doleiloes.com.br` (DANIEL OLIVEIRA JUNIOR): HTTP retornou 0 lotes, Playwright encontrou 20
+- `https://www.teza.com.br` (ERICK SOARES TELES): HTTP retornou 0 lotes, Playwright encontrou 1
+- `https://www.fabiobarbosaleiloes.com.br` (FÁBIO GONÇALVES BARBOSA): HTTP retornou 0 lotes, Playwright encontrou 21
+- `https://www.gilsonleiloes.com.br` (GILSON KENITI INUMARU): HTTP retornou 0 lotes, Playwright encontrou 11
+- `https://www.giordanoleiloes.com.br` (GIORDANO BRUNO COAN AMADOR): HTTP retornou 0 lotes, Playwright encontrou 47
+- `https://www.verrileiloes.com.br` (HELTON ROGERIO VERRI VENTRILHO): HTTP retornou 0 lotes, Playwright encontrou 13
+- `https://www.jsilvaleiloes.com.br` (JUNIOR CESAR DA SILVA): HTTP retornou 0 lotes, Playwright encontrou 1
+- ... e mais 8 sites
+
+#### Sites com bloqueio 403 (1 sites)
+**Causa:** Servidor rejeita o scraper — precisaria de headers adicionais ou Playwright
+
+Sites afetados:
+- `https://www.pestanaleiloes.com.br` (AUGUSTO PARMEGGIANI PESTANA M. GOMES): Status 403 na home
+
+#### Sites offline/DNS inválido (1 sites)
+**Causa:** Domínio não existe ou está sem DNS
+
+Sites afetados:
+- `https://www.drrleiloes.com.br` (DANIEL RIBAS ROSA FRAHM): HTTPSConnectionPool(host='www.drrleiloes.com.br', port=443): Max retries exceede
+
+### Sugestões de Melhoria
+
+1. **Sites offline (404/Connection):** manter lista de sites atualizada; remover leiloeiros IRREGULAR/SUSPENSO automaticamente.
+2. **Bloqueio 403/Cloudflare:** implementar FlareSolverr (Docker `:8191`) para sites com Cloudflare Managed Challenge — ver seção 14 deste documento.
+3. **SPA/JS-heavy:** Playwright já é acionado automaticamente, mas alguns SPAs Next.js App Router exigem `wait_until='networkidle'` com timeout de 60s.
+4. **Sem lotes ativos:** criar agenda de re-scraping; muitos leiloeiros têm leilões esporádicos — verificar novamente em 7-14 dias.
+5. **Paginação:** alguns sites usam `?page=N` em vez de `?pagina=N` — ampliar lista de variantes de paginação.
+6. **Imagens:** alguns sites usam `data-lazy-src` ou carregam imagens via CSS — adicionar extração de backgrounds CSS.
+7. **Documentos (edital/matrícula):** muitos sites usam botões JS com `onclick` ou APIs internas — implementar extratores específicos por domínio.
+8. **Rate limiting:** adicionar delay adaptativo baseado no tempo de resposta do servidor.
+9. **Leiloeiros sem site:** 30+ leiloeiros REGULAR sem website identificado — buscar pelo nome no Google para encontrar sites atualizados.
+10. **Deduplicação:** alguns leiloeiros compartilham site (ex.: Nogari, Pestana, Vardana) — usar `id_externo` baseado em URL para evitar duplicatas.

@@ -1,6 +1,6 @@
 {
-  "atualizado": "2026-06-08T14:54:19.589653",
-  "total_imoveis": 670,
+  "atualizado": "2026-06-08T17:36:40.024480",
+  "total_imoveis": 2004,
   "por_leiloeiro": {
     "ADALBERTO SCHERER FILHO": 2,
     "ADRIANO MELNISKI": 0,
@@ -10,9 +10,9 @@
     "ALEXANDRE AUGUSTO DOS SANTOS SABBAG": 6,
     "ANA CAROLINA ZANINETTI ROSA": 62,
     "ANTONIO MAGNO JACOB DA ROCHA": 24,
-    "APARECIDA MARIA FIXER": 20,
+    "APARECIDA MARIA FIXER": 18,
     "ARTHUR FERREIRA NUNES": 0,
-    "ARTUR NOGARI DOS SANTOS": 21,
+    "ARTUR NOGARI DOS SANTOS": 20,
     "AUGUSTO PARMEGGIANI PESTANA M. GOMES": 0,
     "BEATRIZ SILVA CARVALHO": 0,
     "BRUNO BARRETO SANCHES": 19,
@@ -28,209 +28,275 @@
     "CONRADO AUGUSTO CARVALHO DE MAGALHÃES": 8,
     "CRISTIANE BORGUETTI MORAES LOPES": 8,
     "DANIEL ELIAS GARCIA": 68,
-    "DANIEL OLIVEIRA JUNIOR": 18,
+    "DANIEL OLIVEIRA JUNIOR": 20,
     "DANIEL RIBAS ROSA FRAHM": 0,
     "DAVI BORGES DE AQUINO": 12,
     "DEYSE SCHEERER PIETNOZKA KULTZ": 6,
     "DIEGO COSTA MULLER": 51,
     "DIEGO WOLF DE OLIVEIRA": 24,
     "DORA PLAT": 3,
-    "EDUARDO JESUS BORDIGNON": 53,
+    "EDUARDO JESUS BORDIGNON": 51,
     "EDUARDO SCHMITZ": 22,
-    "ELTON LUIZ SIMON": 12,
+    "ELTON LUIZ SIMON": 9,
     "ERICK SOARES TELES": 1,
     "FÁBIO GONÇALVES BARBOSA": 21,
     "FABIO MARLON MACHADO": 39,
-    "FERNANDO CAETANO MOREIRA FILHO": 0,
-    "FERNANDO DE OLIVEIRA KUSS": 0,
+    "FERNANDO CAETANO MOREIRA FILHO": 1,
+    "FERNANDO DE OLIVEIRA KUSS": 1,
     "FLAVIA KLOCKNER RODRIGUES": 0,
-    "GALVÃO ADENYR LOPES JUNIOR": 0,
-    "GELSON BOURSCHIET": 0
+    "GALVÃO ADENYR LOPES JUNIOR": 2,
+    "GELSON BOURSCHIET": 10,
+    "GIANCARLO PETERLONGO LORENZINI MENEGOTTO": 123,
+    "GILBERTO RUIZ GUILHEN": 0,
+    "GILSON KENITI INUMARU": 11,
+    "GIORDANO BRUNO COAN AMADOR": 47,
+    "GUILHERME EDUARDO STUTZ TOPOROSKI": 0,
+    "GUSTAVO MORETTO GUIMARÃES DE OLIVEIRA": 0,
+    "HELCIO KRONBERG": 0,
+    "HELOÍSE SANTI LOCATELLI": 0,
+    "HELTON ROGERIO VERRI VENTRILHO": 13,
+    "ISABELLA KATARINA SCHACKER PERACCHI": 0,
+    "JAIR VICENTE MARTINS": 10,
+    "JAQUELINE CHRISTIANNI STRYK VARDANA": 0,
+    "JAQUELINE SPERANÇA": 21,
+    "JEFFERSON ADRIANO DA COSTA": 223,
+    "JEREMY WU SANTIAGO DA COSTA E SILVA": 0,
+    "JOACIR MONZON POUEY": 33,
+    "JOÃO LUIZ DE OLIVEIRA": 11,
+    "JOÃO VITOR MARTINS FERREIRA": 28,
+    "JONAS GABRIEL ANTUNES MOREIRA": 1,
+    "JONEY MARCELO LOPES FERREIRA": 34,
+    "JORGE MARCO AURELIO BIAVATI": 28,
+    "JORGE VITORIO ESPOLADOR": 14,
+    "JOSE FERNANDO DE QUINA": 23,
+    "JOSECELLI KILDARE FRAGA GOMES": 14,
+    "JOYCE RIBEIRO": 1,
+    "JUNIOR CESAR DA SILVA": 1,
+    "LELIA MARIA DE PAULA LENZ CESAR": 2,
+    "LEONICE FIXER": 11,
+    "LEVY DOS SANTOS MORAES FILHO": 7,
+    "LUCAS EDUARDO DALCANALE": 4,
+    "LUCAS RAFAEL ANTUNES MOREIRA": 1,
+    "LUIZ BARBOSA DE LIMA JUNIOR": 1,
+    "LUIZ CARLOS DALL'AGNOL": 29,
+    "LUIZ EGIDIO CRUZ MEDEIROS": 40,
+    "LUIZ FERNANDO FAVARETO": 4,
+    "LUIZ RAFAEL LEMUCHI DE LIMA": 0,
+    "MARCELO SOARES DE OLIVEIRA": 0,
+    "MARCIANO MAURO PAGLIARINI": 0,
+    "MARCOS ANTÔNIO TULIO": 4,
+    "MARIA FILOMENA PLANAS SERRANO": 11,
+    "MARILAINE BORGES DE PAULA": 1,
+    "MAURICIO SAMBUGARI APPOLINARIO": 1,
+    "MIGUEL DONHA JUNIOR": 0,
+    "MURILO PAES LOPES LOURENÇO": 210,
+    "NEWTON JORGE GONÇALVES DE OLIVEIRA": 1,
+    "NICOLAS TADASHI MATSUNE": 0,
+    "OTAVIO LAURO SODRE SANTORO": 0,
+    "PATRÍCIA PIMENTEL GROCOSKI COSTA": 32,
+    "PAULO ROBERTO NAKAKOGUE": 41,
+    "PAULO SETSUO NAKAKOGUE": 6,
+    "PEDRO LERNER KRONBERG": 2,
+    "PLINIO BARROSO DE CASTRO FILHO": 0,
+    "POLIANA MIKEJEVS CALÇA": 2,
+    "RAFAEL CERETTA ALEGRANZZI": 137,
+    "RAFAEL DANIELEWICZ": 5,
+    "RAFAEL GALVANI FERREIRA": 26,
+    "RAIMUNDO MAGALHAES DE MORAES": 0,
+    "RENATO SCHLOBACH MOYSÉS": 40,
+    "RICARDO FERREIRA GOMES": 0,
+    "RODRIGO APARECIDO RIGOLON DA SILVA": 36,
+    "RUBENS HENRIQUE DE CASTRO": 0,
+    "RUDIVAL ALMEIDA GOMES JUNIOR": 20,
+    "SIDNEY BELARMINO FERREIRA JUNIOR": 0,
+    "SPENCER D'AVILA FOGAGNOLI": 12,
+    "VANESSA GOELZER DE ARAÚJO VARGAS E PINTO": 2,
+    "WERNO KLÖCKNER JÚNIOR": 2
   },
-  "sites_ok": 31,
+  "sites_ok": 82,
   "sites_err": 0,
-  "sites_sem_leilao": 13,
+  "sites_sem_leilao": 28,
   "erros": [],
   "dificuldades": [
     {
-      "leiloeiro": "ADRIANO MELNISKI",
-      "site": "https://www.amleiloeiro.com.br",
-      "tipo": "SEM_LOTES",
-      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
-    },
-    {
-      "leiloeiro": "ALEX SANDRO VIEIRA FELIX",
-      "site": "https://www.alleiloes.com.br",
-      "tipo": "JS_HEAVY",
-      "detalhe": "SPA detectado — usando Playwright"
-    },
-    {
-      "leiloeiro": "ALEX SANDRO VIEIRA FELIX",
-      "site": "https://www.alleiloes.com.br",
-      "tipo": "SEM_LOTES",
-      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
-    },
-    {
-      "leiloeiro": "ALEX WILLIAN HOPPE",
-      "site": "https://www.hoppeleiloes.com.br",
-      "tipo": "JS_HEAVY",
-      "detalhe": "SPA detectado — usando Playwright"
-    },
-    {
-      "leiloeiro": "ANTONIO MAGNO JACOB DA ROCHA",
-      "site": "https://www.rochaleiloes.com.br",
+      "leiloeiro": "JUNIOR CESAR DA SILVA",
+      "site": "https://www.jsilvaleiloes.com.br",
       "tipo": "HTTP_VAZIO_PW_OK",
-      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 24"
+      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 1"
     },
     {
-      "leiloeiro": "APARECIDA MARIA FIXER",
-      "site": "https://www.cidafixerleiloes.com.br",
+      "leiloeiro": "LELIA MARIA DE PAULA LENZ CESAR",
+      "site": "https://www.lelialenz.com.br",
       "tipo": "HTTP_VAZIO_PW_OK",
-      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 20"
+      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 2"
     },
     {
-      "leiloeiro": "ARTHUR FERREIRA NUNES",
-      "site": "https://www.arthurnunesleiloes.com.br",
-      "tipo": "SEM_LOTES",
-      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
-    },
-    {
-      "leiloeiro": "AUGUSTO PARMEGGIANI PESTANA M. GOMES",
-      "site": "https://www.pestanaleiloes.com.br",
-      "tipo": "HTTP_403",
-      "detalhe": "Status 403 na home"
-    },
-    {
-      "leiloeiro": "BEATRIZ SILVA CARVALHO",
-      "site": "https://www.grupocarvalholeiloes.com.br",
-      "tipo": "SEM_LOTES",
-      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
-    },
-    {
-      "leiloeiro": "BRUNO BARRETO SANCHES",
-      "site": "https://www.barretoleiloes.com.br",
-      "tipo": "JS_HEAVY",
-      "detalhe": "SPA detectado — usando Playwright"
-    },
-    {
-      "leiloeiro": "BRUNO HENRIQUE LOPES",
-      "site": "https://www.brunoleiloes.com.br",
+      "leiloeiro": "LEONICE FIXER",
+      "site": "https://www.capitalvalorleiloes.com.br",
       "tipo": "HTTP_VAZIO_PW_OK",
       "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 11"
     },
     {
-      "leiloeiro": "CAMILA DE MOURA GAIA PELLISSARI",
-      "site": "https://www.camilagaialeiloes.com.br",
-      "tipo": "SEM_LOTES",
-      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
-    },
-    {
-      "leiloeiro": "CAMILA PADILHA PRESOTTO",
-      "site": "https://www.presottoleiloes.com.br",
-      "tipo": "JS_HEAVY",
-      "detalhe": "SPA detectado — usando Playwright"
-    },
-    {
-      "leiloeiro": "CAROLINE FERREIRA BARBOZA",
-      "site": "https://www.bzleiloes.com.br",
-      "tipo": "JS_HEAVY",
-      "detalhe": "SPA detectado — usando Playwright"
-    },
-    {
-      "leiloeiro": "CATIA FERNANDA ALIEVI TOPOROSKI",
-      "site": "https://www.aleiloeira.leilao.br",
-      "tipo": "JS_HEAVY",
-      "detalhe": "SPA detectado — usando Playwright"
-    },
-    {
-      "leiloeiro": "CATIA FERNANDA ALIEVI TOPOROSKI",
-      "site": "https://www.aleiloeira.leilao.br",
-      "tipo": "SEM_LOTES",
-      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
-    },
-    {
-      "leiloeiro": "CLEVER ELMES MILANI",
-      "site": "https://www.milanileiloes.com.br",
-      "tipo": "JS_HEAVY",
-      "detalhe": "SPA detectado — usando Playwright"
-    },
-    {
-      "leiloeiro": "DANIEL OLIVEIRA JUNIOR",
-      "site": "https://www.doleiloes.com.br",
+      "leiloeiro": "LUCAS EDUARDO DALCANALE",
+      "site": "https://www.dalcanaleleiloes.com.br",
       "tipo": "HTTP_VAZIO_PW_OK",
-      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 18"
+      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 4"
     },
     {
-      "leiloeiro": "DANIEL RIBAS ROSA FRAHM",
-      "site": "https://www.drrleiloes.com.br",
-      "tipo": "CONNECTION_ERROR",
-      "detalhe": "HTTPSConnectionPool(host='www.drrleiloes.com.br', port=443): Max retries exceeded with url: / (Caused by NameResolutionE"
+      "leiloeiro": "LUIZ BARBOSA DE LIMA JUNIOR",
+      "site": "https://www.lbleiloes.com.br",
+      "tipo": "HTTP_VAZIO_PW_OK",
+      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 1"
     },
     {
-      "leiloeiro": "DIEGO WOLF DE OLIVEIRA",
-      "site": "https://www.diegoleiloes.com.br",
-      "tipo": "CONNECTION_ERROR",
-      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+      "leiloeiro": "LUIZ CARLOS DALL'AGNOL",
+      "site": "https://www.dallagnolleiloes.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
     },
     {
-      "leiloeiro": "EDUARDO SCHMITZ",
-      "site": "https://www.clicleiloes.com.br",
-      "tipo": "CONNECTION_ERROR",
-      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+      "leiloeiro": "LUIZ RAFAEL LEMUCHI DE LIMA",
+      "site": "https://www.leiloeslr.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
     },
     {
-      "leiloeiro": "ELTON LUIZ SIMON",
-      "site": "https://www.simonleiloes.com.br",
-      "tipo": "CONNECTION_ERROR",
-      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+      "leiloeiro": "LUIZ RAFAEL LEMUCHI DE LIMA",
+      "site": "https://www.leiloeslr.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
     },
     {
-      "leiloeiro": "ERICK SOARES TELES",
-      "site": "https://www.teza.com.br",
-      "tipo": "CONNECTION_ERROR",
-      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+      "leiloeiro": "MARCELO SOARES DE OLIVEIRA",
+      "site": "https://www.oleiloes.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
     },
     {
-      "leiloeiro": "FÁBIO GONÇALVES BARBOSA",
-      "site": "https://www.fabiobarbosaleiloes.com.br",
-      "tipo": "CONNECTION_ERROR",
-      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+      "leiloeiro": "MARCIANO MAURO PAGLIARINI",
+      "site": "https://www.pagliarinileiloes.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
     },
     {
-      "leiloeiro": "FABIO MARLON MACHADO",
-      "site": "https://www.machadoleiloeiro.com.br",
-      "tipo": "CONNECTION_ERROR",
-      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+      "leiloeiro": "MARCIANO MAURO PAGLIARINI",
+      "site": "https://www.pagliarinileiloes.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
     },
     {
-      "leiloeiro": "FERNANDO CAETANO MOREIRA FILHO",
-      "site": "https://www.fernandoleiloeiro.com.br",
-      "tipo": "CONNECTION_ERROR",
-      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+      "leiloeiro": "MARIA FILOMENA PLANAS SERRANO",
+      "site": "https://www.leiloesmariafilomena.com.br",
+      "tipo": "HTTP_VAZIO_PW_OK",
+      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 11"
     },
     {
-      "leiloeiro": "FERNANDO DE OLIVEIRA KUSS",
-      "site": "https://www.ksleiloes.com.br",
-      "tipo": "CONNECTION_ERROR",
-      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+      "leiloeiro": "MARILAINE BORGES DE PAULA",
+      "site": "https://www.e-confianca.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
     },
     {
-      "leiloeiro": "FLAVIA KLOCKNER RODRIGUES",
-      "site": "https://www.fkleiloes.com.br",
-      "tipo": "CONNECTION_ERROR",
-      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+      "leiloeiro": "MAURICIO SAMBUGARI APPOLINARIO",
+      "site": "https://www.andraleiloes.com.br",
+      "tipo": "HTTP_VAZIO_PW_OK",
+      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 1"
     },
     {
-      "leiloeiro": "GALVÃO ADENYR LOPES JUNIOR",
-      "site": "https://www.lancejusto.com.br",
-      "tipo": "CONNECTION_ERROR",
-      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+      "leiloeiro": "MIGUEL DONHA JUNIOR",
+      "site": "https://www.donhaleiloes.com",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
     },
     {
-      "leiloeiro": "GELSON BOURSCHIET",
-      "site": "https://www.gelsonleiloes.com.br",
-      "tipo": "CONNECTION_ERROR",
-      "detalhe": "('Connection aborted.', PermissionError(13, 'Permission denied'))"
+      "leiloeiro": "NICOLAS TADASHI MATSUNE",
+      "site": "https://www.tadashileiloes.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
+    },
+    {
+      "leiloeiro": "NICOLAS TADASHI MATSUNE",
+      "site": "https://www.tadashileiloes.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
+    },
+    {
+      "leiloeiro": "OTAVIO LAURO SODRE SANTORO",
+      "site": "https://www.sodresantoro.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
+    },
+    {
+      "leiloeiro": "OTAVIO LAURO SODRE SANTORO",
+      "site": "https://www.sodresantoro.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
+    },
+    {
+      "leiloeiro": "PEDRO LERNER KRONBERG",
+      "site": "https://www.kronberg.lel.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
+    },
+    {
+      "leiloeiro": "PLINIO BARROSO DE CASTRO FILHO",
+      "site": "https://www.pbcastro.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
+    },
+    {
+      "leiloeiro": "POLIANA MIKEJEVS CALÇA",
+      "site": "https://www.polileiloes.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
+    },
+    {
+      "leiloeiro": "RAFAEL GALVANI FERREIRA",
+      "site": "https://www.galvanileiloes.com.br",
+      "tipo": "HTTP_VAZIO_PW_OK",
+      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 26"
+    },
+    {
+      "leiloeiro": "RAIMUNDO MAGALHAES DE MORAES",
+      "site": "https://www.rmmleiloes.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
+    },
+    {
+      "leiloeiro": "RENATO SCHLOBACH MOYSÉS",
+      "site": "https://www.rmoyses.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
+    },
+    {
+      "leiloeiro": "RICARDO FERREIRA GOMES",
+      "site": "https://www.ricardogomesleiloes.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
+    },
+    {
+      "leiloeiro": "RODRIGO APARECIDO RIGOLON DA SILVA",
+      "site": "https://www.rigolonleiloes.com.br",
+      "tipo": "HTTP_VAZIO_PW_OK",
+      "detalhe": "HTTP retornou 0 lotes, Playwright encontrou 36"
+    },
+    {
+      "leiloeiro": "RUBENS HENRIQUE DE CASTRO",
+      "site": "https://www.rubenshcastro.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
+    },
+    {
+      "leiloeiro": "SIDNEY BELARMINO FERREIRA JUNIOR",
+      "site": "https://www.sfleiloes.com.br",
+      "tipo": "JS_HEAVY",
+      "detalhe": "SPA detectado — usando Playwright"
+    },
+    {
+      "leiloeiro": "SIDNEY BELARMINO FERREIRA JUNIOR",
+      "site": "https://www.sfleiloes.com.br",
+      "tipo": "SEM_LOTES",
+      "detalhe": "Nenhum lote/imóvel encontrado mesmo com Playwright"
     }
   ]
 }

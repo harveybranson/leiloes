@@ -702,124 +702,106 @@ def psql(sql: str, timeout: int = 30) -> str:
 
 
 def importar_postgres(imoveis: list[dict]) -> tuple[int,int]:
-    import subprocess
-    log(f"\n[PostgreSQL] Importando {len(imoveis)} imóveis...")
-
-    psql("""
-        INSERT INTO fontes (nome, url_base, ativo, criado_em)
-        VALUES ('JUCEPAR','https://www.jucepar.pr.gov.br/',true,NOW())
-        ON CONFLICT (nome) DO NOTHING;
-    """)
-    raw = psql("SELECT id FROM fontes WHERE nome='JUCEPAR' LIMIT 1;").strip()
-    if not raw.isdigit():
-        log(f"[ERRO] Não foi possível obter fonte_id JUCEPAR. Saída: {repr(raw)}")
-        return 0, 0
-
-    FONTE_ID = int(raw)
-    log(f"  fonte_id JUCEPAR = {FONTE_ID}")
+    """
+    Importa via arquivo SQL temporário copiado ao container (docker cp + psql -f).
+    Evita WinError 206 (linha de comando > 32 KB no Windows ao usar psql -c).
+    """
+    import subprocess, tempfile, os
+    log(f"\n[PostgreSQL] Importando {len(imoveis)} imóveis via arquivo SQL...")
 
     TIPOS_IMOVEL_VALIDOS = {"APARTAMENTO","CASA","TERRENO","COMERCIAL","RURAL","GALPAO","SALA","VAGA","OUTRO"}
     TIPOS_LEILAO_VALIDOS = {"JUDICIAL","EXTRAJUDICIAL","BANCARIO"}
 
-    ins_pg = upd_pg = err_pg = 0
+    def esc(v, max_len=None):
+        s = str(v or "").replace("\x00","").replace("'","''")
+        if max_len: s = s[:max_len]
+        return s
 
-    for i in range(0, len(imoveis), 50):
-        batch = imoveis[i:i+50]
-        values = []
+    def _d(v):
+        try: return str(float(Decimal(str(v).replace(",","."))) ) if v else "NULL"
+        except: return "NULL"
 
-        for r in batch:
-            def esc(v, max_len=None):
-                # Remove NUL bytes (rejeitados pelo PostgreSQL)
-                s = str(v or "").replace("\x00","").replace("'","''")
-                if max_len: s = s[:max_len]
-                return s
+    def _dt(v):
+        if not v: return "NULL"
+        return f"'{str(v)[:10]}'"
 
-            tipo_i = r.get("tipo_imovel","outro").upper()
-            if tipo_i not in TIPOS_IMOVEL_VALIDOS: tipo_i = "OUTRO"
-            tipo_l = r.get("tipo_leilao","extrajudicial").upper()
-            if tipo_l not in TIPOS_LEILAO_VALIDOS: tipo_l = "EXTRAJUDICIAL"
+    def _i(v):
+        try: return str(int(v)) if v else "NULL"
+        except: return "NULL"
 
-            def _d(v):
-                try: return float(Decimal(str(v).replace(",","."))) if v else None
-                except: return None
+    # Escreve SQL em arquivo temporário no host
+    tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".sql",
+                                      encoding="utf-8", delete=False)
+    try:
+        tmp.write("BEGIN;\n")
+        tmp.write("""INSERT INTO fontes (nome, url_base, ativo, criado_em)
+VALUES ('JUCEPAR','https://www.jucepar.pr.gov.br/',true,NOW())
+ON CONFLICT (nome) DO NOTHING;\n""")
 
-            vmin  = _d(r.get("valor_minimo"))
-            vaval = _d(r.get("valor_avaliacao"))
-            area  = _d(r.get("area_total"))
-            quartos_v = r.get("quartos","")
-            try: quartos_v = int(quartos_v) if quartos_v else None
-            except: quartos_v = None
+        for r in imoveis:
+            ti = r.get("tipo_imovel","outro").upper()
+            if ti not in TIPOS_IMOVEL_VALIDOS: ti = "OUTRO"
+            tl = r.get("tipo_leilao","extrajudicial").upper()
+            if tl not in TIPOS_LEILAO_VALIDOS: tl = "EXTRAJUDICIAL"
 
-            d1 = r.get("data_primeiro_leilao","")
-            d2 = r.get("data_segundo_leilao","")
+            tmp.write(f"""INSERT INTO imoveis (
+    fonte_id, id_externo, titulo, descricao, url_original,
+    tipo_imovel, tipo_leilao, status, categoria,
+    cidade, estado, cep, endereco_completo,
+    valor_minimo, valor_avaliacao, area_total, quartos,
+    data_primeiro_leilao, data_segundo_leilao,
+    imagem_principal, arquivos, numero_processo,
+    leiloeiro, ativo, classificado, geocodificado, criado_em, atualizado_em
+) VALUES (
+    (SELECT id FROM fontes WHERE nome='JUCEPAR' LIMIT 1),
+    '{esc(r.get("id_externo",""),200)}','{esc(r.get("titulo",""),500)}',
+    '{esc(r.get("descricao",""),2000)}','{esc(r.get("url_original",""),1000)}',
+    '{ti}','{tl}','ABERTO','IMOVEL',
+    '{esc(r.get("cidade",""),200)}','{esc(r.get("estado","PR"),2)}',
+    '{esc(r.get("cep",""),10)}','{esc(r.get("endereco_completo",""),500)}',
+    {_d(r.get("valor_minimo"))},{_d(r.get("valor_avaliacao"))},
+    {_d(r.get("area_total"))},{_i(r.get("quartos"))},
+    {_dt(r.get("data_primeiro_leilao"))},{_dt(r.get("data_segundo_leilao"))},
+    '{esc(r.get("imagem_principal",""),1000)}','{esc(r.get("arquivos","[]"),4000)}',
+    '{esc(r.get("numero_processo",""),100)}','{esc(r.get("leiloeiro",""),300)}',
+    true,false,false,NOW(),NOW()
+) ON CONFLICT (fonte_id, id_externo) DO UPDATE SET
+    titulo=EXCLUDED.titulo, valor_minimo=EXCLUDED.valor_minimo,
+    data_primeiro_leilao=EXCLUDED.data_primeiro_leilao,
+    imagem_principal=EXCLUDED.imagem_principal,
+    arquivos=EXCLUDED.arquivos, atualizado_em=NOW();\n""")
 
-            values.append(f"""(
-                {FONTE_ID},
-                '{esc(r.get("id_externo",""), 200)}',
-                '{esc(r.get("titulo",""), 500)}',
-                '{esc(r.get("descricao",""), 500)}',
-                '{esc(r.get("url_original",""), 1000)}',
-                '{tipo_i}','{tipo_l}',
-                'ABERTO','IMOVEL',
-                '{esc(r.get("cidade",""), 200)}',
-                '{esc(r.get("estado","PR"), 2)}',
-                '{esc(r.get("cep",""), 10)}',
-                '{esc(r.get("endereco_completo",""), 500)}',
-                {vmin if vmin is not None else 'NULL'},
-                {vaval if vaval is not None else 'NULL'},
-                {area if area is not None else 'NULL'},
-                {quartos_v if quartos_v is not None else 'NULL'},
-                {f"'{d1}'" if d1 else 'NULL'},
-                {f"'{d2}'" if d2 else 'NULL'},
-                '{esc(r.get("imagem_principal",""), 1000)}',
-                '{esc(r.get("arquivos","[]"), 4000)}',
-                '{esc(r.get("numero_processo",""), 100)}',
-                '{esc(r.get("leiloeiro",""), 300)}',
-                true,false,false,NOW(),NOW()
-            )""")
+        tmp.write("COMMIT;\n")
+        tmp_path = tmp.name
+    finally:
+        tmp.close()
 
-        if not values: continue
+    try:
+        # Copia arquivo para o container e executa
+        cp = subprocess.run(
+            ["docker","cp", tmp_path, "leilao_postgres:/tmp/pg_import.sql"],
+            capture_output=True, text=True
+        )
+        if cp.returncode != 0:
+            log(f"  [ERRO docker cp] {cp.stderr[:200]}")
+            return 0, 0
 
-        sql = f"""
-        INSERT INTO imoveis (
-            fonte_id, id_externo, titulo, descricao, url_original,
-            tipo_imovel, tipo_leilao, status, categoria,
-            cidade, estado, cep, endereco_completo,
-            valor_minimo, valor_avaliacao, area_total, quartos,
-            data_primeiro_leilao, data_segundo_leilao,
-            imagem_principal, arquivos, numero_processo,
-            leiloeiro, ativo, classificado, geocodificado,
-            criado_em, atualizado_em
-        ) VALUES {', '.join(values)}
-        ON CONFLICT (fonte_id, id_externo) DO UPDATE SET
-            titulo = EXCLUDED.titulo,
-            valor_minimo = EXCLUDED.valor_minimo,
-            data_primeiro_leilao = EXCLUDED.data_primeiro_leilao,
-            imagem_principal = EXCLUDED.imagem_principal,
-            arquivos = EXCLUDED.arquivos,
-            atualizado_em = NOW();
-        """
-
-        try:
-            proc = subprocess.run(
-                ["docker","exec","leilao_postgres","psql","-U","leilao","-d","leilao_db","-c",sql],
-                capture_output=True, text=True, encoding="utf-8", timeout=60,
-            )
-            out = proc.stdout + proc.stderr
-            if "INSERT" in out:
-                m2 = re.search(r"INSERT \d+ (\d+)", out)
-                ins_pg += int(m2.group(1)) if m2 else len(batch)
-            elif "UPDATE" in out or "conflict" in out.lower():
-                upd_pg += len(batch)
-            elif proc.returncode != 0:
-                err_pg += len(batch)
-                log(f"  [ERR lote {i//50}] {out[:200]}")
-        except Exception as e:
-            err_pg += len(batch)
-            log(f"  [ERR lote {i//50}] {e}")
-
-    log(f"  PostgreSQL: {ins_pg} inseridos, {upd_pg} atualizados, {err_pg} erros")
-    return ins_pg, upd_pg
+        proc = subprocess.run(
+            ["docker","exec","leilao_postgres","psql","-U","leilao","-d","leilao_db",
+             "-f","/tmp/pg_import.sql"],
+            capture_output=True, text=True, encoding="utf-8", timeout=300,
+        )
+        out = proc.stdout + proc.stderr
+        ins_pg = out.count("INSERT 0 1")
+        upd_pg = out.count("UPDATE 1")
+        err_lines = [l for l in out.splitlines() if "ERROR" in l or "error" in l.lower()]
+        err_pg = len(err_lines)
+        if err_pg:
+            log(f"  [PG erros] {err_lines[:3]}")
+        log(f"  PostgreSQL: {ins_pg} inseridos, {upd_pg} atualizados, {err_pg} erros")
+        return ins_pg, upd_pg
+    finally:
+        os.unlink(tmp_path)
 
 
 # ── 8. Relatório final de dificuldades ─────────────────────────────────────────

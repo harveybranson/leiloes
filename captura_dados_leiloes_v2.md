@@ -6160,3 +6160,208 @@ Sites afetados:
    o que já está no banco.
 
 **Relatório gerado em:** 08/06/2026 21:02:00
+
+
+---
+
+## CORREÇÕES DE CAPTURA — TRT3 (MG Judiciais) + JUCEMG — 09/06/2026 06:05
+
+> Cada item é uma **correção acionável** para uma dificuldade encontrada na captura.
+> Foco em *como resolver* — para incorporar ao fluxo de scraping deste guia.
+
+### Resultado da captura
+- Leiloeiros REGULAR: 133 (excluídos Suspensos/Licenciados: Aristóteles Ruas, Carmen Michetti, Paulo S. Gregório, Camila Pires, Arthur Vianna, Frederico Faria)
+- Sites únicos visitados: 130
+- Imóveis (1ª praça > 09/06/2026): 333
+- Inserção no PostgreSQL do site: via `pipeline.importar_ofertas_csv` (dedup por URL) → classificar/normalizar/dedup/geocodificar
+- CSV: `leiloeiros_trt3mg_2026-06-09.csv` (nome+site) / `imoveis_trt3mg_2026-06-09.csv` (imóveis)
+
+### Imóveis capturados por leiloeiro (apenas > 0)
+| Leiloeiro | Imóveis |
+|---|---|
+| Mauricio Jose de Sousa Costa | 43 |
+| Flavio Duarte Ceruli | 40 |
+| Isaias Rosa Ramos Junior | 40 |
+| Luis Otavio Marcolino Shinkawa | 31 |
+| Fabio Prando Fagundes Goes | 21 |
+| Julio Abdo Costa Calil | 20 |
+| Fernando Jose Cerello Goncalves Pereira | 19 |
+| Daniel Elias Garcia | 15 |
+| Joao Emilio de Oliveira Filho | 13 |
+| Orlando Araujo dos Santos | 11 |
+| Marcos Roberto Torres | 9 |
+| Rosimeire das Dores Garcia de Castro | 7 |
+| Cesar Augusto Bagatini | 6 |
+| Cintia Regina Martins Roma | 5 |
+| Denis de Oliveira Fernandes | 5 |
+| Francisco David Batista de Souza | 5 |
+| Sergio Sousa Rodrigues | 5 |
+| Thais Silva Moreira de Sousa | 5 |
+| Alexsander Pretti Domingos | 4 |
+| Cristiane Borguetti Moraes Lopes | 4 |
+| Paulo Cesar Agostinho | 4 |
+| Thais Costa Bastos Teixeira | 4 |
+| Carla Karine Santos Agostinho | 2 |
+| Carlos Augusto Ribeiro Lima | 2 |
+| Gilson Aparecido Mariano | 2 |
+| Marilaine Borges de Paula | 2 |
+| Angela Saraiva Portes Souza | 1 |
+| Caroline de Sousa Ribas | 1 |
+| Davi Borges de Aquino | 1 |
+| Eduardo Schmitz | 1 |
+| Giovana Norma Bolico | 1 |
+| Jose Luiz Pereira Vizeu | 1 |
+| Luiz Felipe Perpetuo Lobato | 1 |
+| Magnun Luiz Serpa | 1 |
+| Sandra de Fatima Santos | 1 |
+
+### Correções a aplicar (dificuldade → solução)
+
+1. **Fonte é o "banco do site" (PostgreSQL), não o SQLite local → usar o pipeline oficial.**
+   Capturas anteriores gravaram no `imoveis_leiloeiros.db` (SQLite standalone), que **não** é lido pelo site.
+   **Correção (aplicada):** gerar CSV no formato `url,leiloeiro,cidade,estado,titulo,preco,avaliacao` e rodar
+   `python -m pipeline.importar_ofertas_csv` apontando para `postgresql://...:5432/leilao_db`, seguido de
+   `classificar → normalizar-cidades → separar-produtos → deduplicar → devoltaparaofuturo → geocodificar`.
+
+2. **TRT3 lista credenciados sem `site`; JUCEMG tem `www.` por leiloeiro → cruzar as duas fontes.**
+   O PDF do TRT3 (judiciais) traz só "Acesse o site" sem URL legível; o registro da JUCEMG traz o domínio.
+   **Correção:** casar nome do TRT3 com o registro JUCEMG para obter o site; status REGULAR pela JUCEMG
+   (excluir `(Suspenso)`, `(Suspensa)`, `(Licenciado...)`).
+
+3. **Matrículas duplicadas (principal + SUPLEMENTAR) e sites compartilhados → dedup.**
+   Muitos leiloeiros têm 2 matrículas e/ou usam a mesma plataforma (`palaciodosleiloes` ×4, `goldenlance` ×2,
+   `milhaoleiloes` ×2, `claudiokussleiloes` ×2, `gpleiloes`, `stefanelli`). **Correção:** dedup por site na
+   coleta e por URL canônica na ingestão (já aplicado).
+
+4. **SPA / Cloudflare / data só no detalhe → cascata + enricher + FlareSolverr.**
+   **Correção:** cascata httpx → Playwright → sufixos (`/imoveis`, `/leiloes`, `/lotes`); enricher de detalhe
+   (seções 17/23) p/ recuperar data da 1ª praça/edital; FlareSolverr (seção 14) p/ Cloudflare; `curl_cffi` p/ TLS.
+
+5. **Encoding Windows (cp1252) quebrou `separar-produtos` (caractere `→`).**
+   **Correção (aplicada):** exportar `PYTHONIOENCODING=utf-8 PYTHONUTF8=1` antes de rodar comandos do pipeline.
+
+6. **`id`/PK e geocodificação dos novos → backfill direcionado.**
+   **Correção (aplicada):** geocodificar mirando só os registros recém-inseridos (criados nas últimas horas),
+   evitando processar o backlog de ~30k; `id` gerado como `md5(url)[:12]` quando ausente.
+
+7. **Domínios offline/DNS → checagem prévia.** Sites com problema nesta rodada:
+- **Adriana Pires Amancio**: sem imoveis com leilao futuro
+- **Adriano Apolinario Leao de Oliveira**: sem imoveis com leilao futuro
+- **Alessandro de Assis Teixeira**: sem imoveis com leilao futuro
+- **Alex Willian Hoppe**: sem imoveis com leilao futuro
+- **Alexandra Benedita de Sousa Casado**: sem imoveis com leilao futuro
+- **Ananda Portes Souza**: sem imoveis com leilao futuro
+- **Andre Fonseca Dias**: sem imoveis com leilao futuro
+- **Andre de Oliveira Kuss**: sem imoveis com leilao futuro
+- **Angela Assis Oliveira Bechara**: sem imoveis com leilao futuro
+- **Arnaldo Emilio Colombarolli**: sem imoveis com leilao futuro
+- **Arnold Strass**: sem imoveis com leilao futuro
+- **Arthur Ferreira Nunes**: sem imoveis com leilao futuro
+- **Breno Augusto Magalhaes da Anunciacao**: sem imoveis com leilao futuro
+- **Breno Cesar Oliveira Farias**: sem imoveis com leilao futuro
+- **Caio Marcos Campos Caldeira**: sem imoveis com leilao futuro
+- **Carlos Chui**: sem imoveis com leilao futuro
+- **Catia Fernanda Alievi Toporoski**: sem imoveis com leilao futuro
+- **Claudio Cesar Kuss**: sem imoveis com leilao futuro
+- **Cleber Cardoso Pereira**: sem imoveis com leilao futuro
+- **Clecio Oliveira de Carvalho**: sem imoveis com leilao futuro
+
+**Relatório gerado em:** 09/06/2026 06:05:51
+
+
+---
+
+## CORREÇÕES DE CAPTURA — JUCETINS (Tocantins) — 09/06/2026 06:46
+
+> Cada item abaixo é uma **correção acionável** para uma dificuldade encontrada na captura
+> da JUCETINS (PDF DREI "Leiloeiros Tocantins"). Foco em *como resolver* — para incorporar ao guia.
+
+### Resultado da captura
+- Leiloeiros REGULAR: 44 (42 com site, 2 só e-mail) | Sites únicos: 39
+- Excluídos do PDF (IRREGULAR/CANCELAMENTO): 8 (Dulnik, Borges Guedes Neto, Danilo A. Oliveira, Carlos Chui, Mike Dutra Fleitas, Renato Moysés, Eduardo Schmitz, Lorrainny R. Lopes)
+- Imóveis (1ª praça > 09/06/2026): 64 | Inseridos no banco: 19
+- CSV: `leiloeiros_jucetins_2026-06-09.csv` / `imoveis_jucetins_2026-06-09.csv`
+
+| Leiloeiro | Site | Imóveis |
+|---|---|---|
+| Victor Oliveira Dorta | https://www.victordortaleiloes.com.br | 9 |
+| Cesar Augusto Bagatini | https://www.leiloesfederal.com.br | 6 |
+| Rudival Almeida Gomes Junior | https://www.rjleiloes.com.br | 8 |
+| Daniel Elias Garcia | https://www.danielgarcialeiloes.com.br | 15 |
+| Davi Borges de Aquino | https://www.alfaleiloes.com | 1 |
+| Milena Rosa Di Giacomo Adri | https://www.megaleiloes.com.br | 19 |
+| Joao Luiz de Franca Neto | https://www.jocaleiloesagro.com.br | 2 |
+| Lucas Fernandes Almeida | https://www.leiloestocantins.com | 2 |
+| Elenice Lira Sales de Sousa | https://www.leiloesbrasil.com.br | 1 |
+| Luiz Barbosa de Lima Junior | https://www.lbleiloes.com.br | 1 |
+
+### Correções a aplicar (dificuldade → solução)
+
+1. **Numeração do PDF com saltos (1–48 e 52–55) e status no título → parsing por marcador, não por índice.**
+   O PDF de Tocantins pula de 48 para 52 e marca a situação entre parênteses no nome (`(IRREGULAR)`,
+   `(CANCELAMENTO DE MATRÍCULA…)`). **Correção:** detectar a situação por regex no título do leiloeiro,
+   nunca pela posição na lista; tratar qualquer marcador ≠ vazio como exclusão.
+
+2. **Sites compartilhados entre leiloeiros → dedup por URL na ingestão.**
+   `mgl.com.br` ×3 (Lucas/Jonas/Fernando Moreira), `vecchileiloes.com.br` ×2 (Camilla/Marciano).
+   **Correção (já aplicada):** inserir no banco com **dedup por URL canônica**; atribuir o imóvel ao
+   leiloeiro pelo dado do próprio lote, não pelo domínio compartilhado.
+
+3. **2 leiloeiros REGULAR sem site (só Gmail) → derivar/buscar domínio.**
+   Joselma Moraes Martins e Lysia Moreira Silva têm apenas e-mail `@gmail.com`. **Correção:** resolver
+   via busca "nome + leilões Tocantins" e gravar o site validado de volta no CSV; sem domínio próprio,
+   marcar para captura manual.
+
+4. **SPA / Cloudflare retornando 0 na listagem → cascata + extrator por plataforma.**
+   **Correção:** manter a cascata httpx → Playwright → sufixos (`/imoveis`, `/leiloes`, `/lotes`,
+   `/busca?categoria=imoveis`); para `megaleiloes`, `arrematabem`, `alfaleiloes`, `webleiloes`,
+   `leiloesbrasil` escrever **parser dedicado por domínio** (seção 27) e acionar **FlareSolverr**
+   (seção 14) onde houver Cloudflare; `curl_cffi` para erros de TLS.
+
+5. **Data da 1ª praça só no detalhe → enricher de detalhe antes de descartar.**
+   Itens sem data legível na listagem foram descartados (subnotifica). **Correção:** rodar o
+   *enricher* (seções 17/23) que abre cada lote e extrai data da praça + edital + matrícula.
+
+6. **Domínios offline/DNS/TLS → checagem prévia e fallback.**
+   **Correção:** validar resolução DNS antes de raspar; tentar `www`/sem-`www` e `http`/`https`;
+   marcar como inativo após 2 tentativas. Sites com problema nesta rodada:
+- **Eduardo Gomes**: sem imoveis com leilao futuro
+- **Rossana Paiva Borges de Oliveira**: sem imoveis com leilao futuro
+- **Antonio Carlos Volpi Santana**: sem imoveis com leilao futuro
+- **Tatiana Dinelly e Silva Bonato**: sem imoveis com leilao futuro
+- **Sandro de Oliveira**: sem imoveis com leilao futuro
+- **Alvaro Sergio Fuzo**: sem imoveis com leilao futuro
+- **Fernanda Lima Mascarenhas**: sem imoveis com leilao futuro
+- **Murilo Goncalves Ramos**: sem imoveis com leilao futuro
+- **Tiago Tessler Blecher**: sem imoveis com leilao futuro
+- **Arnold Strass**: sem imoveis com leilao futuro
+- **Leonardo Coelho Avelar**: sem imoveis com leilao futuro
+- **Bruno Barreto Sanches**: sem imoveis com leilao futuro
+- **Nelci Dezan**: sem imoveis com leilao futuro
+- **Alex Willian Hoppe**: sem imoveis com leilao futuro
+- **Uesley da Silva Oliveira dos Santos**: sem imoveis com leilao futuro
+- **Rafael Galvani Ferreira**: sem imoveis com leilao futuro
+- **Livia Leilane de Oliveira Azevedo**: sem imoveis com leilao futuro
+- **Mouzar Baston Filho**: sem imoveis com leilao futuro
+- **Rodolfo da Rosa Schontag**: sem imoveis com leilao futuro
+- **Aluisio Francisco de Assis Cardoso Bringel**: sem imoveis com leilao futuro
+- **Evando da Silva Lagares**: sem imoveis com leilao futuro
+- **Mara Helena de Urzedo Fortunato**: sem imoveis com leilao futuro
+- **Joabe Balbino da Silva**: sem imoveis com leilao futuro
+- **Rosimeire Alves de Oliveira Maia**: sem imoveis com leilao futuro
+- **Lucas Rafael Antunes Moreira**: sem imoveis com leilao futuro
+- **Jonas Gabriel Antunes Moreira**: sem imoveis com leilao futuro
+- **Fernando Caetano Moreira Filho**: sem imoveis com leilao futuro
+- **Erico Sobral Soares**: sem imoveis com leilao futuro
+- **Camilla Correia Vecchi Aguiar**: sem imoveis com leilao futuro
+- **Marciano Aguiar Carneiro**: sem imoveis com leilao futuro
+
+7. **Leiloeiros sediados fora de TO (GO, SP, MG, DF, BA, etc.) → captura nacional, filtro por leiloeiro.**
+   Vários REGULAR de TO operam de outros estados. **Correção:** não filtrar imóvel por UF do leiloeiro;
+   capturar tudo que o site publica e registrar a UF real do imóvel a partir do lote.
+
+8. **Leilões esporádicos → re-scraping agendado.**
+   **Correção:** agendar re-execução a cada 7–14 dias (cron/Celery beat, seção 21); o dedup por URL
+   evita duplicar o que já está no banco.
+
+**Relatório gerado em:** 09/06/2026 06:46:52

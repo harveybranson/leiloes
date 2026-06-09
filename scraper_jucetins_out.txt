@@ -56,3 +56,99 @@ Sites: 15/42 | Imoveis: 23
 [06:57:50]   -> Daniel Elias Garcia  [https://www.danielgarcialeiloes.com.br]
 [06:57:52]      15 imovel(is) com leilao futuro
 [06:57:53]   -> Alex Willian Hoppe  [https://www.hoppeleiloes.com.br]
+[06:58:36]      0 imovel(is) com leilao futuro
+[06:58:37]   -> Davi Borges de Aquino  [https://www.alfaleiloes.com]
+[06:58:39]      1 imovel(is) com leilao futuro
+[06:58:40]   -> Uesley da Silva Oliveira dos Santos  [https://www.carrollruralleiloes.com.br]
+[06:59:20]      0 imovel(is) com leilao futuro
+[06:59:21]   -> Rafael Galvani Ferreira  [https://www.galvanileiloes.com.br]
+[06:59:46]      0 imovel(is) com leilao futuro
+[06:59:47]   -> Livia Leilane de Oliveira Azevedo  [https://www.livialeiloes.com.br]
+[07:00:12]      0 imovel(is) com leilao futuro
+[07:00:13]   -> Milena Rosa Di Giacomo Adri  [https://www.megaleiloes.com.br]
+[07:00:16]      19 imovel(is) com leilao futuro
+[07:00:17]   -> Joao Luiz de Franca Neto  [https://www.jocaleiloesagro.com.br]
+[07:00:18]      2 imovel(is) com leilao futuro
+[07:00:19]   -> Mouzar Baston Filho  [https://www.bastonleiloes.com.br]
+[07:01:13]      0 imovel(is) com leilao futuro
+[07:01:14]   -> Rodolfo da Rosa Schontag  [https://www.leiloeiropublico.com.br]
+[07:01:37]      0 imovel(is) com leilao futuro
+[07:01:38]   -> Lucas Fernandes Almeida  [https://www.leiloestocantins.com]
+[07:01:40]      2 imovel(is) com leilao futuro
+[07:01:41]   -> Aluisio Francisco de Assis Cardoso Bringel  [https://www.sancarleiloes.com.br]
+[07:02:34]      0 imovel(is) com leilao futuro
+
+----- RELATORIO PARCIAL (5 min) -----
+Sites: 28/42 | Imoveis: 62
+  - Victor Oliveira Dorta: 9
+  - Cesar Augusto Bagatini: 6
+  - Rudival Almeida Gomes Junior: 8
+  - Daniel Elias Garcia: 15
+  - Davi Borges de Aquino: 1
+  - Milena Rosa Di Giacomo Adri: 19
+  - Joao Luiz de Franca Neto: 2
+  - Lucas Fernandes Almeida: 2
+-------------------------------------
+
+[07:02:35]   -> Elenice Lira Sales de Sousa  [https://www.leiloesbrasil.com.br]
+[07:02:47]      1 imovel(is) com leilao futuro
+[07:02:48]   -> Evando da Silva Lagares  [https://www.tonoleilao.com.br]
+[07:03:31]      0 imovel(is) com leilao futuro
+[07:03:32]   -> Mara Helena de Urzedo Fortunato  [https://www.maraurzedoleilao.com.br]
+[07:04:05]      0 imovel(is) com leilao futuro
+[07:04:06]   -> Joabe Balbino da Silva  [https://www.globoleiloes.com.br]
+[07:04:42]      0 imovel(is) com leilao futuro
+[07:04:43]   -> Rosimeire Alves de Oliveira Maia  [https://rosioliveiraleiloes.com.br]
+[07:05:08]      0 imovel(is) com leilao futuro
+[07:05:09]   -> Lucas Rafael Antunes Moreira  [https://www.mgl.com.br]
+[07:05:47]      0 imovel(is) com leilao futuro
+[07:05:48]   -> Jonas Gabriel Antunes Moreira  [https://www.mgl.com.br]
+[07:06:25]      0 imovel(is) com leilao futuro
+[07:06:26]   -> Fernando Caetano Moreira Filho  [https://www.mgl.com.br]
+[07:07:04]      0 imovel(is) com leilao futuro
+[07:07:05]   -> Erico Sobral Soares  [https://www.ericosobral.com.br]
+[07:07:34]      0 imovel(is) com leilao futuro
+[07:07:35]   -> Luiz Barbosa de Lima Junior  [https://www.lbleiloes.com.br]
+[07:07:36]      1 imovel(is) com leilao futuro
+
+----- RELATORIO PARCIAL (5 min) -----
+Sites: 38/42 | Imoveis: 64
+  - Victor Oliveira Dorta: 9
+  - Cesar Augusto Bagatini: 6
+  - Rudival Almeida Gomes Junior: 8
+  - Daniel Elias Garcia: 15
+  - Davi Borges de Aquino: 1
+  - Milena Rosa Di Giacomo Adri: 19
+  - Joao Luiz de Franca Neto: 2
+  - Lucas Fernandes Almeida: 2
+  - Elenice Lira Sales de Sousa: 1
+  - Luiz Barbosa de Lima Junior: 1
+-------------------------------------
+
+[07:07:37]   -> Camilla Correia Vecchi Aguiar  [https://www.vecchileiloes.com.br]
+[07:08:03]      0 imovel(is) com leilao futuro
+[07:08:04]   -> Marciano Aguiar Carneiro  [https://www.vecchileiloes.com.br]
+[07:08:53]      0 imovel(is) com leilao futuro
+[07:08:54]   -> Sergio Fleury Batista  [https://www.pmklog.com.br]
+[07:09:40]      0 imovel(is) com leilao futuro
+[07:09:41]   -> Paulo Marcelo Silva Almeida  [https://www.upleilao.com.br]
+[07:10:24]      0 imovel(is) com leilao futuro
+[07:10:25] Inseridos 19 imoveis novos no banco (dedup por URL).
+[07:10:25] CSV leiloeiros: leiloeiros_jucetins_2026-06-09.csv | CSV imoveis: imoveis_jucetins_2026-06-09.csv
+
+========================================================================
+RESUMO FINAL — IMOVEIS POR LEILOEIRO
+========================================================================
+   19  Milena Rosa Di Giacomo Adri
+   15  Daniel Elias Garcia
+    9  Victor Oliveira Dorta
+    8  Rudival Almeida Gomes Junior
+    6  Cesar Augusto Bagatini
+    2  Joao Luiz de Franca Neto
+    2  Lucas Fernandes Almeida
+    1  Davi Borges de Aquino
+    1  Elenice Lira Sales de Sousa
+    1  Luiz Barbosa de Lima Junior
+------------------------------------------------------------------------
+TOTAL imoveis (1a praca futura): 64 | Inseridos no banco: 19
+Relatorio anexado em: captura_dados_leiloes_v2.md

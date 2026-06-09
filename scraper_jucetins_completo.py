@@ -90,8 +90,8 @@ LEILOEIROS_REGULAR = [
     ("Fernando Caetano Moreira Filho", "https://www.mgl.com.br", "Contagem", "MG"),
     ("Erico Sobral Soares", "https://www.ericosobral.com.br", "Fortaleza", "CE"),
     ("Luiz Barbosa de Lima Junior", "https://www.lbleiloes.com.br", "Londrina", "PR"),
-    ("Joselma Moraes Martins", "", "Palmas", "TO"),
-    ("Lysia Moreira Silva", "", "Gurupi", "TO"),
+    ("Joselma Moraes Martins", "https://jmleiloesto.com.br", "Palmas", "TO"),  # site resolvido via busca (JM Leilões; tel. confere com PDF)
+    ("Lysia Moreira Silva", "", "Gurupi", "TO"),  # sem site próprio (advogada OAB TO002535, matrícula 12/12/2025, só Gmail)
     ("Camilla Correia Vecchi Aguiar", "https://www.vecchileiloes.com.br", "Goiania", "GO"),
     ("Marciano Aguiar Carneiro", "https://www.vecchileiloes.com.br", "Goiania", "GO"),
     ("Sergio Fleury Batista", "https://www.pmklog.com.br", "Goiania", "GO"),

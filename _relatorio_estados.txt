@@ -1,0 +1,317 @@
+# CORREÇÃO DE ESTADO (UF) PELO IBGE
+Pares (cidade,estado) reconhecidos com UF única e divergente: 179
+Registros a corrigir : 1221
+Já corretos          : 60489
+Protegidos (fragmento/RA-DF, intactos): 99 (1414 registros)
+Ambíguos (homônimos, estado fora das UFs): 20 (98 registros)
+Cidade não reconhecida (intacta): 3079 registros
+
+================================================================================
+## CORREÇÕES (estado_atual -> estado_correto)
+================================================================================
+[  142]  'Porto Alegre'                                 SE -> RS
+[  119]  'Bela Vista do Piauí'                          SP -> PI
+[   64]  'Osório'                                       SE -> RS
+[   53]  'Santo Ângelo'                                 TO -> RS
+[   45]  'Horizontina'                                  SE -> RS
+[   34]  'Florianópolis'                                SE -> SC
+[   29]  'Porto Alegre'                                 PR -> RS
+[   27]  'Pelotas'                                      SE -> RS
+[   26]  'Viamão'                                       SE -> RS
+[   25]  'Iaçu'                                         RN -> BA
+[   24]  'Bagé'                                         SE -> RS
+[   24]  'Joinville'                                    SE -> SC
+[   22]  'Torres'                                       SE -> RS
+[   21]  'Três Passos'                                  SE -> RS
+[   16]  'Carazinho'                                    SE -> RS
+[   15]  'Cachoeira do Sul'                             SE -> RS
+[   14]  'Brusque'                                      SE -> SC
+[   14]  'Rio Grande'                                   SE -> RS
+[   13]  'Biguaçu'                                      PR -> SC
+[   13]  'Esteio'                                       SE -> RS
+[   13]  'Frederico Westphalen'                         SE -> RS
+[   13]  'Santo Ângelo'                                 SE -> RS
+[   12]  'Novo Hamburgo'                                SE -> RS
+[   12]  'Porto Alegre'                                 SC -> RS
+[   12]  'Santa Cruz do Sul'                            SE -> RS
+[   12]  'São Borja'                                    SE -> RS
+[   11]  'Chapecó'                                      SE -> SC
+[   11]  'Osório'                                       ES -> RS
+[   11]  'Rio do Sul'                                   SE -> SC
+[   10]  'Santo Augusto'                                MG -> RS
+[    9]  'Veranópolis'                                  SE -> RS
+[    8]  'Bela Vista do Piauí'                          AC -> PI
+[    8]  'Canoas'                                       SE -> RS
+[    8]  'Cerro Branco'                                 AC -> RS
+[    8]  'Florianópolis'                                GO -> SC
+[    8]  'São Francisco de Assis'                       SE -> RS
+[    8]  'São Leopoldo'                                 SE -> RS
+[    8]  'Silva Jardim'                                 PE -> RJ
+[    8]  'Viamão'                                       GO -> RS
+[    7]  'Balneário Camboriú'                           PR -> SC
+[    7]  'Brasília'                                     SP -> DF
+[    7]  'Itaqui'                                       SE -> RS
+[    7]  'Pelotas'                                      ES -> RS
+[    7]  'Tapes'                                        SC -> RS
+[    6]  'Bauru'                                        AC -> SP
+[    6]  'Campos dos Goytacazes'                        MG -> RJ
+[    6]  'Encantado'                                    SE -> RS
+[    6]  'Porto Alegre'                                 AP -> RS
+[    5]  'Capão da Canoa'                               SE -> RS
+[    5]  'Caxias do Sul'                                BA -> RS
+[    5]  'Cerro Grande'                                 SE -> RS
+[    5]  'Cerro Largo'                                  SE -> RS
+[    5]  'Uruguaiana'                                   SE -> RS
+[    4]  'Bagé'                                         PR -> RS
+[    4]  'Butiá'                                        SE -> RS
+[    4]  'Canoas'                                       GO -> RS
+[    4]  'Caxias do Sul'                                SE -> RS
+[    4]  'Passo Fundo'                                  SE -> RS
+[    4]  'São Bento do Sul'                             SE -> SC
+[    3]  'Abelardo Luz'                                 SE -> SC
+[    3]  'Bela Vista do Piauí'                          RJ -> PI
+[    3]  'Bombinhas'                                    SE -> SC
+[    3]  'Curitiba'                                     BA -> PR
+[    3]  'Dom Pedrito'                                  SE -> RS
+[    3]  'Garça'                                        MT -> SP
+[    3]  'Guaraíta'                                     RS -> GO
+[    3]  'Mafra'                                        SE -> SC
+[    3]  'Panambi'                                      SE -> RS
+[    3]  'Paraí'                                        SE -> RS
+[    3]  'Porto Alegre'                                 CE -> RS
+[    3]  'Porto Alegre'                                 PB -> RS
+[    3]  'São Leopoldo'                                 AP -> RS
+[    3]  'Umirim'                                       RO -> CE
+[    2]  'Araguaína'                                    PA -> TO
+[    2]  'Baixio'                                       SC -> CE
+[    2]  'Balneário Camboriú'                           SE -> SC
+[    2]  'Balneário Camboriú'                           SP -> SC
+[    2]  'Bela Vista do Piauí'                          MG -> PI
+[    2]  'Blumenau'                                     SE -> SC
+[    2]  'Caçador'                                      SE -> SC
+[    2]  'Cantá'                                        MG -> RR
+[    2]  'Capão da Canoa'                               MA -> RS
+[    2]  'Caraá'                                        PA -> RS
+[    2]  'Curitiba'                                     SE -> PR
+[    2]  'Duque de Caxias'                              MG -> RJ
+[    2]  'Florianópolis'                                MG -> SC
+[    2]  'Florianópolis'                                SP -> SC
+[    2]  'Francisco Beltrão'                            PA -> PR
+[    2]  'Indaial'                                      SE -> SC
+[    2]  'Ipuaçu'                                       SE -> SC
+[    2]  'Mariana'                                      SP -> MG
+[    2]  'Monte Alegre de Minas'                        GO -> MG
+[    2]  'Monte Belo'                                   GO -> MG
+[    2]  'Paraú'                                        PA -> RN
+[    2]  'Passo Fundo'                                  MG -> RS
+[    2]  'Passos Maia'                                  SE -> SC
+[    2]  'Pedra'                                        AL -> PE
+[    2]  'Piau'                                         PI -> MG
+[    2]  'Pirapemas'                                    MG -> MA
+[    2]  'Pirenópolis'                                  SC -> GO
+[    2]  'Porto Alegre'                                 BA -> RS
+[    2]  'Porto Alegre'                                 SP -> RS
+[    2]  'Santa Bárbara do Pará'                        TO -> PA
+[    2]  'Santa Maria do Salto'                         SP -> MG
+[    2]  'Santo Ângelo'                                 SC -> RS
+[    2]  'São José de Caiana'                           PE -> PB
+[    2]  'São Luiz Gonzaga'                             BA -> RS
+[    2]  'Três Passos'                                  RJ -> RS
+[    1]  'Alto Santo'                                   SP -> CE
+[    1]  'Araguaína'                                    GO -> TO
+[    1]  'Atalaia do Norte'                             SC -> AM
+[    1]  'Bagé'                                         ES -> RS
+[    1]  'Bagé'                                         TO -> RS
+[    1]  'Balneário Camboriú'                           MT -> SC
+[    1]  'Cachoeira do Sul'                             PE -> RS
+[    1]  'Campo Largo'                                  MS -> PR
+[    1]  'Cana Verde'                                   SP -> MG
+[    1]  'Canoinhas'                                    PR -> SC
+[    1]  'Castilho'                                     RS -> SP
+[    1]  'Conceição de Ipanema'                         SP -> MG
+[    1]  'Concórdia'                                    SE -> SC
+[    1]  'Corumbá'                                      MG -> MS
+[    1]  'Corupá'                                       AC -> SC
+[    1]  'Curitiba'                                     CE -> PR
+[    1]  'Curitiba'                                     MG -> PR
+[    1]  'Dourado'                                      CE -> SP
+[    1]  'Duque de Caxias'                              SP -> RJ
+[    1]  'Florianópolis'                                MT -> SC
+[    1]  'Florianópolis'                                ∅ -> SC
+[    1]  'Francisco Beltrão'                            AM -> PR
+[    1]  'Frederico Westphalen'                         PB -> RS
+[    1]  'Guaçuí'                                       SP -> ES
+[    1]  'Horizontina'                                  MA -> RS
+[    1]  'Içara'                                        SE -> SC
+[    1]  'Jaguaquara'                                   SP -> BA
+[    1]  'Jaraguá do Sul'                               SE -> SC
+[    1]  'Maringá'                                      GO -> PR
+[    1]  'Marumbi'                                      SP -> PR
+[    1]  'Mirassol'                                     GO -> SP
+[    1]  'Muritiba'                                     PR -> BA
+[    1]  'Nossa Senhora Aparecida'                      CE -> SE
+[    1]  'Panambi'                                      SP -> RS
+[    1]  'Paranavaí'                                    ES -> PR
+[    1]  'Poá'                                          RS -> SP
+[    1]  'Porto Alegre'                                 AC -> RS
+[    1]  'Porto Alegre'                                 AL -> RS
+[    1]  'Porto Alegre'                                 MS -> RS
+[    1]  'Rio das Antas'                                SE -> SC
+[    1]  'Rio do Campo'                                 AC -> SC
+[    1]  'Rio do Sul'                                   AP -> SC
+[    1]  'Rio do Sul'                                   ES -> SC
+[    1]  'Rio Grande'                                   AP -> RS
+[    1]  'Rio Negrinho'                                 RN -> SC
+[    1]  'Rio Negrinho'                                 SP -> SC
+[    1]  'Santa Cecília do Pavão'                       AP -> PR
+[    1]  'Santa Cecília do Pavão'                       GO -> PR
+[    1]  'Santa Cecília do Pavão'                       MT -> PR
+[    1]  'Santa Cecília do Pavão'                       RJ -> PR
+[    1]  'Santa Cecília do Pavão'                       SE -> PR
+[    1]  'Santa Cecília do Pavão'                       SP -> PR
+[    1]  'Santa Cruz Cabrália'                          MT -> BA
+[    1]  'Santa Isabel do Ivaí'                         SP -> PR
+[    1]  'Santa Rosa de Viterbo'                        RJ -> SP
+[    1]  'Santo Antônio da Barra'                       SP -> GO
+[    1]  'Santo Antônio do Caiuá'                       MG -> PR
+[    1]  'Santo Antônio do Içá'                         RJ -> AM
+[    1]  'Santo Antônio do Tauá'                        BA -> PA
+[    1]  'Santo Augusto'                                AL -> RS
+[    1]  'São Francisco do Sul'                         MS -> SC
+[    1]  'São Leopoldo'                                 PA -> RS
+[    1]  'São Paulo'                                    AC -> SP
+[    1]  'São Paulo'                                    PR -> SP
+[    1]  'São Pedro da Serra'                           ES -> RS
+[    1]  'Tabira'                                       PR -> PE
+[    1]  'Tabocão'                                      MS -> TO
+[    1]  'Taipu'                                        SP -> RN
+[    1]  'Umirim'                                       SP -> CE
+[    1]  'Veranópolis'                                  SC -> RS
+[    1]  'Xanxerê'                                      SE -> SC
+
+================================================================================
+## PROTEGIDOS (não alterados: truncamento local ou RA do DF)
+================================================================================
+[  306]  'Socorro'                                      SE  (fragmento; descartado ->SP)
+[  286]  'Serra'                                        MT  (fragmento; descartado ->ES)
+[  100]  'Jordão'                                       SP  (fragmento; descartado ->AC)
+[   90]  'Rio Preto'                                    SP  (fragmento; descartado ->MG)
+[   61]  'Caxias'                                       RJ  (fragmento; descartado ->MA)
+[   47]  'Guararapes'                                   PE  (fragmento; descartado ->SP)
+[   40]  'Descoberto'                                   GO  (fragmento; descartado ->MG)
+[   36]  'Paraíso'                                      MG  (fragmento; descartado ->SC/SP)
+[   31]  'Lapa'                                         MG  (fragmento; descartado ->PR)
+[   30]  'Amambai'                                      DF  (RA-DF; descartado ->MS)
+[   23]  'Goianá'                                       PE  (fragmento; descartado ->MG)
+[   22]  'Progresso'                                    SC  (fragmento; descartado ->RS)
+[   21]  'Taguatinga'                                   DF  (RA-DF; descartado ->TO)
+[   20]  'Barra'                                        RJ  (fragmento; descartado ->BA)
+[   19]  'Aparecida'                                    PR  (fragmento; descartado ->PB/SP)
+[   14]  'Guaporé'                                      RO  (fragmento; descartado ->RS)
+[   12]  'Guará'                                        DF  (RA-DF; descartado ->SP)
+[   11]  'Amarante'                                     RN  (fragmento; descartado ->PI)
+[   10]  'Alegria'                                      PE  (fragmento; descartado ->RS)
+[    9]  'Parnaíba'                                     SP  (fragmento; descartado ->PI)
+[    9]  'Serra'                                        SP  (fragmento; descartado ->ES)
+[    8]  'Água Clara'                                   DF  (RA-DF; descartado ->MS)
+[    8]  'Cidelândia'                                   DF  (RA-DF; descartado ->MA)
+[    8]  'Vitória'                                      PR  (fragmento; descartado ->ES)
+[    6]  'Boa Vista'                                    SP  (fragmento; descartado ->PB/RR)
+[    6]  'Capitão'                                      SP  (bairro; descartado ->RS)
+[    6]  'Conquista'                                    BA  (fragmento; descartado ->MG)
+[    6]  'Iporá'                                        PR  (fragmento; descartado ->GO)
+[    6]  'Mata'                                         PE  (fragmento; descartado ->RS)
+[    6]  'Passa Quatro'                                 SP  (fragmento; descartado ->MG)
+[    6]  'Rio Claro'                                    MT  (fragmento; descartado ->RJ/SP)
+[    6]  'Santa Bárbara'                                SP  (fragmento; descartado ->BA/MG)
+[    6]  'Santana'                                      SP  (fragmento; descartado ->AP/BA)
+[    5]  'Barras'                                       SC  (fragmento; descartado ->PI)
+[    5]  'Cássia'                                       BA  (fragmento; descartado ->MG)
+[    5]  'Paraná'                                       RO  (fragmento; descartado ->RN)
+[    5]  'Rio Verde'                                    MT  (fragmento; descartado ->GO)
+[    4]  'Amarante'                                     CE  (fragmento; descartado ->PI)
+[    4]  'Consolação'                                   SP  (bairro; descartado ->MG)
+[    4]  'Horizonte'                                    MG  (fragmento; descartado ->CE)
+[    4]  'Paraná'                                       PR  (fragmento; descartado ->RN)
+[    4]  'Planaltina'                                   DF  (RA-DF; descartado ->GO)
+[    4]  'Porto Alegre'                                 MT  (fragmento; descartado ->RS)
+[    4]  'Rio Preto'                                    RJ  (fragmento; descartado ->MG)
+[    4]  'Santo Amaro'                                  SP  (bairro; descartado ->BA)
+[    3]  'Olaria'                                       RJ  (bairro; descartado ->MG)
+[    3]  'Platina'                                      PR  (fragmento; descartado ->SP)
+[    3]  'Poções'                                       MG  (fragmento; descartado ->BA)
+[    3]  'Porto Alegre'                                 PI  (fragmento; descartado ->RS)
+[    3]  'Santa Rosa'                                   SE  (fragmento; descartado ->RS)
+[    3]  'Taquara'                                      RJ  (bairro; descartado ->RS)
+[    2]  'Areia'                                        RS  (fragmento; descartado ->PB)
+[    2]  'Bonfinópolis'                                 MG  (fragmento; descartado ->GO)
+[    2]  'Bugre'                                        RS  (fragmento; descartado ->MG)
+[    2]  'Conceição'                                    SP  (fragmento; descartado ->PB)
+[    2]  'Dourados'                                     MG  (fragmento; descartado ->MS)
+[    2]  'Glória'                                       SE  (fragmento; descartado ->BA)
+[    2]  'Itaporanga'                                   SE  (fragmento; descartado ->PB/SP)
+[    2]  'Jacuí'                                        RS  (fragmento; descartado ->MG)
+[    2]  'Lapa'                                         SP  (bairro; descartado ->PR)
+[    2]  'Lontra'                                       PR  (fragmento; descartado ->MG)
+[    2]  'Mendes'                                       BA  (fragmento; descartado ->RJ)
+[    2]  'Palmeiras'                                    PR  (fragmento; descartado ->BA)
+[    2]  'Palmeiras'                                    SP  (fragmento; descartado ->BA)
+[    2]  'Paraíso'                                      PR  (fragmento; descartado ->SC/SP)
+[    2]  'Perdizes'                                     SP  (bairro; descartado ->MG)
+[    2]  'Perdões'                                      SP  (fragmento; descartado ->MG)
+[    2]  'Pirapora'                                     SP  (fragmento; descartado ->MG)
+[    2]  'Rio Pardo'                                    SP  (fragmento; descartado ->RS)
+[    2]  'São Félix'                                    PE  (fragmento; descartado ->BA)
+[    2]  'Tijucas'                                      RJ  (bairro; descartado ->SC)
+[    2]  'Triunfo'                                      PR  (fragmento; descartado ->PB/PE/RS)
+[    1]  'Alvorada do Sul'                              MS  (fragmento; descartado ->PR)
+[    1]  'Araçoiaba'                                    CE  (fragmento; descartado ->PE)
+[    1]  'Bandeira'                                     RJ  (bairro; descartado ->MG)
+[    1]  'Barreiros'                                    SP  (bairro; descartado ->PE)
+[    1]  'Camaragibe'                                   AL  (fragmento; descartado ->PE)
+[    1]  'Capitão'                                      RJ  (bairro; descartado ->RS)
+[    1]  'Casa Nova'                                    SP  (bairro; descartado ->BA)
+[    1]  'Flores'                                       RJ  (fragmento; descartado ->PE)
+[    1]  'Florianópolis'                                DF  (RA-DF; descartado ->SC)
+[    1]  'Guimarães'                                    MT  (fragmento; descartado ->MA)
+[    1]  'Ipira'                                        BA  (fragmento; descartado ->SC)
+[    1]  'Liberdade'                                    SP  (bairro; descartado ->MG)
+[    1]  'Melgaço'                                      MT  (fragmento; descartado ->PA)
+[    1]  'Palma'                                        RS  (fragmento; descartado ->MG)
+[    1]  'Paraíso'                                      RO  (fragmento; descartado ->SC/SP)
+[    1]  'Penha'                                        RJ  (bairro; descartado ->SC)
+[    1]  'Porto Alegre'                                 DF  (RA-DF; descartado ->RS)
+[    1]  'Rio Azul'                                     RS  (fragmento; descartado ->PR)
+[    1]  'Rio Branco'                                   MG  (fragmento; descartado ->AC/MT)
+[    1]  'Rio Pardo'                                    MS  (fragmento; descartado ->RS)
+[    1]  'Rio Preto'                                    BA  (fragmento; descartado ->MG)
+[    1]  'Salgado'                                      SP  (fragmento; descartado ->SE)
+[    1]  'Santa Maria'                                  ES  (fragmento; descartado ->RN/RS)
+[    1]  'São Miguel'                                   AL  (fragmento; descartado ->RN)
+[    1]  'Saúde'                                        SP  (bairro; descartado ->BA)
+[    1]  'Serra'                                        RS  (fragmento; descartado ->ES)
+[    1]  'Vila Maria'                                   SP  (bairro; descartado ->RS)
+
+================================================================================
+## AMBÍGUOS (deixados intactos p/ revisão)
+================================================================================
+[   39]  'Santa Maria'                                  SE  (UFs IBGE: RN,RS)
+[   12]  'São Sebastião'                                DF  (UFs IBGE: AL,SP)
+[    6]  'Maravilha'                                    AC  (UFs IBGE: AL,SC)
+[    6]  'Maravilha'                                    PR  (UFs IBGE: AL,SC)
+[    6]  'Maravilha'                                    RS  (UFs IBGE: AL,SC)
+[    5]  'Campo Grande'                                 RJ  (UFs IBGE: AL,MS,RN)
+[    4]  'Cascavel'                                     AP  (UFs IBGE: CE,PR)
+[    4]  'Sobradinho'                                   DF  (UFs IBGE: BA,RS)
+[    3]  'Maravilha'                                    MS  (UFs IBGE: AL,SC)
+[    3]  'Presidente Kennedy'                           MG  (UFs IBGE: ES,TO)
+[    1]  'Bandeirantes'                                 RJ  (UFs IBGE: MS,PR)
+[    1]  'Cascavel'                                     RS  (UFs IBGE: CE,PR)
+[    1]  'Cascavel'                                     SP  (UFs IBGE: CE,PR)
+[    1]  'Novo Horizonte'                               MG  (UFs IBGE: BA,SC,SP)
+[    1]  'Queimadas'                                    CE  (UFs IBGE: BA,PB)
+[    1]  'Santa Maria'                                  DF  (UFs IBGE: RN,RS)
+[    1]  'Santo André'                                  BA  (UFs IBGE: PB,SP)
+[    1]  'Santo André'                                  SE  (UFs IBGE: PB,SP)
+[    1]  'São João Batista'                             RJ  (UFs IBGE: MA,SC)
+[    1]  'Sapucaia'                                     MG  (UFs IBGE: PA,RJ)

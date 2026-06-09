@@ -6365,3 +6365,282 @@ Sites afetados:
    evita duplicar o que já está no banco.
 
 **Relatório gerado em:** 09/06/2026 06:46:52
+
+
+---
+
+## ETAPA 1 — Recuperação via FlareSolverr (SPA/Cloudflare) — 09/06/2026 11:33
+
+Reprocessados 32 sites que retornaram 0 no scraper inicial (SPA/JS/Cloudflare).
+FlareSolverr renderiza o JS e a `extrair()` é reaplicada (mesmas regras: 1ª praça futura, dedup por URL).
+
+- Imóveis recuperados (1ª praça futura): **126** | Inseridos novos no banco: **84**
+- Sites com recuperação > 0: 11 de 32
+
+| Leiloeiro (recuperado) | Imóveis |
+|---|---|
+| Rodolfo da Rosa Schontag | 50 |
+| Jonas Gabriel Antunes Moreira | 15 |
+| Lucas Rafael Antunes Moreira | 15 |
+| Fernando Caetano Moreira Filho | 15 |
+| Rafael Galvani Ferreira | 14 |
+| Joabe Balbino da Silva | 3 |
+| Alex Willian Hoppe | 3 |
+| Bruno Barreto Sanches | 3 |
+| Livia Leilane de Oliveira Azevedo | 3 |
+| Murilo Goncalves Ramos | 3 |
+| Paulo Marcelo Silva Almeida | 2 |
+
+**Diagnóstico-chave:** o erro original não era Cloudflare na maioria — era SPA cujo HTML só
+aparece após JS (ex.: `webleiloes` home = 472 KB renderizada vs. ~1,4 KB no shell estático).
+A correção genérica (render via FlareSolverr na **home** antes de tentar sufixos) resolve a
+maior parte sem parser dedicado por domínio. Sites ainda em 0 exigem API interna (XHR/JSON).
+
+**Gerado em:** 09/06/2026 11:33:59
+
+
+---
+
+## 38. Captura dos leiloeiros REGULARES de Roraima/Rondônia — JUCER (jun/2026)
+
+> Execução real em 09/06/2026 a partir do PDF *Leiloeiros Roraima* (lista JUCER RR + lista
+> de antiguidade RO). Fluxo: extrair leiloeiros **REGULARES** → CSV `nome,site` → scraper
+> genérico (`scraper_rr_ro.py`) → filtro de 1ª praça futura → inserção no banco + CSV datado.
+
+### 38.1. Resultado
+
+- **26 leiloeiros REGULARES com site** (após excluir IRREGULAR/suspenso/afastado e deduplicar
+  domínios compartilhados — MGL, LanceVip, Leilões Aguiar, Vinco). CSV de leiloeiros:
+  `csv/leiloeiros_roraima_rondonia_2026-06-09.csv`.
+- **72 imóveis** com 1ª praça **posterior a 09/06/2026** capturados; **55 novos** inseridos no
+  SQLite `imoveis_leiloeiros.db`, **17** já existiam (dedup por URL). CSV de imóveis:
+  `csv/imoveis_rr_ro_2026-06-09.csv` (colunas: leiloeiro, junta, site, titulo, cidade, uf,
+  preco, data_leilao, imagem, anexos, url). 69/72 com imagem.
+- **11 sites produtivos**, 14 com 0 imóveis (parkados, Cloudflare/JS não-mapeado, ou lotes sem
+  tipo no título), 1 inacessível (DNS).
+
+| Imóveis | Leiloeiro | Observação |
+|--------:|-----------|------------|
+| 12 | Thaís Costa Bastos Teixeira | |
+| 10 | Hugo Moreira Pimenta (Rio Negro) | |
+| 10 | Rodrigo Aparecido Rigolon | |
+|  8 | Patrícia Pimentel Grocoski Costa | |
+|  7 | Dora Plat (Portal Zuk) | |
+|  6 | Deonizia Kiratch | plataforma vlance |
+|  6 | Leilões Aguiar (Vera Lúcia/Vera Maria) | |
+|  5 | Rafael Galvani Ferreira | Cloudflare |
+|  3 | MGL Leilões (Fernando/Jonas/Lucas) | mgl.com.br 403 → FlareSolverr |
+|  3 | Daniel Elias Garcia | Cloudflare |
+|  2 | Fernando Caetano Moreira Filho | espelhado com Lucas (dedup) |
+|  0 | Wesley, Mayco, Hoppe, Brian/GF, Jimmy Asami, Carlos H. Barbosa, LanceVip, Portela, Marcus Allain, Lucas Rafael, Sandro/Norte, Beltrame, Vinco, Reis | ver 38.2 |
+|  — | Angélica Vilas Boas (vbleiloes.com.br) | inacessível (DNS) |
+
+### 38.2. Principais dificuldades enfrentadas
+
+1. **Listagens 100% renderizadas por JS.** `requests` puro retorna só o *shell* (0 cards) na
+   maioria — vlance/Vue (deonizialeiloes), WordPress+AJAX e SPAs. Os lotes só aparecem após
+   execução de JavaScript.
+2. **Cloudflare Managed Challenge** em ~15 dos 26 sites. Vários passam com 200 mas
+   `mgl.com.br` retorna **403** e `reisleiloes.com.br` **401** direto no `requests`.
+3. **Lotes aninhados dentro do leilão (padrão vlance).** A página de categoria
+   (`/leilao/index/imoveis`) lista **leilões** (eventos), não lotes; os lotes ficam em
+   `/leilao/index/leilao_id/<id>`. Extração "plana" de cards na home/categoria não acha lote
+   nenhum — é preciso seguir os links de leilão.
+4. **API interna opaca.** `/core/api/get-lotes` existe mas ignora os params óbvios
+   (`categoria`, `leilao_id`) e devolve vazio (len 28); `get-leiloes` ignora `categoria` e
+   retorna tudo. Reverter cada plataforma não escala.
+5. **Lixo de DOM capturado como "imóvel".** A 1ª versão (crawl profundo) trouxe **71% de
+   ruído**: texto de navegação (`prev next`, `Detalhes do lote`, `Auditório do Leilão`),
+   **leilões cancelados** e até **produtos/veículos** (TV, iPhone, ar-condicionado) que estavam
+   no mesmo bloco de um imóvel.
+6. **Data ausente no card.** Muitos cards de listagem não mostram a data da praça — exige
+   abrir a página de detalhe (caro) para decidir se a 1ª praça é futura; com orçamento limitado
+   de detalhes, parte dos imóveis válidos é perdida.
+7. **Sites mortos/parkados:** `vbleiloes.com.br` (ConnectionError/DNS), `maleiloesro.com.br`
+   (len 67, parkado), `maycosantos.lel.br` (página mínima).
+8. **Status divergente entre fontes.** O mesmo leiloeiro aparece **Regular** na tabela de RR e
+   **Irregular** na lista de antiguidade de RO (ex.: Wesley Silva Ramos) — exige reconciliação
+   manual antes de montar o CSV.
+9. **Plataformas espelhadas.** `fernandoleiloeiro.com.br` e `lucasleiloeiro.com.br` servem o
+   **mesmo conteúdo** (backend MGL) → risco de imóvel duplicado entre leiloeiros (mitigado por
+   dedup por URL, que aqui zerou Lucas).
+10. **Encoding no Windows.** Ler o banco com `python -c` sem `-X utf8` mostra mojibake
+    (`S�tio`) no console **cp1252** — é artefato de exibição, não corrupção no banco; e a fonte
+    em si às vezes vem Latin-1, gerando `U+FFFD` se decodificada errada.
+11. **Anexos com falso-positivo.** O heurístico de "qualquer `.pdf`" capturou o
+    `aviso_cookies.pdf` do rodapé em vez do edital/matrícula reais (que ficam mais fundo, na
+    página do lote).
+12. **Parsing de cidade imperfeito.** O regex `Cidade/UF` corta nomes compostos
+    ("Plácido de Castro/AC" → "Castro"; "Poços de Caldas" → "Caldas"). O nome completo continua
+    no título, mas a coluna `cidade` fica truncada.
+
+### 38.3. Correções sugeridas (mapeadas às dificuldades)
+
+- **(1,2,3) Render + fallback + crawl em camadas — já implementado.** Playwright (browser único
+  reusado) com fallback automático para **FlareSolverr** (`:8191`) quando há challenge/401/403,
+  e crawl `home → categoria → leilão → lote`. Manter este pipeline como base.
+- **(4) Adapter por plataforma para os casos de alto volume.** Detectar `vlance`
+  (`/v3/js/vlance`, `/core/api/get-leiloes`) e consumir o JSON de `get-leiloes` (tem `nm`,
+  `dt_formatada`, `dt_segundoleilao_data`, paginação) — dados tipados e mais rápidos que render.
+  Capturar o XHR real de `get-lotes` via `page.on("response")` (em vez de chutar params) e fixar
+  o endpoint/params descobertos por plataforma. Ver seção 27 (camada de adaptadores).
+- **(5) Filtro precisão > recall — já implementado.** Exigir **tipo de imóvel no título**
+  (casa/terreno/sítio/galpão/apartamento/sala comercial/chácara…), rejeitar lixo de navegação
+  (`JUNK_RE`), excluir `cancelad|encerrad|arrematad|suspens` (`DEAD_RE`) e bloquear
+  produtos/veículos (`NEG_WORDS`). **Efeito colateral conhecido:** sites que titulam o lote como
+  "Lote N" (descrição só no corpo) rendem 0 — corrigir com adapter que leia o `<h_>`/descrição
+  do card, não só o texto do link. Reaproveitar `categoria_bem` (seção 22) para a decisão
+  imóvel × produto.
+- **(6) Orçamento de detalhe adaptativo + 2ª praça.** Quando a categoria já é "imóveis",
+  assumir o lote como imóvel e priorizar abrir detalhe **apenas** para os sem data no card;
+  extrair também `dt_segundoleilao` para casos em que a 1ª praça já passou mas a 2ª é futura
+  (regra de negócio a confirmar). Persistir o orçamento por site em config.
+- **(7) Pré-checagem de liveness.** Rodar o `recon` (status/headers/tamanho) antes do scraping e
+  pular automaticamente DNS-fail/parkados (`len < 1KB`, sem `<a>` de imóvel), registrando o
+  motivo — evita gastar render em site morto.
+- **(8) Tabela-mestre de status.** Consolidar RR+RO numa planilha única com a **regra: vale o
+  status mais restritivo** entre as fontes; marcar conflitos para revisão. Automatizar o merge
+  na geração do CSV de leiloeiros.
+- **(9) Dedup por URL canônica + chave leiloeiro.** Já há dedup por URL; adicionar
+  normalização de URL (remover query de tracking) e, para backends espelhados, mapear o
+  leiloeiro "dono" para não perder atribuição.
+- **(10) Encoding.** Rodar todo script com `python -X utf8` (ou `PYTHONUTF8=1`); ao ler resposta
+  bruta, respeitar `charset` do `Content-Type`/meta e normalizar para UTF-8 antes do parse.
+- **(11) Anexos com allowlist.** Aceitar PDF só quando o texto do link casar
+  `edital|matr[ií]cula|laudo|avalia[çc][ãa]o` **e** rejeitar `cookie|termo|pol[ií]tica|aviso`;
+  buscar anexos preferencialmente na **página do lote**, não na listagem. Integrar com
+  `baixar-docs` (DocumentoDownloader) para baixar de fato os PDFs válidos.
+- **(12) Cidade via IBGE.** Após capturar, normalizar `cidade/uf` contra a lista IBGE
+  (`corrigir_cidades_ibge.py`, seção 32) usando match por substring no título — corrige nomes
+  compostos truncados.
+
+### 38.4. Checklist desta captura
+
+- [x] Extrair só leiloeiros REGULARES (excluir IRREGULAR/suspenso/afastado).
+- [x] Deduplicar domínios compartilhados (MGL/LanceVip/Aguiar/Vinco).
+- [x] CSV `nome,site` em `/csv`.
+- [x] Render JS + fallback FlareSolverr para Cloudflare.
+- [x] Filtrar 1ª praça > data da captura.
+- [x] Capturar título, imagem, preço, cidade/uf, data, anexos.
+- [x] Inserir no banco com dedup por URL + CSV datado em `/csv`.
+- [x] Report parcial por leiloeiro a cada 5 min.
+- [ ] **Pendências p/ próxima rodada:** adapter vlance via API; allowlist de anexos + baixar-docs;
+      normalização de cidade IBGE; capturar lotes "Lote N" (ler descrição do card).
+
+---
+
+## ETAPAS 2–4 — Pós-captura JUCETINS (enriquecimento, sync e docs) — 09/06/2026
+
+Continuação da ETAPA 1 (recuperação via FlareSolverr). Correções acionáveis:
+
+### Etapa 4 — Sync para produção (PostgreSQL)
+- Conversão SQLite→JSONL e `python run.py importar-scraping --arquivo <jsonl>`: **103 lidos → 88 inseridos, 15 duplicados** (dedup por `url_original`; sites nacionais já presentes via outras juntas).
+- **Mapeamento de campos** (SQLite → JSONL do importador): `titulo→titulo`, `url→url/source_url`, `tipo→tipo_imovel` (derivar por palavra-chave do título; o importador mapeia string→enum, `imovel` cai em OUTRO), `imagem→fotos[]`, `uf→estado` (validado contra UFs BR), `lance_inicial→preco` (parse pt-BR `1.234,56`→float), `leiloeiro→nome_anunciante`, `descricao→descricao_completa`.
+- **Atenção:** `importar_scraping.py` **não** mapeia documentos — `arquivos` precisa ser populado em etapa separada (enricher), não no import.
+
+### Etapa 2 — Enricher de detalhe + baixar-docs
+- A listagem captura **links de página de detalhe**, não os PDFs. Para `baixar-docs` funcionar é **obrigatório** um enricher: abrir cada `url_original` (FlareSolverr), extrair `edital|matrícula|laudo|avaliação|certidão`/`.pdf` e gravar `Imovel.arquivos = [{tipo,url,nome}]`.
+- Resultado: **76/104 imóveis enriquecidos, 130 docs gravados**; guard para **não sobrescrever** imóveis que já tinham PDFs (duplicatas de produção).
+- **Armadilha de download (Windows local):** `run.py baixar-docs` via Python local falha com `SSL: CERTIFICATE_VERIFY_FAILED` (mesmo erro do `normalizar-cidades`). **Correção:** rodar `baixar-docs` **dentro do container** (cert store correto) — é o que o **Celery beat** já faz de hora em hora (800 docs previamente baixados comprovam). Alternativa: `verify=False`/`certifi` no `document_downloader` para execução local. Os 130 docs ficam **enfileirados** e o beat os baixa automaticamente.
+
+### Etapa 3 — Leiloeiros sem site
+- `Joselma Moraes Martins` → **jmleiloesto.com.br** (resolvido por busca; telefone confere com o PDF). Gravado no CSV e no scraper.
+- `Lysia Moreira Silva` → **sem site próprio** (advogada OAB TO002535, matrícula 12/12/2025, só Gmail) — marcar para captura manual quando houver domínio.
+
+**Registrado em:** 09/06/2026
+
+
+---
+
+## CORREÇÕES DE CAPTURA — Revisão de TÍTULOS e LINKS de todos os imóveis — 09/06/2026 14:43
+
+> Remediação de qualidade dos dados já no banco do site (PostgreSQL). Títulos-lixo como
+> "Compartilhe no WhatsApp", "O JavaScript não está disponível" e textos concatenados
+> ("Anterior Próxima... 636 visitas...") foram reinvestigados e re-extraídos da fonte.
+
+### Resultado
+- Registros com título/URL ruim: **3.562 → 0 títulos-lixo** (~10% dos ativos saneados)
+- Corrigidos: ~3.858 títulos | Desativados: 234 (125 páginas 404 + 109 links sociais quebrados)
+- Ativos finais: 33.948
+
+### Correções a aplicar (dificuldade → solução)
+
+1. **Botão "Compartilhe no WhatsApp/Twitter" capturado como imóvel → ignorar âncoras sociais; recuperar do `?text=`.**
+   O scraper genérico pegava o `<a href="api.whatsapp.com/send?text=...">` do botão de compartilhar como
+   se fosse o lote (URL e título errados). **Correção:** (a) na coleta, **excluir** hrefs de
+   `whatsapp|twitter|x.com|facebook|telegram` da seleção de lotes; (b) para registros já gravados, o título
+   real está no parâmetro `?text=` — recuperá-lo via `parse_qs`+`unquote`; (c) como a URL do lote se perdeu,
+   **desativar** esses registros (link aponta para rede social, não para o imóvel).
+
+2. **SPA não renderizado → "O JavaScript não está disponível" → usar `og:title`/JSON-LD do HTML estático.**
+   Mesmo em SPAs, as meta tags de SEO/compartilhamento (`og:title`, `application/ld+json` `name`) vêm no
+   HTML inicial. **Correção:** extração em cascata `og:title → JSON-LD name → <title> limpo → <h1>` via httpx
+   (rápido); **Playwright só como fallback** para os poucos que não servem meta estática. Recuperou ~90% sem browser.
+
+3. **Texto concatenado do card ("Anterior Próxima... 636 visitas... Facebook Twitter Whatsapp") → priorizar meta/JSON-LD, nunca o texto bruto do container.**
+   **Correção:** o título deve vir de `og:title`/JSON-LD/`<title>`, com **limpeza de sufixos** ("- Lance Inicial: R$...",
+   "- Avaliação: R$...", "| NomeDoSite Leilões") e **rejeição de lixo** por regex
+   (`compartilh|whatsapp|javascript|visitas|cookie|anterior próxima|^Lote -|categorias`).
+
+4. **Título no slug da URL quando a página não entrega meta (vipleiloes SPA) → derivar do path.**
+   Páginas tipo `/evento/anuncio/toyota-hilux-swsrxa4fd-17` não servem `og:title` nem no Playwright, mas o
+   slug **é** o título. **Correção:** último segmento do path → remove id numérico final → `-`/`_`→espaço →
+   Title Case. Recuperou 287 títulos.
+
+5. **Mojibake nos títulos antigos → re-extração já corrige.**
+   Títulos gravados com `R�`, `S�tio` etc. **Correção:** ao re-extrair via httpx/Playwright, o `og:title`
+   vem em UTF-8 correto, substituindo o texto corrompido automaticamente.
+
+6. **Página de lote removida (404/410) → desativar.**
+   **Correção:** no re-fetch, status `404/410` ⇒ `ativo=false` (o lote saiu do site). 125 desativados.
+
+7. **Concorrência alta gerava falsas falhas (throttling) → retry com menos conexões.**
+   A 1ª passada (15 conexões) registrou 897 "falhas" que eram timeouts. **Correção:** 2ª passada com
+   concorrência 8, 2 tentativas e timeout 20s recuperou 674; restante via Playwright.
+
+8. **Filtro de "título curto" (<12 chars) marca títulos legítimos como ruins.**
+   "MOTOCICLETA", "VESTUÁRIO", "Picotadeira", "Apartamento" são títulos reais e curtos. **Correção:** não tratar
+   comprimento isolado como lixo — só sinalizar curto **se também** casar padrão de lixo ou vier de URL de
+   listagem (`/eventos/leilao/`).
+
+**Relatório gerado em:** 09/06/2026 14:43:22
+
+### 38.5. 2ª passada — melhoria de recall (slug) + import em produção (PostgreSQL)
+
+Após a 1ª rodada (72 imóveis, seção 38.1), duas ações:
+
+**(a) Import no banco de produção (PostgreSQL Docker).** Os imóveis foram convertidos para
+JSONL no schema do `pipeline/importar_scraping.py` (campos: `titulo`, `url`, `tipo_imovel`,
+`fotos`, `cidade`, `estado`, `preco`, `nome_anunciante`, `descricao_completa`) e importados com
+`python run.py importar-scraping`. **Armadilhas reais:**
+- O mount real do container **não** era `OneDrive/.../leilao-scraper/leilao-scraper`, e sim
+  `C:\Users\arthur\leilao-scraper` → `/app` (descobrir com
+  `docker inspect <ctn> --format '{{range .Mounts}}{{.Source}} -> {{.Destination}}{{"\n"}}{{end}}'`).
+- O container `leilao_api` estava `Exited (1)`; usar o `leilao_worker` (mesmo mount/DB) para o
+  `docker exec`.
+- **Git Bash mangla `/app/...`** → usar `MSYS_NO_PATHCONV=1` antes do `docker exec`.
+- **Bind-mount do Docker Desktop no Windows fica obsoleto** ao sobrescrever o arquivo *in place*:
+  o host via 82 linhas, o container via 72. **Solução:** `docker cp host.jsonl ctn:/app/...`
+  com nome novo (ou novo nome de arquivo) em vez de confiar no mount.
+- O `importar-scraping` **não persiste a data da praça** (não há campo no mapeamento) — a data
+  fica só em `descricao_completa`. Para manter `data_leilao` estruturada, estender o mapeamento.
+
+Resultado import: 1ª passada **50 inseridos** / 22 dup; 2ª passada **+10** → **60 imóveis meus
+em produção** (`SELECT count(*) FROM imoveis WHERE descricao LIKE '%1a praca:%'` = 60).
+
+**(b) Recall via slug da URL.** Muitos sites (ex.: `gfleiloes.com.br`) deixam o link do lote
+como **imagem** (texto vazio) e descrevem o bem **no slug**:
+`/lote/imovel-area-de-4896m_-morumbi-sao-paulo-sp/238/`. O filtro que exigia tipo de imóvel no
+*título* descartava esses cards. **Correção implementada** em `extract_cards`: derivar o título
+do **último segmento não-numérico do path** (slug → texto) quando o título do card é fraco/lixo,
+e aceitar o card se o tipo de imóvel aparece no título **ou** no slug. Mantidos os filtros de
+lixo/cancelado/produto.
+
+Ganho (mesma data de captura, 09/06/2026): **72 → 82 imóveis**; sites produtivos **11 → 13**
+(Carlos H. Barbosa 0→3, Brian/GF 0→2, Daniel Garcia 3→5, Hugo 10→11, Zuk 7→8), **sem regressão**
+(Deonizia 6→6) e **sem reintrodução de lixo**.
+
+**Ainda em 0 (limitações remanescentes):** sites SPA cujos lotes carregam por JS sem slug
+descritivo nem cards no DOM raspável (Beltrame `/leilao/lotes/imoveis`, Vinco), e
+`reisleiloes.com.br` (401 persistente). Próximo passo seria adapter por plataforma capturando o
+XHR real de lotes (`page.on("response")`).

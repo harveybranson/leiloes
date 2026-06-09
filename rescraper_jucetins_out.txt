@@ -1,0 +1,50 @@
+[11:33:59] FlareSolverr OK. Re-scrape de 32 sites que retornaram 0.
+[11:34:04]   [1/32] Joabe Balbino da Silva: 3 imovel(is) renderizados [https://www.globoleiloes.com.br]
+[11:34:12]   [2/32] Jonas Gabriel Antunes Moreira: 15 imovel(is) renderizados [https://www.mgl.com.br]
+[11:34:35]   [3/32] Erico Sobral Soares: 0 imovel(is) renderizados [https://www.ericosobral.com.br]
+[11:34:53]   [4/32] Nelci Dezan: 0 imovel(is) renderizados [https://www.leiloesmwd.com.br]
+[11:35:15]   [5/32] Arnold Strass: 0 imovel(is) renderizados [https://www.savoyleiloes.com.br]
+[11:35:23]   [6/32] Rodolfo da Rosa Schontag: 50 imovel(is) renderizados [https://www.leiloeiropublico.com.br]
+[11:35:28]   [7/32] Lucas Rafael Antunes Moreira: 15 imovel(is) renderizados [https://www.mgl.com.br]
+[11:35:35]   [8/32] Fernando Caetano Moreira Filho: 15 imovel(is) renderizados [https://www.mgl.com.br]
+[11:36:03]   [9/32] Tatiana Dinelly e Silva Bonato: 0 imovel(is) renderizados [https://www.rapidaovende.com.br]
+[11:36:39]   [10/32] Fernanda Lima Mascarenhas: 0 imovel(is) renderizados [https://www.fernandalimaleiloes.com.br]
+[11:37:24]   [11/32] Eduardo Gomes: 0 imovel(is) renderizados [https://www.leiloeiroeduardo.com.br]
+[11:37:52]   [12/32] Alex Willian Hoppe: 3 imovel(is) renderizados [https://www.hoppeleiloes.com.br]
+[11:37:55]   [13/32] Paulo Marcelo Silva Almeida: 2 imovel(is) renderizados [https://www.upleilao.com.br]
+[11:38:25]   [14/32] Mouzar Baston Filho: 0 imovel(is) renderizados [https://www.bastonleiloes.com.br]
+[11:39:09]   [15/32] Rossana Paiva Borges de Oliveira: 0 imovel(is) renderizados [https://www.caiapoleiloes.com.br]
+[11:40:13]   [16/32] Camilla Correia Vecchi Aguiar: 0 imovel(is) renderizados [https://www.vecchileiloes.com.br]
+[11:40:42]   [17/32] Tiago Tessler Blecher: 0 imovel(is) renderizados [https://www.webleiloes.com.br]
+[11:41:22]   [18/32] Sergio Fleury Batista: 0 imovel(is) renderizados [https://www.pmklog.com.br]
+[11:41:47]   [19/32] Sandro de Oliveira: 0 imovel(is) renderizados [https://www.norteleiloes.com.br]
+[11:42:20]   [20/32] Mara Helena de Urzedo Fortunato: 0 imovel(is) renderizados [https://www.maraurzedoleilao.com.br]
+[11:42:40]   [21/32] Rosimeire Alves de Oliveira Maia: 0 imovel(is) renderizados [https://rosioliveiraleiloes.com.br]
+[11:43:01]   [22/32] Antonio Carlos Volpi Santana: 0 imovel(is) renderizados [https://www.leiloesbrasilto.com.br]
+[11:43:25]   [23/32] Alvaro Sergio Fuzo: 0 imovel(is) renderizados [https://www.alvaroleiloes.com.br]
+[11:43:53]   [24/32] Bruno Barreto Sanches: 3 imovel(is) renderizados [https://www.barretoleiloes.com.br]
+[11:44:18]   [25/32] Marciano Aguiar Carneiro: 0 imovel(is) renderizados [https://www.vecchileiloes.com.br]
+[11:44:28]   [26/32] Livia Leilane de Oliveira Azevedo: 3 imovel(is) renderizados [https://www.livialeiloes.com.br]
+[11:47:33]   [27/32] Uesley da Silva Oliveira dos Santos: 0 imovel(is) renderizados [https://www.carrollruralleiloes.com.br]
+[11:48:20]   [28/32] Aluisio Francisco de Assis Cardoso Bringel: 0 imovel(is) renderizados [https://www.sancarleiloes.com.br]
+[11:48:28]   [29/32] Rafael Galvani Ferreira: 14 imovel(is) renderizados [https://www.galvanileiloes.com.br]
+[11:50:41]   [30/32] Evando da Silva Lagares: 0 imovel(is) renderizados [https://www.tonoleilao.com.br]
+[11:51:09]   [31/32] Murilo Goncalves Ramos: 3 imovel(is) renderizados [https://www.mgrleiloes.com.br]
+[11:51:54]   [32/32] Leonardo Coelho Avelar: 0 imovel(is) renderizados [https://www.arrematabem.com.br]
+[11:51:56] Imoveis recuperados via FlareSolverr: 126 | Inseridos novos no banco: 84
+[11:51:56] CSV atualizado: imoveis_jucetins_2026-06-09.csv (+126 linhas)
+[11:51:56] Relatorio etapa 1 anexado ao .md
+
+=== ETAPA 1 — RESUMO (recuperados via FlareSolverr) ===
+   50  Rodolfo da Rosa Schontag
+   15  Jonas Gabriel Antunes Moreira
+   15  Lucas Rafael Antunes Moreira
+   15  Fernando Caetano Moreira Filho
+   14  Rafael Galvani Ferreira
+    3  Joabe Balbino da Silva
+    3  Alex Willian Hoppe
+    3  Bruno Barreto Sanches
+    3  Livia Leilane de Oliveira Azevedo
+    3  Murilo Goncalves Ramos
+    2  Paulo Marcelo Silva Almeida
+TOTAL recuperado: 126 | Novos no banco: 84

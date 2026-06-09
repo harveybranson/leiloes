@@ -1,0 +1,32 @@
+{
+  "atualizado": "2026-06-09T12:00:34.739089",
+  "total_imoveis": 340,
+  "por_leiloeiro": {
+    "Danielly Fernandes da Silva Nazareth": 1,
+    "Ricardo Marcelo Gomes de OLiveira": 1,
+    "HUGO MOREIRA PIMENTA": 0,
+    "JIMMY ASAMI": 2,
+    "WESLEY SILVA RAMOS": 6,
+    "LUIZ DE CHIRICO JÚNIOR": 0,
+    "FELIPE GUIMARÃES CARRIJO": 44,
+    "BRIAN GALVÃO FROTA": 1,
+    "SANDRO DE OLIVEIRA": 2,
+    "DEONIZIA KIRATCH": 3,
+    "ALEX WILLIAN HOPPE": 17,
+    "DANIEL ELIAS GARCIA": 30,
+    "TIAGO TESSLER BLECHER": 109,
+    "DAVI BORGES DE AQUINO": 10,
+    "THAIS SILVA MOREIRA DE SOUZA": 9,
+    "FERNANDO CAETANO MOREIRA FILHO": 1,
+    "RENAN SOUZA SILVA": 0,
+    "IRANI FLORES": 86,
+    "PAULO CESAR AGOSTINHO": 7,
+    "LEONARDO VIEIRA AMARAL": 11
+  },
+  "sites_ok": 17,
+  "sites_err": 0,
+  "sites_sem_leilao": 2,
+  "descartados_data": 64,
+  "fonte_atual": "LEONARDO VIEIRA AMARAL",
+  "erros": []
+}

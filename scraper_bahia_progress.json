@@ -1,0 +1,50 @@
+{
+  "iniciado": "2026-06-09T18:35:57.591736",
+  "capture_date": "09/06/2026 18:35",
+  "leiloeiros_processados": 17,
+  "imoveis_total": 19,
+  "por_leiloeiro": {
+    "Hilda Emília de Souza Costa Lima": 4,
+    "Paulo Cézar Rocha Teixeira": 6,
+    "Orlando José Lacerda Pereira": 0,
+    "Tânia Maria de Abreu": 0,
+    "Oscar de Menezes Palmeira": 0,
+    "Miguel Paulo Rodrigues da Silva": 0,
+    "Eustácio Medeiros Neves": 0,
+    "Adilson Guimarães Araújo": 0,
+    "Arthur Ferreira Nunes": 0,
+    "Rudival Almeida Gomes Júnior": 5,
+    "Antônio Romero Ferreira da Silva": 0,
+    "Maurício Paes Inácio": 4,
+    "Josecelli Kildare Fraga Gomes": 0,
+    "Péricles Luciano Santos de Jesus": 0,
+    "Smith Pereira da Silva Neto": 0,
+    "Clauberto Fernandes Nascimento Júnior": 0,
+    "Tábata Mineiro Bezerra": 0
+  },
+  "status_sites": {
+    "Hilda Emília de Souza Costa Lima": "ok (4)",
+    "Paulo Cézar Rocha Teixeira": "ok (6)",
+    "Orlando José Lacerda Pereira": "sem site (nao raspavel)",
+    "Tânia Maria de Abreu": "inacessivel",
+    "Oscar de Menezes Palmeira": "ok (0)",
+    "Miguel Paulo Rodrigues da Silva": "ok (0)",
+    "Eustácio Medeiros Neves": "ok (0)",
+    "Adilson Guimarães Araújo": "ok (0)",
+    "Arthur Ferreira Nunes": "ok (0)",
+    "Rudival Almeida Gomes Júnior": "ok (5)",
+    "Antônio Romero Ferreira da Silva": "ok (0)",
+    "Maurício Paes Inácio": "ok (4)",
+    "Josecelli Kildare Fraga Gomes": "sem site (nao raspavel)",
+    "Péricles Luciano Santos de Jesus": "ok (0)",
+    "Smith Pereira da Silva Neto": "sem site (nao raspavel)",
+    "Clauberto Fernandes Nascimento Júnior": "ok (0)",
+    "Tábata Mineiro Bezerra": "ok (0)"
+  },
+  "erros": [
+    "Tânia Maria de Abreu: inacessivel"
+  ],
+  "last_report": "2026-06-09T18:57:26.938461",
+  "db_novos": 10,
+  "db_ja_existiam": 9
+}

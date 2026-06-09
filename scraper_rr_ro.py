@@ -251,6 +251,47 @@ def db_insert(conn, rows):
 def scrape_leiloeiro(lei):
     nome, site = lei["nome"], lei["site"]
     print(f"[{datetime.now():%H:%M:%S}] >>> {nome} | {site}", flush=True)
+
+    # --- Adapters por plataforma antes do crawl generico ---
+    try:
+        import lancevip_adapter
+        if lancevip_adapter.is_lancevip(site):
+            lv = lancevip_adapter.fetch_imoveis(site, TODAY, render)
+            imoveis = []
+            for c in (lv or []):
+                imoveis.append({
+                    "leiloeiro": nome, "junta": lei.get("junta", "JUCER/RR-RO"), "site": site,
+                    "titulo": c["titulo"], "descricao": c.get("ctx", "")[:500],
+                    "cidade": c["cidade"] or lei.get("cidade", ""), "uf": c["uf"] or lei.get("uf", ""),
+                    "lance_inicial": to_real(c["preco"]), "preco": c["preco"],
+                    "data_leilao": c["data_leilao"], "url": c["url"],
+                    "imagem": c["imagem"], "anexos": c["anexos"],
+                })
+            progress["status_sites"][nome] = f"ok-lancevip ({len(imoveis)})"
+            print(f"    [lancevip] imoveis: {len(imoveis)}", flush=True)
+            return imoveis
+    except Exception as e:
+        print(f"    [lancevip ERR] {e}", flush=True)
+    try:
+        import superbid_adapter
+        sb = superbid_adapter.fetch_imoveis(site, TODAY)
+    except Exception:
+        sb = None
+    if sb is not None:
+        imoveis = []
+        for c in sb:
+            imoveis.append({
+                "leiloeiro": nome, "junta": lei.get("junta", "JUCER/RR-RO"), "site": site,
+                "titulo": c["titulo"], "descricao": c.get("ctx", "")[:500],
+                "cidade": c["cidade"] or lei.get("cidade", ""), "uf": c["uf"] or lei.get("uf", ""),
+                "lance_inicial": to_real(c["preco"]), "preco": c["preco"],
+                "data_leilao": c["data_leilao"], "url": c["url"],
+                "imagem": c["imagem"], "anexos": c["anexos"],
+            })
+        progress["status_sites"][nome] = f"ok-superbid ({len(imoveis)})"
+        print(f"    [superbid] imoveis: {len(imoveis)}", flush=True)
+        return imoveis
+
     home, base = render(site)
     if not home:
         progress["status_sites"][nome] = "inacessivel"

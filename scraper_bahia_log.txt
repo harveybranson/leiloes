@@ -1,0 +1,70 @@
+========================================================================
+SCRAPER BAHIA/JUCEB | captura 09/06/2026 18:35 | 88 leiloeiros
+========================================================================
+[18:35:58] >>> Hilda Emília de Souza Costa Lima | https://www.hastaleiloes.com.br
+    cards candidatos: 4
+    [OK] imoveis com 1a praca futura: 4
+[18:38:28] >>> Paulo Cézar Rocha Teixeira | https://www.leiloesjudiciaisbahia.com.br
+    cards candidatos: 6
+    [OK] imoveis com 1a praca futura: 6
+
+----- REPORT PARCIAL (18:41) sites 2/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+   TOTAL: 10 | banco novos=10
+
+[18:41:28] >>> Orlando José Lacerda Pereira | (sem site)
+    [-] sem site cadastrado - pulado
+[18:41:28] >>> Tânia Maria de Abreu | https://leiloestaniaabreu.wix.com.br/leiloes
+    [X] inacessivel
+[18:41:29] >>> Oscar de Menezes Palmeira | https://www.oscarleiloes.com.br
+    cards candidatos: 2
+    [OK] imoveis com 1a praca futura: 0
+[18:45:27] >>> Miguel Paulo Rodrigues da Silva | https://www.ccjleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (18:47) sites 6/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+   TOTAL: 10 | banco novos=10
+
+[18:47:43] >>> Eustácio Medeiros Neves | https://www.eustacio.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[18:48:31] >>> Adilson Guimarães Araújo | https://www.aguialeiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[18:49:37] >>> Arthur Ferreira Nunes | https://www.nordesteleiloes.com
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[18:49:54] >>> Rudival Almeida Gomes Júnior | https://www.rjleiloes.com.br
+    cards candidatos: 5
+    [OK] imoveis com 1a praca futura: 5
+
+----- REPORT PARCIAL (18:52) sites 10/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+   TOTAL: 15 | banco novos=10
+
+[18:52:46] >>> Antônio Romero Ferreira da Silva | https://www.leiloescostaesilva.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[18:52:52] >>> Maurício Paes Inácio | https://www.hastaleiloes.com.br
+    cards candidatos: 4
+    [OK] imoveis com 1a praca futura: 4
+[18:55:12] >>> Josecelli Kildare Fraga Gomes | (sem site)
+    [-] sem site cadastrado - pulado
+[18:55:12] >>> Péricles Luciano Santos de Jesus | https://www.centraldosleiloes.com.br

@@ -1,0 +1,58 @@
+========================================================================
+SCRAPER JUCETINS (TOCANTINS) COMPLETO  —  09/06/2026 06:46:52
+Corte de leilao futuro: > 09/06/2026
+========================================================================
+
+44 leiloeiros REGULAR (42 com site)
+
+[06:46:52]   -> Eduardo Gomes  [https://www.leiloeiroeduardo.com.br]
+[06:47:37]      0 imovel(is) com leilao futuro
+[06:47:38]   -> Rossana Paiva Borges de Oliveira  [https://www.caiapoleiloes.com.br]
+[06:48:26]      0 imovel(is) com leilao futuro
+[06:48:27]   -> Antonio Carlos Volpi Santana  [https://www.leiloesbrasilto.com.br]
+[06:49:00]      0 imovel(is) com leilao futuro
+[06:49:01]   -> Victor Oliveira Dorta  [https://www.victordortaleiloes.com.br]
+[06:49:03]      9 imovel(is) com leilao futuro
+[06:49:04]   -> Tatiana Dinelly e Silva Bonato  [https://www.rapidaovende.com.br]
+[06:49:36]      0 imovel(is) com leilao futuro
+[06:49:37]   -> Cesar Augusto Bagatini  [https://www.leiloesfederal.com.br]
+[06:49:39]      6 imovel(is) com leilao futuro
+[06:49:40]   -> Sandro de Oliveira  [https://www.norteleiloes.com.br]
+[06:50:21]      0 imovel(is) com leilao futuro
+[06:50:22]   -> Alvaro Sergio Fuzo  [https://www.alvaroleiloes.com.br]
+[06:50:49]      0 imovel(is) com leilao futuro
+[06:50:50]   -> Fernanda Lima Mascarenhas  [https://www.fernandalimaleiloes.com.br]
+[06:51:24]      0 imovel(is) com leilao futuro
+[06:51:25]   -> Rudival Almeida Gomes Junior  [https://www.rjleiloes.com.br]
+[06:51:27]      8 imovel(is) com leilao futuro
+[06:51:28]   -> Murilo Goncalves Ramos  [https://www.mgrleiloes.com.br]
+[06:52:11]      0 imovel(is) com leilao futuro
+
+----- RELATORIO PARCIAL (5 min) -----
+Sites: 11/42 | Imoveis: 23
+  - Victor Oliveira Dorta: 9
+  - Cesar Augusto Bagatini: 6
+  - Rudival Almeida Gomes Junior: 8
+-------------------------------------
+
+[06:52:12]   -> Tiago Tessler Blecher  [https://www.webleiloes.com.br]
+[06:52:46]      0 imovel(is) com leilao futuro
+[06:52:47]   -> Arnold Strass  [https://www.savoyleiloes.com.br]
+[06:53:56]      0 imovel(is) com leilao futuro
+[06:53:57]   -> Leonardo Coelho Avelar  [https://www.arrematabem.com.br]
+[06:56:34]      0 imovel(is) com leilao futuro
+[06:56:35]   -> Bruno Barreto Sanches  [https://www.barretoleiloes.com.br]
+[06:57:17]      0 imovel(is) com leilao futuro
+
+----- RELATORIO PARCIAL (5 min) -----
+Sites: 15/42 | Imoveis: 23
+  - Victor Oliveira Dorta: 9
+  - Cesar Augusto Bagatini: 6
+  - Rudival Almeida Gomes Junior: 8
+-------------------------------------
+
+[06:57:18]   -> Nelci Dezan  [https://www.leiloesmwd.com.br]
+[06:57:49]      0 imovel(is) com leilao futuro
+[06:57:50]   -> Daniel Elias Garcia  [https://www.danielgarcialeiloes.com.br]
+[06:57:52]      15 imovel(is) com leilao futuro
+[06:57:53]   -> Alex Willian Hoppe  [https://www.hoppeleiloes.com.br]

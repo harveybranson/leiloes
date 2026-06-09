@@ -24,6 +24,36 @@
 
 ---
 
+## 0. REGRA OBRIGATÓRIA: todo imóvel capturado vai para o banco ao fim do scraping
+
+> ⚠️ **Obrigatório e não-negociável.** Ao concluir **qualquer** rotina de scraping, **todos** os
+> imóveis capturados (válidos — i.e., 1ª praça posterior à data da captura) **devem ser inseridos no
+> banco de dados** antes de a tarefa ser considerada concluída. Exportar CSV não basta: o CSV é
+> artefato intermediário; a fonte de verdade é o banco.
+
+**O que isso significa na prática:**
+
+1. **A inserção no banco é a última etapa obrigatória de toda execução**, depois de coletar e antes de
+   gerar o relatório final. Nenhum scraper pode terminar com imóveis válidos só em memória/CSV.
+2. **Inserir 100% dos imóveis válidos**, aplicando **dedup por URL canônica** (não pular registros por
+   outro motivo). Dedup ≠ descarte: o que já existe no banco é ignorado; o que é novo entra sempre.
+3. **Sincronizar o destino correto:**
+   - SQLite local `imoveis_leiloeiros.db` (tabela `imoveis`) para os scrapers standalone deste diretório;
+   - PostgreSQL Docker via pipeline (`run.py importar` / `importar_*`) quando o alvo for o sistema em produção.
+4. **Verificação pós-inserção obrigatória:** comparar a contagem de imóveis válidos coletados com os
+   efetivamente gravados (ver `verificar_importacao.py`, seção 36). Se houver divergência, **reimportar
+   os faltantes automaticamente** — a execução só termina quando `coletados_válidos == gravados (novos + já existentes)`.
+5. **Registrar no relatório final** quantos imóveis foram coletados, quantos eram novos, quantos já
+   existiam (dedup) e a contagem final no banco por junta/leiloeiro.
+6. **Em caso de falha de inserção** (enum, NUL byte, overflow, SQL longo no Windows — seções 20/34/36),
+   tratar linha a linha com `SAVEPOINT`/try-except e **nunca** abortar o lote inteiro: salvar o que for
+   válido e reportar as linhas rejeitadas, em vez de deixar imóveis de fora do banco silenciosamente.
+
+**Definição de "concluído":** uma rodada de scraping só está concluída quando os imóveis válidos estão
+**no banco** (não apenas no CSV) e a verificação CSV↔banco fecha sem faltantes.
+
+---
+
 ## 1. Princípio fundamental: sempre procure a fonte de dados mais "limpa" primeiro
 
 Antes de escrever qualquer scraper de HTML, investigue se existe uma forma estruturada de obter os dados. A ordem de preferência, da mais eficiente/confiável para a menos, é:
@@ -5945,3 +5975,188 @@ Sites afetados:
 8. **Rate limiting:** adicionar delay adaptativo baseado no tempo de resposta do servidor.
 9. **Leiloeiros sem site:** 30+ leiloeiros REGULAR sem website identificado — buscar pelo nome no Google para encontrar sites atualizados.
 10. **Deduplicação:** alguns leiloeiros compartilham site (ex.: Nogari, Pestana, Vardana) — usar `id_externo` baseado em URL para evitar duplicatas.
+
+
+---
+
+## CORREÇÕES DE CAPTURA — JUCEAC (Acre) + JUCER (Rondônia) — 08/06/2026
+
+> Relatório consolidado das 3 execuções JUCEAC/JUCER. Cada item é uma **correção acionável**
+> para uma dificuldade encontrada — foco em *como resolver*, para incorporar ao fluxo deste guia.
+
+### Resultado da captura
+- Leiloeiros REGULAR processados: 35 (de 49 no PDF de antiguidade; excluídos IRREGULAR/AFASTADO/CANCELADO)
+- Com site: 26 | Sem site: 9 | Sites únicos: 20
+- Imóveis (1ª praça > 08/06/2026): 52 | Inseridos no banco `imoveis_leiloeiros.db`: 2 (50 já existiam — dedup por URL)
+- CSV: `leiloeiros_juceac_2026-06-08.csv` / `imoveis_juceac_2026-06-08.csv`
+
+| Leiloeiro | Site | Imóveis |
+|---|---|---|
+| Daniel Elias Garcia | danielgarcialeiloes.com.br | 16 |
+| Vladmir Oliani | leiloesaguiar.com.br | 9 |
+| Vera Lucia Aguiar de Sousa | leiloesaguiar.com.br | 9 |
+| Vera Maria Aguiar de Sousa | leiloesaguiar.com.br | 9 |
+| Patricia Pimentel Grocoski Costa | pimentelleiloes.com.br | 6 |
+| Evanilde Aquino Pimentel Rosa | lancevip.com.br | 1 |
+| Ana Carolina Zaninetti Rosa | lancevip.com.br | 1 |
+| Bruno Pimentel Rosa | lancevip.com.br | 1 |
+
+### Correções a aplicar (dificuldade → solução)
+
+1. **Site da JUCEAC é do estado errado e JS-pesado → trocar a fonte e renderizar.**
+   `juceac.ac.gov.br` é a Junta do **Acre** (a maioria CANCELADA), enquanto os PDFs são da **Rondônia (JUCER)**.
+   **Correção:** quando o alvo for RO, usar a JUCER (`jucer.ro.gov.br`) como fonte primária e o PDF de
+   antiguidade (que tem campo `Situação`) como autoridade de status; renderizar o site com Playwright
+   (`wait_until=networkidle`) já que a lista não existe no HTML estático.
+
+2. **Situação só existe no PDF detalhado → cruzar os dois PDFs.**
+   O PDF em tabela não traz `Situação` e inclui nomes que o PDF de antiguidade marca IRREGULAR.
+   **Correção:** confiar sempre no campo `Situação` do PDF detalhado; em divergência, IRREGULAR/AFASTADO/
+   CANCELADO prevalece e o leiloeiro é excluído.
+
+3. **Encoding/mojibake nos metadados → forçar UTF-8 e normalizar.**
+   **Correção:** ler o HTML renderizado pelo Playwright com `encoding=utf-8` e normalizar nomes com
+   `unicodedata.normalize`; não confiar em `og:description` cru.
+
+4. **Sites compartilhados entre leiloeiros → dedup por URL na ingestão.**
+   `leiloesaguiar.com.br` ×3, `lancevip.com.br` ×3, `vincoleiloes.com.br` ×3.
+   **Correção (aplicada):** inserir no banco com dedup por URL canônica; atribuir o imóvel ao leiloeiro
+   pelo dado do próprio lote, não pelo domínio.
+
+5. **9 leiloeiros REGULAR sem site → derivar/validar domínio.**
+   **Correção:** derivar do e-mail corporativo (`@empresa.com.br`); para `@gmail/@hotmail`, resolver via
+   busca "nome + leilões" e gravar o site validado de volta no CSV.
+
+6. **Data da 1ª praça só no detalhe → enricher antes de descartar.**
+   Itens sem data legível na listagem foram descartados (subnotifica).
+   **Correção:** rodar o enricher (seções 17/23) que abre cada lote e extrai data da praça + edital +
+   matrícula, em vez de descartar por ausência de data.
+
+7. **Estruturas heterogêneas / SPA / offline → cascata + adaptador + checagem DNS.**
+   **Correção:** manter a cascata httpx → Playwright → sufixos (`/imoveis`, `/leiloes`, `/lotes`);
+   parser dedicado por plataforma (seção 27); FlareSolverr (seção 14) p/ Cloudflare e `curl_cffi` p/ TLS;
+   validar DNS e tentar `www`/sem-`www` antes de marcar o site como offline (ex.: vbleiloes.com.br).
+
+8. **`id` (PK) ficou NULL ao inserir → gerar hash na inserção.**
+   **Correção (aplicada):** preencher `id = md5(url)[:12]` no INSERT (mesmo formato dos demais registros),
+   evitando chave primária nula.
+
+9. **Leilões esporádicos → re-scraping agendado.**
+   **Correção:** reexecutar a cada 7–14 dias (cron/Celery beat, seção 21); o dedup por URL evita duplicar.
+
+**Relatório gerado em:** 08/06/2026 20:19:54
+
+
+---
+
+## CORREÇÕES DE CAPTURA — JUCEG (Goiás) — 08/06/2026
+
+> Cada item é uma **correção acionável** para uma dificuldade encontrada na captura da JUCEG.
+> Foco em *como resolver* — para incorporar ao fluxo de scraping deste guia.
+
+### Resultado da captura
+- Leiloeiros REGULAR: 120 (excluídos todos SUSPENSO/CANCELADO e a seção "MATRÍCULAS CANCELADAS" do PDF)
+- Com site: 80 | Sem site (só e-mail/telefone): 40 | Sites únicos: 68
+- Imóveis (1ª praça > 08/06/2026): 291 | Inseridos no banco `imoveis_leiloeiros.db`: 112 (demais já existiam — dedup por URL)
+- CSV: `leiloeiros_juceg_2026-06-08.csv` / `imoveis_juceg_2026-06-08.csv`
+
+### Imóveis capturados por leiloeiro (apenas > 0)
+| Leiloeiro | Imóveis |
+|---|---|
+| Flavio Duarte Ceruli | 40 |
+| Lucas Andreatta de Oliveira | 39 |
+| Erico Sobral Soares | 34 |
+| Fernando Jose Cerello Goncalves Pereira | 23 |
+| Daniel Elias Garcia | 16 |
+| Rodrigo Schmitz | 11 |
+| Jussiara Santos Ermano Sukiennik | 11 |
+| Orlando Araujo dos Santos | 9 |
+| Alglecio Bueno da Silva | 8 |
+| Jean Carlo Rosa | 8 |
+| Rudival Almeida Gomes Junior | 8 |
+| Kaio Albuquerque Rosa Botelho | 8 |
+| Leonardo Nunes Lobo | 7 |
+| Felipe Guimaraes Carrijo | 6 |
+| Eduardo Vinicius Fleury Lobo | 6 |
+| Sergio Fleury Batista | 6 |
+| Diego Wolf de Oliveira | 6 |
+| Jorge Vinicius de Moura Correa | 6 |
+| Lidia Ribeiro de Andrade | 6 |
+| Cristiane Borguetti Moraes Lopes | 5 |
+| Anderson Lopes de Paula | 5 |
+| Rodrigo Paes Camapum Bringel | 4 |
+| Wellington Martins Araujo | 3 |
+| Carlos Augusto Ribeiro Lima | 2 |
+| Antonio Brasil II | 1 |
+| Leila Nanci Karasiaki | 1 |
+| Leony Gomes dos Santos Junior | 1 |
+| Johenn Brasil Balduino | 1 |
+| Ygor Ferreira Brasil | 1 |
+| Davi Borges de Aquino | 1 |
+| Jose Luiz Pereira Vizeu | 1 |
+| Danielle Joy Karasiaki Carvalho | 1 |
+| Paulo de Oliveira Azevedo | 1 |
+| Magnun Luiz Serpa | 1 |
+| Victor Renno Polatto Vizeu | 1 |
+| Eduardo Schmitz | 1 |
+| Giovana Norma Bolico | 1 |
+| Caroline de Sousa Ribas | 1 |
+
+### Correções a aplicar (dificuldade → solução)
+
+1. **Situação conflitante no PDF → usar a fonte oficial da JUCEG, não o PDF estático.**
+   O PDF lista o mesmo leiloeiro 2× com status divergente (SUSPENSO × REGULAR) e mantém quem já foi
+   cancelado. **Correção:** consultar o status atual por matrícula no site da JUCEG na hora da captura;
+   na ausência disso, regra de desempate fixa — (a) se o nome consta na seção "MATRÍCULAS CANCELADAS",
+   excluir sempre; (b) senão, vale o bloco de data mais recente.
+
+2. **Maioria sem campo `site` (40 leiloeiros) → derivar e validar o domínio.**
+   **Correção:** derivar site do domínio do e-mail corporativo (`@empresa.com.br` →
+   `https://www.empresa.com.br`), descartando `@gmail/@hotmail`; para os sem domínio, resolver via busca
+   "nome + leilões" e gravar o site validado de volta no CSV.
+
+3. **Sites compartilhados entre leiloeiros → dedup por URL na ingestão.**
+   `leiloesbrasil` ×4, `leilo.com.br` ×4, `lkleiloes` ×3, `sfrazao`/`mcleilao`/`arrematabem`/`leilaobrasil` ×2.
+   **Correção (aplicada):** inserir no banco com dedup por URL canônica; atribuir o imóvel ao leiloeiro
+   pelo dado do próprio lote, não pelo domínio compartilhado.
+
+4. **SPA / Cloudflare retornando 0 na listagem → cascata + extrator por plataforma.**
+   **Correção:** manter a cascata httpx → Playwright → sufixos (`/imoveis`, `/leiloes`, `/lotes`,
+   `/busca?categoria=imoveis`); para `megaleiloes`, `sodresantoro`, `portalzuk`, `alfaleiloes`,
+   `leilo.com.br`, `leiloesbrasil`, `lkleiloes` escrever parser dedicado por domínio (seção 27) e acionar
+   FlareSolverr (seção 14) onde houver Cloudflare; `curl_cffi` para erros de TLS.
+
+5. **Data da 1ª praça só no detalhe → enricher de detalhe antes de descartar.**
+   Itens sem data legível na listagem foram descartados (subnotifica). **Correção:** rodar o enricher
+   (seções 17/23) que abre cada lote e extrai data da praça + edital + matrícula, em vez de descartar por
+   ausência de data na listagem.
+
+6. **Domínios offline/DNS/TLS → checagem prévia e fallback.**
+   **Correção:** validar resolução DNS antes de raspar; tentar `www`/sem-`www` e `http`/`https`; marcar
+   como inativo após 2 tentativas e remover do pool de re-scraping. Sites com problema nesta rodada:
+- **Braulio Ferreira Neto**: sem imoveis com leilao futuro
+- **Marcia Regina Cardellichio Nunes**: sem imoveis com leilao futuro
+- **Alvaro Sergio Fuzo**: sem imoveis com leilao futuro
+- **Maria Aparecida de Freitas Fuzo**: sem imoveis com leilao futuro
+- **Geoliano de Souza Lima**: sem imoveis com leilao futuro
+- **Ivan Rodrigues Nogueira**: sem imoveis com leilao futuro
+- **Erick Soares Teles**: sem imoveis com leilao futuro
+- **Maik Nunes de Oliveira**: sem imoveis com leilao futuro
+- **Mike Dutra Fleitas**: offline: HTTPSConnectionPool(host='www.mikedutraleiloeiro.com.br', port=443): Max retries exceeded with url: / (Caused by NameRes
+- **Leonardo Coelho Avelar**: sem imoveis com leilao futuro
+- **Cesar Augusto Bagatini**: sem imoveis com leilao futuro
+- **Elenice Lira Sales de Sousa**: sem imoveis com leilao futuro
+- **Fernando Caetano Moreira Filho**: sem imoveis com leilao futuro
+- **Alex Willian Hoppe**: sem imoveis com leilao futuro
+- **Antonio Carlos Peres Bernardini**: sem imoveis com leilao futuro
+- **Rossana Paiva Borges de Oliveira**: sem imoveis com leilao futuro
+- **Frederico Albert Krausegg Neves**: sem imoveis com leilao futuro
+- **Jose Valero Santos Junior**: sem imoveis com leilao futuro
+- **Tiago Tessler Blecher**: sem imoveis com leilao futuro
+- **Luiz Ubirata de Carvalho**: sem imoveis com leilao futuro
+
+7. **Leilões esporádicos → re-scraping agendado.**
+   **Correção:** reexecutar a cada 7–14 dias (cron/Celery beat, seção 21); o dedup por URL evita duplicar
+   o que já está no banco.
+
+**Relatório gerado em:** 08/06/2026 21:02:00

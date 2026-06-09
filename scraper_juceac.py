@@ -14,7 +14,7 @@ from datetime import datetime
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
-from typing import dict, list
+from typing import Dict, List
 
 # Config
 BASE_URL = "https://juceac.ac.gov.br"
@@ -44,51 +44,82 @@ def save_progress():
         json.dump(progress, f, indent=2, ensure_ascii=False)
 
 def scrape_leiloeiros():
-    """Extrai leiloeiros regular do site JUCEAC."""
+    """Extrai leiloeiros regular do site JUCEAC usando Playwright."""
+    from playwright.sync_api import sync_playwright
+
     try:
-        print(f"[{datetime.now().strftime('%H:%M:%S')}] Acessando {LEILOEIROS_URL}")
-        r = requests.get(LEILOEIROS_URL, headers=HEADERS, timeout=10)
-        r.raise_for_status()
+        print(f"[{datetime.now().strftime('%H:%M:%S')}] Renderizando {LEILOEIROS_URL} com Playwright...")
 
-        soup = BeautifulSoup(r.text, "html.parser")
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True,
+                args=['--disable-blink-features=AutomationControlled'])
+            page = browser.new_page()
+            page.goto(LEILOEIROS_URL, wait_until="networkidle", timeout=30000)
 
-        # Procura por tabelas ou listas de leiloeiros
-        # Formato pode variar — vamos procurar padrões comuns
-        leiloeiros = []
+            html = page.content()
+            soup = BeautifulSoup(html, "html.parser")
 
-        # Padrão 1: tabela com linhas de leiloeiros
-        for row in soup.find_all("tr"):
-            cells = row.find_all(["td", "th"])
-            if len(cells) < 2:
-                continue
+            # Extrai texto completo
+            main = soup.find("main") or soup.find("body")
+            if not main:
+                return []
 
-            # Procura por padrão: nome, registro, situação
-            row_text = " ".join(c.get_text(strip=True) for c in cells)
+            texto = main.get_text()
+            leiloeiros = []
 
-            # Verifica se é cancelado/suspenso
-            if any(palavra in row_text.upper() for palavra in ["CANCELADO", "SUSPENSO", "INATIVO"]):
-                continue
+            # Padrão: nome em MAIÚSCULA, seguido de situação (REGULAR, CANCELADO, SUSPENSO)
+            # Separa por blocos de 'Matrícula n.'
+            blocos = re.split(r"Matr[íi]cula\s+n[.º]+\s*", texto)
 
-            # Tenta extrair nome e link
-            link_elem = row.find("a")
-            if link_elem:
-                nome = link_elem.get_text(strip=True)
-                url = link_elem.get("href", "")
-                url = urljoin(BASE_URL, url)
+            for bloco in blocos[1:]:  # Skip primeiro (header)
+                linhas = bloco.split("\n")
+                if not linhas:
+                    continue
 
-                if nome and url:
+                primeira_linha = linhas[0].strip()
+
+                # Procura separadores (múltiplos espaços indicam colunas)
+                partes = re.split(r"\s{2,}", primeira_linha)
+                if len(partes) < 2:
+                    continue
+
+                nome = partes[0].strip()
+                situacao_text = " ".join(partes[1:]).strip()
+
+                # Filtra: só REGULAR (exclui CANCELADO, SUSPENSO, INATIVO)
+                if any(word in situacao_text.upper() for word in
+                       ["CANCELADO", "SUSPENSO", "INATIVO", "IMPEDIDO"]):
+                    continue
+
+                # Extrai registro (primeiros 3 dígitos)
+                match_reg = re.search(r"\d{3}", primeira_linha)
+                registro = match_reg.group(0) if match_reg else "000"
+
+                if nome and len(nome) > 3:
+                    # Tenta encontrar website do leiloeiro (primeira URL no bloco)
+                    url = BASE_URL
+                    for linha in linhas:
+                        match_url = re.search(r"https?://[^\s]+", linha)
+                        if match_url:
+                            url = match_url.group(0)
+                            break
+
                     leiloeiros.append({
                         "nome": nome,
+                        "registro": registro,
                         "url": url,
                         "situacao": "Regular",
                         "data_captura": CAPTURE_DATE.isoformat()
                     })
 
-        print(f"[{datetime.now().strftime('%H:%M:%S')}] Encontrados {len(leiloeiros)} leiloeiros")
-        return leiloeiros
+            browser.close()
+            print(f"[{datetime.now().strftime('%H:%M:%S')}] Encontrados {len(leiloeiros)} leiloeiros REGULARES")
+            return leiloeiros
 
     except Exception as e:
         print(f"[ERRO] ao buscar leiloeiros: {e}")
+        import traceback
+        traceback.print_exc()
         return []
 
 def scrape_imoveis_leiloeiro(nome: str, url: str) -> list:

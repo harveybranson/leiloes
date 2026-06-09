@@ -1,0 +1,24 @@
+{
+  "iniciado": "2026-06-08T20:10:37.876483",
+  "leiloeiros_processados": 9,
+  "imoveis_total": 94,
+  "imoveis_por_leiloeiro": {
+    "Patricia Pimentel Grocoski Costa": 6,
+    "Vera Lucia Aguiar de Sousa": 19,
+    "Vera Maria Aguiar de Sousa": 19,
+    "Vladmir Oliani": 19,
+    "Daniel Elias Garcia": 12,
+    "Felipe Cezar Sousa e Silva": 19
+  },
+  "erros": [
+    "Deonizia Kiratch: 'charmap' codec can't encode character '\\u2192' in",
+    "Evanilde Aquino Pimentel: 'charmap' codec can't encode character '\\u2192' in",
+    "Alex Willian Hoppe: 'charmap' codec can't encode character '\\u2192' in",
+    "Wesley Silva Ramos: 'charmap' codec can't encode character '\\u2192' in",
+    "Angelica Vilas Boas Nunes: 'charmap' codec can't encode character '\\u2192' in",
+    "Thais Costa Bastos Teixeira: 'charmap' codec can't encode character '\\u2192' in"
+  ],
+  "last_report": "2026-06-08T20:11:02.553830",
+  "status": "concluido",
+  "tempo_total_min": 0.4112842281659444
+}

@@ -1,0 +1,10 @@
+{
+  "data_captura": "2026-06-08T19:12:10.251073",
+  "leiloeiros_total": 12,
+  "imoveis_total": 0,
+  "arquivos": {
+    "leiloeiros": "C:\\Users\\arthur\\OneDrive\\Documentos\\Cursor\\leiloes\\csv\\leiloeiros_juceac_2026-06-08.csv",
+    "relatorio": "C:\\Users\\arthur\\OneDrive\\Documentos\\Cursor\\leiloes\\captura_dados_leiloes_v2.md"
+  },
+  "status": "concluido"
+}

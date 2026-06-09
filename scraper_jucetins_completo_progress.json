@@ -1,0 +1,38 @@
+{
+  "iniciado": "2026-06-09T06:46:52.188400",
+  "leiloeiros_total": 44,
+  "imoveis_por_leiloeiro": {
+    "Eduardo Gomes": 0,
+    "Rossana Paiva Borges de Oliveira": 0,
+    "Antonio Carlos Volpi Santana": 0,
+    "Victor Oliveira Dorta": 9,
+    "Tatiana Dinelly e Silva Bonato": 0,
+    "Cesar Augusto Bagatini": 6,
+    "Sandro de Oliveira": 0,
+    "Alvaro Sergio Fuzo": 0,
+    "Fernanda Lima Mascarenhas": 0,
+    "Rudival Almeida Gomes Junior": 8,
+    "Murilo Goncalves Ramos": 0,
+    "Tiago Tessler Blecher": 0,
+    "Arnold Strass": 0,
+    "Leonardo Coelho Avelar": 0,
+    "Bruno Barreto Sanches": 0
+  },
+  "imoveis_total": 23,
+  "sites_problema": {
+    "Eduardo Gomes": "sem imoveis com leilao futuro",
+    "Rossana Paiva Borges de Oliveira": "sem imoveis com leilao futuro",
+    "Antonio Carlos Volpi Santana": "sem imoveis com leilao futuro",
+    "Tatiana Dinelly e Silva Bonato": "sem imoveis com leilao futuro",
+    "Sandro de Oliveira": "sem imoveis com leilao futuro",
+    "Alvaro Sergio Fuzo": "sem imoveis com leilao futuro",
+    "Fernanda Lima Mascarenhas": "sem imoveis com leilao futuro",
+    "Murilo Goncalves Ramos": "sem imoveis com leilao futuro",
+    "Tiago Tessler Blecher": "sem imoveis com leilao futuro",
+    "Arnold Strass": "sem imoveis com leilao futuro",
+    "Leonardo Coelho Avelar": "sem imoveis com leilao futuro",
+    "Bruno Barreto Sanches": "sem imoveis com leilao futuro"
+  },
+  "status": "scraping",
+  "atualizado": "2026-06-09T06:57:17.582863"
+}

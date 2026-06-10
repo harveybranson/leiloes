@@ -64,10 +64,25 @@ def contar_total():
 
 
 def escrever_resultado(estado):
-    """Grava o relatorio ao vivo (atomico: escreve em .tmp e renomeia)."""
+    """Grava o relatorio ao vivo. Tolerante a falha: o arquivo de status nunca
+    deve derrubar a rodada. Tenta escrita atomica (.tmp + replace); se o OneDrive/
+    AV travar o arquivo (WinError 5), faz retry e por fim escreve direto."""
+    conteudo = json.dumps(estado, ensure_ascii=False, indent=2)
     tmp = RESULTADO.with_suffix(".json.tmp")
-    tmp.write_text(json.dumps(estado, ensure_ascii=False, indent=2), encoding="utf-8")
-    tmp.replace(RESULTADO)
+    for tentativa in range(4):
+        try:
+            tmp.write_text(conteudo, encoding="utf-8")
+            tmp.replace(RESULTADO)
+            return
+        except PermissionError:
+            time.sleep(0.5 * (tentativa + 1))  # OneDrive solta o lock em ~1-2s
+        except Exception:
+            break
+    # Fallback: escreve direto (nao-atomico, mas melhor que perder o status).
+    try:
+        RESULTADO.write_text(conteudo, encoding="utf-8")
+    except Exception as e:
+        print(f"[todos] aviso: nao consegui gravar {RESULTADO.name}: {e}", flush=True)
 
 
 def rodar_scraper(script, timeout, log_path):

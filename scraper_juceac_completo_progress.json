@@ -1,20 +1,20 @@
 {
-  "iniciado": "2026-06-08T20:19:54.860968",
+  "iniciado": "2026-06-10T11:27:15.843518",
   "leiloeiros_total": 35,
   "imoveis_por_leiloeiro": {
-    "Vladmir Oliani": 9,
-    "Vera Lucia Aguiar de Sousa": 9,
+    "Vladmir Oliani": 8,
+    "Vera Lucia Aguiar de Sousa": 8,
     "Evanilde Aquino Pimentel Rosa": 1,
-    "Vera Maria Aguiar de Sousa": 9,
+    "Vera Maria Aguiar de Sousa": 8,
     "Francisco Portela Aguiar": 0,
     "Deonizia Kiratch": 0,
     "Ana Carolina Zaninetti Rosa": 1,
     "Marcus Allain de Oliveira Barbosa": 0,
-    "Patricia Pimentel Grocoski Costa": 6,
+    "Patricia Pimentel Grocoski Costa": 4,
     "Maria Vanielly de Lima Honorato Portela": 0,
     "Alex Willian Hoppe": 0,
     "Bruno Pimentel Rosa": 1,
-    "Daniel Elias Garcia": 16,
+    "Daniel Elias Garcia": 12,
     "Jonas Gabriel Antunes Moreira": 0,
     "Maciel Rodrigues Chaves": 0,
     "Fernando Caetano Moreira Filho": 0,
@@ -38,7 +38,7 @@
     "Carlos Henrique Barbosa": 0,
     "Maria Rafaela Barbosa Silva": 0
   },
-  "imoveis_total": 52,
+  "imoveis_total": 43,
   "erros": [],
   "sites_problema": {
     "Francisco Portela Aguiar": "sem imoveis com leilao futuro",
@@ -61,6 +61,6 @@
     "Carlos Henrique Barbosa": "sem imoveis com leilao futuro"
   },
   "status": "concluido",
-  "atualizado": "2026-06-08T20:28:35.761036",
-  "imoveis_inseridos_db": 2
+  "atualizado": "2026-06-10T11:36:44.242155",
+  "imoveis_inseridos_db": 1
 }

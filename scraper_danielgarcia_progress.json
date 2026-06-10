@@ -1,9 +1,9 @@
 {
-  "iniciado": "2026-06-09T23:19:21.230173",
-  "capture_date": "09/06/2026 23:19",
+  "iniciado": "2026-06-10T11:16:48.373895",
+  "capture_date": "10/06/2026 11:16",
   "leiloes_processados": 39,
   "leiloes_total": 39,
-  "imoveis_total": 87,
+  "imoveis_total": 79,
   "por_leilao": {
     "7510": 1,
     "7521": 0,
@@ -23,7 +23,7 @@
     "7562": 0,
     "7566": 0,
     "7567": 1,
-    "7589": 8,
+    "7589": 0,
     "7591": 3,
     "7594": 0,
     "7598": 30,
@@ -46,8 +46,8 @@
     "7647": 30
   },
   "erros": [],
-  "last_report": "2026-06-09T23:20:08.182276",
-  "db_novos": 81,
-  "db_ja_existiam": 6,
+  "last_report": "2026-06-10T11:17:28.592310",
+  "db_novos": 0,
+  "db_ja_existiam": 79,
   "status": "concluido"
 }

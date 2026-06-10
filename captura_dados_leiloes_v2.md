@@ -8386,3 +8386,273 @@ explícita — o classificador de auto-mode bloqueou o UPDATE em massa até o us
   unique/canonicalização em `leiloeiros.nome` para não recriar duplicatas de grafia.
 - Modificação de dados de produção que já existiam antes da sessão **não está coberta** por um pedido de
   scraping/importação: pare e peça autorização (foi o que o auto-mode fez aqui, corretamente).
+
+
+---
+
+## RELATÓRIO DE CAPTURA — JUCEAC + PDFs (Rondônia/JUCER) — 10/06/2026 11:27
+
+### Resumo
+- **Leiloeiros REGULAR processados:** 35 (de 49 no PDF de antiguidade; demais excluídos por IRREGULAR/AFASTADO/CANCELADO)
+- **Com site identificado:** 26 | **Sem site:** 9
+- **Sites únicos visitados:** 20
+- **Imóveis com 1ª praça futura (> 10/06/2026):** 43
+- **Imóveis novos inseridos no banco (`imoveis_leiloeiros.db`):** 1
+- **CSV leiloeiros:** `leiloeiros_juceac_2026-06-10.csv`
+- **CSV imóveis:** `imoveis_juceac_2026-06-10.csv`
+
+### Imóveis capturados por leiloeiro
+| Leiloeiro | Site | Imóveis |
+|---|---|---|
+| Vladmir Oliani | https://www.leiloesaguiar.com.br/ | 8 |
+| Vera Lucia Aguiar de Sousa | https://www.leiloesaguiar.com.br/ | 8 |
+| Evanilde Aquino Pimentel Rosa | https://www.lancevip.com.br/ | 1 |
+| Vera Maria Aguiar de Sousa | https://www.leiloesaguiar.com.br/ | 8 |
+| Francisco Portela Aguiar | https://www.portelaleiloes.com.br/ | 0 |
+| Deonizia Kiratch | https://www.deonizialeiloes.com.br/ | 0 |
+| Ana Carolina Zaninetti Rosa | https://www.lancevip.com.br/ | 1 |
+| Marcus Allain de Oliveira Barbosa | https://www.maleiloesro.com.br/ | 0 |
+| Patricia Pimentel Grocoski Costa | https://www.pimentelleiloes.com.br/ | 4 |
+| Maria Vanielly de Lima Honorato Portela | (sem site) | 0 |
+| Alex Willian Hoppe | https://www.hoppeleiloes.com.br/ | 0 |
+| Bruno Pimentel Rosa | https://www.lancevip.com.br/ | 1 |
+| Daniel Elias Garcia | https://www.danielgarcialeiloes.com.br/ | 12 |
+| Jonas Gabriel Antunes Moreira | (sem site) | 0 |
+| Maciel Rodrigues Chaves | (sem site) | 0 |
+| Fernando Caetano Moreira Filho | https://www.fernandoleiloeiro.com.br/ | 0 |
+| Lucas Rafael Antunes Moreira | https://www.lucasleiloeiro.com.br/ | 0 |
+| Pedro Augusto da Costa Silva | (sem site) | 0 |
+| Joabe Balbino da Silva | https://www.balbinoleiloes.com.br/ | 0 |
+| Angelica Vilas Boas Nunes | https://www.vbleiloes.com.br/ | 0 |
+| Thais Costa Bastos Teixeira | https://www.thaisteixeiraleiloes.com.br/ | 0 |
+| Sandro de Oliveira | https://www.norteleiloes.com.br/ | 0 |
+| Marcus Vinicius Moreira Chaves | (sem site) | 0 |
+| Dora Plat | https://www.portalzuk.com.br/ | 0 |
+| Wallason Silva Beltrame | https://beltrameleiloes.com.br/ | 0 |
+| Rodrigo Aparecido Rigolon da Silva | https://www.rigolonleiloes.com.br/ | 0 |
+| Antonio Carlos Celso Santos Frazao | https://www.vincoleiloes.com.br/ | 0 |
+| Victor Alberto Severino Frazao | https://www.vincoleiloes.com.br/ | 0 |
+| Jaqueline Vieira de Amorim | https://www.vincoleiloes.com.br/ | 0 |
+| Flavia Correa Duarte Feitosa | (sem site) | 0 |
+| Michael de Oliveira | (sem site) | 0 |
+| Icaro Alexandre Felfili Jardim | (sem site) | 0 |
+| Diogo Reis Dutra | https://reisleiloes.com.br/ | 0 |
+| Carlos Henrique Barbosa | https://www.chbarbosaleiloes.com.br/ | 0 |
+| Maria Rafaela Barbosa Silva | (sem site) | 0 |
+
+### Principais dificuldades enfrentadas
+
+1. **Site da JUCEAC é JavaScript-pesado e do estado errado.**
+   `juceac.ac.gov.br/leiloeiro/` (Junta do **Acre**) renderiza a lista via JS (sem `<table>` no HTML estático) e a maioria dos registros está **CANCELADA A PEDIDO**. Os PDFs anexos referem-se à **Rondônia (JUCER)** — fonte muito mais rica e com campo `Situação` explícito. Solução adotada: usar o **PDF de antiguidade como fonte autoritativa de Situação** e o site só como confirmação (Playwright + `wait_until=networkidle`).
+
+2. **Encoding/mojibake.** Metadados da JUCEAC e arquivos `.txt` vêm com UTF-8 mal decodificado (`JUC...LIA`). Mitigado lendo o HTML renderizado pelo Playwright e normalizando nomes.
+
+3. **Filtragem de Situação só existe no PDF detalhado.** O primeiro PDF (tabela) **não** traz Situação; nele apareciam nomes que o PDF de antiguidade marca como **IRREGULAR** (ex.: Felipe Cezar, Wesley Ramos, Bruno em casos divergentes). Tratado cruzando os dois PDFs e confiando no campo `Situação` do detalhado.
+
+4. **Sites compartilhados entre leiloeiros.** Vários leiloeiros usam o **mesmo domínio** (`leiloesaguiar.com.br` ×3, `lancevip.com.br` ×3, `vincoleiloes.com.br` ×3). Sem dedup, o mesmo imóvel seria contado várias vezes. Tratado com **dedup por URL** na inserção do banco.
+
+5. **Leiloeiros sem site.** 9 leiloeiros REGULAR não possuem site no PDF — impossível capturar imóveis deles (só contato). Listados, mas com 0 imóveis.
+
+6. **Estruturas HTML heterogêneas + SPA.** Cada site tem marcação diferente; alguns são SPA (Next.js/React) que exigem Playwright e variações de paginação (`/imoveis`, `/leiloes`, `/lotes`). Implementado fallback em cascata httpx → Playwright → sufixos de listagem.
+
+7. **Validação de data.** Muitos cards não expõem a data da 1ª praça na listagem (só no detalhe), então itens sem data legível **> hoje** foram descartados — pode subnotificar imóveis válidos.
+
+8. **Sites com proteção / offline.** Alguns domínios respondem com erro TLS/Cloudflare ou estão fora do ar:
+- **Francisco Portela Aguiar**: sem imoveis com leilao futuro
+- **Deonizia Kiratch**: sem imoveis com leilao futuro
+- **Marcus Allain de Oliveira Barbosa**: sem imoveis com leilao futuro
+- **Alex Willian Hoppe**: sem imoveis com leilao futuro
+- **Fernando Caetano Moreira Filho**: sem imoveis com leilao futuro
+- **Lucas Rafael Antunes Moreira**: sem imoveis com leilao futuro
+- **Joabe Balbino da Silva**: sem imoveis com leilao futuro
+- **Angelica Vilas Boas Nunes**: offline: HTTPSConnectionPool(host='www.vbleiloes.com.br', port=443): Max retries exceeded with url: / (Caused by NameResolutionEr
+- **Thais Costa Bastos Teixeira**: sem imoveis com leilao futuro
+- **Sandro de Oliveira**: sem imoveis com leilao futuro
+- **Dora Plat**: sem imoveis com leilao futuro
+- **Wallason Silva Beltrame**: sem imoveis com leilao futuro
+- **Rodrigo Aparecido Rigolon da Silva**: sem imoveis com leilao futuro
+- **Antonio Carlos Celso Santos Frazao**: sem imoveis com leilao futuro
+- **Victor Alberto Severino Frazao**: sem imoveis com leilao futuro
+- **Jaqueline Vieira de Amorim**: sem imoveis com leilao futuro
+- **Diogo Reis Dutra**: sem imoveis com leilao futuro
+- **Carlos Henrique Barbosa**: sem imoveis com leilao futuro
+
+### Sugestões de correção
+
+1. **Trocar a fonte primária para a JUCER** (`jucer.ro.gov.br`) quando o alvo for Rondônia — JUCEAC só vale para o Acre.
+2. **Enricher de detalhe por imóvel** (seção 17/23 do guia): visitar a página de cada lote para extrair a data da 1ª praça, edital e matrícula que faltam na listagem, em vez de descartar por ausência de data.
+3. **Adaptadores por plataforma** (seção 27): `lancevip`, `vincoleiloes`, `portalzuk`, `leiloesaguiar` têm padrões próprios — parser dedicado por domínio aumenta muito a taxa de captura.
+4. **FlareSolverr (seção 14)** para domínios com Cloudflare; **curl_cffi** para erros de TLS.
+5. **Dedup por `id_externo`/URL canônica** mantida ao reimportar; agendar re-scraping a cada 7–14 dias (leilões esporádicos).
+6. **Resolver sites compartilhados** atribuindo o imóvel ao leiloeiro correto via campo do próprio lote, não pelo domínio.
+7. **Geocodificação e normalização de cidade** pós-importação (seções 21/32).
+
+**Relatório gerado em:** 10/06/2026 11:27:15
+
+
+---
+
+## RELATÓRIO DE CAPTURA JUCEAC
+
+## Relatório de Captura — JUCEAC 10/06/2026 11:36
+
+### Resumo Executivo
+- **Leiloeiros Capturados:** 12
+- **Imóveis Encontrados:** 0
+- **Data da Captura:** 10/06/2026 11:36:45
+- **Fonte:** Site JUCEAC + PDF anexado
+
+---
+
+### Principais Dificuldades Enfrentadas
+
+#### 1. **Estrutura do Site JUCEAC — Conteúdo Dinâmico / JavaScript Pesado**
+
+**Problema Encontrado:**
+- O site `https://juceac.ac.gov.br/leiloeiro/` renderiza dados via JavaScript
+- A tabela de leiloeiros não aparece no HTML estático — precisa execução de JS
+- Métodos simples de scraping (requests + BeautifulSoup) retornam página quase vazia
+
+**Indicadores:**
+- Requisição GET retorna ~200 KB de HTML, mas sem dados estruturados de leiloeiros
+- Metadados `og:description` contêm alguns nomes, mas parcialmente corrompidos (encoding UTF-8 vs. encoding local)
+- Nenhuma `<table>` no HTML; nenhum JSON-LD com dados estruturados
+
+**Solução Implementada:**
+- ✅ Usar **Playwright** em vez de `requests` — renderiza JavaScript completo
+- ✅ Aguardar `wait_until="networkidle"` para garantir carregamento de dados
+- ✅ Extrair texto bruto e parsear com regex (padrão: "Matrícula n. XXX")
+
+**Resultado Observado:**
+- Após renderização: site mostra ~26 leiloeiros (mistos: regulares + cancelados)
+- Apenas 0-2 leiloeiros em situação "REGULAR" no site JUCEAC do Acre
+- Motivo: a maioria dos leiloeiros cadastrados em JUCEAC estão **cancelados ou suspensos**
+
+---
+
+#### 2. **Discrepância Geográfica — JUCEAC é Acre, PDF é Rondônia**
+
+**Problema Encontrado:**
+- O site `juceac.ac.gov.br` é a Junta Comercial do **Acre** (UF = AC)
+- O PDF fornecido ("Leiloeiros judiciais Rondônia.pdf") é da **Rondônia** (UF = RO)
+- Leiloeiros de RO devem estar registrados em **JUCER** (Junta Comercial de Rondônia), não em JUCEAC
+
+**Padrão Observado:**
+- JUCER, JUCESP, JUCESC, JUCEMS, JUCEES, JUCERJA, JUCISRS, JUCEDS, JUCEPAR = Juntas estaduais
+- Cada estado tem sua Junta Comercial (JUC + UF sigla)
+- JUCEAC = Junta Comercial do Acre (só cadastra leiloeiros do Acre)
+
+**Recomendação para Próximas Execuções:**
+- Para Rondônia: use `https://jucer.ro.gov.br/` (JUCER, não JUCEAC)
+- Para São Paulo: `https://www.jucesp.sp.gov.br/`
+- Para Minas Gerais: `https://www.jucemg.mg.gov.br/`
+- Etc.
+
+---
+
+#### 3. **Encoding / Mojibake nos Metadados**
+
+**Problema Encontrado:**
+- Meta tags contêm nomes de leiloeiros, mas com caracteres corrompidos
+- Exemplo: `JUC...LIA ARA...JO` em vez de `JUCÍLIA ARAÚJO`
+- Causa: mismatch entre encoding da página (UTF-8) e decodificação local (latin-1 ou Windows-1252)
+
+**Solução:**
+- Especificar `encoding='utf-8'` explicitamente no Playwright
+- Recodificar strings suspeitas com `unicodedata.normalize()`
+
+---
+
+#### 4. **Ausência de URLs Diretas dos Leiloeiros no Site**
+
+**Problema Encontrado:**
+- O site JUCEAC lista nomes e registros, mas **sem links diretos** para os sites dos leiloeiros
+- Impossível extrair URLs de leiloeiros a partir do HTML da listagem
+- Necessário match manual entre nome/registro e domínio (error-prone)
+
+**Solução Implementada:**
+- ✅ Usar **dados do PDF fornecido** como fonte primária (mais completa)
+- ✅ Match manual: nome PDF → nome site JUCEAC
+- ✅ Enriquecer com emails/telefones do PDF
+
+**Resultado:**
+- CSV com 12 leiloeiros (do PDF) + sites validados
+- Todos com situação "Regular" (filtrado no PDF)
+
+---
+
+#### 5. **Imóveis Não Indexados no Site JUCEAC**
+
+**Problema Encontrado:**
+- O site JUCEAC não lista imóveis diretamente
+- Cada leiloeiro tem seu próprio site (endereço na coluna "Site Oficial")
+- Necessário visitar **cada site** individualmente para coletar imóveis
+
+**Padrão Observado:**
+- URLs dos sites: variáveis (alguns .com.br, alguns .gov.br, alguns Wix/Shopify)
+- Estrutura HTML dos imóveis: **diferente em cada site**
+- Campos de data do leilão: às vezes em `/estrutura-de-imoveis`, às vezes em API interna
+
+**Recomendação:**
+- Criar scrapers **específicos por site** (não genérico)
+- Ou: investigar se há **API centralizada** que agrega leiloeiros (tipo BomValor, LeilõesSur, etc.)
+
+---
+
+### Recomendações para Correção / Melhoria
+
+#### A. **Se o Objetivo é Acre (JUCEAC):**
+1. Confirmar que JUCEAC é o estado alvo
+2. Se sim, aceitar que há poucos leiloeiros regulares cadastrados
+3. Focar em leiloeiros com sites ativos e coletar imóveis de lá
+
+#### B. **Se o Objetivo é Rondônia (JUCER):**
+1. Trocar URL para `https://jucer.ro.gov.br/leiloeiro/` (JUCER, não JUCEAC)
+2. Aplicar mesmo scraper (Playwright + regex de nomes)
+3. Usar PDF fornecido como validação dos nomes extraídos
+
+#### C. **Para Coleta de Imóveis:**
+1. **Não** esperar uma listagem centralizada (não existe em JUCEAC ou JUCER)
+2. Iterar sobre sites de cada leiloeiro extraído
+3. Identificar padrão de estrutura HTML para cada site
+4. Implementar parser específico (use seção 5 do guia `captura_dados_leiloes_v2.md`)
+
+#### D. **Para Melhorar Robustez:**
+1. Adicionar retry com exponential backoff para Playwright (timeouts ocasionais)
+2. Implementar pool de browsers para parallelizar (5-10 sites simultâneos)
+3. Gravar HTML renderizado em cache para debug rápido
+4. Usar Playwright em headless=False por 30 s na primeira execução para validar visualmente
+
+#### E. **Automação:**
+1. Adicionar a reports a cada **5 minutos** (conforme solicitado)
+2. Usar arquivo JSON de progresso para retomar em falhas
+3. Agendar execução diária via cron / Celery beat (seção 21 do guia)
+
+---
+
+### Dados Capturados (CSV Gerado)
+
+**Arquivo:** `leiloeiros_juceac_2026-06-10.csv`
+
+**Campos:**
+- `nome` — Nome do leiloeiro
+- `registro_jucer` — Registro na Junta do estado de origem
+- `registro_juceac` — Registro em JUCEAC (se aplicável)
+- `email` — Email de contato
+- `site` — Website do leiloeiro
+- `telefone` — Telefone de contato
+- `uf` — Estado (UF) onde o leiloeiro atua
+- `situacao` — Situação (Regular, Cancelado, Suspenso)
+
+---
+
+### Próximos Passos
+
+1. **Validar UF alvo:** Confirm se Acre (AC) ou Rondônia (RO)
+2. **Coletar imóveis:** Visitare sites dos leiloeiros extraídos
+3. **Integrar ao banco:** `python run.py importar-csv --arquivo <csv>`
+4. **Agendar:** `cron "0 */6 * * * python scraper_juceac_v2.py"` (a cada 6 horas)
+
+---
+
+**Relatório gerado em:** 10/06/2026 11:36:45

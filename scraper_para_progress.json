@@ -1,8 +1,8 @@
 {
   "iniciado": "2026-06-09T18:10:41.925435",
   "capture_date": "09/06/2026 18:10",
-  "leiloeiros_processados": 47,
-  "imoveis_total": 37,
+  "leiloeiros_processados": 53,
+  "imoveis_total": 39,
   "por_leiloeiro": {
     "Getúlio Boadana": 0,
     "Célia Maria Campos Cardoso": 0,
@@ -50,7 +50,13 @@
     "Lucas Vasconcelos Chagas": 0,
     "Érico Sobral Soares": 0,
     "Fábio Prando Fagundes Góes": 0,
-    "Edivan Ribeiro dos Santos": 0
+    "Edivan Ribeiro dos Santos": 0,
+    "Ana Laura de Souza Pires": 0,
+    "Leonardo Nunes Lobo": 0,
+    "Gleinda Cristina Chaves Cavalheri": 0,
+    "Ronaldo Galvão do Nascimento": 0,
+    "Luzinete dos Santos": 0,
+    "Ícaro Alexandre Felfili Jardim": 2
   },
   "status_sites": {
     "Getúlio Boadana": "sem site (nao raspavel)",
@@ -99,14 +105,21 @@
     "Lucas Vasconcelos Chagas": "sem site (nao raspavel)",
     "Érico Sobral Soares": "sem site (nao raspavel)",
     "Fábio Prando Fagundes Góes": "inacessivel",
-    "Edivan Ribeiro dos Santos": "sem site (nao raspavel)"
+    "Edivan Ribeiro dos Santos": "sem site (nao raspavel)",
+    "Ana Laura de Souza Pires": "ok (0)",
+    "Leonardo Nunes Lobo": "sem site (nao raspavel)",
+    "Gleinda Cristina Chaves Cavalheri": "sem site (nao raspavel)",
+    "Ronaldo Galvão do Nascimento": "sem site (nao raspavel)",
+    "Luzinete dos Santos": "sem site (nao raspavel)",
+    "Ícaro Alexandre Felfili Jardim": "ok (2)"
   },
   "erros": [
     "Wirna Campos Cardoso: inacessivel",
     "Jonas Gabriel Antunes Moreira: inacessivel",
     "Fábio Prando Fagundes Góes: inacessivel"
   ],
-  "last_report": "2026-06-09T18:57:53.771164",
-  "db_novos": 25,
-  "db_ja_existiam": 12
+  "last_report": "2026-06-09T19:00:56.552441",
+  "db_novos": 27,
+  "db_ja_existiam": 12,
+  "status": "concluido"
 }

@@ -1,0 +1,283 @@
+========================================================================
+SCRAPER AL/JUCEAL | captura 09/06/2026 19:58 | 28 leiloeiros
+========================================================================
+[19:58:44] >>> ISALDO SOBRAL E SILVA | https://www.portaldosleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[19:59:01] >>> OSMAN SOBRAL E SILVA | https://www.leiloesfreire.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:01:07] >>> FERNANDO GUSTAVO ALENCAR DE ALBUQUERQUE LINS | http://www.albuquerquelins.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:01:13] >>> OLDICÉA SOBRAL E SILVA DE ALBUQUERQUE | https://www.leiloesfreire.com.br
+    [cache] site ja raspado -> 0 imoveis
+    [OK] imoveis com 1a praca futura: 0
+[20:01:13] >>> CARLOS ADRIANO SOLANO DOS SANTOS PINHO | https://www.vipleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (20:04) sites 5/28 -----
+      0 | ISALDO SOBRAL E SILVA
+      0 | OSMAN SOBRAL E SILVA
+      0 | FERNANDO GUSTAVO ALENCAR DE ALBUQUERQUE LINS
+      0 | OLDICÉA SOBRAL E SILVA DE ALBUQUERQUE
+      0 | CARLOS ADRIANO SOLANO DOS SANTOS PINHO
+   TOTAL: 0 | banco novos=0
+
+[20:04:24] >>> ADILSON BENTO DE ARAÚJO | https://www.abaleiloes.com.br
+    [OK] imoveis com 1a praca futura: 2
+[20:05:42] >>> CRISTIANE BARROS DA MOTA BALBINO | https://www.lancecertoleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (20:11) sites 7/28 -----
+      0 | ISALDO SOBRAL E SILVA
+      0 | OSMAN SOBRAL E SILVA
+      0 | FERNANDO GUSTAVO ALENCAR DE ALBUQUERQUE LINS
+      0 | OLDICÉA SOBRAL E SILVA DE ALBUQUERQUE
+      0 | CARLOS ADRIANO SOLANO DOS SANTOS PINHO
+      2 | ADILSON BENTO DE ARAÚJO
+      0 | CRISTIANE BARROS DA MOTA BALBINO
+   TOTAL: 2 | banco novos=2
+
+[20:11:07] >>> ALEXANDRE ALMEIDA DE SOUZA E SILVA | https://www.leiloesfreire.com.br
+    [cache] site ja raspado -> 0 imoveis
+    [OK] imoveis com 1a praca futura: 0
+[20:11:07] >>> ALEX WILLIN HOPPE | https://www.hoppeleiloes.com.br
+    [OK] imoveis com 1a praca futura: 7
+[20:14:43] >>> RUDIVAL ALMEIDA GOMES JUNIOR | https://www.rjleiloes.com.br
+    [OK] imoveis com 1a praca futura: 13
+
+----- REPORT PARCIAL (20:18) sites 10/28 -----
+      0 | ISALDO SOBRAL E SILVA
+      0 | OSMAN SOBRAL E SILVA
+      0 | FERNANDO GUSTAVO ALENCAR DE ALBUQUERQUE LINS
+      0 | OLDICÉA SOBRAL E SILVA DE ALBUQUERQUE
+      0 | CARLOS ADRIANO SOLANO DOS SANTOS PINHO
+      2 | ADILSON BENTO DE ARAÚJO
+      0 | CRISTIANE BARROS DA MOTA BALBINO
+      0 | ALEXANDRE ALMEIDA DE SOUZA E SILVA
+      7 | ALEX WILLIN HOPPE
+     13 | RUDIVAL ALMEIDA GOMES JUNIOR
+   TOTAL: 22 | banco novos=8
+
+[20:18:44] >>> DANIEL ELIAS GARCIA | https://www.danielgarcialeiloes.com.br
+    [OK] imoveis com 1a praca futura: 5
+[20:23:18] >>> DIOGO MATTOS DIAS MARTINS | https://www.inovaleilao.com.br
+    [OK] imoveis com 1a praca futura: 7
+
+----- REPORT PARCIAL (20:26) sites 12/28 -----
+      0 | ISALDO SOBRAL E SILVA
+      0 | OSMAN SOBRAL E SILVA
+      0 | FERNANDO GUSTAVO ALENCAR DE ALBUQUERQUE LINS
+      0 | OLDICÉA SOBRAL E SILVA DE ALBUQUERQUE
+      0 | CARLOS ADRIANO SOLANO DOS SANTOS PINHO
+      2 | ADILSON BENTO DE ARAÚJO
+      0 | CRISTIANE BARROS DA MOTA BALBINO
+      0 | ALEXANDRE ALMEIDA DE SOUZA E SILVA
+      7 | ALEX WILLIN HOPPE
+     13 | RUDIVAL ALMEIDA GOMES JUNIOR
+      5 | DANIEL ELIAS GARCIA
+      7 | DIOGO MATTOS DIAS MARTINS
+   TOTAL: 34 | banco novos=12
+
+[20:26:28] >>> LUCAS KURY DIAS MARTINS | https://www.inovaleilao.com.br
+    [cache] site ja raspado -> 7 imoveis
+    [OK] imoveis com 1a praca futura: 7
+[20:26:28] >>> DOUGLAS RICHER E SILVA NASCIMENTO | https://www.portaldosleiloes.com.br
+    [cache] site ja raspado -> 0 imoveis
+    [OK] imoveis com 1a praca futura: 0
+[20:26:28] >>> DAVI BORGES DE AQUINO | https://alfaleiloes.com
+    [OK] imoveis com 1a praca futura: 45
+
+----- REPORT PARCIAL (20:32) sites 15/28 -----
+      0 | ISALDO SOBRAL E SILVA
+      0 | OSMAN SOBRAL E SILVA
+      0 | FERNANDO GUSTAVO ALENCAR DE ALBUQUERQUE LINS
+      0 | OLDICÉA SOBRAL E SILVA DE ALBUQUERQUE
+      0 | CARLOS ADRIANO SOLANO DOS SANTOS PINHO
+      2 | ADILSON BENTO DE ARAÚJO
+      0 | CRISTIANE BARROS DA MOTA BALBINO
+      0 | ALEXANDRE ALMEIDA DE SOUZA E SILVA
+      7 | ALEX WILLIN HOPPE
+     13 | RUDIVAL ALMEIDA GOMES JUNIOR
+      5 | DANIEL ELIAS GARCIA
+      7 | DIOGO MATTOS DIAS MARTINS
+      7 | LUCAS KURY DIAS MARTINS
+      0 | DOUGLAS RICHER E SILVA NASCIMENTO
+     45 | DAVI BORGES DE AQUINO
+   TOTAL: 86 | banco novos=57
+
+[20:32:52] >>> FRANCISCO JONNATHAN SANTOS FREITAS | https://www.franciscofreitasleiloes.com.br
+    [OK] imoveis com 1a praca futura: 2
+[20:36:34] >>> FERNANDO CAETANO MOREIRA FILHO | https://www.mgl.com.br
+    [OK] imoveis com 1a praca futura: 5
+
+----- REPORT PARCIAL (20:38) sites 17/28 -----
+      0 | ISALDO SOBRAL E SILVA
+      0 | OSMAN SOBRAL E SILVA
+      0 | FERNANDO GUSTAVO ALENCAR DE ALBUQUERQUE LINS
+      0 | OLDICÉA SOBRAL E SILVA DE ALBUQUERQUE
+      0 | CARLOS ADRIANO SOLANO DOS SANTOS PINHO
+      2 | ADILSON BENTO DE ARAÚJO
+      0 | CRISTIANE BARROS DA MOTA BALBINO
+      0 | ALEXANDRE ALMEIDA DE SOUZA E SILVA
+      7 | ALEX WILLIN HOPPE
+     13 | RUDIVAL ALMEIDA GOMES JUNIOR
+      5 | DANIEL ELIAS GARCIA
+      7 | DIOGO MATTOS DIAS MARTINS
+      7 | LUCAS KURY DIAS MARTINS
+      0 | DOUGLAS RICHER E SILVA NASCIMENTO
+     45 | DAVI BORGES DE AQUINO
+      2 | FRANCISCO JONNATHAN SANTOS FREITAS
+      5 | FERNANDO CAETANO MOREIRA FILHO
+   TOTAL: 93 | banco novos=57
+
+[20:38:56] >>> LUCAS RAFAEL ANTUNES MOREIRA | https://www.mgl.com.br
+    [cache] site ja raspado -> 5 imoveis
+    [OK] imoveis com 1a praca futura: 5
+[20:38:56] >>> JONAS GABRIEL ANTUNES MOREIRA | https://www.mgl.com.br
+    [cache] site ja raspado -> 5 imoveis
+    [OK] imoveis com 1a praca futura: 5
+[20:38:56] >>> MAYSALA SOARES DE SOUZA PEIXOTO | https://www.bravoleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:39:01] >>> DENYS PYERRE DE OLIVEIRA | https://www.leje.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:39:51] >>> IRANI FLORES | https://www.leilaobrasil.com.br
+    [OK] imoveis com 1a praca futura: 160
+[20:40:32] >>> MURILO GONÇALVES RAMOS | https://www.mgrleiloes.com.br
+    [OK] imoveis com 1a praca futura: 1
+[20:43:30] >>> LAIZA MACHADO DE OLIVEIRA ADRI | http://www.adrileiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (20:47) sites 24/28 -----
+      0 | ISALDO SOBRAL E SILVA
+      0 | OSMAN SOBRAL E SILVA
+      0 | FERNANDO GUSTAVO ALENCAR DE ALBUQUERQUE LINS
+      0 | OLDICÉA SOBRAL E SILVA DE ALBUQUERQUE
+      0 | CARLOS ADRIANO SOLANO DOS SANTOS PINHO
+      2 | ADILSON BENTO DE ARAÚJO
+      0 | CRISTIANE BARROS DA MOTA BALBINO
+      0 | ALEXANDRE ALMEIDA DE SOUZA E SILVA
+      7 | ALEX WILLIN HOPPE
+     13 | RUDIVAL ALMEIDA GOMES JUNIOR
+      5 | DANIEL ELIAS GARCIA
+      7 | DIOGO MATTOS DIAS MARTINS
+      7 | LUCAS KURY DIAS MARTINS
+      0 | DOUGLAS RICHER E SILVA NASCIMENTO
+     45 | DAVI BORGES DE AQUINO
+      2 | FRANCISCO JONNATHAN SANTOS FREITAS
+      5 | FERNANDO CAETANO MOREIRA FILHO
+      5 | LUCAS RAFAEL ANTUNES MOREIRA
+      5 | JONAS GABRIEL ANTUNES MOREIRA
+      0 | MAYSALA SOARES DE SOUZA PEIXOTO
+      0 | DENYS PYERRE DE OLIVEIRA
+    160 | IRANI FLORES
+      1 | MURILO GONÇALVES RAMOS
+      0 | LAIZA MACHADO DE OLIVEIRA ADRI
+   TOTAL: 264 | banco novos=61
+
+[20:47:07] >>> ADELANE PEDROZO FERREIRA | http://www.adelanepedrozoleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:50:42] >>> ARTHUR FERREIRA NUNES | https://www.nordesteleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:50:59] >>> MARIA CATARINA LINHARES FEIJAO VILLA REAL ARAUJO | https://www.nasarleiloes.com.br
+    [OK] imoveis com 1a praca futura: 24
+
+----- REPORT PARCIAL (20:58) sites 27/28 -----
+      0 | ISALDO SOBRAL E SILVA
+      0 | OSMAN SOBRAL E SILVA
+      0 | FERNANDO GUSTAVO ALENCAR DE ALBUQUERQUE LINS
+      0 | OLDICÉA SOBRAL E SILVA DE ALBUQUERQUE
+      0 | CARLOS ADRIANO SOLANO DOS SANTOS PINHO
+      2 | ADILSON BENTO DE ARAÚJO
+      0 | CRISTIANE BARROS DA MOTA BALBINO
+      0 | ALEXANDRE ALMEIDA DE SOUZA E SILVA
+      7 | ALEX WILLIN HOPPE
+     13 | RUDIVAL ALMEIDA GOMES JUNIOR
+      5 | DANIEL ELIAS GARCIA
+      7 | DIOGO MATTOS DIAS MARTINS
+      7 | LUCAS KURY DIAS MARTINS
+      0 | DOUGLAS RICHER E SILVA NASCIMENTO
+     45 | DAVI BORGES DE AQUINO
+      2 | FRANCISCO JONNATHAN SANTOS FREITAS
+      5 | FERNANDO CAETANO MOREIRA FILHO
+      5 | LUCAS RAFAEL ANTUNES MOREIRA
+      5 | JONAS GABRIEL ANTUNES MOREIRA
+      0 | MAYSALA SOARES DE SOUZA PEIXOTO
+      0 | DENYS PYERRE DE OLIVEIRA
+    160 | IRANI FLORES
+      1 | MURILO GONÇALVES RAMOS
+      0 | LAIZA MACHADO DE OLIVEIRA ADRI
+      0 | ADELANE PEDROZO FERREIRA
+      0 | ARTHUR FERREIRA NUNES
+     24 | MARIA CATARINA LINHARES FEIJAO VILLA REAL ARAUJO
+   TOTAL: 288 | banco novos=85
+
+[20:58:28] >>> IVANA MONTENEGRO CASTELO BRANCO ROCHA | https://www.patiorochaleiloes.com.br
+    [OK] imoveis com 1a praca futura: 2
+
+----- REPORT PARCIAL (21:06) sites 28/28 -----
+      0 | ISALDO SOBRAL E SILVA
+      0 | OSMAN SOBRAL E SILVA
+      0 | FERNANDO GUSTAVO ALENCAR DE ALBUQUERQUE LINS
+      0 | OLDICÉA SOBRAL E SILVA DE ALBUQUERQUE
+      0 | CARLOS ADRIANO SOLANO DOS SANTOS PINHO
+      2 | ADILSON BENTO DE ARAÚJO
+      0 | CRISTIANE BARROS DA MOTA BALBINO
+      0 | ALEXANDRE ALMEIDA DE SOUZA E SILVA
+      7 | ALEX WILLIN HOPPE
+     13 | RUDIVAL ALMEIDA GOMES JUNIOR
+      5 | DANIEL ELIAS GARCIA
+      7 | DIOGO MATTOS DIAS MARTINS
+      7 | LUCAS KURY DIAS MARTINS
+      0 | DOUGLAS RICHER E SILVA NASCIMENTO
+     45 | DAVI BORGES DE AQUINO
+      2 | FRANCISCO JONNATHAN SANTOS FREITAS
+      5 | FERNANDO CAETANO MOREIRA FILHO
+      5 | LUCAS RAFAEL ANTUNES MOREIRA
+      5 | JONAS GABRIEL ANTUNES MOREIRA
+      0 | MAYSALA SOARES DE SOUZA PEIXOTO
+      0 | DENYS PYERRE DE OLIVEIRA
+    160 | IRANI FLORES
+      1 | MURILO GONÇALVES RAMOS
+      0 | LAIZA MACHADO DE OLIVEIRA ADRI
+      0 | ADELANE PEDROZO FERREIRA
+      0 | ARTHUR FERREIRA NUNES
+     24 | MARIA CATARINA LINHARES FEIJAO VILLA REAL ARAUJO
+      2 | IVANA MONTENEGRO CASTELO BRANCO ROCHA
+   TOTAL: 290 | banco novos=85
+
+
+[CSV] C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_al_2026-06-09.csv
+
+========================================================================
+RELATORIO FINAL
+========================================================================
+    160 | IRANI FLORES -> ok (160)
+     45 | DAVI BORGES DE AQUINO -> ok (45)
+     24 | MARIA CATARINA LINHARES FEIJAO VILLA REAL ARAUJO -> ok (24)
+     13 | RUDIVAL ALMEIDA GOMES JUNIOR -> ok (13)
+      7 | ALEX WILLIN HOPPE -> ok (7)
+      7 | DIOGO MATTOS DIAS MARTINS -> ok (7)
+      7 | LUCAS KURY DIAS MARTINS -> ok (7)
+      5 | DANIEL ELIAS GARCIA -> ok (5)
+      5 | FERNANDO CAETANO MOREIRA FILHO -> ok (5)
+      5 | LUCAS RAFAEL ANTUNES MOREIRA -> ok (5)
+      5 | JONAS GABRIEL ANTUNES MOREIRA -> ok (5)
+      2 | ADILSON BENTO DE ARAÚJO -> ok (2)
+      2 | FRANCISCO JONNATHAN SANTOS FREITAS -> ok (2)
+      2 | IVANA MONTENEGRO CASTELO BRANCO ROCHA -> ok (2)
+      1 | MURILO GONÇALVES RAMOS -> ok (1)
+      0 | ISALDO SOBRAL E SILVA -> ok (0)
+      0 | OSMAN SOBRAL E SILVA -> ok (0)
+      0 | FERNANDO GUSTAVO ALENCAR DE ALBUQUERQUE LINS -> ok (0)
+      0 | OLDICÉA SOBRAL E SILVA DE ALBUQUERQUE -> ok (0)
+      0 | CARLOS ADRIANO SOLANO DOS SANTOS PINHO -> ok (0)
+      0 | CRISTIANE BARROS DA MOTA BALBINO -> ok (0)
+      0 | ALEXANDRE ALMEIDA DE SOUZA E SILVA -> ok (0)
+      0 | DOUGLAS RICHER E SILVA NASCIMENTO -> ok (0)
+      0 | MAYSALA SOARES DE SOUZA PEIXOTO -> ok (0)
+      0 | DENYS PYERRE DE OLIVEIRA -> ok (0)
+      0 | LAIZA MACHADO DE OLIVEIRA ADRI -> ok (0)
+      0 | ADELANE PEDROZO FERREIRA -> ok (0)
+      0 | ARTHUR FERREIRA NUNES -> ok (0)
+
+Total imoveis (1a praca futura): 290
+Banco: novos=85 ja_existiam=205 | Erros: 0

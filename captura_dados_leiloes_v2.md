@@ -7205,3 +7205,947 @@ Davi Borges de Aquino (IRREGULAR), Cyntia A. Diniz Nóbrega (IRREGULAR), Tiago T
    origem e pegar o **site oficial** quando o PDF só traz e-mail — evita a inferência de domínio.
 6. **Reduzir latência do drill** paralelizando contextos Playwright e só caindo no FlareSolverr quando
    houver challenge real (já é o caso) — evita 70 s/lote em sites sem Cloudflare.
+
+### 41.5. Correções IMPLEMENTADAS (módulo `scraper_commons.py`, 09/06/2026 21:09)
+
+As 4 correções dos itens 1–4 de 41.4 foram codificadas num módulo reaproveitável
+**`scraper_commons.py`** (funções puras, `requests` + stdlib) e ligadas ao `scraper_rn.py`. Os demais
+scrapers de junta podem `import scraper_commons` e ganhar o mesmo comportamento.
+
+| # | Correção | Função em `scraper_commons.py` | Como foi ligada no `scraper_rn.py` |
+|---|---|---|---|
+| 1 | Dedup multi-junta | `merge_juntas(atual, nova)` | `db_insert`: ao achar URL existente, faz `UPDATE imoveis SET junta=merge_juntas(...)` em vez de só pular; conta `multijunta`. |
+| 2 | Inferência de domínio por e-mail | `site_from_email(email)`, `candidate_sites(site, email)` | `scrape_leiloeiro` monta a lista de candidatos = site do PDF **+** `https://www.<domínio-do-email>` (se não-genérico) e tenta na ordem. Exige coluna `email` no CSV de leiloeiros. |
+| 3 | Adapter SPA (XHR + scroll) | `cards_from_json(payloads)`, `walk_json` | `render(..., capture_xhr=True, scroll=True)` intercepta `page.on("response")` com `content-type: json` e rola a página; quando o HTML dá **0 cards**, `_spa_cards` extrai lotes do JSON da API interna. |
+| 4 | Sondagem de saúde | `site_health(url)` | `scrape_leiloeiro` roda `site_health` em cada candidato **antes** de abrir o Playwright; classifica `dns_invalido`/`offline`/`timeout`/`sem_site_publicado`/`http_4xx` e só renderiza os vivos (HTTP 403/503 = provável Cloudflare → renderiza). |
+
+**Detalhes de projeto que evitaram regressões:**
+
+- `render()` ganhou parâmetros **opcionais** `capture_xhr`/`scroll`; sem eles a assinatura `(html, final)`
+  é preservada — nenhum chamador existente quebrou. Com `capture_xhr=True` retorna `(html, final, payloads)`.
+- `db_insert()` agora retorna **3 valores** `(novos, existe, multijunta)`; o `main()` foi atualizado.
+- `GENERIC_EMAIL_DOMAINS` (gmail/yahoo/hotmail/outlook/live/ig/uol/bol/terra...) impede inferir site de
+  provedor pessoal — Davi Paulim (yahoo) e Jussara (gmail) seguem corretamente como "sem site".
+- `site_health` resolve **DNS primeiro** (`socket.getaddrinfo`) para cortar `NXDOMAIN` sem nem abrir socket HTTP.
+
+**Resultado da re-execução (21:09–21:41) — ganhos medidos vs. a 1ª rodada (74 imóveis):**
+
+- **77 imóveis** (1ª praça futura), +3 — o **adapter SPA** recuperou cards onde antes dava 0:
+  `erickleiloes.com.br` (0 → **6 cards** via XHR/scroll) e `fidelisleiloes.com.br` (5 → **8**).
+- **Dedup multi-junta:** `multijunta+=8` — 5 lotes viraram `JUCER/RR-RO; JUCERN/RN` (Daniel Garcia) e 3
+  viraram `JUCEPE/PE; JUCERN/RN` (Edeylson). **Lotes associados a JUCERN/RN subiram de 69 → 77** sem
+  duplicar nenhuma linha física (verificado no banco: `SELECT … WHERE junta LIKE '%JUCERN/RN%'` = 77).
+- **Sondagem de saúde:** `robertofernandesleiloes.com` e `alessandraleiloes.com` cortados na hora como
+  `dns_invalido` (antes gastavam ~30 s cada em Playwright+FlareSolverr). Erros caíram de 2 → 1.
+- **Inferência por e-mail:** em Alessandra, o `.com` do PDF é DNS inválido, mas o domínio do e-mail
+  (`alessandraleiloes.com.br`) foi alcançado como candidato alternativo — antes era só "inacessível".
+- Itens **5** (cruzar cadastro oficial) e **6** (paralelizar contextos) ficam como melhorias futuras.
+
+---
+
+## 42. Captura dos leiloeiros REGULARES do Pará — JUCEPA (PDF "Leiloeiros Pará", 2026-06-09)
+
+**Scraper:** `scraper_para.py` (clone do `scraper_amapa.py`, seção 39 — mesma engine Playwright + fallback
+FlareSolverr, mesmo filtro de 1ª praça futura e dedup global por URL). **Entrada:**
+`csv/leiloeiros_para_2026-06-09.csv`. **Junta:** `JUCEPA/PA`. **Progresso:** `scraper_para_progress.json`.
+
+### 42.1. Universo e filtragem na origem
+- O PDF lista **61 leiloeiros**. Excluídos **8** por situação irregular na própria JUCEPA:
+  marcados `IRREGULAR` (Maria do Socorro Patello de Moraes, Antonio Alberto Correa do Vale, Ananias de Sá,
+  Erick Rodrigo Corrêa de Oliveira, Hugo Moreira Pimenta, Tiago Tessler Blecher) ou
+  `MATRÍCULA CANCELADA` (Mauricio Ferreira Maciel, Rodrigo Schmitz).
+- Restaram **53 REGULARES**, todos gravados no CSV de leiloeiros (nome + site quando publicado).
+- Apenas **27 dos 53** trazem site no diário; os outros **26** só publicam e-mail/telefone → não-raspáveis.
+
+### 42.2. Resultado
+- **Total de imóveis com 1ª praça > data da captura (09/06/2026): 39.**
+- **Banco (`imoveis_leiloeiros.db`):** **27 novos** + **12 já existentes** (dedup por URL) → `JUCEPA/PA` = 27.
+- **Verificação CSV↔banco:** 39 linhas no CSV, **0 URLs faltando** no banco. Fecha.
+- **Qualidade:** 38/39 com foto, 33/39 com anexo (edital/matrícula).
+- **CSVs gerados:** `csv/leiloeiros_para_2026-06-09.csv` e `csv/imoveis_para_2026-06-09.csv`.
+
+**Relação de imóveis por leiloeiro (somente os que renderam):**
+
+| Imóveis | Leiloeiro | Site |
+|--:|---|---|
+| 12 | Renato Guedes Rocha | rioleiloes.com.br |
+| 6 | Victor Oliveira Dorta | victordortaleiloes.com.br |
+| 5 | Rafael Galvani Ferreira | galvanileiloes.com.br |
+| 5 | Daniel Elias Garcia | danielgarcialeiloes.com.br |
+| 5 | José Antônio Rodovalho Junior | joserodovalholeiloes.com.br |
+| 2 | Francisco Jonnathan Santos Freitas | franciscofreitasleiloes.com.br |
+| 2 | Fernando Caetano Moreira Filho | fernandoleiloeiro.com.br |
+| 2 | Ícaro Alexandre Felfili Jardim | felfilileiloes.com.br |
+
+Os demais 19 sites raspáveis retornaram 0 (SPA/0 cards ou inacessível); 26 leiloeiros sem site foram pulados.
+
+### 42.3. Principais dificuldades enfrentadas
+
+1. **26 de 53 regulares sem site no diário (49%).** A JUCEPA publica só e-mail/telefone para metade dos
+   regulares. São intrinsecamente não-raspáveis pela rotina atual.
+2. **Sites grandes retornando 0 cards (SPA / API interna).** vipleiloes, maestroleiloes, leilo.com.br
+   (grupoleilo), lanceja, lmleiloes, celsocunha, alfaleiloes, leiloesmwd, lancecerto, solidus, hoppe,
+   norteleiloes — a listagem chega via XHR/Fetch ou exige interação com filtros de busca; o extrator
+   genérico de cards não casa nada. Mesmo sintoma das seções 39-41.
+3. **3 sites inacessíveis.** `wirnacampos.com.br`, `jonasleiloerio.com.br`, `apiceleiloes.com` — falha de
+   DNS/conexão mesmo com fallback FlareSolverr. O domínio `jonasleiloerio` aparenta **erro de digitação no
+   PDF** (provável `jonasleiloeiro`).
+4. **Divergência de domínio entre juntas → recall perdido.** Lucas Rafael Antunes Moreira
+   (`lucasleiloeiro.com.br`) e Jonas Gabriel Antunes Moreira (`jonasleiloerio.com.br`) deram **0** no PA,
+   mas os **mesmos leiloeiros** renderam **5 cada** no run do Amapá usando o domínio `mgl.com.br`. O PDF
+   da JUCEPA traz o domínio de marca pessoal (parkeado/vazio) em vez da plataforma real onde estão os lotes.
+5. **Dedup global "transfere" lotes de leiloeiro multi-estado para a 1ª junta que capturou.** Galvani (5),
+   Daniel Garcia (5) e Fernando (2) já estavam no banco sob `JUCAP/AP`; entram como `já existentes` e o
+   `JUCEPA/PA` "não fica" com eles. Comportamento esperado (ver [[project_scraper_acre]]), mas mascara a
+   real cobertura por junta.
+6. **`detail_budget=12` por site limita a confirmação de datas.** Cards sem data na listagem só viram
+   imóvel se entrarmos na página de detalhe; acima de 12 detalhes/site, lotes válidos podem ser descartados.
+
+### 42.4. Como corrigir essas falhas (sugestões)
+
+1. **Enriquecer o cadastro de sites antes de raspar:** para leiloeiro sem site, derivar
+   `https://www.<domínio-do-email>` quando o domínio **não** for genérico (gmail/yahoo/hotmail/outlook/
+   bol/uol/live) — recupera quem só publica e-mail corporativo (ex.: norteleiloes, dgleiloes, lanceja).
+2. **Mapa canônico de domínio por leiloeiro, transversal às juntas.** Manter `site_canonico` por CPF/nome e
+   **preferir o domínio que historicamente rendeu lotes** (ex.: usar `mgl.com.br` para Lucas/Jonas em vez do
+   domínio de marca do PDF). Resolve as falhas 3 e 4 de uma vez.
+3. **Adapters por plataforma para os SPAs.** Interceptar `page.on("response")` e ler o JSON da API interna,
+   ou scroll incremental + espera de seletor específico. Detectar plataforma (vlance, superbid, sodré, etc.)
+   e aplicar o parser certo — sem isso o extrator genérico retorna 0 nos sites grandes (falha 2).
+4. **Sondagem de saúde (`requests.get` timeout curto + checagem DNS) antes do Playwright** para classificar
+   *offline*/*DNS inválido*/*sem site* sem gastar ciclo de render+FlareSolverr; também sinaliza prováveis
+   erros de digitação de domínio (falha 3) para correção manual.
+5. **Relatório por junta deve separar "novos" de "já existentes (outra junta)"** explicitando sob qual junta
+   o lote foi originalmente gravado — torna a cobertura por estado auditável apesar do dedup global (falha 5).
+6. **Elevar `detail_budget`** (ou extrair data da própria listagem/JSON) nos sites que rendem cards mas
+   poucas datas, equilibrando recall × tempo (falha 6).
+
+**Conclusão:** a rodada cumpriu a Regra 0 (todos os imóveis válidos no banco, verificação CSV↔banco fechada).
+O gargalo de recall não é o filtro de data nem o dedup, e sim **(a)** metade dos regulares sem site e
+**(b)** sites SPA cuja listagem só sai via API interna — ambos endereçáveis pelos itens 1-3 acima.
+
+### 38.10. Correção "em escala" — diagnóstico e por que o re-scrape agendado está bloqueado
+
+Pedido: corrigir registros antigos de baixa qualidade em escala (rodar `--upsert` no resto do
+dataset ou agendar no Celery beat). Diagnóstico (read-only, antes de qualquer mutação):
+
+**Impacto em produção** (123.058 imóveis): `valor_minimo` nulo = 16.776; `< R$100` = 10.306;
+`cidade` nula = 55.987; sem imagem = 38.296.
+
+**Origem do "lixo de valor" (por fonte):** quase tudo de **scrapers standalone fora do beat**:
+`frazaoleiloes` 8543 (todos `valor_minimo = NULL`), `e-leiloes.com.br` 5279 (`= 0.00`),
+`JUCISRS` 1951, `lut` 1858, `megaleiloes` 1135, `JUCEPAR` 956, etc.
+
+**Por que não dá pra "corrigir em massa" agora:**
+1. **É dado faltante, não dado errado patchável.** frazao = NULL, e-leiloes = 0,00 — não há valor
+   correto a aplicar sem **re-coletar a fonte**. O `--upsert` só conserta uma linha se receber um
+   registro (por URL) com valor melhor; não posso fabricar 27k preços.
+2. **Os arquivos-fonte sumiram** (`/app/scraping` só tem os meus `imoveis_rr_ro_*`). O grande
+   `imoveis_A_final.jsonl` não está mais lá.
+
+**Por que agendar re-scrape no beat (a opção escolhida) não resolve hoje:**
+- O `FrazaoScraper` atual **está quebrado**: `_buscar_pagina(1)` retorna **0 itens** (o site mudou;
+  os seletores `.preco/.valor-lance/.bid-value` não casam mais). frazao **não é Superbid** (o
+  `style.config.json` não existe), então o adapter pronto não serve.
+- `daniel_garcia` e outros scrapers Playwright **nem sobem no worker** (`chromium` ausente em
+  `/root/.cache/ms-playwright` no container `leilao_worker`).
+- `e-leiloes`, `jucisrs`, `jucepar`, `lut`, `megaleiloes` **não têm classe de scraper** (foram
+  imports pontuais de JUCE/sites).
+- Agendar um scraper quebrado/que-não-roda é **prejudicial**: gasta ciclos, e como
+  `salvar_imoveis` **sobrescreve** `valor_minimo` no conflito (não é coalesce), um re-scrape ruim
+  poderia **zerar** dados bons. Por isso **não** adicionei nada ao `beat_schedule`.
+
+**O que já é estrutural e funciona:**
+- **Fontes agendadas** (`caixa`, `superbid`, `zuk`, `tjsp`): `pipeline/normalizer.salvar_imoveis`
+  faz `on_conflict_do_update` **sobrescrevendo** `valor_minimo/cidade/imagem` a cada ciclo do beat
+  → **auto-curam sozinhas**. (Só `latitude/longitude/geocodificado/leiloeiro_id/arquivos/descricao`
+  são preservados-se-nulos.)
+- **Caminho de import manual**: o novo `importar-scraping --upsert` (seção 38.9) corrige
+  null/lixo quando a fonte standalone for **reexecutada** e reimportada.
+
+**Recomendação (próximo passo real, por fonte, em ordem de impacto):**
+1. **Reconstruir o `FrazaoScraper`** (8543 linhas) para o site atual — checar se virou outra
+   plataforma (Cloudflare/JS) e remapear preço/lote; validar que captura `valor_minimo`; só então
+   **agendar `coletar_frazao` no beat** (aí sim auto-cura via `salvar_imoveis`).
+2. Instalar `chromium` no `leilao_worker` (`playwright install chromium`) para os scrapers
+   Playwright rodarem no beat.
+3. Para `e-leiloes/jucisrs/jucepar/...` sem classe: criar scraper/adapter ou re-exportar a fonte e
+   reimportar com `--upsert`.
+
+> **Conclusão honesta:** a infraestrutura de auto-cura está correta (upsert no `salvar_imoveis` +
+> `--upsert` no import manual). O que falta é **scraper funcional por fonte** — cada um é um
+> mini-projeto de engenharia reversa. Não agendei re-scrape de scraper quebrado para não degradar o
+> banco.
+
+
+---
+
+## 43. Scraping JUCEPE/PE — leiloeiros judiciais de Pernambuco (jun/2026)
+
+Captura a partir de dois PDFs: a **lista de leiloeiros judiciais** (com site e período de habilitação) e o **registro da JUCEPE** (com Situação de Matrícula). Reaproveita integralmente o motor do `scraper_para.py` (Playwright + fallback FlareSolverr, filtro de 1ª praça futura, dedup por URL), com uma melhoria: **cache por domínio**.
+
+- **Entrada:** `csv/leiloeiros_pe_2026-06-09.csv` (46 leiloeiros regulares; excluídos Cancelada / Com Pendências/Irregular / Em Andamento).
+- **Saída:** `csv/imoveis_pe_2026-06-09.csv` + inserção em `imoveis_leiloeiros.db` (junta `JUCEPE/PE`).
+- **Resultado:** 414 linhas no CSV → **253 URLs únicas**, **todas no banco** (128 novas sob JUCEPE/PE; ~125 já existiam sob outras juntas via dedup global por URL). 1 site inacessível.
+
+### 43.1. Principais dificuldades enfrentadas
+
+1. **Duas fontes com dados conflitantes para o mesmo leiloeiro.** O PDF judicial e o registro
+   JUCEPE divergem em site (ex.: Flávio Costa = `hastaleilao.com.br` no judicial vs
+   `flaviocostaleiloes.com.br` no registro; Rudival = `leilaovip` vs `rjleiloes`; Ícaro =
+   `icarotenorioleiloes` vs `organizacaodeleiloes`) e até em situação (Tânia Grimaldi consta
+   habilitada no judicial mas "Irregular" na JUCEPE).
+2. **Site ausente, mascarado ou inválido em ~40% do registro.** Muitos campos `Site:` traziam
+   `000000000000`, o próprio e-mail, ou "Não informado". 18 dos 46 regulares ficaram sem site
+   raspável (pulados).
+3. **Vários leiloeiros compartilham o mesmo domínio.** leilaopernambuco (Daniel/Flávia),
+   leiloesfreire (Osman/Onildo), lancecertoleiloes (Luciano/Roberta), leilaovip, leilaobrasil
+   (Irani/Aline) — sem cache, cada domínio seria raspado 2x.
+4. **Plataforma nacional infla a contagem.** leilaobrasil.com.br devolveu 160 imóveis (teto de
+   cards) de todo o Brasil, não só PE — atribuídos a Irani e Aline. O dedup por URL evitou
+   gravar duas vezes, mas a contagem por-leiloeiro fica superestimada e mistura imóveis de
+   outras UFs.
+5. **Renderização lenta.** Sites com muitos cards forçam até 14 renders de página de detalhe
+   (45 s de timeout cada) — sites pesados levaram 4–5 min. Execução total ≈ 1 h.
+6. **Condição de corrida ao ler o progresso.** Leitor externo abriu o `*_progress.json` no meio
+   de uma escrita e, em cp1252 (Windows), quebrou com `UnicodeDecodeError`.
+7. **Site inacessível.** albuquerqueleiloes.com.br (Gervasio) caiu mesmo com fallback FlareSolverr.
+
+### 43.2. Correções sugeridas
+
+1. **Resolver conflito de fonte por precedência explícita:** preferir o site do PDF judicial
+   (habilitação ativa) e só cair para o registro JUCEPE quando ausente; registrar ambos numa
+   coluna `site_alt` para tentativa secundária.
+2. **Inferência de site a partir do e-mail corporativo** (já aplicada: `destakleiloes`,
+   `fernandoleiloeiro`, `leilaobrasil`, `rmoyses`, `colodeteleiloes`). Formalizar como passo
+   do pipeline e validar com `HEAD`/DNS antes de enfileirar.
+3. **Escrita atômica do progresso:** gravar em `*.tmp` e `os.replace()`; leitores sempre com
+   `encoding='utf-8', errors='replace'`.
+4. **Tag de origem da plataforma + filtro por UF:** marcar imóveis de portais nacionais
+   (leilaobrasil, leilaovip) e, quando possível, filtrar por UF=PE no card para não inflar a
+   atribuição ao leiloeiro pernambucano.
+5. **Paralelizar contextos do Playwright** (2–3 abas) e reduzir `networkidle` para encurtar a
+   janela de ~1 h.
+6. **Retry programado para inacessíveis** (Gervasio) numa segunda passada com `maxTimeout` maior
+   no FlareSolverr.
+7. **Rodar `baixar-docs`** para materializar editais/matrículas dos 253 imóveis em `storage/docs/`.
+
+---
+
+## 44. Captura dos leiloeiros REGULARES da Bahia — JUCEB (PDF "Leiloeiros Bahia", 2026-06-09)
+
+**Scraper:** `scraper_bahia.py` (clone do `scraper_para.py`, seção 42 — mesma engine Playwright +
+fallback FlareSolverr, mesmo filtro de 1ª praça futura e dedup global por URL). **Entrada:**
+`csv/leiloeiros_bahia_2026-06-09.csv`. **Junta:** `JUCEB/BA`. **Progresso:** `scraper_bahia_progress.json`.
+**Duração:** ~2h10 (18:35 → 20:47).
+
+### 44.1. Universo e filtragem na origem
+- O PDF lista **95 leiloeiros**. Excluídos **7** por situação não-REGULAR: `IRREGULAR`
+  (Simone de Queiroz, Vinicius Martins Cutolo, Márcia Cristina dos Santos Silva, Fabio da Silva Ferreira),
+  `Em processo de cancelamento de matrícula` (Mike Dutra Fleitas), `Cancelamento de Matrícula em Andamento`
+  (Mouzar Baston Filho) e `Destituído como leiloeiro` (Rodrigo Brandel Martins).
+- Restaram **88 REGULARES**, todos gravados no CSV de leiloeiros (nome + site quando publicado).
+- Apenas **68 dos 88** trazem site no diário; os outros **20** só publicam e-mail gratuito
+  (gmail/hotmail/outlook/yahoo) → não-raspáveis. Para vários regulares, o site foi **derivado do
+  domínio do e-mail corporativo** (ex.: `contato@alessandraleiloes.com.br` → `alessandraleiloes.com.br`).
+
+### 44.2. Resultado
+- **Total de imóveis com 1ª praça > data da captura (09/06/2026): 620.**
+- **Banco (`imoveis_leiloeiros.db`):** **250 novos** + **370 já existentes** (dedup por URL) → `JUCEB/BA` = 250.
+- **Verificação CSV↔banco:** 620 linhas no CSV; `620 = 250 novos + 370 já existiam`. Fecha sem faltantes.
+- **Filtro de data:** 0 imóveis com 1ª praça no passado (100% futuros). **Qualidade:** 242/250 com
+  lance inicial, 108/250 com imagem (lazy-load reduz a captura de foto).
+- **Distribuição dos 88 sites:** 30 renderam imóveis · 31 acessíveis mas 0 cards (SPA/API interna) ·
+  20 sem site · 7 inacessíveis.
+- **CSVs gerados:** `csv/leiloeiros_bahia_2026-06-09.csv` e `csv/imoveis_bahia_2026-06-09.csv`.
+
+**Relação de imóveis por leiloeiro (somente os que renderam):**
+
+| Imóveis | Leiloeiro | Site |
+|--:|---|---|
+| 150 | Irani Flores | leilaobrasil.com.br |
+| 150 | Aline Souza Flores | leilaobrasil.com.br (mesmo portal → dedup integral) |
+| 144 | Tiago Tessler Blecher | webleiloes.com.br (portal nacional → quase tudo já no banco) |
+| 18 | Catiele Borges Leffa | leffaleiloes.com.br |
+| 16 | Maria Isabel Brito Mendes Palma Soeiro | isabelleiloes.com.br |
+| 15 | Renato Guedes Rocha | rioleiloes.com.br |
+| 13 | Angela Saraiva Portes | saraivaleiloes.com.br |
+| 10 | José David Gonçalves de Melo | jdleiloes.com.br |
+| 9 | Dora Plat | portalzuk.com.br |
+| 8 | Rafaela Santos Ribeiro do Vale | rafaelaribeiroleiloes.com.br |
+| 7 | Emílio Matos Rocha | emiliomatosleiloes.com.br |
+| 7 | Alessandra Cristine Aparecida de Carlos | alessandraleiloes.com.br |
+| 7 | Daniel Melo Cruz | grupolance.com.br |
+| 7 | Marcus Vinicius Yoshimi Uebara | destakleiloes.com.br |
+| 6 | Paulo Cézar Rocha Teixeira | leiloesjudiciaisbahia.com.br |
+| 6 | Rodrigo Schmitz | hammer.lel.br |
+| 6 | Marco Antônio Barbosa de Oliveira Jr | marcoantonioleiloeiro.com.br |
+| 5 | Rudival Almeida Gomes Júnior | rjleiloes.com.br |
+| 5 | Viriato Domingues Cravo | cravoleiloes.com.br |
+| 5 | Daniel Elias Garcia | danielgarcialeiloes.com.br |
+| 5 | Rodrigo Aparecido Rigolon Da Silva | rigolonleiloes.com.br |
+| 4 | Hilda Emília de Souza Costa Lima | hastaleiloes.com.br |
+| 4 | Maurício Paes Inácio | hastaleiloes.com.br (mesmo site da Hilda → dedup) |
+| 4 | Renan Souza Silva | silvaleiloes.com.br |
+| 2 | Ivana Montenegro Castelo Branco Rocha | patiorochaleiloes.com.br |
+| 2 | Fernando Caetano Moreira Filho | fernandoleiloeiro.com.br |
+| 2 | Francisco Jonnathan Santos Freitas | franciscofreitasleiloes.com.br |
+| 1 | Fábio Manoel Guimarães | fabioleiloes.com.br |
+| 1 | Flávio Alexandre Alves Da Costa e Silva | hastaleilao.com.br |
+| 1 | Hélcio Kronberg | kronleiloes.com.br |
+
+Os demais 31 sites acessíveis retornaram 0 (SPA/0 cards); 20 leiloeiros sem site e 7 inacessíveis foram pulados.
+
+### 44.3. Principais dificuldades enfrentadas
+
+1. **Múltiplos leiloeiros compartilhando o mesmo portal → atribuição inflada e dedup massivo.**
+   Irani Flores e Aline Souza Flores publicam **ambos via `leilaobrasil.com.br`**; cada um "rendeu" 150,
+   mas o 2º foi 100% deduplicado por URL (`db_novos` subiu só +0). Idem hastaleiloes (Hilda + Maurício) e
+   ccjleiloes (Miguel + Jamile). O número por leiloeiro **não é exclusivo** do leiloeiro — é o acervo do
+   portal compartilhado.
+2. **Portais nacionais grandes já estavam no banco.** webleiloes (Tiago, 144 cards) gerou só ~3 novos:
+   o portal já fora raspado em runs de outros estados. Dos 620 coletados, **370 (60%) eram dedup**.
+3. **31 de 68 sites raspáveis retornaram 0 cards (SPA / API interna).** oscarleiloes, ccjleiloes, eustacio,
+   aguialeiloes, nordesteleiloes, hatoryleiloes, bezerraleiloes, kcleiloes, alfaleiloes, msoleiloes,
+   hoppeleiloes, jonasleiloeiro, lucasleiloeiro, palaciodosleiloes, guariglialeiloes, jussiaraleiloes,
+   positivoleiloes, lopesleiloes, albertomacedoleiloes, gustavomorettoleiloeiro, leiloeiroeduardo, rmoyses,
+   lancecertoleiloes etc. — a listagem chega via XHR/Fetch ou exige interação com filtros de busca; o
+   extrator genérico de cards (`extract_cards`) não casa nada. Mesmo sintoma das seções 39-43.
+4. **20 de 88 regulares sem site no diário (23%).** A JUCEB publica só e-mail gratuito para esses; são
+   intrinsecamente não-raspáveis pela rotina atual.
+5. **7 sites inacessíveis** mesmo com fallback FlareSolverr: `leiloestaniaabreu.wix.com.br/leiloes`,
+   `jocaleiloesagro.com`, `carrollruralleiloes.com`, `vecchileiloes.com` (Marciano + Camila),
+   `clicleiloes.com`, `lubreleiloes.com.br` — DNS/timeout/Wix com challenge.
+6. **Lazy-load de imagens.** Só 108/250 vieram com foto: muitos cards usam `data-src`/IntersectionObserver
+   e a `<img>` real só carrega ao rolar; o `render()` atual não faz scroll.
+7. **Cidade default herdada do leiloeiro.** Quando o card não traz `Cidade/UF`, o registro herda a cidade
+   do leiloeiro (Salvador), produzindo imóveis "em Salvador" que na verdade são de São Vicente/SP etc.
+   (caso Irani Flores, portal nacional).
+8. **Lentidão (~2h10 para 88 sites).** `networkidle` + `wait_ms=3500` por página, até 5 categorias + 8
+   leilões + 12 detalhes por site, tudo serial e single-tab. Sites lentos (oscarleiloes ~10 min) seguram a fila.
+
+### 44.4. Correções sugeridas
+
+1. **Chave de dedup/atribuição por (URL, leiloeiro) e flag de portal compartilhado.** Marcar `plataforma`
+   (leilaobrasil, webleiloes, vlance, portalzuk) e **não recontar** o acervo do portal para cada leiloeiro
+   que o usa; atribuir o lote ao leiloeiro real do edital, não ao dono do domínio.
+2. **Camada de adaptadores por plataforma (seção 27).** Implementar adapters para os portais que somam a
+   maior parte do "0 cards": vlance, superbid/leilo, vipleiloes, sodré-santoro-like. Captura a API interna
+   (XHR/JSON) em vez de raspar a DOM — resolve de uma vez dezenas de leiloeiros (já há `superbid_adapter.py`
+   e `lancevip_adapter.py` no repo a integrar).
+3. **Scroll + espera de lazy-load no `render()`.** `page.mouse.wheel`/`scroll_into_view_if_needed` antes de
+   `page.content()` para materializar `data-src` e elevar a taxa de fotos de 43% para ~90%.
+4. **Detecção de UF no próprio card com prioridade sobre o default do leiloeiro;** quando ausente, deixar
+   cidade/UF vazias em vez de herdar a sede do leiloeiro (evita "imóvel de SP marcado como Salvador").
+5. **Paralelizar 2–3 contextos do Playwright e reduzir `networkidle`** para cortar a janela de ~2h pela
+   metade; aplicar `timeout` por-site (ex.: 4 min) para não deixar um site lento (oscarleiloes) travar a fila.
+6. **Segunda passada (retry) para os 7 inacessíveis** com `maxTimeout` maior no FlareSolverr e correção de
+   URLs Wix (usar a home `leiloestaniaabreu.wix.com.br` sem o path `/leiloes`).
+7. **Derivação de site a partir do e-mail corporativo** já aplicada manualmente aqui — vale automatizar no
+   pré-processamento do CSV (descartar provedores gratuitos, manter domínio próprio).
+8. **Rodar `baixar-docs`** para materializar editais/matrículas dos 250 imóveis novos em `storage/docs/`.
+
+### 38.11. Reconstrução do `FrazaoScraper` + agendamento no Celery beat
+
+`frazaoleiloes` era a maior fonte de lixo (8543 linhas, `valor_minimo` NULL). Diagnóstico do
+scraper antigo: usava `/leiloes/imoveis` + seletores `.lot-item/.preco` que **não casam mais** —
+capturava páginas de **"Verificação de segurança"** (título) e itens **não-imóveis** (celulares),
+com valor NULL.
+
+**Engenharia reversa da plataforma (.NET):**
+- Lotes de imóveis vêm de `GET /Sale/SearchLotResult?uf=<UF>&cidade=&bairro=&tipoimovel=&start=<n>`
+  — **HTML, sem JS** (funciona com httpx/requests; só precisa `X-Requested-With: XMLHttpRequest`
+  e `Referer`).
+- Card `.card.thumbnail-vitrine-lot`: `data-lote-id`, `data-tipo` (Casa/Apartamento/Terreno…),
+  `data-addr` (logradouro), título com cidade/UF, **`.price-line`** com o valor, data da 1ª praça
+  em `"Leilão: DD/MM/YYYY às HHhMM"`, imagem em `cdn.frazaoleiloes.com.br/images/lot/...`.
+- **Armadilha:** no HTML cru o preço vem **sem o "R$"** (o cifrão é adicionado por JS); pegar do
+  elemento `.price-line` (que tem `R$ 300.200,00`) em vez de regex `R\$` no texto todo.
+- `SearchLotResult` retorna **muito lote histórico/encerrado** — filtrar `data_primeiro_leilao ≥
+  hoje` para não reimportar passado; UF vem como código no meio do título
+  (`"…, Porto Velho RO Rua…"`), então casar cidade por **alternância de códigos de UF**, não por
+  `/UF` no fim.
+
+**Scraper reescrito** (`scrapers/leiloeiros/frazao.py`): itera os 27 UFs, pagina `start` até
+esgotar, extrai os campos acima, filtra 1ª praça futura, monta `url_original =
+/lote/<lote_id>` e `id_externo = frazao_lote_<lote_id>`. **httpx async** → roda no `leilao_worker`
+**sem Chromium**.
+
+**Validação (RO):** 2 imóveis futuros com **valor preenchido** —
+`Casa … Porto Velho/RO R$ 65.500,00` e `R$ 147.000,00` (antes: NULL). Título/cidade/UF limpos.
+
+**Agendamento:** adicionados ao `scheduler/tasks.py` a task `coletar_frazao` (espelha
+`coletar_caixa`: `FrazaoScraper().run()` → `salvar_imoveis`) e a entrada de beat
+`scraping-frazao-diario` (`crontab(hour=4, minute=0)`). `leilao_beat` reiniciado → schedule
+confirmado em `app.conf.beat_schedule`. Como `salvar_imoveis` faz `on_conflict_do_update`
+(sobrescreve valor/cidade/imagem), a fonte passa a **auto-curar** a cada ciclo diário.
+
+> **Nota sobre o lixo antigo:** as 8543 linhas velhas (celulares/"Verificação de segurança") têm
+> `id_externo` diferente dos lotes novos, então **não** são sobrescritas — são registros de
+> não-imóveis que devem ser limpos à parte (ex.: `DELETE WHERE titulo='Verificação de segurança'`),
+> não "curados". O scraper novo gera **registros limpos de imóveis** daqui pra frente.
+
+---
+
+## 45. Captura dos leiloeiros REGULARES de Alagoas — JUCEAL (PDF "Leiloeiros Alagoas", 2026-06-09)
+
+Captura a partir do PDF da junta de Alagoas. Dos 29 leiloeiros do PDF, **1 foi excluído por estar
+CANCELADO** (Eduardo Schmitz, matrícula 01/2024, cancelado em 19/01/2026); os **28 REGULARES**
+entraram no scraper. Script: [`scraper_al.py`](scraper_al.py) (adaptado de `scraper_pe.py`).
+Entrada: [`csv/leiloeiros_al_2026-06-09.csv`](csv/leiloeiros_al_2026-06-09.csv); lista enxuta
+nome+site: [`csv/leiloeiros_al_nome_site_2026-06-09.csv`](csv/leiloeiros_al_nome_site_2026-06-09.csv).
+Saída de imóveis: [`csv/imoveis_al_2026-06-09.csv`](csv/imoveis_al_2026-06-09.csv).
+
+### 45.1. Resultado
+
+| Métrica | Valor |
+|---|---|
+| Leiloeiros regulares processados | 28 |
+| Imóveis com 1ª praça futura (linhas no CSV) | 290 |
+| URLs únicas | 273 |
+| **Novos no banco (JUCEAL/AL)** | **85** |
+| Já existiam (dedup por URL, outras juntas) | 205 |
+| Erros de execução | 0 |
+
+**Por leiloeiro (1ª praça futura):** Irani Flores 160 · Davi Borges de Aquino 45 ·
+Maria Catarina (Nasar) 24 · Rudival Gomes Jr. 13 · Alex Hoppe 7 · Diogo Martins 7 ·
+Lucas Kury 7 · Daniel Garcia 5 · Fernando Caetano 5 · Lucas Rafael 5 · Jonas Gabriel 5 ·
+Adilson Bento 2 · Francisco Jonnathan 2 · Ivana Montenegro 2 · Murilo Ramos 1 · demais 13 leiloeiros: 0.
+
+> A maior parte das 290 linhas já existia no banco porque muitos leiloeiros de AL atuam em
+> **portais nacionais multi-estado** (leilaobrasil, mgl, inovaleilao) já raspados sob outras juntas.
+> A dedup por URL é correta: JUCEAL/AL "fica" apenas com os 85 lotes ainda inéditos no banco.
+
+### 45.2. Principais dificuldades enfrentadas
+
+1. **Filtro de título derrubava títulos vindos do slug da URL (causa de 0 imóveis no 1º run).**
+   O `JUNK_RE` original rejeitava qualquer título começando com "leilão/leilao". Vários sites
+   (alfaleiloes, danielgarcia) só expõem o título no slug, no formato
+   `/lote/9798/leilao-de-sala-comercial-no-bairro-...`. Resultado: **todos os sites retornaram 0**
+   na primeira execução, mesmo tendo lotes válidos no HTML.
+
+2. **Plataformas SPA sem lotes no HTML server-side.** `leje.com.br`, `nordesteleiloes.com.br`,
+   `bravoleiloes.com.br`, `adrileiloes.com.br`, `lancecertoleiloes.com.br` e o
+   `vipleiloes.com.br` (que lista por **evento**, não por lote) carregam os cards via XHR/JS
+   após o load. O HTML inicial só traz um link de filtro (`filtro/imoveis`) — 0 lotes extraíveis
+   por DOM. Foram os principais responsáveis pelos 13 leiloeiros com 0 imóveis.
+
+3. **Bloqueio anti-bot (HTTP 403) no `mgl.com.br`.** Requests simples levam 403; resolvido via
+   Playwright + fallback FlareSolverr (capturou 5 imóveis para cada um dos 3 leiloeiros da MGL).
+
+4. **Estrutura de dois níveis (evento → lote).** `danielgarcialeiloes.com.br` e `vipleiloes`
+   só listam páginas de evento (`/leilao/<id>/lotes`, `/evento/detalhes/...`) na home; os lotes
+   individuais ficam dentro delas.
+
+5. **Teto de visitas a páginas de detalhe (`detail_budget`).** Em portais grandes (leilaobrasil
+   com ~197 cards na home), muitos cards não trazem a data da 1ª praça na listagem — é preciso
+   abrir o detalhe. O limite de 24 detalhes/site (para manter o tempo viável) descarta lotes
+   válidos cuja data só aparece na página interna.
+
+6. **Atribuição leiloeiro↔junta em multi-estado.** Como a dedup é por URL, um lote de um leiloeiro
+   que atua em vários estados fica "preso" à primeira junta que o capturou — subnotificando AL.
+
+7. **Mojibake no console (cp1252 no Windows).** Acentos saem corrompidos no stdout
+   (`ARA�JO`); cosmético, não afeta os dados gravados (UTF-8 no CSV/banco).
+
+8. **Sites genuinamente sem imóveis na home.** `portaldosleiloes`, `leiloesfreire`,
+   `albuquerquelins`, `vipleiloes` (home só com categorias/eventos) retornaram 0 — sem 1ª praça
+   futura visível pela rota raspada.
+
+### 45.3. Correções aplicadas nesta rodada
+
+- **`best_title()` / `clean_title()` / `good_title()`** ([`scraper_al.py`](scraper_al.py)):
+  o título passa a ser escolhido entre heading, texto da âncora **e todos os segmentos do slug**,
+  removendo o prefixo boilerplate "Leilão de/da/do…" e "Lote N -". Isso destravou alfaleiloes
+  (0 → 45) e leilaobrasil (0 → 160).
+- **Seguir páginas de evento/oferta**: adicionados `/evento` e `/oferta` aos padrões de link de
+  leilão e ao filtro de href, permitindo descer evento → lote (Daniel Garcia 0 → 5).
+- **`detail_budget` elevado** de 14 para 24 detalhes/site.
+
+### 45.4. Correções sugeridas (próximos passos)
+
+1. **Adaptadores por plataforma (maior ganho).** Em vez de raspar DOM genérico, descobrir o
+   endpoint XHR/JSON de cada SPA e consumi-lo diretamente:
+   - `leilaobrasil.com.br`, `leje.com.br`, `vipleiloes.com.br`, `nordesteleiloes.com.br`,
+     `lancecertoleiloes.com.br`, `adrileiloes.com.br`, `bravoleiloes.com.br` — abrir DevTools
+     (Network → Fetch/XHR) e mapear a API de busca de lotes (paginação, filtro por categoria
+     "imóveis"). Reaproveitar a camada de adaptadores descrita nas seções 19 (BomValor) e 27
+     (scraper genérico) — `abaleiloes` já cai no padrão BomValor.
+2. **Render com espera por conteúdo dinâmico nas SPAs.** Quando não houver API, no Playwright
+   aguardar o seletor dos cards (`wait_for_selector`) e/ou rolar a página (lazy-load) antes de
+   `page.content()`, em vez do `wait_for_timeout` fixo.
+3. **Extrair datas/preço da listagem via JSON embutido** (`__NEXT_DATA__`, `__NUXT__`, JSON-LD)
+   para reduzir a dependência do `detail_budget`; quando precisar abrir detalhes, **paralelizar**
+   (várias abas) e elevar o teto.
+4. **Tabela de associação leiloeiro↔junta (N:N).** Registrar todas as juntas em que um lote/leiloeiro
+   aparece, em vez de deixar a primeira junta "dona" do URL — melhora a contagem por estado sem
+   duplicar imóveis.
+5. **Normalizar saída do console** com `PYTHONUTF8=1` / `chcp 65001` para evitar mojibake nos logs.
+6. **Inferência de site a partir do e-mail corporativo** (já aplicada: Maysala sem site no PDF →
+   `bravoleiloes.com.br` via `atendimento@bravoleiloes.com.br`) — generalizar como heurística padrão
+   quando o campo Site estiver vazio no PDF.
+
+---
+
+## 46. Captura dos leiloeiros REGULARES do Piauí — JUCEPI (PDF "Leiloeiros Piauí", 2026-06-09)
+
+Scraper: [`scraper_pi.py`](scraper_pi.py) (clone do `scraper_pe.py`). Entrada:
+[`csv/leiloeiros_pi_2026-06-09.csv`](csv/leiloeiros_pi_2026-06-09.csv). Junta `JUCEPI/PI`.
+Captura iniciada 09/06/2026 20:54, concluída ~21:27 (~33 min).
+
+### 46.1. Recorte da lista (somente regulares)
+
+O PDF da Jucepi tem 3 blocos. Mantidos **apenas os 19 "aptos conforme a Portaria Nº 002/2026"**
+(páginas 1–5). **Excluídos**:
+- **Irregulares** (pág. 6–7): Celso Alves Cunha, Tiago Tessler, Davi Borges de Aquino, Irani Flores.
+- **Cancelados** (pág. 7): Dalton Luis de Moraes Leal, Victor Oliveira Dorta, Erico Lages Soares,
+  Rodrigo Schmitz.
+
+⚠️ **Armadilha de homônimo:** o regular é **Erico Sobral Soares** (matr. 15/2015); o cancelado é
+**Erico Lages Soares** (matr. 02/1994) — pessoas distintas. Manter o primeiro, descartar o segundo.
+
+A maioria dos leiloeiros do PI tem domicílio em **outras UFs** (SP, GO, MG, BA, PR, PB, CE, MA, SC, PE):
+são leiloeiros nacionais com matrícula também na Jucepi. O campo `cidade/uf` da entrada guarda o
+endereço de registro; o `uf` real do imóvel vem do card (regex cidade/UF).
+
+### 46.2. Inferência de site (campo Site ausente/poluído no PDF)
+
+Vários verbetes não trazem campo "Site" — só e-mail. Aplicada a heurística da seção 45.6:
+- e-mail **corporativo** → site (`contato@dgleiloes.com.br` → `dgleiloes.com.br`;
+  `erico.sobral@vipleiloes.com.br` → `vipleiloes.com.br`; `@portalzuk.com.br` → `portalzuk.com.br`;
+  `@mjleiloes.com.br`, `@rigolonleiloes.com.br`, `@leiloesjudiciaisbahia.com.br`,
+  `@leiloesmonteiro.com.br`, `@hoppeleiloes.com.br`, `@fernandoleiloeiro.com.br`).
+- e-mail **gratuito** (gmail/yahoo/hotmail) → **sem site raspável** (Sergio Lima, Murilo Ramos,
+  Ítalo Filho, Jonas Moreira, Lucas Moreira, Andrezza Peron, Eduardo Sydney) → 7 pulados.
+- Outra armadilha do PDF: o campo "Site:" do Erico Sobral continha um **e-mail** (`erico.sobral@vipleiloes.com.br`),
+  não uma URL — tratado como e-mail corporativo.
+
+### 46.3. Resultado
+
+| Imóveis (1ª praça futura) | Leiloeiro | Site | Status |
+|--------------------------:|-----------|------|--------|
+| 14 | Maurício José de Sousa Costa | mjleiloes.com.br | ok |
+| 11 | Dora Plat | portalzuk.com.br | ok |
+| 11 | Rodrigo Aparecido Rigolon da Silva | rigolonleiloes.com.br | ok |
+|  9 | José David Gonçalves de Melo | jdleiloes.com.br | ok (já no banco via PE) |
+|  6 | Paulo Cezar Rocha Teixeira | leiloesjudiciaisbahia.com.br | ok |
+|  5 | Daniel Elias Garcia | dgleiloes.com.br | ok |
+|  3 | Ítalo Trindade Moura | italoleiloes.com | ok |
+|  3 | Miguel Alexandrino Monteiro Neto | leiloesmonteiro.com.br | ok |
+|  2 | Fernando Caetano Moreira Filho | fernandoleiloeiro.com.br | ok |
+|  0 | Erico Sobral Soares | vipleiloes.com.br | acessível, sem 1ª praça futura |
+|  0 | Alex Willian Hoppe | hoppeleiloes.com.br | acessível, sem imóveis |
+|  0 | Suzana C. M. de Carvalho | suzanacarvalholeiloes.com | **inacessível** |
+|  0 | 7 leiloeiros | — | sem site (e-mail gratuito) |
+
+**Totais:** 64 imóveis válidos (1ª praça > data da captura); **19 novos no banco**, 45 já existiam
+(dedup por URL — `portalzuk`, `rigolonleiloes`, `jdleiloes`, `leiloesjudiciaisbahia` já capturados em
+rodadas de outras juntas). CSVs: [`csv/imoveis_pi_2026-06-09.csv`](csv/imoveis_pi_2026-06-09.csv) e
+[`csv/leiloeiros_pi_2026-06-09.csv`](csv/leiloeiros_pi_2026-06-09.csv). Verificação CSV↔banco:
+`SELECT COUNT(*) WHERE junta='JUCEPI/PI'` = 19 = `db_novos`. ✅
+
+### 46.4. Principais dificuldades
+
+1. **Alta sobreposição com bancos anteriores (70% de dedup).** 45 de 64 imóveis já estavam no banco —
+   leiloeiros nacionais (Zuk, Rigolon, JD, Leilões Judiciais Bahia) já raspados sob PE/BA/etc. O dedup
+   por URL funcionou, mas **gastou tempo de render** raspando sites já conhecidos.
+2. **Site inacessível (`suzanacarvalholeiloes.com`).** Caiu no fallback FlareSolverr e ainda assim não
+   respondeu (timeout/DNS) → 0 imóveis, 1 erro registrado.
+3. **Sites lentos dominam o tempo de execução.** `mjleiloes.com.br` levou ~5 min sozinho (vários
+   `auction_links` + `detail_budget`, cada render com timeout de 45 s + fallback de até 70 s). ~33 min
+   totais para 19 leiloeiros, sendo a maior parte em 2–3 domínios pesados.
+4. **37% dos leiloeiros sem site raspável** (7 de 19 com e-mail gratuito). Recall limitado pela fonte:
+   sem URL, não há o que raspar.
+5. **Mojibake no console do Windows** (`Maur��cio`, `Gon��alves`) nos logs — cosmético, não afeta os
+   dados gravados (CSV/DB em UTF-8 corretos).
+
+### 46.5. Correções sugeridas
+
+1. **Cache global de URLs já no banco antes de renderizar.** Carregar o set de URLs existentes no início
+   e, para domínios 100% já capturados em rodadas anteriores, pular o render (ou só revalidar datas) —
+   elimina o desperdício do item 1. Hoje o dedup ocorre só na inserção, depois de raspar.
+2. **Adaptadores por plataforma para os sites pesados** (Zuk/`portalzuk`, `mjleiloes`, `rigolonleiloes`):
+   consumir o XHR/JSON da busca de lotes (paginação + filtro "imóveis") em vez de DOM genérico — corta
+   drasticamente o tempo do item 3. Reaproveitar seções 19/27.
+3. **Timeout adaptativo + 1 retry curto para sites inacessíveis** (item 2): baixar `maxTimeout`,
+   tentar `http://` e `https://`, e marcar como "offline" rapidamente em vez de segurar o pipeline.
+4. **Paralelizar leiloeiros independentes** (várias abas/contextos Playwright) — os 19 são independentes;
+   um pool de 3–4 workers reduziria o tempo total de ~33 min para ~10 min.
+5. **Enriquecer site dos leiloeiros sem URL** via busca web pelo nome + "leiloeiro" + cidade, ou pela
+   matrícula no portal da Jucepi — recupera parte dos 7 pulados (item 4).
+6. **Forçar UTF-8 no console** (`PYTHONUTF8=1` / `chcp 65001`) para eliminar o mojibake dos logs (item 5).
+
+
+---
+
+## 47. Scraping JUCEMA/MA — leiloeiros do Maranhão (2 PDFs, jun/2026)
+
+> Captura a partir de **dois PDFs** da junta: `1626201361_Leioleiros 2021.2.pdf` (18 leiloeiros, RELAÇÃO DOS LEILOEIROS) e `Leiloeiros Maranhão.pdf` (LEILOEIROS CREDENCIADOS + relação de endereços). Implementação em `scraper_ma.py` (base reaproveitada de `scraper_para.py`/seção 27), entrada `csv/leiloeiros_ma_2026-06-09.csv`.
+
+### 47.1. Resultado
+- **28 leiloeiros regulares** consolidados (dedup entre os 2 PDFs; nenhum marcado cancelado/suspenso — ambos são listas de credenciados/regulares).
+- **15 com site** (direto no PDF ou inferido do e-mail corporativo); **13 sem site** (e-mail pessoal hotmail/gmail/yahoo/bol/live → não-raspável).
+- **191 imóveis** com 1ª praça futura coletados; **1 novo** no banco, **190 já existiam** (dedup por URL). Verificação CSV↔banco fechou: 191/191 URLs presentes.
+- Maiores rendimentos: Irani Flores/leilaobrasil.com.br (150 — portal nacional), Marco Antônio (10), Rigolon (10), Aranha/leilaovip (8), Victor Dorta (6). Duração ~31 min.
+
+### 47.2. Principais dificuldades
+1. **Quase todo imóvel já estava no banco (novos=1/191).** Os leiloeiros do MA com site são, na prática, **leiloeiros nacionais** (Marco Antônio, Maria Fixer, Francisco Freitas, Victor Dorta, Fernando, Rigolon, Irani/Leilão Brasil) já capturados em rodadas anteriores (MS, PA, etc.). O dedup por URL canônica funcionou — mas o rendimento marginal de novas juntas com leiloeiros nacionais é baixo.
+2. **46% dos leiloeiros sem site (13/28).** A maioria dos credenciados locais (Wesley, Hetury, Pedro, Leonardo, Marina, Taís, Daniel, Ana Cláudia Scarpim, Thales, Tassiana, Frazão) só tem e-mail pessoal no PDF → impossível inferir domínio → 0 imóveis próprios.
+3. **Portal nacional infla a contagem (Irani Flores = 150).** `leilaobrasil.com.br` lista imóveis de todo o Brasil; atribuir 150 lotes a 1 leiloeiro do MA distorce a relação por-leiloeiro (mesmo padrão já visto em PE/BA).
+4. **Sites compartilhados (vipleiloes.com.br) entre 3 leiloeiros** (Vicente, Erico, Wirna) e VIP/leilaovip majoritariamente de **veículos** → 0 imóveis. O cache por domínio evitou re-raspar, mas o site em si rende pouco imóvel.
+5. **Site offline (lealleiloes.com.br)** — ConnectionError/DNS em www e ápice; 1 leiloeiro (Dalton) perdido.
+6. **403 inicial (norteleiloes, fernandoleiloeiro)** resolvido via fallback FlareSolverr, mas custou tempo (sites lentos levaram 4–15 min cada; Francisco Freitas ~15 min batendo timeouts de 45s).
+7. **Mojibake nos logs** (`José`→`Jos�`) pelo redirect do PowerShell em UTF-16 e console cp1252.
+
+### 47.3. Correções sugeridas
+1. **Dedup-aware reporting:** ao raspar uma nova junta, separar no relatório "imóveis novos da junta" de "já existentes (leiloeiro nacional)" — evita a falsa impressão de baixa captura quando o trabalho real é só confirmar cobertura.
+2. **Pular leiloeiros nacionais já cobertos:** manter um set de domínios já raspados globalmente e, em nova junta, só re-raspar se passou > N dias — corta ~70% do tempo (os 31 min foram quase todos em sites já no banco).
+3. **Enriquecer site dos 13 sem URL** via busca web (nome + "leiloeiro" + cidade) ou pelo nº de matrícula no portal da JUCEMA antes de marcar como não-raspável.
+4. **Cap por leiloeiro em portais nacionais:** filtrar lotes do leilaobrasil por UF=MA (ou limitar a N) para não atribuir 150 imóveis nacionais a 1 credenciado do MA.
+5. **Timeout adaptativo + 1 retry http/https** para sites lentos/offline (Francisco Freitas, lealleiloes): baixar `maxTimeout`, marcar "offline" cedo em vez de segurar o pipeline ~15 min.
+6. **Paralelizar** os 15 sites independentes (pool de 3–4 contextos Playwright) → ~31 min cairia para ~10 min.
+7. **Forçar UTF-8 no console** (`PYTHONUTF8=1` / `chcp 65001`) para eliminar o mojibake (item 7).
+
+---
+
+## 48. Captura dos leiloeiros REGULARES da Paraíba — JUCEP (PDF "Leiloeiros PAraíba", 2026-06-09)
+
+> Captura a partir do PDF da junta (28 páginas: ficha por leiloeiro nas pp. 1-17 + suplemento "Regiões de atuação" pp. 17-26 + tabela de contatos pp. 26-28). Implementação em `scraper_pb.py` (base reaproveitada de `scraper_pe.py`/seção 43), entrada `csv/leiloeiros_pb_2026-06-09.csv`, junta `JUCEP/PB`.
+
+### 48.1. Resultado
+- **38 leiloeiros regulares** consolidados; **6 IRREGULAR excluídos** (Rennan Napy Neves, Emanuel Abraão Silva de Lima, Josecelli Kildare Fraga Gomes, Cyntia Araújo Diniz Nóbrega, Aluizio Hilario De Souza Junior, Lúcia De Fátima Barbosa Almeida).
+- **27 com site** (direto no PDF, no suplemento de contatos ou inferido do e-mail corporativo); **11 sem site** (e-mail pessoal gmail/hotmail/icloud/yahoo → não-raspável).
+- **196 imóveis** com 1ª praça futura coletados; **7 novos** no banco, **189 já existiam** (dedup por URL). Verificação CSV↔banco fechou: 196 = 7 novos + 189 já existentes.
+- Maiores rendimentos: Irani Flores/leilaobrasil.com.br (160 — portal nacional), Rigolon (11), Edeylson/Rudival/Daniel Garcia (5 cada), Cleber/leiloespb (4), Miguel/leiloesmonteiro (3), Fernando (2), Ives (1). Duração ~50 min.
+- **Únicos imóveis genuinamente novos da junta:** Cleber da Silva Melo (4) e Miguel Alexandrino Monteiro Neto (3) — os demais já estavam no banco sob outras juntas.
+
+### 48.2. Principais dificuldades
+1. **96% dos imóveis já estavam no banco (novos=7/196).** Quase todos os leiloeiros da PB com site são **leiloeiros nacionais/multi-estado** já capturados em rodadas anteriores (PE, BA, RN, etc.): Irani/Leilão Brasil, Rigolon, RJ Leilões (Rudival), Daniel Garcia, Fidelis, Nasar. O dedup por URL canônica funcionou; o ganho marginal é baixo.
+2. **Portal nacional infla a contagem (Irani Flores = 160).** `leilaobrasil.com.br` lista imóveis de todo o Brasil — atribuir 160 lotes a 1 leiloeiro da PB distorce a relação por-leiloeiro (mesmo padrão de PE/BA/MA).
+3. **29% dos leiloeiros sem site (11/38).** Locais como Alexandre Nunes, Filipe Pedro, Igor Oliveira, Danillo Cunha, Celso Cunha, Bruno Monteiro, Stefania Xavier, Jussara Medeiros só têm e-mail pessoal → sem domínio inferível → 0 imóveis próprios.
+4. **Muitos sites compartilhados.** `maglianoleiloes.com.br` (José Andrea, Jéssica, Raphael), `vipleiloes.com.br` (Roberto, Erico), `rjleiloes.com.br` (Rudival) — o cache por domínio evitou re-raspar, mas concentra a captura em poucos domínios.
+5. **Site inacessível (albuquerqueleiloes.com.br)** — 1 leiloeiro (Gervasio) perdido (timeout/DNS mesmo com fallback FlareSolverr).
+6. **SPAs/portais que renderizam 0 cards válidos** apesar de "ok": maglianoleiloes, alfaleiloes, atlanticoleiloes, colossoleiloes, tesouroleiloes, abrantesleiloes — listagem via JS pesada ou catálogo majoritariamente de veículos/sem data futura.
+7. **Sites inferidos podem não existir** (`mgrleiloes.com.br`, `lucasleiloeiro.com.br`, `jonasleiloeiro.com.br`, `fernandoleiloeiro.com.br`) — inferência a partir do e-mail é palpite; quando o domínio não resolve vira "inacessível"/0 sem ganho.
+
+### 48.3. Correções sugeridas
+1. **Dedup-aware reporting:** separar no relatório "imóveis novos da junta" de "já existentes (leiloeiro nacional)" — aqui o trabalho real foram só 7 imóveis novos (Cleber + Miguel); o resto foi confirmação de cobertura.
+2. **Registro global de domínios já raspados + TTL:** ao abrir nova junta, só re-raspar domínio se passou > N dias da última varredura — cortaria ~80% do tempo (os ~50 min foram quase todos em sites já no banco).
+3. **Cap/filtro por UF em portais nacionais:** filtrar lotes do `leilaobrasil` por UF=PB (ou limitar a N) para não atribuir 160 imóveis nacionais a 1 credenciado da PB.
+4. **Confirmar domínio antes de raspar:** fazer um HEAD/DNS-check rápido nos sites inferidos do e-mail e marcar "site não confirmado" em vez de gastar render+FlareSolverr num domínio inexistente.
+5. **Enriquecer site dos 11 sem URL** via busca web (nome + "leiloeiro" + cidade/matrícula) antes de marcar como não-raspável.
+6. **Adaptador específico para SPAs de alto valor** (maglianoleiloes, colossoleiloes, atlanticoleiloes — leiloeiros locais reais da PB): inspecionar XHR/API interna para extrair os lotes que o parser genérico de cards não vê.
+7. **Paralelizar** os ~20 domínios únicos (pool de 3-4 contextos Playwright) → ~50 min cairia para ~15 min.
+
+### 45.5. Por que os imóveis não apareciam na listagem (correção do destino)
+
+Após o scraping, os 290 imóveis estavam apenas no **SQLite standalone** `imoveis_leiloeiros.db` —
+que **não é o banco do site**. A listagem (frontend → API `leilao_api`) lê do **PostgreSQL dentro do
+container `leilao_postgres`** (`leilao_db`, ~123 mil imóveis). Dois detalhes não-óbvios travaram a
+visibilidade:
+
+1. **`scraper_al.py` (herdado de pe/para/bahia) só insere no SQLite.** Nenhum desses scrapers
+   standalone escreve no PostgreSQL — é preciso um passo de importação separado.
+2. **Dois PostgreSQL na mesma porta.** A máquina tem um PostgreSQL **do host** ouvindo em
+   `localhost:5432` que **sombreia** o `0.0.0.0:5432->5432` do Docker. Conectar via
+   `psycopg2 postgresql://...@localhost:5432` cai no banco **do host** (74 mil imóveis), **não** no do
+   site. O canal correto é o mesmo usado por `importar_jucems.py`:
+   `docker exec leilao_postgres psql -U leilao -d leilao_db`.
+
+**Correção aplicada** ([`importar_al_docker.py`](importar_al_docker.py)):
+- desfez a importação que havia ido para o banco-host por engano;
+- importou no container via `docker exec`, com tabela `stage` temporária + `\copy` + dedup global por
+  `url_original` (não duplica o que já está no site) e dedup intra-CSV por url;
+- mapeou os enums **reais** do schema (`tipoimovel`, `tipoleilao`, `statusleilao`, `categoriaitem` —
+  e não os nomes das colunas);
+- fonte `JUCEAL` (id 977) criada; **82 imóveis novos** inseridos no site (191 das 273 URLs já
+  existiam lá, vindos de portais nacionais já raspados). Confirmado pela API
+  (`GET /api/v1/imoveis/{id}` e listagem por `criado_em desc`).
+
+**Pendências de qualidade (não bloqueiam a listagem):**
+- `cidade`/`estado` caem no endereço do leiloeiro quando não foram parseados do card (ex.: terreno em
+  Rondonópolis/MT aparece como São Paulo/SP). Melhorar o parser de localização por lote.
+- `leiloeiro_id` não foi vinculado (só o texto `leiloeiro`): o nome aparece no **detalhe**, mas o card
+  da lista que depende do join por `leiloeiro_id` fica sem nome. Sincronizar leiloeiros novos (seção
+  24/25) e popular `leiloeiro_id`.
+
+> **Recomendação geral:** os scrapers standalone deste diretório deveriam, ao final, importar para o
+> container via `docker exec` (e nunca `localhost:5432`). Vale checar se pe/para/bahia também ficaram
+> só no SQLite e nunca chegaram ao site.
+
+---
+
+## 46. REGRA OBRIGATÓRIA: gravar todo scraping em AMBOS os bancos (SQLite + container do site)
+
+> ⚠️ Complementa a **Seção 0**. Concluir um scraping significa ter os imóveis válidos **nos dois
+> bancos**, não só no SQLite. Caso contrário eles **não aparecem na listagem do site** (ver 45.5).
+
+### 46.1. Os dois destinos (e a cilada dos dois PostgreSQL)
+
+| Banco | O que é | Como acessar |
+|---|---|---|
+| **SQLite** `imoveis_leiloeiros.db` | Fonte de verdade dos scrapers standalone deste diretório | `sqlite3` direto no arquivo |
+| **PostgreSQL do site** `leilao_db` | **O que a API/listagem lê** | **`docker exec leilao_postgres psql -U leilao -d leilao_db`** |
+
+**Nunca** use `psycopg2 postgresql://...@localhost:5432` para o banco do site: a máquina tem um
+**PostgreSQL do host** ouvindo em `localhost:5432` que **sombreia** o mapeamento do Docker
+(`0.0.0.0:5432->5432`). Conectar em `localhost` cai no **banco do host** (errado) — os dados não
+chegam ao site e você "perde" o trabalho silenciosamente. O único canal correto é `docker exec`.
+
+Sintoma típico: `docker exec leilao_postgres psql ... -c "SELECT count(*)..."` e
+`psycopg2 localhost` retornam **contagens e registros diferentes para o mesmo id** → são dois bancos.
+
+### 46.2. Importador genérico — [`importar_site.py`](importar_site.py)
+
+Grava o CSV simples de qualquer scraper standalone nos **dois** bancos, com dedup:
+
+```bash
+python importar_site.py --csv csv/imoveis_<UF>_<DATA>.csv \
+    --fonte <FONTE_PG> --url-base <URL> --junta "<JUNTA/UF>" --estado-padrao <UF>
+
+# exemplo (Alagoas)
+python importar_site.py --csv csv/imoveis_al_2026-06-09.csv \
+    --fonte JUCEAL --url-base https://www.juceal.al.gov.br/ --junta "JUCEAL/AL" --estado-padrao AL
+```
+
+O que ele faz:
+- **SQLite:** cria a tabela se preciso e insere com dedup por `url` (PK derivada da url).
+- **PostgreSQL (container):** garante a `fonte`, sobe um `stage` temporário, `\copy` do CSV e
+  `INSERT ... SELECT` com **dedup global por `url_original`** (não duplica o que já está no site) +
+  dedup intra-CSV (`DISTINCT ON (url_original)`) + `ON CONFLICT (fonte_id,id_externo) DO NOTHING`.
+- **Idempotente:** rodar de novo reporta `novos=0` / `inseridos=0`.
+
+### 46.3. Detalhes de mapeamento que quebram se ignorados
+
+- **Nomes dos enums ≠ nomes das colunas.** Os tipos são `tipoimovel`, `tipoleilao`, `statusleilao`,
+  `categoriaitem` (descubra com `information_schema.columns.udt_name`). Castar para
+  `::tipo_imovel` falha (`type "tipo_imovel" does not exist`).
+- **`\copy` com colunas TEXT + cast no INSERT.** O stage é todo `text`; converta com
+  `NULLIF(x,'')::numeric` / `::timestamp` no `SELECT` (CSV vazio não vira NULL sozinho).
+- **`id` é serial** (`nextval('imoveis_id_seq')`) — não envie `id`.
+- **NUL bytes (`\x00`)** são removidos antes de inserir.
+- **Acentos:** o banco guarda UTF-8 correto; `�` no terminal Windows é só artefato de exibição
+  (cp1252), não corrupção.
+
+### 46.4. Pós-importação (obrigatório)
+1. Conferir contagem da fonte no container:
+   `docker exec leilao_postgres psql -U leilao -d leilao_db -c "SELECT count(*) FROM imoveis WHERE fonte_id=<id>;"`
+2. Validar pela API: `GET http://localhost:8000/api/v1/imoveis/{id}` e
+   `GET /api/v1/imoveis/?ordenar_por=criado_em&ordem=desc` (os novos aparecem no topo).
+3. Pendências de qualidade conhecidas a tratar: `cidade/estado` caindo no endereço do leiloeiro
+   quando não parseados do card; `leiloeiro_id` não vinculado (nome aparece no detalhe, mas o card da
+   lista depende do join) — sincronizar leiloeiros novos (seções 24/25) e popular `leiloeiro_id`.
+
+> **Pendência herdada:** os scrapers PE, Pará e Bahia (e demais standalone) provavelmente só
+> gravaram no SQLite. Reprocessar os respectivos `csv/imoveis_*.csv` com `importar_site.py` para
+> levá-los ao site.
+
+
+---
+
+## MELHORIAS SUGERIDAS — Reprocessamento de páginas de LISTAGEM + drift de schema — 09/06/2026 22:21
+
+> Reprocessamento dos 48 registros cujo `url_original` apontava para uma **página de listagem/evento**
+> (`/eventos/leilao/...`, `/leilao/...`) com título de categoria ("Casas", "Carros", "Sucatas").
+> Resultado: **48 artefatos desativados** (nunca foram imóveis individuais). A tentativa de extrair os lotes
+> individuais retornou mais lixo de categoria ("ELETRÔNICOS", "SEMOVENTES", "Faça login para se habilitar"),
+> revelando que esses portais exigem **adaptador por site**. Os 28 URLs extraídos NÃO foram importados.
+
+### Melhorias a implementar (dificuldade → solução)
+
+1. **[CRÍTICO] Drift entre o modelo ORM e o schema do banco quebra todo o pipeline.**
+   O `database/models.py` (`Imovel`) declara colunas **`valor_arrematacao`, `rescrape_status`, `rescrape_em`**
+   que **não existem** na tabela `imoveis`; e o banco tem **`documentos`, `edital_url`, `matricula_url`** que
+   **não estão** no modelo. Qualquer `session.query(Imovel)` (full ORM select) falha com
+   `UndefinedColumn: imoveis.valor_arrematacao` — isso **derruba importer, classifier e geocoder**.
+   A API só responde porque seus endpoints usam schema de resposta com colunas específicas.
+   **Solução:** criar e aplicar migração Alembic aditiva:
+   ```sql
+   ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS valor_arrematacao NUMERIC(15,2);
+   ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS rescrape_status VARCHAR(20);
+   ALTER TABLE imoveis ADD COLUMN IF NOT EXISTS rescrape_em TIMESTAMP;
+   ```
+   e reconciliar `documentos/edital_url/matricula_url` (migrar p/ o modelo ou removê-las do banco).
+   **Enquanto a migração não roda, scripts auxiliares devem usar CORE SQL** (`text()`), nunca o ORM `Imovel`
+   (foi o que se fez aqui para desativar os artefatos).
+
+2. **Página de listagem capturada como se fosse 1 imóvel → detectar e expandir, não cadastrar.**
+   Um registro apontando para `/eventos/leilao/<evento>` representa um **leilão com N lotes**, não um imóvel.
+   **Solução:** no scraper, (a) **nunca** cadastrar a URL do evento como imóvel; (b) ao encontrar uma listagem,
+   **iterar os lotes** e cadastrar cada `/item|/oferta/<id>` individualmente; (c) para registros legados desse
+   tipo, **desativar** (feito: 48) e recapturar via adaptador.
+
+3. **Portais com lotes gated por login / navegação por categoria → adaptador por site (não genérico).**
+   juleiloes, kleiberleiloes, lancevip, bigleilao: os links dentro da listagem são **subcategorias**
+   ("ELETRÔNICOS", "SUCATAS") ou exigem **"Faça login para se habilitar"**; o HTML público não expõe os lotes.
+   **Solução:** adaptador dedicado por plataforma — identificar o endpoint JSON/AJAX de lotes (muitos usam
+   `/api/.../lotes?leilao=<id>`), ou Playwright autenticado quando o catálogo exige sessão; só então extrair
+   título/preço/data por lote. Extração genérica de `<a href*=item>` aqui só traz lixo de menu.
+
+4. **Validar título extraído contra um dicionário de "categorias/sucata" antes de gravar.**
+   "ELETRÔNICOS", "SEMOVENTES", "MÁQUINAS", "Faça login", "0 itens" são rótulos de navegação, não títulos.
+   **Solução:** estender o filtro `LIXO` para rejeitar rótulos de categoria isolados e textos de UI
+   ("faça login", "habilitar", "N itens"), exigindo que o título tenha ao menos um descritor de bem
+   (apartamento/terreno/veículo/marca-modelo) ou número de lote real.
+
+### Métodos que JÁ funcionaram (consolidar no scraper de produção)
+- Título: cascata **`og:title` → JSON-LD `name` → `<title>` limpo → `<h1>`** (recupera ~90% sem browser; corrige mojibake).
+- Recuperar título do **slug da URL** quando o SPA não entrega meta (`/anuncio/toyota-hilux-...`).
+- **Excluir âncoras sociais** (`whatsapp|twitter|x.com|facebook`) da seleção de lotes; recuperar título de `?text=` só p/ legados e então desativar (link quebrado).
+- **404/410 → desativar**; concorrência ≤ 8 + retry p/ evitar falsos timeouts.
+
+**Relatório gerado em:** 09/06/2026 22:21:40
+
+
+---
+
+# Captura SE (JUCESE) + CE (JUCEC/TJCE/TRT7) — 09/06/2026
+
+Execução em duas etapas sequenciais usando `scraper_se.py` e `scraper_ce.py`
+(mesmo motor do `scraper_pe.py`: Playwright + fallback FlareSolverr, filtro de
+1ª praça futura, cache por domínio, dedup por URL no `imoveis_leiloeiros.db`).
+
+## Resultado consolidado
+
+| UF | Leiloeiros (regulares no CSV) | Com site / sem site | Imóveis 1ª praça futura | Novos no banco | Já existiam | Inacessíveis |
+|----|------|------|------|------|------|------|
+| **SE** | 23 | 21 / 2 | **61** | 19 | 42 | 0 |
+| **CE** | 54 | 43 / 11 | **235** | 17 | 218 | 1 |
+
+CSVs gerados: `csv/leiloeiros_se_2026-06-09.csv`, `csv/imoveis_se_2026-06-09.csv`,
+`csv/leiloeiros_ce_2026-06-09.csv`, `csv/imoveis_ce_2026-06-09.csv`.
+
+### SE — imóveis por leiloeiro (somente Situação = Regular no PDF)
+Valerio Cesar de Azevedo Deda (lancese) **13** · Rodrigo Rigolon (rigolonleiloes) **11** ·
+Paulo Cezar Rocha Teixeira (leiloesjudiciaisbahia) **6** · Carlos Vinicius Mascarenhas (rjleiloes) **5** ·
+Daniel Elias Garcia (dgleiloes) **5** · Jonas Antunes (mgl) **5** · Lucas Antunes (mgl) **5** ·
+Jose Ivan Rabelo (realizaleiloes) **4** · Cristiane Gois (argleiloes) **2** ·
+Fernando Moreira Filho (fernandoleiloeiro) **2** · Francisco Jonnathan (franciscofreitasleiloes) **2** ·
+Helcio Kronberg (kronleiloes) **1** · demais 0; Hildegards e Adelane sem site (pulados).
+Excluídos por situação ≠ Regular: Jailson, Alisson, Sostenes, Arthur Nunes, Erico Sobral,
+Marco Túlio, Davi Borges, Lucas Marllon, Rodrigo Prata, Ivana Rocha (Irregular),
+Eduardo Schmitz (Cancelado), Robério, Irani Flores, Fellipe, Antônio Carlos, Danyele (Irregular),
+toda a seção INATIVOS e CANCELADOS.
+
+### CE — imóveis por leiloeiro (registros JUCEC/TJCE/TRT7; nenhum marcado cancelado/suspenso)
+Irani Flores (leilaobrasil) **160** ⚠️ · Mauricio J. Costa (mjleiloes) **14** · Rodrigo Rigolon (rigolonleiloes) **11** ·
+Daniel Melo Cruz (grupolance) **11** · Silvio Maraschi (hastapublica) **5** · Rudival Gomes Jr (rjleiloes) **5** ·
+Daniel Elias Garcia (danielgarcialeiloes) **5** · Jonas Antunes (mgl) **5** · Lucas Antunes (mgl) **5** ·
+Francisco Jonnathan (nortenordesteleiloes) **2** · Carlos A. Ribeiro Lima (infinityleiloes) **2** ·
+Fernando Moreira Filho (fernandoleiloeiro) **2** · Paulo Marcelo (upleilao) **2** · Ivana Rocha (patiorochaleiloes) **2** ·
+Francisca Medeiros (construbemleiloes) **1** · Ives Nasar (nasarleiloes) **1** · Eduardo Fleury (leilomaster) **1** ·
+Regilane Monteiro (construbemleiloes) **1** · demais 0; 11 sem site (pulados);
+William Marden (otonirodriguesadvogados — escritório de advocacia) inacessível.
+
+## Principais dificuldades enfrentadas e correções sugeridas
+
+1. **Portais nacionais inflam a contagem.** `leilaobrasil.com.br` (Irani Flores) devolveu
+   **160** lotes — quase todos já existentes no banco (CE inseriu só 17 novos de 235; SE só 19 de 61).
+   Esses portais agregam leilões do Brasil inteiro, não os do leiloeiro específico.
+   *Correção:* manter um blocklist de domínios-portal (`leilaobrasil`, `bomvalor`, `vlance`,
+   `leilaojudicial`…) e, nesses casos, filtrar lotes pelo nome/matrícula do leiloeiro na página,
+   ou raspar via a rota do leiloeiro (ex.: `hastapublica.com.br/grupos/11?TJ-CE`) em vez da home.
+
+2. **Múltiplos leiloeiros no mesmo domínio.** montenegroleiloes (Fernando, Daniela, Georgia,
+   João Paulo), mgl (Jonas, Lucas), lancecertoleiloes (Saulo, Marco Túlio), construbemleiloes
+   (Francisca, Regilane), rjleiloes (Carlos Vinicius/SE e Rudival/CE). O cache por domínio
+   atribui o **mesmo conjunto** de imóveis a todos — superestima por pessoa.
+   *Correção:* dentro de site compartilhado, segmentar lotes por leiloeiro (página/curador) e
+   atribuir só os correspondentes; contar imóveis únicos por domínio no relatório.
+
+3. **Leiloeiros regulares sem site.** SE: 2 (Hildegards, Adelane — "Site: #"); CE: 11
+   (só e-mail gmail/hotmail). Ficam não-raspáveis.
+   *Correção:* inferência de domínio a partir de e-mail corporativo (feito p/ Daniel Garcia→dgleiloes,
+   Renato→rmoyses, Silvio→hastapublica); para e-mails pessoais, buscar "nome + leilões" no Google
+   ou localizar em agregadores (bomvalor/vlance) e cadastrar o site real.
+
+4. **Domínio inferido nem sempre é portal de leilão.** `otonirodriguesadvogados.com.br`
+   (William Marden) é escritório de advocacia → inacessível/zero lotes. Risco de falso-site.
+   *Correção:* validar que a home retorna sinais de leilão (palavras "lote/leilão/edital") antes
+   de varrer; senão marcar "site não é portal de leilão".
+
+5. **Mesma pessoa, domínios diferentes por estado.** Daniel Elias Garcia usa `dgleiloes.com.br`
+   no PDF de SE e `danielgarcialeiloes.com.br` no de CE (ambos funcionaram, 5 imóveis cada).
+   *Correção:* consolidar aliases de leiloeiro→domínios num cadastro mestre para reaproveitar
+   entre estados e evitar redescoberta.
+
+6. **Alta sobreposição entre estados (dedup por URL).** CE teve 218/235 já no banco porque
+   muitos "leiloeiros do CE" são nacionais já capturados em rodadas anteriores (PE etc.):
+   Irani/leilaobrasil, Davi/alfaleiloes, Renato/rmoyses, Rigolon, Arthur Nunes. O dedup por URL
+   funcionou corretamente — não é bug, mas a contagem "imóveis do estado" superdimensiona o
+   estoque local. *Correção:* relatório separar "novos" de "reatribuições" e, se útil, marcar a
+   UF do imóvel pela cidade/UF do lote, não pela junta do leiloeiro.
+
+7. **Cloudflare + render JS é lento.** `realizaleiloes.com.br` e similares só abrem via
+   FlareSolverr; SE levou ~52 min e CE ~75 min. *Correção:* reaproveitar sessões persistentes do
+   FlareSolverr (já mapeado no projeto Milan), paralelizar 2-3 domínios e preferir endpoints
+   JSON/API quando existirem (padrão vlance `/core/api/get-leiloes`).
+
+8. **Datas só no detalhe.** Cards sem data exigem abrir a página do lote (orçamento limitado a 14
+   por domínio); lotes sem data detectável são descartados, podendo perder imóveis válidos.
+   *Correção:* aumentar o orçamento de detalhe para sites pequenos e extrair data de JSON-LD/API.
+
+### 38.12. Sistema de staging/aprovação de novos anúncios + enriquecimento com documentos
+
+Pedido: revisar os sites dos leiloeiros, raspar tudo, comparar com o banco, **enriquecer cada
+anúncio** com fotos/descrição/edital/matrícula/anexos (transferindo os documentos para a janela
+do anúncio), **sem deduplicar** anúncios, e jogar os **novos** numa **página de aprovação** onde o
+usuário dá OK antes de inserir nos **2 bancos**.
+
+**Escopo real:** o banco tem **777 fontes / 1.362 sites de leiloeiros / 123.260 imóveis**. Raspar
+e enriquecer tudo é operação de semanas (muitos scrapers quebrados/diversos). Entregue o
+**mecanismo completo** + execução numa fatia validada (leiloeiros RR/RO), **fonte-agnóstico** para
+escalar incrementalmente.
+
+**Arquitetura (3 peças, em `/leiloes`):**
+1. `staging_anuncios.py` — captura (reusa `scraper_rr_ro`) → **enriquece** cada lote abrindo a
+   página de detalhe (`enrich()`: descrição, todas as fotos, edital, matrícula, anexos PDF, com
+   *allowlist* `edital|matr[ií]cula|laudo|avalia` e *blocklist* `cookie|termo|aviso`) → **compara a
+   URL contra os 2 bancos** (SQLite local + Postgres via `psycopg2`) → classifica **NOVO ×
+   JÁ_NO_BANCO** (não deduplica: cada anúncio é distinto) → grava NOVOS em `staging.db`
+   (`staging_imoveis`) + `staging_anuncios.json`, e gera `anuncios_novos.html`.
+2. `anuncios_novos.html` — página de revisão: cards com foto, título, cidade/UF, 1ª praça, preço,
+   descrição, **chips de edital/matrícula/anexos**, galeria e badge **🆕 NOVO** (com checkbox
+   "Aprovar") × **✓ já no banco · enriquecido**.
+3. `aprovar_anuncios.py` — após o OK: `--aprovar-todos`/`--aprovar aprovados.txt` → `--inserir`
+   insere os aprovados nos **2 bancos** (SQLite `imoveis` + Postgres via
+   `run.py importar-scraping --upsert`, levando `arquivos`/`edital_url`/`matricula_url`).
+
+**Pipeline estendido para persistir documentos** (`pipeline/importar_scraping.py`):
+- `_record_para_imovel` agora mapeia **`arquivos`** (JSON `[{tipo,url,nome}]`) a partir de
+  `arquivos`/`documentos` + `edital_url`/`matricula_url`.
+- `_aplicar_upsert` passou a **preencher em registros existentes**: `arquivos` (quando vazio),
+  `descricao`, `imagens` (galeria) — além de valor/cidade/estado/imagem. Assim o **re-scrape
+  enriquece o anúncio que já está no banco** sem duplicar.
+
+**Execução (4 leiloeiros RR/RO):** 36 imóveis capturados → **0 NOVOS** (os DBs já estavam
+populados das rodadas anteriores) / **32 JÁ_NO_BANCO**. Enriquecimento: **32/32 com anexos
+(edital+matrícula+docs), 32/32 com fotos, 31/32 com descrição** (~1500 chars). Aplicado via
+`importar-scraping --upsert`: **29 anúncios atualizados** no Postgres — verificado:
+`arquivos` agora traz os PDFs de edital/matrícula, `descricao` preenchida, `imagens` (galeria) em
+parte. Os documentos passaram a constar na "janela" do anúncio.
+
+> **Por que 0 novos:** as rodadas anteriores já inseriram os imóveis em destaque desses
+> leiloeiros. O mecanismo de comparação está correto (achou os 36 como existentes). Para a página
+> de aprovação aparecer **populada de novos**, basta rodar sobre **fontes ainda não raspadas** ou
+> com **crawl mais fundo** (ver melhorias).
+
+#### Melhorias e correções sugeridas
+1. **URL por lote (crítico).** Em plataformas vlance, vários lotes compartilham a URL do leilão
+   (`/leilao/index/leilao_id/<id>`), então fotos/edital de lotes diferentes colidem e a
+   comparação "novo×existente" fica grossa. Capturar a **URL real por lote** (ex.: endpoint
+   `get-lotes` ou link do lote) para granularidade correta.
+2. **Crawl mais fundo para surfasr novos.** Os scrapers pegam só os lotes em destaque; paginar
+   todos os leilões/lotes de cada leiloeiro revela os que ainda não estão no banco.
+3. **Baixar os PDFs (não só linkar).** Rodar `run.py baixar-docs` após o enriquecimento para
+   salvar edital/matrícula em disco (`storage/docs/`) e gravar `path_local`/`hash_md5` em
+   `arquivos` — evita link quebrado quando o leiloeiro remove o anexo.
+4. **Fila de aprovação no frontend/admin** em vez de HTML estático: endpoint que lê `staging.db` e
+   um botão "Aprovar → inserir" que chama `aprovar_anuncios.py` (auditável, multiusuário).
+5. **Galeria completa.** Só ~parte dos anúncios trouxe `imagens`; padronizar a extração da galeria
+   (carrossel) por plataforma.
+6. **chromium no `leilao_worker`** (`playwright install chromium`) para rodar os scrapers que
+   dependem de render dentro do beat/worker.
+7. **Normalizar cidade/UF** dos enriquecidos com `run.py normalizar-cidades` (IBGE).
+8. **Rate-limit/robots** por domínio no enriquecimento (abrir N páginas de detalhe é pesado);
+   honrar `robots.txt` e espaçar requisições.

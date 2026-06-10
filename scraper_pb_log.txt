@@ -1,0 +1,282 @@
+========================================================================
+SCRAPER PB/JUCEP | captura 09/06/2026 21:01 | 38 leiloeiros
+========================================================================
+[21:01:23] >>> Alexandre Ferreira Nunes | (sem site)
+    [-] sem site cadastrado - pulado
+[21:01:23] >>> Roberto Jacinto Pinho Junior | https://www.vipleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:02:31] >>> Cleber da Silva Melo | http://www.leiloespb.com.br
+    [OK] imoveis com 1a praca futura: 4
+
+----- REPORT PARCIAL (21:06) sites 3/38 -----
+      0 | Alexandre Ferreira Nunes
+      0 | Roberto Jacinto Pinho Junior
+      4 | Cleber da Silva Melo
+   TOTAL: 4 | banco novos=4
+
+[21:06:46] >>> Marco Túlio Montenegro Cavalcanti Dias | https://www.marcotulioleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:08:21] >>> José Andrea Magliano Filho | https://www.maglianoleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:09:10] >>> José Gonçalves Abrantes Filho | https://www.abrantesleiloes.com
+    [OK] imoveis com 1a praca futura: 0
+[21:09:28] >>> Miguel Alexandrino Monteiro Neto | https://www.leiloesmonteiro.com.br
+    [OK] imoveis com 1a praca futura: 3
+[21:11:43] >>> Vinícius Vidal Lacerda | https://www.vlleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (21:13) sites 8/38 -----
+      0 | Alexandre Ferreira Nunes
+      0 | Roberto Jacinto Pinho Junior
+      4 | Cleber da Silva Melo
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      0 | José Andrea Magliano Filho
+      0 | José Gonçalves Abrantes Filho
+      3 | Miguel Alexandrino Monteiro Neto
+      0 | Vinícius Vidal Lacerda
+   TOTAL: 7 | banco novos=7
+
+[21:13:23] >>> Jéssica Queiroga Magliano | https://www.maglianoleiloes.com.br
+    [cache] site ja raspado -> 0 imoveis
+    [OK] imoveis com 1a praca futura: 0
+[21:13:23] >>> Edeylson Peixoto Fidelis | https://www.fidelisleiloes.com.br
+    [OK] imoveis com 1a praca futura: 5
+[21:15:08] >>> Samara Barbosa Araújo | https://www.colossoleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:17:07] >>> Rudival Almeida Gomes Júnior | https://www.rjleiloes.com.br
+    [OK] imoveis com 1a praca futura: 5
+
+----- REPORT PARCIAL (21:20) sites 12/38 -----
+      0 | Alexandre Ferreira Nunes
+      0 | Roberto Jacinto Pinho Junior
+      4 | Cleber da Silva Melo
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      0 | José Andrea Magliano Filho
+      0 | José Gonçalves Abrantes Filho
+      3 | Miguel Alexandrino Monteiro Neto
+      0 | Vinícius Vidal Lacerda
+      0 | Jéssica Queiroga Magliano
+      5 | Edeylson Peixoto Fidelis
+      0 | Samara Barbosa Araújo
+      5 | Rudival Almeida Gomes Júnior
+   TOTAL: 17 | banco novos=7
+
+[21:20:25] >>> Filipe Pedro de Araújo | (sem site)
+    [-] sem site cadastrado - pulado
+[21:20:25] >>> Alessandra Cristine Aparecida de Carlos | https://www.alessandraleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:21:18] >>> Erico Sobral Soares | https://www.vipleiloes.com.br
+    [cache] site ja raspado -> 0 imoveis
+    [OK] imoveis com 1a praca futura: 0
+[21:21:18] >>> Igor Luiz Silva Oliveira | (sem site)
+    [-] sem site cadastrado - pulado
+[21:21:18] >>> Gervasio Vasconcelos de Albuquerque | https://www.albuquerqueleiloes.com.br
+    [X] inacessivel
+[21:21:20] >>> Davi Borges de Aquino | https://www.alfaleiloes.com
+    [OK] imoveis com 1a praca futura: 0
+[21:25:05] >>> Tatiana Gadelha de Paiva | https://www.atlanticoleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (21:27) sites 19/38 -----
+      0 | Alexandre Ferreira Nunes
+      0 | Roberto Jacinto Pinho Junior
+      4 | Cleber da Silva Melo
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      0 | José Andrea Magliano Filho
+      0 | José Gonçalves Abrantes Filho
+      3 | Miguel Alexandrino Monteiro Neto
+      0 | Vinícius Vidal Lacerda
+      0 | Jéssica Queiroga Magliano
+      5 | Edeylson Peixoto Fidelis
+      0 | Samara Barbosa Araújo
+      5 | Rudival Almeida Gomes Júnior
+      0 | Filipe Pedro de Araújo
+      0 | Alessandra Cristine Aparecida de Carlos
+      0 | Erico Sobral Soares
+      0 | Igor Luiz Silva Oliveira
+      0 | Gervasio Vasconcelos de Albuquerque
+      0 | Davi Borges de Aquino
+      0 | Tatiana Gadelha de Paiva
+   TOTAL: 17 | banco novos=7
+
+[21:27:57] >>> Raphael Queiroga Magliano | https://www.maglianoleiloes.com.br
+    [cache] site ja raspado -> 0 imoveis
+    [OK] imoveis com 1a praca futura: 0
+[21:27:57] >>> Daniel Elias Garcia | https://www.dgleiloes.com.br
+    [OK] imoveis com 1a praca futura: 5
+[21:31:40] >>> Murilo Gonçalves Ramos | https://www.mgrleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (21:33) sites 22/38 -----
+      0 | Alexandre Ferreira Nunes
+      0 | Roberto Jacinto Pinho Junior
+      4 | Cleber da Silva Melo
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      0 | José Andrea Magliano Filho
+      0 | José Gonçalves Abrantes Filho
+      3 | Miguel Alexandrino Monteiro Neto
+      0 | Vinícius Vidal Lacerda
+      0 | Jéssica Queiroga Magliano
+      5 | Edeylson Peixoto Fidelis
+      0 | Samara Barbosa Araújo
+      5 | Rudival Almeida Gomes Júnior
+      0 | Filipe Pedro de Araújo
+      0 | Alessandra Cristine Aparecida de Carlos
+      0 | Erico Sobral Soares
+      0 | Igor Luiz Silva Oliveira
+      0 | Gervasio Vasconcelos de Albuquerque
+      0 | Davi Borges de Aquino
+      0 | Tatiana Gadelha de Paiva
+      0 | Raphael Queiroga Magliano
+      5 | Daniel Elias Garcia
+      0 | Murilo Gonçalves Ramos
+   TOTAL: 22 | banco novos=7
+
+[21:33:17] >>> Davi Eduardo Paulim | (sem site)
+    [-] sem site cadastrado - pulado
+[21:33:17] >>> Alex Willian Hoppe | https://www.hoppeleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:36:00] >>> Danillo Hamesses Melo Cunha | (sem site)
+    [-] sem site cadastrado - pulado
+[21:36:00] >>> Celso Alves Cunha | (sem site)
+    [-] sem site cadastrado - pulado
+[21:36:00] >>> Anna Karoline Santos do Amaral | https://www.focoleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:38:10] >>> Lucas Rafael Antunes Moreira | https://www.lucasleiloeiro.com.br
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (21:39) sites 28/38 -----
+      0 | Alexandre Ferreira Nunes
+      0 | Roberto Jacinto Pinho Junior
+      4 | Cleber da Silva Melo
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      0 | José Andrea Magliano Filho
+      0 | José Gonçalves Abrantes Filho
+      3 | Miguel Alexandrino Monteiro Neto
+      0 | Vinícius Vidal Lacerda
+      0 | Jéssica Queiroga Magliano
+      5 | Edeylson Peixoto Fidelis
+      0 | Samara Barbosa Araújo
+      5 | Rudival Almeida Gomes Júnior
+      0 | Filipe Pedro de Araújo
+      0 | Alessandra Cristine Aparecida de Carlos
+      0 | Erico Sobral Soares
+      0 | Igor Luiz Silva Oliveira
+      0 | Gervasio Vasconcelos de Albuquerque
+      0 | Davi Borges de Aquino
+      0 | Tatiana Gadelha de Paiva
+      0 | Raphael Queiroga Magliano
+      5 | Daniel Elias Garcia
+      0 | Murilo Gonçalves Ramos
+      0 | Davi Eduardo Paulim
+      0 | Alex Willian Hoppe
+      0 | Danillo Hamesses Melo Cunha
+      0 | Celso Alves Cunha
+      0 | Anna Karoline Santos do Amaral
+      0 | Lucas Rafael Antunes Moreira
+   TOTAL: 22 | banco novos=7
+
+[21:39:51] >>> Fernando Caetano Moreira Filho | https://www.fernandoleiloeiro.com.br
+    [OK] imoveis com 1a praca futura: 2
+[21:42:08] >>> Jonas Gabriel Antunes Moreira | https://www.jonasleiloeiro.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:43:58] >>> Bruno José Galvão Monteiro | (sem site)
+    [-] sem site cadastrado - pulado
+[21:43:58] >>> Irani Flores | https://www.leilaobrasil.com.br
+    [OK] imoveis com 1a praca futura: 160
+[21:44:37] >>> Rodrigo Aparecido Rigolon da Silva | https://www.rigolonleiloes.com.br
+    [OK] imoveis com 1a praca futura: 11
+
+----- REPORT PARCIAL (21:47) sites 33/38 -----
+      0 | Alexandre Ferreira Nunes
+      0 | Roberto Jacinto Pinho Junior
+      4 | Cleber da Silva Melo
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      0 | José Andrea Magliano Filho
+      0 | José Gonçalves Abrantes Filho
+      3 | Miguel Alexandrino Monteiro Neto
+      0 | Vinícius Vidal Lacerda
+      0 | Jéssica Queiroga Magliano
+      5 | Edeylson Peixoto Fidelis
+      0 | Samara Barbosa Araújo
+      5 | Rudival Almeida Gomes Júnior
+      0 | Filipe Pedro de Araújo
+      0 | Alessandra Cristine Aparecida de Carlos
+      0 | Erico Sobral Soares
+      0 | Igor Luiz Silva Oliveira
+      0 | Gervasio Vasconcelos de Albuquerque
+      0 | Davi Borges de Aquino
+      0 | Tatiana Gadelha de Paiva
+      0 | Raphael Queiroga Magliano
+      5 | Daniel Elias Garcia
+      0 | Murilo Gonçalves Ramos
+      0 | Davi Eduardo Paulim
+      0 | Alex Willian Hoppe
+      0 | Danillo Hamesses Melo Cunha
+      0 | Celso Alves Cunha
+      0 | Anna Karoline Santos do Amaral
+      0 | Lucas Rafael Antunes Moreira
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Bruno José Galvão Monteiro
+    160 | Irani Flores
+     11 | Rodrigo Aparecido Rigolon da Silva
+   TOTAL: 195 | banco novos=7
+
+[21:47:34] >>> Stefania Filgueira Xavier | (sem site)
+    [-] sem site cadastrado - pulado
+[21:47:34] >>> Israel Cassiano Rodrigues Farias | https://www.tesouroleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:47:51] >>> Josenildo Lima da Silva Souza | https://josenildolimaleiloeiro.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:48:09] >>> Ives Harrisson Nasar dos Santos | https://www.nasarleiloes.com.br
+    [OK] imoveis com 1a praca futura: 1
+[21:51:41] >>> Jussara Daniele de Medeiros | (sem site)
+    [-] sem site cadastrado - pulado
+
+[CSV] C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_pb_2026-06-09.csv
+
+========================================================================
+RELATORIO FINAL
+========================================================================
+    160 | Irani Flores -> ok (160)
+     11 | Rodrigo Aparecido Rigolon da Silva -> ok (11)
+      5 | Edeylson Peixoto Fidelis -> ok (5)
+      5 | Rudival Almeida Gomes Júnior -> ok (5)
+      5 | Daniel Elias Garcia -> ok (5)
+      4 | Cleber da Silva Melo -> ok (4)
+      3 | Miguel Alexandrino Monteiro Neto -> ok (3)
+      2 | Fernando Caetano Moreira Filho -> ok (2)
+      1 | Ives Harrisson Nasar dos Santos -> ok (1)
+      0 | Alexandre Ferreira Nunes -> sem site (nao raspavel)
+      0 | Roberto Jacinto Pinho Junior -> ok (0)
+      0 | Marco Túlio Montenegro Cavalcanti Dias -> ok (0)
+      0 | José Andrea Magliano Filho -> ok (0)
+      0 | José Gonçalves Abrantes Filho -> ok (0)
+      0 | Vinícius Vidal Lacerda -> ok (0)
+      0 | Jéssica Queiroga Magliano -> ok (0)
+      0 | Samara Barbosa Araújo -> ok (0)
+      0 | Filipe Pedro de Araújo -> sem site (nao raspavel)
+      0 | Alessandra Cristine Aparecida de Carlos -> ok (0)
+      0 | Erico Sobral Soares -> ok (0)
+      0 | Igor Luiz Silva Oliveira -> sem site (nao raspavel)
+      0 | Gervasio Vasconcelos de Albuquerque -> inacessivel
+      0 | Davi Borges de Aquino -> ok (0)
+      0 | Tatiana Gadelha de Paiva -> ok (0)
+      0 | Raphael Queiroga Magliano -> ok (0)
+      0 | Murilo Gonçalves Ramos -> ok (0)
+      0 | Davi Eduardo Paulim -> sem site (nao raspavel)
+      0 | Alex Willian Hoppe -> ok (0)
+      0 | Danillo Hamesses Melo Cunha -> sem site (nao raspavel)
+      0 | Celso Alves Cunha -> sem site (nao raspavel)
+      0 | Anna Karoline Santos do Amaral -> ok (0)
+      0 | Lucas Rafael Antunes Moreira -> ok (0)
+      0 | Jonas Gabriel Antunes Moreira -> ok (0)
+      0 | Bruno José Galvão Monteiro -> sem site (nao raspavel)
+      0 | Stefania Filgueira Xavier -> sem site (nao raspavel)
+      0 | Israel Cassiano Rodrigues Farias -> ok (0)
+      0 | Josenildo Lima da Silva Souza -> ok (0)
+      0 | Jussara Daniele de Medeiros -> sem site (nao raspavel)
+
+Total imoveis (1a praca futura): 196
+Banco: novos=7 ja_existiam=189 | Erros: 1

@@ -1,15 +1,15 @@
 {
-  "iniciado": "2026-06-09T18:14:17.270183",
-  "capture_date": "09/06/2026 18:14",
+  "iniciado": "2026-06-09T21:09:16.161507",
+  "capture_date": "09/06/2026 21:09",
   "leiloeiros_processados": 16,
-  "imoveis_total": 74,
+  "imoveis_total": 77,
   "por_leiloeiro": {
     "Marcus Dantas Nepomuceno": 0,
     "Erick Luiz Neves da Camara": 0,
     "Roberto Alexandre Neves Fernandes Filho": 0,
     "Francisco Doege Esteves Filho": 0,
     "Filipe Pedro de Araujo": 0,
-    "Edeylson Peixoto Fidelis": 5,
+    "Edeylson Peixoto Fidelis": 8,
     "Stella Araujo Zanatta": 40,
     "Alex Willian Hoppe": 0,
     "Rudival Almeida Gomes Junior": 5,
@@ -24,14 +24,14 @@
   "status_sites": {
     "Marcus Dantas Nepomuceno": "ok (0)",
     "Erick Luiz Neves da Camara": "ok (0)",
-    "Roberto Alexandre Neves Fernandes Filho": "inacessivel",
+    "Roberto Alexandre Neves Fernandes Filho": "inacessivel (dns_invalido)",
     "Francisco Doege Esteves Filho": "ok (0)",
     "Filipe Pedro de Araujo": "ok (0)",
-    "Edeylson Peixoto Fidelis": "ok (5)",
+    "Edeylson Peixoto Fidelis": "ok (8)",
     "Stella Araujo Zanatta": "ok (40)",
     "Alex Willian Hoppe": "ok (0)",
     "Rudival Almeida Gomes Junior": "ok (5)",
-    "Alessandra Cristine Aparecida de Carlos": "inacessivel",
+    "Alessandra Cristine Aparecida de Carlos": "ok (0)",
     "Davi Eduardo Paulim": "sem site (nao raspavel)",
     "Daniel Elias Garcia": "ok (5)",
     "Jussara Daniele de Medeiros": "sem site (nao raspavel)",
@@ -40,11 +40,11 @@
     "Samara Barbosa Araujo": "ok (0)"
   },
   "erros": [
-    "Roberto Alexandre Neves Fernandes Filho: inacessivel",
-    "Alessandra Cristine Aparecida de Carlos: inacessivel"
+    "Roberto Alexandre Neves Fernandes Filho: dns_invalido"
   ],
-  "last_report": "2026-06-09T18:40:35.036649",
-  "db_novos": 69,
-  "db_ja_existiam": 5,
+  "last_report": "2026-06-09T21:39:45.485144",
+  "db_novos": 0,
+  "db_ja_existiam": 77,
+  "db_multijunta": 8,
   "status": "concluido"
 }

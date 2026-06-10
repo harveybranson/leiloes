@@ -17,6 +17,8 @@ from urllib.parse import urljoin, urlparse
 import requests, urllib3
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
+from scraper_commons import (site_health, candidate_sites, cards_from_json,
+                             merge_juntas)
 
 urllib3.disable_warnings()
 try:
@@ -88,15 +90,30 @@ def flaresolverr(url):
     return None, None
 
 
-def render(url, wait_ms=3500, timeout=45000):
-    """Playwright render -> (html, final_url). Fallback FlareSolverr se challenge/erro."""
+def render(url, wait_ms=3500, timeout=45000, capture_xhr=False, scroll=False):
+    """Playwright render -> (html, final_url) ou (html, final_url, payloads) se capture_xhr.
+
+    capture_xhr: intercepta respostas XHR/Fetch com JSON (API interna de SPA) e devolve
+                 os payloads decodificados (correcao 3 - adapter SPA).
+    scroll     : rola a pagina incrementalmente para disparar carregamento lazy de cards.
+    Fallback FlareSolverr se challenge/erro (sem XHR nesse caminho)."""
     global _BROWSER
     html = ""
     final = url
+    payloads = []
     try:
         ctx = _BROWSER.new_context(user_agent=UA, locale="pt-BR", ignore_https_errors=True)
         pg = ctx.new_page()
         pg.set_default_timeout(timeout)
+        if capture_xhr:
+            def _on_response(resp):
+                try:
+                    ct = (resp.headers or {}).get("content-type", "")
+                    if "json" in ct.lower() and resp.request.resource_type in ("xhr", "fetch"):
+                        payloads.append(resp.json())
+                except Exception:
+                    pass
+            pg.on("response", _on_response)
         try:
             pg.goto(url, wait_until="domcontentloaded", timeout=timeout)
             try:
@@ -104,6 +121,18 @@ def render(url, wait_ms=3500, timeout=45000):
             except Exception:
                 pass
             pg.wait_for_timeout(wait_ms)
+            if scroll:                       # scroll incremental p/ SPA lazy-load
+                try:
+                    prev = -1
+                    for _ in range(8):
+                        h = pg.evaluate("document.body.scrollHeight")
+                        if h == prev:
+                            break
+                        prev = h
+                        pg.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+                        pg.wait_for_timeout(1200)
+                except Exception:
+                    pass
             html = pg.content()
             final = pg.url
         finally:
@@ -116,8 +145,8 @@ def render(url, wait_ms=3500, timeout=45000):
     if blocked:
         fh, fu = flaresolverr(url)
         if fh:
-            return fh, fu or url
-    return html, final
+            return (fh, fu or url, payloads) if capture_xhr else (fh, fu or url)
+    return (html, final, payloads) if capture_xhr else (html, final)
 
 
 def parse_future_dates(text):
@@ -228,48 +257,48 @@ def to_real(s):
 
 
 def db_insert(conn, rows):
+    """Insere os imoveis. Dedup CIENTE DE MULTI-JUNTA (correcao 1): se a URL ja
+    existe sob outra junta (leiloeiro multi-estado), em vez de so descartar,
+    ACRESCENTA a junta atual ao campo `junta` (ex.: 'JUCER/RR-RO; JUCERN/RN'),
+    para o lote aparecer tambem sob esta junta sem duplicar a linha fisica."""
     cur = conn.cursor()
-    novos = existe = 0
+    novos = existe = multijunta = 0
     for r in rows:
         url = r["url"]
+        nova_junta = r.get("junta", JUNTA)
         if url:
-            cur.execute("SELECT 1 FROM imoveis WHERE url=? LIMIT 1", (url,))
-            if cur.fetchone():
+            cur.execute("SELECT junta FROM imoveis WHERE url=? LIMIT 1", (url,))
+            hit = cur.fetchone()
+            if hit:
                 existe += 1
+                merged = merge_juntas(hit[0], nova_junta)
+                if merged != (hit[0] or ""):
+                    cur.execute("UPDATE imoveis SET junta=? WHERE url=?", (merged, url))
+                    multijunta += 1
                 continue
         rid = hashlib.md5((url or r["titulo"]).encode("utf-8")).hexdigest()[:16]
         cur.execute("""INSERT INTO imoveis
             (id,leiloeiro,junta,site,titulo,descricao,endereco,cidade,uf,
              lance_inicial,avaliacao,data_leilao,url,tipo,imagem,importado_em)
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
-            (rid, r["leiloeiro"], r.get("junta", JUNTA), r["site"], r["titulo"],
+            (rid, r["leiloeiro"], nova_junta, r["site"], r["titulo"],
              r.get("descricao", ""), "", r.get("cidade", ""), r.get("uf", ""),
              r.get("lance_inicial"), None, r["data_leilao"], url, "imovel",
              r.get("imagem", ""), datetime.now().isoformat()))
         novos += 1
     conn.commit()
-    return novos, existe
+    return novos, existe, multijunta
 
 
-def scrape_leiloeiro(lei):
-    nome, site = lei["nome"], (lei.get("site") or "").strip()
-    print(f"[{datetime.now():%H:%M:%S}] >>> {nome} | {site or '(sem site)'}", flush=True)
-    if not site:
-        progress["status_sites"][nome] = "sem site (nao raspavel)"
-        print("    [-] sem site cadastrado - pulado", flush=True)
-        return []
+def _collect_cards(site):
+    """Coleta cards de um site especifico via HTML renderizado. Retorna (cards_dict, base)."""
     home, base = render(site)
     if not home:
-        progress["status_sites"][nome] = "inacessivel"
-        progress["erros"].append(f"{nome}: inacessivel")
-        print("    [X] inacessivel", flush=True)
-        return []
+        return None, site
     base = base or site
     cat_links = [u for u in collect_links(home, base, CAT_HINT)]
-    # prioriza paginas de imoveis
     cat_links.sort(key=lambda u: (0 if re.search(r"imove|imóve", u.lower()) else 1))
     pages = list(dict.fromkeys([base] + cat_links))[:5]
-
     cards = {}
     auction_links = []
     for pg in pages:
@@ -277,19 +306,76 @@ def scrape_leiloeiro(lei):
         if not h:
             continue
         cards.update(extract_cards(h, base))
-        # paginas de leilao (para sites tipo vlance: lotes ficam dentro do leilao)
         for al in collect_links(h, base, ["leilao_id", "/leilao/", "/lote"]):
             if re.search(r"leilao_id|/lote", al.lower()) and al not in pages:
                 auction_links.append(al)
         if len(cards) >= 80:
             break
-    auction_links = list(dict.fromkeys(auction_links))[:8]
-    for al in auction_links:
+    for al in list(dict.fromkeys(auction_links))[:8]:
         if len(cards) >= 120:
             break
         h = render(al)[0]
         if h:
             cards.update(extract_cards(h, base))
+    return cards, base
+
+
+def _spa_cards(site):
+    """Correcao 3 (adapter SPA): re-renderiza com captura de XHR/JSON + scroll incremental
+    e extrai lotes do JSON da API interna. Para SPAs com <title>/HTML inicial vazio."""
+    home, base, payloads = render(site, wait_ms=4500, capture_xhr=True, scroll=True)
+    base = base or site
+    cards = {}
+    if payloads:
+        for url, jc in cards_from_json(payloads, base).items():
+            datas = parse_future_dates(jc.get("datas_txt", ""))
+            cards[url] = {"titulo": jc["titulo"], "url": jc["url"] or url, "imagem": jc["imagem"],
+                          "preco": jc["preco"], "ctx": jc["titulo"], "anexos": "",
+                          "cidade": "", "uf": "", "datas": datas}
+    # tambem reaproveita o HTML pos-scroll (lazy-load pode ter inserido cards no DOM)
+    if home:
+        cards.update(extract_cards(home, base))
+    return cards, base
+
+
+def scrape_leiloeiro(lei):
+    nome = lei["nome"]
+    email = (lei.get("email") or "").strip()
+    # correcao 2: candidatos = site do cadastro + dominio inferido do e-mail corporativo
+    cands = candidate_sites(lei.get("site"), email)
+    shown = cands[0] if cands else "(sem site)"
+    print(f"[{datetime.now():%H:%M:%S}] >>> {nome} | {shown}", flush=True)
+    if not cands:
+        progress["status_sites"][nome] = "sem site (nao raspavel)"
+        print("    [-] sem site/e-mail corporativo - pulado", flush=True)
+        return []
+    # correcao 4: sondagem de saude ANTES de gastar Playwright+FlareSolverr
+    vivos, ultimo_status = [], ""
+    for s in cands:
+        ok, st = site_health(s)
+        ultimo_status = st
+        if ok:
+            vivos.append(s)
+        else:
+            print(f"    [skip] {s} -> {st}", flush=True)
+    if not vivos:
+        progress["status_sites"][nome] = f"inacessivel ({ultimo_status})"
+        progress["erros"].append(f"{nome}: {ultimo_status}")
+        print(f"    [X] sem site vivo ({ultimo_status})", flush=True)
+        return []
+
+    site, cards = vivos[0], {}
+    for cand in vivos:
+        cd, base = _collect_cards(cand)
+        if cd is None:                   # render falhou neste candidato
+            continue
+        if len(cd) == 0:                 # 0 cards -> tenta adapter SPA (XHR/scroll)
+            cd, base = _spa_cards(cand)
+            if cd:
+                print(f"    [SPA] {len(cd)} cards via XHR/scroll", flush=True)
+        if cd:
+            site, cards = cand, cd
+            break
 
     cards = list(cards.values())[:150]
     print(f"    cards candidatos: {len(cards)}", flush=True)
@@ -346,7 +432,7 @@ def main():
     conn = sqlite3.connect(DB)
     all_im = []
     last = time.time()
-    tot_novos = tot_exist = 0
+    tot_novos = tot_exist = tot_mj = 0
     for i, lei in enumerate(leiloeiros, 1):
         try:
             ims = scrape_leiloeiro(lei)
@@ -355,15 +441,19 @@ def main():
             ims = []
             print(f"    [ERR] {e}", flush=True)
         if ims:
-            n, ex = db_insert(conn, ims)
+            n, ex, mj = db_insert(conn, ims)
             tot_novos += n
             tot_exist += ex
+            tot_mj += mj
+            if mj:
+                print(f"    [multi-junta] +{mj} lote(s) ganharam JUCERN/RN sem duplicar", flush=True)
         all_im.extend(ims)
         progress["por_leiloeiro"][lei["nome"]] = len(ims)
         progress["imoveis_total"] = len(all_im)
         progress["leiloeiros_processados"] = i
         progress["db_novos"] = tot_novos
         progress["db_ja_existiam"] = tot_exist
+        progress["db_multijunta"] = tot_mj
         save_progress()
         if time.time() - last > 300:
             print(f"\n----- REPORT PARCIAL ({datetime.now():%H:%M}) sites {i}/{len(leiloeiros)} -----")
@@ -391,7 +481,7 @@ def main():
     for nm, q in sorted(progress["por_leiloeiro"].items(), key=lambda x: -x[1]):
         print(f"   {q:4} | {nm} -> {progress['status_sites'].get(nm,'')}")
     print(f"\nTotal imoveis (1a praca futura): {len(all_im)}")
-    print(f"Banco: novos={tot_novos} ja_existiam={tot_exist} | Erros: {len(progress['erros'])}")
+    print(f"Banco: novos={tot_novos} ja_existiam={tot_exist} multijunta+={tot_mj} | Erros: {len(progress['erros'])}")
 
 
 if __name__ == "__main__":

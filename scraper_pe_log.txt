@@ -1,0 +1,263 @@
+========================================================================
+SCRAPER PE/JUCEPE | captura 09/06/2026 19:13 | 46 leiloeiros
+========================================================================
+[19:14:00] >>> Cassiano Ricardo Dall'Ago e Silva | https://www.cassianoleiloes.com.br
+    [OK] imoveis com 1a praca futura: 14
+[19:18:45] >>> César Augusto Aragão Pereira | https://www.aragaoleiloes.com.br
+    [OK] imoveis com 1a praca futura: 14
+
+----- REPORT PARCIAL (19:24) sites 2/46 -----
+     14 | Cassiano Ricardo Dall'Ago e Silva
+     14 | César Augusto Aragão Pereira
+   TOTAL: 28 | banco novos=28
+
+[19:24:01] >>> Daniel Cintra Zanella | https://leilaopernambuco.com.br/
+    [OK] imoveis com 1a praca futura: 1
+[19:27:56] >>> Daniel Elias Garcia | https://www.danielgarcialeiloes.com.br
+    [OK] imoveis com 1a praca futura: 5
+
+----- REPORT PARCIAL (19:32) sites 4/46 -----
+     14 | Cassiano Ricardo Dall'Ago e Silva
+     14 | César Augusto Aragão Pereira
+      1 | Daniel Cintra Zanella
+      5 | Daniel Elias Garcia
+   TOTAL: 34 | banco novos=29
+
+[19:32:38] >>> Diogo Mattos Dias Martins | https://www.inovaleilao.com.br
+    [OK] imoveis com 1a praca futura: 3
+[19:34:18] >>> Edeylson Peixoto Fidelis | https://www.fidelisleiloes.com.br/
+    [OK] imoveis com 1a praca futura: 8
+[19:37:36] >>> Flávia Pereira Bonna | https://leilaopernambuco.com.br/
+    [cache] site ja raspado -> 1 imoveis
+    [OK] imoveis com 1a praca futura: 1
+[19:37:36] >>> Flávio Alexandre Alves da Costa e Silva | https://www.hastaleilao.com.br
+    [OK] imoveis com 1a praca futura: 5
+
+----- REPORT PARCIAL (19:41) sites 8/46 -----
+     14 | Cassiano Ricardo Dall'Ago e Silva
+     14 | César Augusto Aragão Pereira
+      1 | Daniel Cintra Zanella
+      5 | Daniel Elias Garcia
+      3 | Diogo Mattos Dias Martins
+      8 | Edeylson Peixoto Fidelis
+      1 | Flávia Pereira Bonna
+      5 | Flávio Alexandre Alves da Costa e Silva
+   TOTAL: 51 | banco novos=40
+
+[19:41:09] >>> Gustavo Henrique Valença de Melo | http://www.ghvmleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[19:41:24] >>> José Antônio Rodovalho Júnior | https://www.joserodovalholeiloes.com.br/
+    [OK] imoveis com 1a praca futura: 6
+[19:45:54] >>> José David Gonçalves de Melo | https://www.jdleiloes.com.br
+    [OK] imoveis com 1a praca futura: 11
+
+----- REPORT PARCIAL (19:49) sites 11/46 -----
+     14 | Cassiano Ricardo Dall'Ago e Silva
+     14 | César Augusto Aragão Pereira
+      1 | Daniel Cintra Zanella
+      5 | Daniel Elias Garcia
+      3 | Diogo Mattos Dias Martins
+      8 | Edeylson Peixoto Fidelis
+      1 | Flávia Pereira Bonna
+      5 | Flávio Alexandre Alves da Costa e Silva
+      0 | Gustavo Henrique Valença de Melo
+      6 | José Antônio Rodovalho Júnior
+     11 | José David Gonçalves de Melo
+   TOTAL: 68 | banco novos=42
+
+[19:49:40] >>> Luciano Resende Rodrigues | https://www.lancecertoleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[19:52:08] >>> Renato Gracie | https://www.gracieleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[19:54:03] >>> Roberto Jacinto Pinho Júnior | http://www.leilaovip.com.br/
+    [OK] imoveis com 1a praca futura: 8
+
+----- REPORT PARCIAL (19:55) sites 14/46 -----
+     14 | Cassiano Ricardo Dall'Ago e Silva
+     14 | César Augusto Aragão Pereira
+      1 | Daniel Cintra Zanella
+      5 | Daniel Elias Garcia
+      3 | Diogo Mattos Dias Martins
+      8 | Edeylson Peixoto Fidelis
+      1 | Flávia Pereira Bonna
+      5 | Flávio Alexandre Alves da Costa e Silva
+      0 | Gustavo Henrique Valença de Melo
+      6 | José Antônio Rodovalho Júnior
+     11 | José David Gonçalves de Melo
+      0 | Luciano Resende Rodrigues
+      0 | Renato Gracie
+      8 | Roberto Jacinto Pinho Júnior
+   TOTAL: 76 | banco novos=50
+
+[19:55:21] >>> Rudival Almeida Gomes Junior | https://www.rjleiloes.com.br
+    [OK] imoveis com 1a praca futura: 5
+[19:58:04] >>> Tânia Maria von Beckerath Grimaldi | http://www.taniagrimaldileiloes.com.br/
+    [OK] imoveis com 1a praca futura: 0
+[19:58:11] >>> Ícaro Santos de Andrade Tenório | https://www.icarotenorioleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[19:58:41] >>> Osman Sobral e Silva | https://www.leiloesfreire.com.br
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (20:00) sites 18/46 -----
+     14 | Cassiano Ricardo Dall'Ago e Silva
+     14 | César Augusto Aragão Pereira
+      1 | Daniel Cintra Zanella
+      5 | Daniel Elias Garcia
+      3 | Diogo Mattos Dias Martins
+      8 | Edeylson Peixoto Fidelis
+      1 | Flávia Pereira Bonna
+      5 | Flávio Alexandre Alves da Costa e Silva
+      0 | Gustavo Henrique Valença de Melo
+      6 | José Antônio Rodovalho Júnior
+     11 | José David Gonçalves de Melo
+      0 | Luciano Resende Rodrigues
+      0 | Renato Gracie
+      8 | Roberto Jacinto Pinho Júnior
+      5 | Rudival Almeida Gomes Junior
+      0 | Tânia Maria von Beckerath Grimaldi
+      0 | Ícaro Santos de Andrade Tenório
+      0 | Osman Sobral e Silva
+   TOTAL: 81 | banco novos=50
+
+[20:00:49] >>> Roberta Cristina Rezende de Albuquerque | https://www.lancecertoleiloes.com.br
+    [cache] site ja raspado -> 0 imoveis
+    [OK] imoveis com 1a praca futura: 0
+[20:00:49] >>> Onildo de Morais Silva | https://www.leiloesfreire.com.br
+    [cache] site ja raspado -> 0 imoveis
+    [OK] imoveis com 1a praca futura: 0
+[20:00:49] >>> Gervasio Vasconcelos de Albuquerque | https://www.albuquerqueleiloes.com.br
+    [X] inacessivel
+[20:00:51] >>> Gabriel Borja de Lima Freitas | https://www.leiloesbrasilpe.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:01:15] >>> Fernando Caetano Moreira Filho | https://www.fernandoleiloeiro.com.br
+    [OK] imoveis com 1a praca futura: 2
+[20:03:07] >>> Marcus Vinicius Yoshimi Uebara | https://www.destakleiloes.com.br
+    [OK] imoveis com 1a praca futura: 7
+
+----- REPORT PARCIAL (20:06) sites 24/46 -----
+     14 | Cassiano Ricardo Dall'Ago e Silva
+     14 | César Augusto Aragão Pereira
+      1 | Daniel Cintra Zanella
+      5 | Daniel Elias Garcia
+      3 | Diogo Mattos Dias Martins
+      8 | Edeylson Peixoto Fidelis
+      1 | Flávia Pereira Bonna
+      5 | Flávio Alexandre Alves da Costa e Silva
+      0 | Gustavo Henrique Valença de Melo
+      6 | José Antônio Rodovalho Júnior
+     11 | José David Gonçalves de Melo
+      0 | Luciano Resende Rodrigues
+      0 | Renato Gracie
+      8 | Roberto Jacinto Pinho Júnior
+      5 | Rudival Almeida Gomes Junior
+      0 | Tânia Maria von Beckerath Grimaldi
+      0 | Ícaro Santos de Andrade Tenório
+      0 | Osman Sobral e Silva
+      0 | Roberta Cristina Rezende de Albuquerque
+      0 | Onildo de Morais Silva
+      0 | Gervasio Vasconcelos de Albuquerque
+      0 | Gabriel Borja de Lima Freitas
+      2 | Fernando Caetano Moreira Filho
+      7 | Marcus Vinicius Yoshimi Uebara
+   TOTAL: 90 | banco novos=56
+
+[20:06:54] >>> Irani Flores | https://www.leilaobrasil.com.br
+    [OK] imoveis com 1a praca futura: 160
+[20:07:35] >>> Aline Souza Flores | https://www.leilaobrasil.com.br
+    [cache] site ja raspado -> 160 imoveis
+    [OK] imoveis com 1a praca futura: 160
+[20:07:36] >>> Renato Schlobach Moysés | https://www.rmoyses.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:08:45] >>> Mauro Colodete | https://www.colodeteleiloes.com.br
+    [OK] imoveis com 1a praca futura: 4
+[20:10:47] >>> Adriano Santos Venceslau da Silva | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Pedro Dantas Venceslau | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> César Britto Martins | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Deyvison Danilo Reis Martins | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Douglas Richer e Silva Nascimento | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Luiz Eduardo Gomes | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Raphael Esteves de Faria | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Erico Sobral Soares | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Cristiane Barros da Mota Balbino | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Jonas Gabriel Antunes Moreira | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Lucas Rafael Antunes Moreira | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Carmem Regina Pontes Piedade | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Monique Souza e Silva | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Antônio de Lisboa de Andrade | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Celso Alves Cunha | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Luis Otavio Marcolino Shinkawa | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> Miriam Aparecida Trindade Gir | (sem site)
+    [-] sem site cadastrado - pulado
+[20:10:47] >>> David Henrique Barros da Mota Carvalho | (sem site)
+    [-] sem site cadastrado - pulado
+
+[CSV] C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_pe_2026-06-09.csv
+
+========================================================================
+RELATORIO FINAL
+========================================================================
+    160 | Irani Flores -> ok (160)
+    160 | Aline Souza Flores -> ok (160)
+     14 | Cassiano Ricardo Dall'Ago e Silva -> ok (14)
+     14 | César Augusto Aragão Pereira -> ok (14)
+     11 | José David Gonçalves de Melo -> ok (11)
+      8 | Edeylson Peixoto Fidelis -> ok (8)
+      8 | Roberto Jacinto Pinho Júnior -> ok (8)
+      7 | Marcus Vinicius Yoshimi Uebara -> ok (7)
+      6 | José Antônio Rodovalho Júnior -> ok (6)
+      5 | Daniel Elias Garcia -> ok (5)
+      5 | Flávio Alexandre Alves da Costa e Silva -> ok (5)
+      5 | Rudival Almeida Gomes Junior -> ok (5)
+      4 | Mauro Colodete -> ok (4)
+      3 | Diogo Mattos Dias Martins -> ok (3)
+      2 | Fernando Caetano Moreira Filho -> ok (2)
+      1 | Daniel Cintra Zanella -> ok (1)
+      1 | Flávia Pereira Bonna -> ok (1)
+      0 | Gustavo Henrique Valença de Melo -> ok (0)
+      0 | Luciano Resende Rodrigues -> ok (0)
+      0 | Renato Gracie -> ok (0)
+      0 | Tânia Maria von Beckerath Grimaldi -> ok (0)
+      0 | Ícaro Santos de Andrade Tenório -> ok (0)
+      0 | Osman Sobral e Silva -> ok (0)
+      0 | Roberta Cristina Rezende de Albuquerque -> ok (0)
+      0 | Onildo de Morais Silva -> ok (0)
+      0 | Gervasio Vasconcelos de Albuquerque -> inacessivel
+      0 | Gabriel Borja de Lima Freitas -> ok (0)
+      0 | Renato Schlobach Moysés -> ok (0)
+      0 | Adriano Santos Venceslau da Silva -> sem site (nao raspavel)
+      0 | Pedro Dantas Venceslau -> sem site (nao raspavel)
+      0 | César Britto Martins -> sem site (nao raspavel)
+      0 | Deyvison Danilo Reis Martins -> sem site (nao raspavel)
+      0 | Douglas Richer e Silva Nascimento -> sem site (nao raspavel)
+      0 | Luiz Eduardo Gomes -> sem site (nao raspavel)
+      0 | Raphael Esteves de Faria -> sem site (nao raspavel)
+      0 | Erico Sobral Soares -> sem site (nao raspavel)
+      0 | Cristiane Barros da Mota Balbino -> sem site (nao raspavel)
+      0 | Jonas Gabriel Antunes Moreira -> sem site (nao raspavel)
+      0 | Lucas Rafael Antunes Moreira -> sem site (nao raspavel)
+      0 | Carmem Regina Pontes Piedade -> sem site (nao raspavel)
+      0 | Monique Souza e Silva -> sem site (nao raspavel)
+      0 | Antônio de Lisboa de Andrade -> sem site (nao raspavel)
+      0 | Celso Alves Cunha -> sem site (nao raspavel)
+      0 | Luis Otavio Marcolino Shinkawa -> sem site (nao raspavel)
+      0 | Miriam Aparecida Trindade Gir -> sem site (nao raspavel)
+      0 | David Henrique Barros da Mota Carvalho -> sem site (nao raspavel)
+
+Total imoveis (1a praca futura): 414
+Banco: novos=128 ja_existiam=286 | Erros: 1

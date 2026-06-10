@@ -1,0 +1,514 @@
+========================================================================
+SCRAPER CE/JUCEC | captura 09/06/2026 21:11 | 54 leiloeiros
+========================================================================
+[21:11:58] >>> Fernando Montenegro Castelo | https://www.montenegroleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:12:05] >>> Francisca Graca de Oliveira Medeiros | https://www.construbemleiloes.com.br
+    [OK] imoveis com 1a praca futura: 1
+[21:16:09] >>> Sandra Maria Penha Araujo | (sem site)
+    [-] sem site cadastrado - pulado
+[21:16:09] >>> Joao Lopes Cavalcante | https://www.lopesleiloes.net.br
+    [OK] imoveis com 1a praca futura: 0
+[21:16:36] >>> Marcio Morais Correia Goncalves | (sem site)
+    [-] sem site cadastrado - pulado
+[21:16:36] >>> Celso Alves Cunha | https://www.celsocunhaleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (21:17) sites 6/54 -----
+      0 | Fernando Montenegro Castelo
+      1 | Francisca Graca de Oliveira Medeiros
+      0 | Sandra Maria Penha Araujo
+      0 | Joao Lopes Cavalcante
+      0 | Marcio Morais Correia Goncalves
+      0 | Celso Alves Cunha
+   TOTAL: 1 | banco novos=1
+
+[21:17:53] >>> Willian Augusto Ferreira de Araujo | https://www.willianleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:18:01] >>> Francisco das Chagas Pereira Junior | https://www.pereiraleiloesce.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:18:39] >>> Sergio Luis Juca Bezerra | (sem site)
+    [-] sem site cadastrado - pulado
+[21:18:39] >>> Silvio Cesar Maraschi | https://www.hastapublica.com.br
+    [OK] imoveis com 1a praca futura: 5
+[21:21:29] >>> Daniela de Souza Castelo | https://www.montenegroleiloes.com.br
+    [cache] site ja raspado -> 0 imoveis
+    [OK] imoveis com 1a praca futura: 0
+[21:21:29] >>> Georgia de Souza Castelo | https://www.montenegroleiloes.com.br
+    [cache] site ja raspado -> 0 imoveis
+    [OK] imoveis com 1a praca futura: 0
+[21:21:29] >>> Marinete Alves de Brito Oliveira | (sem site)
+    [-] sem site cadastrado - pulado
+[21:21:29] >>> Francisco Jonnathan Santos Freitas | https://www.nortenordesteleiloes.com.br
+    [OK] imoveis com 1a praca futura: 2
+
+----- REPORT PARCIAL (21:25) sites 14/54 -----
+      0 | Fernando Montenegro Castelo
+      1 | Francisca Graca de Oliveira Medeiros
+      0 | Sandra Maria Penha Araujo
+      0 | Joao Lopes Cavalcante
+      0 | Marcio Morais Correia Goncalves
+      0 | Celso Alves Cunha
+      0 | Willian Augusto Ferreira de Araujo
+      0 | Francisco das Chagas Pereira Junior
+      0 | Sergio Luis Juca Bezerra
+      5 | Silvio Cesar Maraschi
+      0 | Daniela de Souza Castelo
+      0 | Georgia de Souza Castelo
+      0 | Marinete Alves de Brito Oliveira
+      2 | Francisco Jonnathan Santos Freitas
+   TOTAL: 8 | banco novos=8
+
+[21:25:57] >>> Eduardo Sydney Bezerra de Girao | (sem site)
+    [-] sem site cadastrado - pulado
+[21:25:57] >>> Saulo Barbosa Catao Segundo | https://www.lancecertoleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:29:17] >>> Denys Pyerre de Oliveira | https://www.leje.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:30:08] >>> Ives Harrison Nasar dos Santos | https://www.nasarleiloes.com.br
+    [OK] imoveis com 1a praca futura: 1
+
+----- REPORT PARCIAL (21:33) sites 18/54 -----
+      0 | Fernando Montenegro Castelo
+      1 | Francisca Graca de Oliveira Medeiros
+      0 | Sandra Maria Penha Araujo
+      0 | Joao Lopes Cavalcante
+      0 | Marcio Morais Correia Goncalves
+      0 | Celso Alves Cunha
+      0 | Willian Augusto Ferreira de Araujo
+      0 | Francisco das Chagas Pereira Junior
+      0 | Sergio Luis Juca Bezerra
+      5 | Silvio Cesar Maraschi
+      0 | Daniela de Souza Castelo
+      0 | Georgia de Souza Castelo
+      0 | Marinete Alves de Brito Oliveira
+      2 | Francisco Jonnathan Santos Freitas
+      0 | Eduardo Sydney Bezerra de Girao
+      0 | Saulo Barbosa Catao Segundo
+      0 | Denys Pyerre de Oliveira
+      1 | Ives Harrison Nasar dos Santos
+   TOTAL: 9 | banco novos=8
+
+[21:33:17] >>> Erico Sobral Soares | https://www.vipleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:34:23] >>> Hugo Moreira Pimenta | https://www.moreirapimenta.bl.br
+    [OK] imoveis com 1a praca futura: 0
+[21:34:26] >>> Alex William Hoppe | https://www.hoppeleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:38:09] >>> Eduardo Vinicius Fleury Lobo | https://www.leilomaster.com.br
+    [OK] imoveis com 1a praca futura: 1
+
+----- REPORT PARCIAL (21:42) sites 22/54 -----
+      0 | Fernando Montenegro Castelo
+      1 | Francisca Graca de Oliveira Medeiros
+      0 | Sandra Maria Penha Araujo
+      0 | Joao Lopes Cavalcante
+      0 | Marcio Morais Correia Goncalves
+      0 | Celso Alves Cunha
+      0 | Willian Augusto Ferreira de Araujo
+      0 | Francisco das Chagas Pereira Junior
+      0 | Sergio Luis Juca Bezerra
+      5 | Silvio Cesar Maraschi
+      0 | Daniela de Souza Castelo
+      0 | Georgia de Souza Castelo
+      0 | Marinete Alves de Brito Oliveira
+      2 | Francisco Jonnathan Santos Freitas
+      0 | Eduardo Sydney Bezerra de Girao
+      0 | Saulo Barbosa Catao Segundo
+      0 | Denys Pyerre de Oliveira
+      1 | Ives Harrison Nasar dos Santos
+      0 | Erico Sobral Soares
+      0 | Hugo Moreira Pimenta
+      0 | Alex William Hoppe
+      1 | Eduardo Vinicius Fleury Lobo
+   TOTAL: 10 | banco novos=9
+
+[21:42:33] >>> Conceicao Maria Fixer | https://www.mariafixerleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:44:05] >>> Bhruna Christine Sales | (sem site)
+    [-] sem site cadastrado - pulado
+[21:44:05] >>> Joao Paulo Ferreira | https://www.montenegroleiloes.com.br
+    [cache] site ja raspado -> 0 imoveis
+    [OK] imoveis com 1a praca futura: 0
+[21:44:05] >>> Josecelli Kildare Fraga Gomes | https://www.kildareleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:46:04] >>> Rudival Almeida Gomes Junior | https://www.rjleiloes.com.br
+    [OK] imoveis com 1a praca futura: 5
+
+----- REPORT PARCIAL (21:49) sites 27/54 -----
+      0 | Fernando Montenegro Castelo
+      1 | Francisca Graca de Oliveira Medeiros
+      0 | Sandra Maria Penha Araujo
+      0 | Joao Lopes Cavalcante
+      0 | Marcio Morais Correia Goncalves
+      0 | Celso Alves Cunha
+      0 | Willian Augusto Ferreira de Araujo
+      0 | Francisco das Chagas Pereira Junior
+      0 | Sergio Luis Juca Bezerra
+      5 | Silvio Cesar Maraschi
+      0 | Daniela de Souza Castelo
+      0 | Georgia de Souza Castelo
+      0 | Marinete Alves de Brito Oliveira
+      2 | Francisco Jonnathan Santos Freitas
+      0 | Eduardo Sydney Bezerra de Girao
+      0 | Saulo Barbosa Catao Segundo
+      0 | Denys Pyerre de Oliveira
+      1 | Ives Harrison Nasar dos Santos
+      0 | Erico Sobral Soares
+      0 | Hugo Moreira Pimenta
+      0 | Alex William Hoppe
+      1 | Eduardo Vinicius Fleury Lobo
+      0 | Conceicao Maria Fixer
+      0 | Bhruna Christine Sales
+      0 | Joao Paulo Ferreira
+      0 | Josecelli Kildare Fraga Gomes
+      5 | Rudival Almeida Gomes Junior
+   TOTAL: 15 | banco novos=9
+
+[21:49:31] >>> Mateus Nascimento Guerra | (sem site)
+    [-] sem site cadastrado - pulado
+[21:49:31] >>> Daniel Elias Garcia | https://www.danielgarcialeiloes.com.br
+    [OK] imoveis com 1a praca futura: 5
+[21:53:08] >>> Davi Borges de Aquino | https://www.alfaleiloes.com
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (21:56) sites 30/54 -----
+      0 | Fernando Montenegro Castelo
+      1 | Francisca Graca de Oliveira Medeiros
+      0 | Sandra Maria Penha Araujo
+      0 | Joao Lopes Cavalcante
+      0 | Marcio Morais Correia Goncalves
+      0 | Celso Alves Cunha
+      0 | Willian Augusto Ferreira de Araujo
+      0 | Francisco das Chagas Pereira Junior
+      0 | Sergio Luis Juca Bezerra
+      5 | Silvio Cesar Maraschi
+      0 | Daniela de Souza Castelo
+      0 | Georgia de Souza Castelo
+      0 | Marinete Alves de Brito Oliveira
+      2 | Francisco Jonnathan Santos Freitas
+      0 | Eduardo Sydney Bezerra de Girao
+      0 | Saulo Barbosa Catao Segundo
+      0 | Denys Pyerre de Oliveira
+      1 | Ives Harrison Nasar dos Santos
+      0 | Erico Sobral Soares
+      0 | Hugo Moreira Pimenta
+      0 | Alex William Hoppe
+      1 | Eduardo Vinicius Fleury Lobo
+      0 | Conceicao Maria Fixer
+      0 | Bhruna Christine Sales
+      0 | Joao Paulo Ferreira
+      0 | Josecelli Kildare Fraga Gomes
+      5 | Rudival Almeida Gomes Junior
+      0 | Mateus Nascimento Guerra
+      5 | Daniel Elias Garcia
+      0 | Davi Borges de Aquino
+   TOTAL: 20 | banco novos=9
+
+[21:56:52] >>> Marcelo Valland | https://www.pactoleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:57:09] >>> Luiz Eduardo Gomes | (sem site)
+    [-] sem site cadastrado - pulado
+[21:57:09] >>> Carlos Augusto Ribeiro Lima | https://www.infinityleiloes.com.br
+    [OK] imoveis com 1a praca futura: 2
+[21:59:55] >>> Gustavo Moretto Guimaraes de Oliveira | https://www.gustavomorettoleiloeiro.com.br
+    [OK] imoveis com 1a praca futura: 0
+[22:00:02] >>> Jonas Gabriel Antunes Moreira | https://www.mgl.com.br
+    [OK] imoveis com 1a praca futura: 5
+
+----- REPORT PARCIAL (22:02) sites 35/54 -----
+      0 | Fernando Montenegro Castelo
+      1 | Francisca Graca de Oliveira Medeiros
+      0 | Sandra Maria Penha Araujo
+      0 | Joao Lopes Cavalcante
+      0 | Marcio Morais Correia Goncalves
+      0 | Celso Alves Cunha
+      0 | Willian Augusto Ferreira de Araujo
+      0 | Francisco das Chagas Pereira Junior
+      0 | Sergio Luis Juca Bezerra
+      5 | Silvio Cesar Maraschi
+      0 | Daniela de Souza Castelo
+      0 | Georgia de Souza Castelo
+      0 | Marinete Alves de Brito Oliveira
+      2 | Francisco Jonnathan Santos Freitas
+      0 | Eduardo Sydney Bezerra de Girao
+      0 | Saulo Barbosa Catao Segundo
+      0 | Denys Pyerre de Oliveira
+      1 | Ives Harrison Nasar dos Santos
+      0 | Erico Sobral Soares
+      0 | Hugo Moreira Pimenta
+      0 | Alex William Hoppe
+      1 | Eduardo Vinicius Fleury Lobo
+      0 | Conceicao Maria Fixer
+      0 | Bhruna Christine Sales
+      0 | Joao Paulo Ferreira
+      0 | Josecelli Kildare Fraga Gomes
+      5 | Rudival Almeida Gomes Junior
+      0 | Mateus Nascimento Guerra
+      5 | Daniel Elias Garcia
+      0 | Davi Borges de Aquino
+      0 | Marcelo Valland
+      0 | Luiz Eduardo Gomes
+      2 | Carlos Augusto Ribeiro Lima
+      0 | Gustavo Moretto Guimaraes de Oliveira
+      5 | Jonas Gabriel Antunes Moreira
+   TOTAL: 27 | banco novos=10
+
+[22:02:16] >>> Fernando Caetano Moreira Filho | https://www.fernandoleiloeiro.com.br
+    [OK] imoveis com 1a praca futura: 2
+[22:04:34] >>> Sandro de Oliveira | (sem site)
+    [-] sem site cadastrado - pulado
+[22:04:34] >>> Lucas Rafael Antunes Moreira | https://www.mgl.com.br
+    [cache] site ja raspado -> 5 imoveis
+    [OK] imoveis com 1a praca futura: 5
+[22:04:34] >>> Filipe Pedro de Araujo | (sem site)
+    [-] sem site cadastrado - pulado
+[22:04:34] >>> Marco Tulio Montenegro Cavalcanti Dias | https://www.lancecertoleiloes.com.br
+    [cache] site ja raspado -> 0 imoveis
+    [OK] imoveis com 1a praca futura: 0
+[22:04:34] >>> Renato Schlobach Moyses | https://www.rmoyses.com.br
+    [OK] imoveis com 1a praca futura: 0
+[22:05:58] >>> Daniel Melo Cruz | https://www.grupolance.com.br
+    [OK] imoveis com 1a praca futura: 11
+
+----- REPORT PARCIAL (22:09) sites 42/54 -----
+      0 | Fernando Montenegro Castelo
+      1 | Francisca Graca de Oliveira Medeiros
+      0 | Sandra Maria Penha Araujo
+      0 | Joao Lopes Cavalcante
+      0 | Marcio Morais Correia Goncalves
+      0 | Celso Alves Cunha
+      0 | Willian Augusto Ferreira de Araujo
+      0 | Francisco das Chagas Pereira Junior
+      0 | Sergio Luis Juca Bezerra
+      5 | Silvio Cesar Maraschi
+      0 | Daniela de Souza Castelo
+      0 | Georgia de Souza Castelo
+      0 | Marinete Alves de Brito Oliveira
+      2 | Francisco Jonnathan Santos Freitas
+      0 | Eduardo Sydney Bezerra de Girao
+      0 | Saulo Barbosa Catao Segundo
+      0 | Denys Pyerre de Oliveira
+      1 | Ives Harrison Nasar dos Santos
+      0 | Erico Sobral Soares
+      0 | Hugo Moreira Pimenta
+      0 | Alex William Hoppe
+      1 | Eduardo Vinicius Fleury Lobo
+      0 | Conceicao Maria Fixer
+      0 | Bhruna Christine Sales
+      0 | Joao Paulo Ferreira
+      0 | Josecelli Kildare Fraga Gomes
+      5 | Rudival Almeida Gomes Junior
+      0 | Mateus Nascimento Guerra
+      5 | Daniel Elias Garcia
+      0 | Davi Borges de Aquino
+      0 | Marcelo Valland
+      0 | Luiz Eduardo Gomes
+      2 | Carlos Augusto Ribeiro Lima
+      0 | Gustavo Moretto Guimaraes de Oliveira
+      5 | Jonas Gabriel Antunes Moreira
+      2 | Fernando Caetano Moreira Filho
+      0 | Sandro de Oliveira
+      5 | Lucas Rafael Antunes Moreira
+      0 | Filipe Pedro de Araujo
+      0 | Marco Tulio Montenegro Cavalcanti Dias
+      0 | Renato Schlobach Moyses
+     11 | Daniel Melo Cruz
+   TOTAL: 45 | banco novos=15
+
+[22:09:58] >>> Regilane de Alencar Monteiro | https://www.construbemleiloes.com.br
+    [cache] site ja raspado -> 1 imoveis
+    [OK] imoveis com 1a praca futura: 1
+[22:09:58] >>> Fabio Prando Fagundes Goes | (sem site)
+    [-] sem site cadastrado - pulado
+[22:09:58] >>> Guilherme Lopes de Souza | (sem site)
+    [-] sem site cadastrado - pulado
+[22:09:58] >>> Irani Flores | https://www.leilaobrasil.com.br
+    [OK] imoveis com 1a praca futura: 160
+[22:10:36] >>> Rodrigo Aparecido Rigolon da Silva | https://www.rigolonleiloes.com.br
+    [OK] imoveis com 1a praca futura: 11
+[22:13:33] >>> Mauricio Jose de Sousa Costa | https://www.mjleiloes.com.br
+    [OK] imoveis com 1a praca futura: 14
+
+----- REPORT PARCIAL (22:18) sites 48/54 -----
+      0 | Fernando Montenegro Castelo
+      1 | Francisca Graca de Oliveira Medeiros
+      0 | Sandra Maria Penha Araujo
+      0 | Joao Lopes Cavalcante
+      0 | Marcio Morais Correia Goncalves
+      0 | Celso Alves Cunha
+      0 | Willian Augusto Ferreira de Araujo
+      0 | Francisco das Chagas Pereira Junior
+      0 | Sergio Luis Juca Bezerra
+      5 | Silvio Cesar Maraschi
+      0 | Daniela de Souza Castelo
+      0 | Georgia de Souza Castelo
+      0 | Marinete Alves de Brito Oliveira
+      2 | Francisco Jonnathan Santos Freitas
+      0 | Eduardo Sydney Bezerra de Girao
+      0 | Saulo Barbosa Catao Segundo
+      0 | Denys Pyerre de Oliveira
+      1 | Ives Harrison Nasar dos Santos
+      0 | Erico Sobral Soares
+      0 | Hugo Moreira Pimenta
+      0 | Alex William Hoppe
+      1 | Eduardo Vinicius Fleury Lobo
+      0 | Conceicao Maria Fixer
+      0 | Bhruna Christine Sales
+      0 | Joao Paulo Ferreira
+      0 | Josecelli Kildare Fraga Gomes
+      5 | Rudival Almeida Gomes Junior
+      0 | Mateus Nascimento Guerra
+      5 | Daniel Elias Garcia
+      0 | Davi Borges de Aquino
+      0 | Marcelo Valland
+      0 | Luiz Eduardo Gomes
+      2 | Carlos Augusto Ribeiro Lima
+      0 | Gustavo Moretto Guimaraes de Oliveira
+      5 | Jonas Gabriel Antunes Moreira
+      2 | Fernando Caetano Moreira Filho
+      0 | Sandro de Oliveira
+      5 | Lucas Rafael Antunes Moreira
+      0 | Filipe Pedro de Araujo
+      0 | Marco Tulio Montenegro Cavalcanti Dias
+      0 | Renato Schlobach Moyses
+     11 | Daniel Melo Cruz
+      1 | Regilane de Alencar Monteiro
+      0 | Fabio Prando Fagundes Goes
+      0 | Guilherme Lopes de Souza
+    160 | Irani Flores
+     11 | Rodrigo Aparecido Rigolon da Silva
+     14 | Mauricio Jose de Sousa Costa
+   TOTAL: 231 | banco novos=15
+
+[22:18:00] >>> Arthur Ferreira Nunes | https://arthurnunes.leilao.br
+    [OK] imoveis com 1a praca futura: 0
+[22:18:17] >>> Romulo Cezar Viana de Lima Junior | (sem site)
+    [-] sem site cadastrado - pulado
+[22:18:17] >>> Paulo Marcelo Silva Almeida | https://www.upleilao.com.br
+    [OK] imoveis com 1a praca futura: 2
+[22:20:27] >>> Ivana Montenegro Castelo Branco Rocha | https://www.patiorochaleiloes.com.br
+    [OK] imoveis com 1a praca futura: 2
+
+----- REPORT PARCIAL (22:25) sites 52/54 -----
+      0 | Fernando Montenegro Castelo
+      1 | Francisca Graca de Oliveira Medeiros
+      0 | Sandra Maria Penha Araujo
+      0 | Joao Lopes Cavalcante
+      0 | Marcio Morais Correia Goncalves
+      0 | Celso Alves Cunha
+      0 | Willian Augusto Ferreira de Araujo
+      0 | Francisco das Chagas Pereira Junior
+      0 | Sergio Luis Juca Bezerra
+      5 | Silvio Cesar Maraschi
+      0 | Daniela de Souza Castelo
+      0 | Georgia de Souza Castelo
+      0 | Marinete Alves de Brito Oliveira
+      2 | Francisco Jonnathan Santos Freitas
+      0 | Eduardo Sydney Bezerra de Girao
+      0 | Saulo Barbosa Catao Segundo
+      0 | Denys Pyerre de Oliveira
+      1 | Ives Harrison Nasar dos Santos
+      0 | Erico Sobral Soares
+      0 | Hugo Moreira Pimenta
+      0 | Alex William Hoppe
+      1 | Eduardo Vinicius Fleury Lobo
+      0 | Conceicao Maria Fixer
+      0 | Bhruna Christine Sales
+      0 | Joao Paulo Ferreira
+      0 | Josecelli Kildare Fraga Gomes
+      5 | Rudival Almeida Gomes Junior
+      0 | Mateus Nascimento Guerra
+      5 | Daniel Elias Garcia
+      0 | Davi Borges de Aquino
+      0 | Marcelo Valland
+      0 | Luiz Eduardo Gomes
+      2 | Carlos Augusto Ribeiro Lima
+      0 | Gustavo Moretto Guimaraes de Oliveira
+      5 | Jonas Gabriel Antunes Moreira
+      2 | Fernando Caetano Moreira Filho
+      0 | Sandro de Oliveira
+      5 | Lucas Rafael Antunes Moreira
+      0 | Filipe Pedro de Araujo
+      0 | Marco Tulio Montenegro Cavalcanti Dias
+      0 | Renato Schlobach Moyses
+     11 | Daniel Melo Cruz
+      1 | Regilane de Alencar Monteiro
+      0 | Fabio Prando Fagundes Goes
+      0 | Guilherme Lopes de Souza
+    160 | Irani Flores
+     11 | Rodrigo Aparecido Rigolon da Silva
+     14 | Mauricio Jose de Sousa Costa
+      0 | Arthur Ferreira Nunes
+      0 | Romulo Cezar Viana de Lima Junior
+      2 | Paulo Marcelo Silva Almeida
+      2 | Ivana Montenegro Castelo Branco Rocha
+   TOTAL: 235 | banco novos=17
+
+[22:25:23] >>> Murilo Goncalves Ramos | https://www.mgrleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[22:26:50] >>> William Marden Pereira Machado | https://www.otonirodriguesadvogados.com.br
+    [X] inacessivel
+
+[CSV] C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_ce_2026-06-09.csv
+
+========================================================================
+RELATORIO FINAL
+========================================================================
+    160 | Irani Flores -> ok (160)
+     14 | Mauricio Jose de Sousa Costa -> ok (14)
+     11 | Daniel Melo Cruz -> ok (11)
+     11 | Rodrigo Aparecido Rigolon da Silva -> ok (11)
+      5 | Silvio Cesar Maraschi -> ok (5)
+      5 | Rudival Almeida Gomes Junior -> ok (5)
+      5 | Daniel Elias Garcia -> ok (5)
+      5 | Jonas Gabriel Antunes Moreira -> ok (5)
+      5 | Lucas Rafael Antunes Moreira -> ok (5)
+      2 | Francisco Jonnathan Santos Freitas -> ok (2)
+      2 | Carlos Augusto Ribeiro Lima -> ok (2)
+      2 | Fernando Caetano Moreira Filho -> ok (2)
+      2 | Paulo Marcelo Silva Almeida -> ok (2)
+      2 | Ivana Montenegro Castelo Branco Rocha -> ok (2)
+      1 | Francisca Graca de Oliveira Medeiros -> ok (1)
+      1 | Ives Harrison Nasar dos Santos -> ok (1)
+      1 | Eduardo Vinicius Fleury Lobo -> ok (1)
+      1 | Regilane de Alencar Monteiro -> ok (1)
+      0 | Fernando Montenegro Castelo -> ok (0)
+      0 | Sandra Maria Penha Araujo -> sem site (nao raspavel)
+      0 | Joao Lopes Cavalcante -> ok (0)
+      0 | Marcio Morais Correia Goncalves -> sem site (nao raspavel)
+      0 | Celso Alves Cunha -> ok (0)
+      0 | Willian Augusto Ferreira de Araujo -> ok (0)
+      0 | Francisco das Chagas Pereira Junior -> ok (0)
+      0 | Sergio Luis Juca Bezerra -> sem site (nao raspavel)
+      0 | Daniela de Souza Castelo -> ok (0)
+      0 | Georgia de Souza Castelo -> ok (0)
+      0 | Marinete Alves de Brito Oliveira -> sem site (nao raspavel)
+      0 | Eduardo Sydney Bezerra de Girao -> sem site (nao raspavel)
+      0 | Saulo Barbosa Catao Segundo -> ok (0)
+      0 | Denys Pyerre de Oliveira -> ok (0)
+      0 | Erico Sobral Soares -> ok (0)
+      0 | Hugo Moreira Pimenta -> ok (0)
+      0 | Alex William Hoppe -> ok (0)
+      0 | Conceicao Maria Fixer -> ok (0)
+      0 | Bhruna Christine Sales -> sem site (nao raspavel)
+      0 | Joao Paulo Ferreira -> ok (0)
+      0 | Josecelli Kildare Fraga Gomes -> ok (0)
+      0 | Mateus Nascimento Guerra -> sem site (nao raspavel)
+      0 | Davi Borges de Aquino -> ok (0)
+      0 | Marcelo Valland -> ok (0)
+      0 | Luiz Eduardo Gomes -> sem site (nao raspavel)
+      0 | Gustavo Moretto Guimaraes de Oliveira -> ok (0)
+      0 | Sandro de Oliveira -> sem site (nao raspavel)
+      0 | Filipe Pedro de Araujo -> sem site (nao raspavel)
+      0 | Marco Tulio Montenegro Cavalcanti Dias -> ok (0)
+      0 | Renato Schlobach Moyses -> ok (0)
+      0 | Fabio Prando Fagundes Goes -> sem site (nao raspavel)
+      0 | Guilherme Lopes de Souza -> sem site (nao raspavel)
+      0 | Arthur Ferreira Nunes -> ok (0)
+      0 | Romulo Cezar Viana de Lima Junior -> sem site (nao raspavel)
+      0 | Murilo Goncalves Ramos -> ok (0)
+      0 | William Marden Pereira Machado -> inacessivel
+
+Total imoveis (1a praca futura): 235
+Banco: novos=17 ja_existiam=218 | Erros: 1

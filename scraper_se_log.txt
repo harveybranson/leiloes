@@ -1,0 +1,220 @@
+========================================================================
+SCRAPER SE/JUCESE | captura 09/06/2026 20:19 | 23 leiloeiros
+========================================================================
+[20:19:44] >>> Jose Ivan de Souza Rabelo | https://www.realizaleiloes.com.br
+    [OK] imoveis com 1a praca futura: 4
+[20:24:23] >>> Hildegards Azevedo Santos Junior | (sem site)
+    [-] sem site cadastrado - pulado
+[20:24:23] >>> Carlos Vinicius de Carvalho Mascarenhas | https://www.rjleiloes.com.br
+    [OK] imoveis com 1a praca futura: 5
+
+----- REPORT PARCIAL (20:27) sites 3/23 -----
+      4 | Jose Ivan de Souza Rabelo
+      0 | Hildegards Azevedo Santos Junior
+      5 | Carlos Vinicius de Carvalho Mascarenhas
+   TOTAL: 9 | banco novos=4
+
+[20:27:25] >>> Carlos Gustavo Santos Fiel | https://www.c3leiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:27:36] >>> Adilson Bento de Araujo | https://www.abaleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:28:53] >>> Valerio Cesar de Azevedo Deda | https://www.lancese.com.br
+    [OK] imoveis com 1a praca futura: 13
+
+----- REPORT PARCIAL (20:33) sites 6/23 -----
+      4 | Jose Ivan de Souza Rabelo
+      0 | Hildegards Azevedo Santos Junior
+      5 | Carlos Vinicius de Carvalho Mascarenhas
+      0 | Carlos Gustavo Santos Fiel
+      0 | Adilson Bento de Araujo
+     13 | Valerio Cesar de Azevedo Deda
+   TOTAL: 22 | banco novos=17
+
+[20:33:41] >>> Cristiane de Almeida Rabelo Gois | https://www.argleiloes.com.br
+    [OK] imoveis com 1a praca futura: 2
+[20:36:34] >>> Alex Willian Hope | https://www.hoppeleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (20:39) sites 8/23 -----
+      4 | Jose Ivan de Souza Rabelo
+      0 | Hildegards Azevedo Santos Junior
+      5 | Carlos Vinicius de Carvalho Mascarenhas
+      0 | Carlos Gustavo Santos Fiel
+      0 | Adilson Bento de Araujo
+     13 | Valerio Cesar de Azevedo Deda
+      2 | Cristiane de Almeida Rabelo Gois
+      0 | Alex Willian Hope
+   TOTAL: 24 | banco novos=19
+
+[20:39:09] >>> Antonio Romero Ferreira da Silva | https://www.leiloescostaesilva.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:39:15] >>> Thiago Barros Cardoso | https://www.tbaracajuleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:39:24] >>> Adelane Pedrozo Ferreira | (sem site)
+    [-] sem site cadastrado - pulado
+[20:39:24] >>> Daniel Elias Garcia | https://www.dgleiloes.com.br
+    [OK] imoveis com 1a praca futura: 5
+[20:43:26] >>> Osman Sobral e Silva | https://www.leiloesfreire.com.br
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (20:45) sites 13/23 -----
+      4 | Jose Ivan de Souza Rabelo
+      0 | Hildegards Azevedo Santos Junior
+      5 | Carlos Vinicius de Carvalho Mascarenhas
+      0 | Carlos Gustavo Santos Fiel
+      0 | Adilson Bento de Araujo
+     13 | Valerio Cesar de Azevedo Deda
+      2 | Cristiane de Almeida Rabelo Gois
+      0 | Alex Willian Hope
+      0 | Antonio Romero Ferreira da Silva
+      0 | Thiago Barros Cardoso
+      0 | Adelane Pedrozo Ferreira
+      5 | Daniel Elias Garcia
+      0 | Osman Sobral e Silva
+   TOTAL: 29 | banco novos=19
+
+[20:45:33] >>> Fabio Goncalves Barbosa | https://www.fabiobarbosaleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:48:01] >>> Jonas Gabriel Antunes Moreira | https://www.mgl.com.br
+    [OK] imoveis com 1a praca futura: 5
+[20:50:30] >>> Fernando Caetano Moreira Filho | https://www.fernandoleiloeiro.com.br
+    [OK] imoveis com 1a praca futura: 2
+
+----- REPORT PARCIAL (20:52) sites 16/23 -----
+      4 | Jose Ivan de Souza Rabelo
+      0 | Hildegards Azevedo Santos Junior
+      5 | Carlos Vinicius de Carvalho Mascarenhas
+      0 | Carlos Gustavo Santos Fiel
+      0 | Adilson Bento de Araujo
+     13 | Valerio Cesar de Azevedo Deda
+      2 | Cristiane de Almeida Rabelo Gois
+      0 | Alex Willian Hope
+      0 | Antonio Romero Ferreira da Silva
+      0 | Thiago Barros Cardoso
+      0 | Adelane Pedrozo Ferreira
+      5 | Daniel Elias Garcia
+      0 | Osman Sobral e Silva
+      0 | Fabio Goncalves Barbosa
+      5 | Jonas Gabriel Antunes Moreira
+      2 | Fernando Caetano Moreira Filho
+   TOTAL: 36 | banco novos=19
+
+[20:52:34] >>> Lucas Rafael Antunes Moreira | https://www.mgl.com.br
+    [cache] site ja raspado -> 5 imoveis
+    [OK] imoveis com 1a praca futura: 5
+[20:52:34] >>> Francisco Jonnathan Santos Freitas | https://www.franciscofreitasleiloes.com.br
+    [OK] imoveis com 1a praca futura: 2
+
+----- REPORT PARCIAL (20:58) sites 18/23 -----
+      4 | Jose Ivan de Souza Rabelo
+      0 | Hildegards Azevedo Santos Junior
+      5 | Carlos Vinicius de Carvalho Mascarenhas
+      0 | Carlos Gustavo Santos Fiel
+      0 | Adilson Bento de Araujo
+     13 | Valerio Cesar de Azevedo Deda
+      2 | Cristiane de Almeida Rabelo Gois
+      0 | Alex Willian Hope
+      0 | Antonio Romero Ferreira da Silva
+      0 | Thiago Barros Cardoso
+      0 | Adelane Pedrozo Ferreira
+      5 | Daniel Elias Garcia
+      0 | Osman Sobral e Silva
+      0 | Fabio Goncalves Barbosa
+      5 | Jonas Gabriel Antunes Moreira
+      2 | Fernando Caetano Moreira Filho
+      5 | Lucas Rafael Antunes Moreira
+      2 | Francisco Jonnathan Santos Freitas
+   TOTAL: 43 | banco novos=19
+
+[20:58:13] >>> Erick Soarez Teles | https://www.clicleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:01:22] >>> Rodrigo Aparecido Rigolon da Silva | https://www.rigolonleiloes.com.br
+    [OK] imoveis com 1a praca futura: 11
+
+----- REPORT PARCIAL (21:04) sites 20/23 -----
+      4 | Jose Ivan de Souza Rabelo
+      0 | Hildegards Azevedo Santos Junior
+      5 | Carlos Vinicius de Carvalho Mascarenhas
+      0 | Carlos Gustavo Santos Fiel
+      0 | Adilson Bento de Araujo
+     13 | Valerio Cesar de Azevedo Deda
+      2 | Cristiane de Almeida Rabelo Gois
+      0 | Alex Willian Hope
+      0 | Antonio Romero Ferreira da Silva
+      0 | Thiago Barros Cardoso
+      0 | Adelane Pedrozo Ferreira
+      5 | Daniel Elias Garcia
+      0 | Osman Sobral e Silva
+      0 | Fabio Goncalves Barbosa
+      5 | Jonas Gabriel Antunes Moreira
+      2 | Fernando Caetano Moreira Filho
+      5 | Lucas Rafael Antunes Moreira
+      2 | Francisco Jonnathan Santos Freitas
+      0 | Erick Soarez Teles
+     11 | Rodrigo Aparecido Rigolon da Silva
+   TOTAL: 54 | banco novos=19
+
+[21:04:25] >>> Helcio Kronberg | https://www.kronleiloes.com.br
+    [OK] imoveis com 1a praca futura: 1
+[21:07:25] >>> Paulo Cezar Rocha Teixeira | https://www.leiloesjudiciaisbahia.com.br
+    [OK] imoveis com 1a praca futura: 6
+
+----- REPORT PARCIAL (21:10) sites 22/23 -----
+      4 | Jose Ivan de Souza Rabelo
+      0 | Hildegards Azevedo Santos Junior
+      5 | Carlos Vinicius de Carvalho Mascarenhas
+      0 | Carlos Gustavo Santos Fiel
+      0 | Adilson Bento de Araujo
+     13 | Valerio Cesar de Azevedo Deda
+      2 | Cristiane de Almeida Rabelo Gois
+      0 | Alex Willian Hope
+      0 | Antonio Romero Ferreira da Silva
+      0 | Thiago Barros Cardoso
+      0 | Adelane Pedrozo Ferreira
+      5 | Daniel Elias Garcia
+      0 | Osman Sobral e Silva
+      0 | Fabio Goncalves Barbosa
+      5 | Jonas Gabriel Antunes Moreira
+      2 | Fernando Caetano Moreira Filho
+      5 | Lucas Rafael Antunes Moreira
+      2 | Francisco Jonnathan Santos Freitas
+      0 | Erick Soarez Teles
+     11 | Rodrigo Aparecido Rigolon da Silva
+      1 | Helcio Kronberg
+      6 | Paulo Cezar Rocha Teixeira
+   TOTAL: 61 | banco novos=19
+
+[21:10:31] >>> Renato Schlobach Moyses | https://www.rmoyses.com.br
+    [OK] imoveis com 1a praca futura: 0
+
+[CSV] C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_se_2026-06-09.csv
+
+========================================================================
+RELATORIO FINAL
+========================================================================
+     13 | Valerio Cesar de Azevedo Deda -> ok (13)
+     11 | Rodrigo Aparecido Rigolon da Silva -> ok (11)
+      6 | Paulo Cezar Rocha Teixeira -> ok (6)
+      5 | Carlos Vinicius de Carvalho Mascarenhas -> ok (5)
+      5 | Daniel Elias Garcia -> ok (5)
+      5 | Jonas Gabriel Antunes Moreira -> ok (5)
+      5 | Lucas Rafael Antunes Moreira -> ok (5)
+      4 | Jose Ivan de Souza Rabelo -> ok (4)
+      2 | Cristiane de Almeida Rabelo Gois -> ok (2)
+      2 | Fernando Caetano Moreira Filho -> ok (2)
+      2 | Francisco Jonnathan Santos Freitas -> ok (2)
+      1 | Helcio Kronberg -> ok (1)
+      0 | Hildegards Azevedo Santos Junior -> sem site (nao raspavel)
+      0 | Carlos Gustavo Santos Fiel -> ok (0)
+      0 | Adilson Bento de Araujo -> ok (0)
+      0 | Alex Willian Hope -> ok (0)
+      0 | Antonio Romero Ferreira da Silva -> ok (0)
+      0 | Thiago Barros Cardoso -> ok (0)
+      0 | Adelane Pedrozo Ferreira -> sem site (nao raspavel)
+      0 | Osman Sobral e Silva -> ok (0)
+      0 | Fabio Goncalves Barbosa -> ok (0)
+      0 | Erick Soarez Teles -> ok (0)
+      0 | Renato Schlobach Moyses -> ok (0)
+
+Total imoveis (1a praca futura): 61
+Banco: novos=19 ja_existiam=42 | Erros: 0

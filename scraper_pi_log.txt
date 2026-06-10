@@ -1,0 +1,143 @@
+========================================================================
+SCRAPER PI/JUCEPI | captura 09/06/2026 20:54 | 19 leiloeiros
+========================================================================
+[20:54:28] >>> Suzana Conceição Medeiros de Carvalho | https://www.suzanacarvalholeiloes.com
+    [X] inacessivel
+[20:54:32] >>> Ítalo Trindade Moura | https://www.italoleiloes.com
+    [OK] imoveis com 1a praca futura: 3
+[20:56:28] >>> Erico Sobral Soares | https://www.vipleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[20:57:37] >>> José David Gonçalves de Melo | https://www.jdleiloes.com.br
+    [OK] imoveis com 1a praca futura: 9
+
+----- REPORT PARCIAL (21:00) sites 4/19 -----
+      0 | Suzana Conceição Medeiros de Carvalho
+      3 | Ítalo Trindade Moura
+      0 | Erico Sobral Soares
+      9 | José David Gonçalves de Melo
+   TOTAL: 12 | banco novos=3
+
+[21:00:01] >>> Alex Willian Hoppe | https://www.hoppeleiloes.com.br
+    [OK] imoveis com 1a praca futura: 0
+[21:02:56] >>> Sergio Roberto Nogueira Lima | (sem site)
+    [-] sem site cadastrado - pulado
+[21:02:56] >>> Daniel Elias Garcia | https://www.dgleiloes.com.br
+    [OK] imoveis com 1a praca futura: 5
+
+----- REPORT PARCIAL (21:07) sites 7/19 -----
+      0 | Suzana Conceição Medeiros de Carvalho
+      3 | Ítalo Trindade Moura
+      0 | Erico Sobral Soares
+      9 | José David Gonçalves de Melo
+      0 | Alex Willian Hoppe
+      0 | Sergio Roberto Nogueira Lima
+      5 | Daniel Elias Garcia
+   TOTAL: 17 | banco novos=3
+
+[21:07:40] >>> Murilo Gonçalves Ramos | (sem site)
+    [-] sem site cadastrado - pulado
+[21:07:40] >>> Italo Trindade Moura Filho | (sem site)
+    [-] sem site cadastrado - pulado
+[21:07:40] >>> Fernando Caetano Moreira Filho | https://www.fernandoleiloeiro.com.br
+    [OK] imoveis com 1a praca futura: 2
+[21:09:49] >>> Jonas Gabriel Antunes Moreira | (sem site)
+    [-] sem site cadastrado - pulado
+[21:09:49] >>> Lucas Rafael Antunes Moreira | (sem site)
+    [-] sem site cadastrado - pulado
+[21:09:49] >>> Dora Plat | https://www.portalzuk.com.br
+    [OK] imoveis com 1a praca futura: 11
+
+----- REPORT PARCIAL (21:12) sites 13/19 -----
+      0 | Suzana Conceição Medeiros de Carvalho
+      3 | Ítalo Trindade Moura
+      0 | Erico Sobral Soares
+      9 | José David Gonçalves de Melo
+      0 | Alex Willian Hoppe
+      0 | Sergio Roberto Nogueira Lima
+      5 | Daniel Elias Garcia
+      0 | Murilo Gonçalves Ramos
+      0 | Italo Trindade Moura Filho
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+     11 | Dora Plat
+   TOTAL: 30 | banco novos=5
+
+[21:12:47] >>> Maurício José de Sousa Costa | https://www.mjleiloes.com.br
+    [OK] imoveis com 1a praca futura: 14
+
+----- REPORT PARCIAL (21:17) sites 14/19 -----
+      0 | Suzana Conceição Medeiros de Carvalho
+      3 | Ítalo Trindade Moura
+      0 | Erico Sobral Soares
+      9 | José David Gonçalves de Melo
+      0 | Alex Willian Hoppe
+      0 | Sergio Roberto Nogueira Lima
+      5 | Daniel Elias Garcia
+      0 | Murilo Gonçalves Ramos
+      0 | Italo Trindade Moura Filho
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+     11 | Dora Plat
+     14 | Maurício José de Sousa Costa
+   TOTAL: 44 | banco novos=19
+
+[21:17:59] >>> Rodrigo Aparecido Rigolon da Silva | https://www.rigolonleiloes.com.br
+    [OK] imoveis com 1a praca futura: 11
+[21:20:56] >>> Paulo Cezar Rocha Teixeira | https://www.leiloesjudiciaisbahia.com.br
+    [OK] imoveis com 1a praca futura: 6
+
+----- REPORT PARCIAL (21:24) sites 16/19 -----
+      0 | Suzana Conceição Medeiros de Carvalho
+      3 | Ítalo Trindade Moura
+      0 | Erico Sobral Soares
+      9 | José David Gonçalves de Melo
+      0 | Alex Willian Hoppe
+      0 | Sergio Roberto Nogueira Lima
+      5 | Daniel Elias Garcia
+      0 | Murilo Gonçalves Ramos
+      0 | Italo Trindade Moura Filho
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+     11 | Dora Plat
+     14 | Maurício José de Sousa Costa
+     11 | Rodrigo Aparecido Rigolon da Silva
+      6 | Paulo Cezar Rocha Teixeira
+   TOTAL: 61 | banco novos=19
+
+[21:24:00] >>> Andrezza da Cruz Peron | (sem site)
+    [-] sem site cadastrado - pulado
+[21:24:00] >>> Miguel Alexandrino Monteiro Neto | https://www.leiloesmonteiro.com.br
+    [OK] imoveis com 1a praca futura: 3
+[21:26:40] >>> Eduardo Sydney Bezerra de Girao | (sem site)
+    [-] sem site cadastrado - pulado
+
+[CSV] C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_pi_2026-06-09.csv
+
+========================================================================
+RELATORIO FINAL
+========================================================================
+     14 | Maurício José de Sousa Costa -> ok (14)
+     11 | Dora Plat -> ok (11)
+     11 | Rodrigo Aparecido Rigolon da Silva -> ok (11)
+      9 | José David Gonçalves de Melo -> ok (9)
+      6 | Paulo Cezar Rocha Teixeira -> ok (6)
+      5 | Daniel Elias Garcia -> ok (5)
+      3 | Ítalo Trindade Moura -> ok (3)
+      3 | Miguel Alexandrino Monteiro Neto -> ok (3)
+      2 | Fernando Caetano Moreira Filho -> ok (2)
+      0 | Suzana Conceição Medeiros de Carvalho -> inacessivel
+      0 | Erico Sobral Soares -> ok (0)
+      0 | Alex Willian Hoppe -> ok (0)
+      0 | Sergio Roberto Nogueira Lima -> sem site (nao raspavel)
+      0 | Murilo Gonçalves Ramos -> sem site (nao raspavel)
+      0 | Italo Trindade Moura Filho -> sem site (nao raspavel)
+      0 | Jonas Gabriel Antunes Moreira -> sem site (nao raspavel)
+      0 | Lucas Rafael Antunes Moreira -> sem site (nao raspavel)
+      0 | Andrezza da Cruz Peron -> sem site (nao raspavel)
+      0 | Eduardo Sydney Bezerra de Girao -> sem site (nao raspavel)
+
+Total imoveis (1a praca futura): 64
+Banco: novos=19 ja_existiam=45 | Erros: 1

@@ -68,3 +68,1281 @@ SCRAPER BAHIA/JUCEB | captura 09/06/2026 18:35 | 88 leiloeiros
 [18:55:12] >>> Josecelli Kildare Fraga Gomes | (sem site)
     [-] sem site cadastrado - pulado
 [18:55:12] >>> Péricles Luciano Santos de Jesus | https://www.centraldosleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[18:56:07] >>> Smith Pereira da Silva Neto | (sem site)
+    [-] sem site cadastrado - pulado
+[18:56:07] >>> Clauberto Fernandes Nascimento Júnior | https://www.hatoryleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[18:56:45] >>> Tábata Mineiro Bezerra | https://www.bezerraleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[18:57:26] >>> Viriato Domingues Cravo | https://www.cravoleiloes.com.br
+    cards candidatos: 5
+    [OK] imoveis com 1a praca futura: 5
+
+----- REPORT PARCIAL (18:58) sites 18/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+   TOTAL: 24 | banco novos=15
+
+[18:58:55] >>> Kátia Cerqueira da Silva Casaes | https://www.kcleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[19:01:05] >>> João Luiz de França Neto | https://www.jocaleiloesagro.com
+    [X] inacessivel
+[19:01:08] >>> Rafaela Santos Ribeiro do Vale | https://www.rafaelaribeiroleiloes.com.br
+    cards candidatos: 8
+    [OK] imoveis com 1a praca futura: 8
+[19:03:35] >>> Ivana Montenegro Castelo Branco Rocha | http://www.patiorochaleiloes.com.br
+    cards candidatos: 26
+    [OK] imoveis com 1a praca futura: 2
+
+----- REPORT PARCIAL (19:08) sites 22/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+   TOTAL: 34 | banco novos=25
+
+[19:08:00] >>> João Paulo Mineiro Bezerra | http://www.bezerraleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[19:08:58] >>> Nina Chamadoiro Matos | (sem site)
+    [-] sem site cadastrado - pulado
+[19:08:58] >>> José David Gonçalves de Melo | http://www.jdleiloes.com.br
+    cards candidatos: 10
+    [OK] imoveis com 1a praca futura: 10
+[19:12:24] >>> Gutemberg da Silva Araújo | https://www.gutembergaraujoleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (19:14) sites 26/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+   TOTAL: 44 | banco novos=35
+
+[19:14:58] >>> Teófilo Santos de Jesus | https://www.centraldosleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[19:15:43] >>> Anderson Douglas Gali Falleiros | https://www.falleirosleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[19:17:49] >>> Maria Isabel Brito Mendes Palma Soeiro | https://isabelleiloes.com.br
+    cards candidatos: 18
+    [OK] imoveis com 1a praca futura: 16
+
+----- REPORT PARCIAL (19:21) sites 29/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+   TOTAL: 60 | banco novos=44
+
+[19:21:48] >>> Alex Willian Hoppe | https://www.hoppeleiloes.com.br
+    cards candidatos: 1
+    [OK] imoveis com 1a praca futura: 0
+[19:24:02] >>> Davi Borges de Aquino | https://www.alfaleiloes.com
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (19:27) sites 31/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+   TOTAL: 60 | banco novos=44
+
+[19:27:54] >>> Maurice da Silva Oliveira | https://www.msoleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[19:28:02] >>> Tiago Tessler Blecher | https://www.webleiloes.com.br
+    cards candidatos: 144
+    [OK] imoveis com 1a praca futura: 144
+[19:28:12] >>> Fernando Caetano Moreira Filho | https://www.fernandoleiloeiro.com.br
+    cards candidatos: 2
+    [OK] imoveis com 1a praca futura: 2
+[19:29:12] >>> Jonas Gabriel Antunes Moreira | https://www.jonasleiloeiro.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[19:30:45] >>> Lucas Rafael Antunes Moreira | https://www.lucasleiloeiro.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[19:32:31] >>> Rafaela Melo Ferreira Marzano | https://www.palaciodosleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (19:33) sites 37/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+      0 | Maurice da Silva Oliveira
+    144 | Tiago Tessler Blecher
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+      0 | Rafaela Melo Ferreira Marzano
+   TOTAL: 206 | banco novos=47
+
+[19:33:07] >>> Angela Saraiva Portes | https://www.saraivaleiloes.com.br
+    cards candidatos: 46
+    [OK] imoveis com 1a praca futura: 13
+[19:36:23] >>> Jamile Santana Cerqueira | https://www.ccjleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (19:38) sites 39/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+      0 | Maurice da Silva Oliveira
+    144 | Tiago Tessler Blecher
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+      0 | Rafaela Melo Ferreira Marzano
+     13 | Angela Saraiva Portes
+      0 | Jamile Santana Cerqueira
+   TOTAL: 219 | banco novos=60
+
+[19:38:29] >>> Uesley Da Silva Oliveira Dos Santos | https://www.carrollruralleiloes.com
+    [X] inacessivel
+[19:38:31] >>> Marco Túlio Montenegro Cavalcanti Dias | https://www.lancecertoleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[19:41:20] >>> Daniel Elias Garcia | https://www.danielgarcialeiloes.com.br
+    cards candidatos: 7
+    [OK] imoveis com 1a praca futura: 5
+
+----- REPORT PARCIAL (19:44) sites 42/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+      0 | Maurice da Silva Oliveira
+    144 | Tiago Tessler Blecher
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+      0 | Rafaela Melo Ferreira Marzano
+     13 | Angela Saraiva Portes
+      0 | Jamile Santana Cerqueira
+      0 | Uesley Da Silva Oliveira Dos Santos
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      5 | Daniel Elias Garcia
+   TOTAL: 224 | banco novos=60
+
+[19:44:39] >>> Rodrigo Schmitz | https://www.hammer.lel.br
+    cards candidatos: 15
+    [OK] imoveis com 1a praca futura: 6
+[19:49:02] >>> Marciano Aguiar Carneiro | https://vecchileiloes.com
+    [X] inacessivel
+[19:49:05] >>> Camila Correia Vecchi Aguiar | https://vecchileiloes.com
+    [X] inacessivel
+[19:49:06] >>> Priscilla Oliveira de França | (sem site)
+    [-] sem site cadastrado - pulado
+[19:49:06] >>> Eduardo Schmitz | https://www.clicleiloes.com
+    [X] inacessivel
+[19:49:08] >>> Emílio Matos Rocha | https://www.emiliomatosleiloes.com.br
+    cards candidatos: 15
+    [OK] imoveis com 1a praca futura: 7
+
+----- REPORT PARCIAL (19:52) sites 48/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+      0 | Maurice da Silva Oliveira
+    144 | Tiago Tessler Blecher
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+      0 | Rafaela Melo Ferreira Marzano
+     13 | Angela Saraiva Portes
+      0 | Jamile Santana Cerqueira
+      0 | Uesley Da Silva Oliveira Dos Santos
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      5 | Daniel Elias Garcia
+      6 | Rodrigo Schmitz
+      0 | Marciano Aguiar Carneiro
+      0 | Camila Correia Vecchi Aguiar
+      0 | Priscilla Oliveira de França
+      0 | Eduardo Schmitz
+      7 | Emílio Matos Rocha
+   TOTAL: 237 | banco novos=73
+
+[19:52:19] >>> Antonio Luiz Guariglia | https://www.guariglialeiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[19:54:58] >>> Marco Antônio Barbosa de Oliveira Jr | https://www.marcoantonioleiloeiro.com.br
+    cards candidatos: 12
+    [OK] imoveis com 1a praca futura: 6
+
+----- REPORT PARCIAL (19:58) sites 50/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+      0 | Maurice da Silva Oliveira
+    144 | Tiago Tessler Blecher
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+      0 | Rafaela Melo Ferreira Marzano
+     13 | Angela Saraiva Portes
+      0 | Jamile Santana Cerqueira
+      0 | Uesley Da Silva Oliveira Dos Santos
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      5 | Daniel Elias Garcia
+      6 | Rodrigo Schmitz
+      0 | Marciano Aguiar Carneiro
+      0 | Camila Correia Vecchi Aguiar
+      0 | Priscilla Oliveira de França
+      0 | Eduardo Schmitz
+      7 | Emílio Matos Rocha
+      0 | Antonio Luiz Guariglia
+      6 | Marco Antônio Barbosa de Oliveira Jr
+   TOTAL: 243 | banco novos=74
+
+[19:58:38] >>> Fábio Manoel Guimarães | https://www.fabioleiloes.com.br
+    cards candidatos: 6
+    [OK] imoveis com 1a praca futura: 1
+[20:01:34] >>> Celso Alves Cunha | https://www.celsocunhaleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[20:02:48] >>> Pietrangelo Rosalem | (sem site)
+    [-] sem site cadastrado - pulado
+[20:02:48] >>> Jussiara Santos Ermano Sukiennik | https://www.jussiaraleiloes.com
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (20:04) sites 54/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+      0 | Maurice da Silva Oliveira
+    144 | Tiago Tessler Blecher
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+      0 | Rafaela Melo Ferreira Marzano
+     13 | Angela Saraiva Portes
+      0 | Jamile Santana Cerqueira
+      0 | Uesley Da Silva Oliveira Dos Santos
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      5 | Daniel Elias Garcia
+      6 | Rodrigo Schmitz
+      0 | Marciano Aguiar Carneiro
+      0 | Camila Correia Vecchi Aguiar
+      0 | Priscilla Oliveira de França
+      0 | Eduardo Schmitz
+      7 | Emílio Matos Rocha
+      0 | Antonio Luiz Guariglia
+      6 | Marco Antônio Barbosa de Oliveira Jr
+      1 | Fábio Manoel Guimarães
+      0 | Celso Alves Cunha
+      0 | Pietrangelo Rosalem
+      0 | Jussiara Santos Ermano Sukiennik
+   TOTAL: 244 | banco novos=75
+
+[20:04:36] >>> Erick Soares Teles | https://positivoleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[20:05:23] >>> Thais Silva Moreira de Sousa | (sem site)
+    [-] sem site cadastrado - pulado
+[20:05:23] >>> Alexsander Pretti Domingos | (sem site)
+    [-] sem site cadastrado - pulado
+[20:05:23] >>> Alessandra Cristine Aparecida de Carlos | https://alessandraleiloes.com.br
+    cards candidatos: 7
+    [OK] imoveis com 1a praca futura: 7
+[20:07:56] >>> Daniel Melo Cruz | https://grupolance.com.br
+    cards candidatos: 108
+    [OK] imoveis com 1a praca futura: 7
+
+----- REPORT PARCIAL (20:11) sites 59/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+      0 | Maurice da Silva Oliveira
+    144 | Tiago Tessler Blecher
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+      0 | Rafaela Melo Ferreira Marzano
+     13 | Angela Saraiva Portes
+      0 | Jamile Santana Cerqueira
+      0 | Uesley Da Silva Oliveira Dos Santos
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      5 | Daniel Elias Garcia
+      6 | Rodrigo Schmitz
+      0 | Marciano Aguiar Carneiro
+      0 | Camila Correia Vecchi Aguiar
+      0 | Priscilla Oliveira de França
+      0 | Eduardo Schmitz
+      7 | Emílio Matos Rocha
+      0 | Antonio Luiz Guariglia
+      6 | Marco Antônio Barbosa de Oliveira Jr
+      1 | Fábio Manoel Guimarães
+      0 | Celso Alves Cunha
+      0 | Pietrangelo Rosalem
+      0 | Jussiara Santos Ermano Sukiennik
+      0 | Erick Soares Teles
+      0 | Thais Silva Moreira de Sousa
+      0 | Alexsander Pretti Domingos
+      7 | Alessandra Cristine Aparecida de Carlos
+      7 | Daniel Melo Cruz
+   TOTAL: 258 | banco novos=84
+
+[20:11:37] >>> Flávio Alexandre Alves Da Costa e Silva | https://www.hastaleilao.com.br
+    cards candidatos: 1
+    [OK] imoveis com 1a praca futura: 1
+[20:13:34] >>> Irani Flores | https://leilaobrasil.com.br
+    cards candidatos: 150
+    [OK] imoveis com 1a praca futura: 150
+[20:14:02] >>> Cristiane Borguetti Moraes Lopes | https://lopesleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[20:14:09] >>> Lorenna Vita Varjão de Jesus | (sem site)
+    [-] sem site cadastrado - pulado
+[20:14:09] >>> Iane Santos da Costa | (sem site)
+    [-] sem site cadastrado - pulado
+[20:14:09] >>> Dora Plat | https://www.portalzuk.com.br
+    cards candidatos: 32
+    [OK] imoveis com 1a praca futura: 9
+
+----- REPORT PARCIAL (20:16) sites 65/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+      0 | Maurice da Silva Oliveira
+    144 | Tiago Tessler Blecher
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+      0 | Rafaela Melo Ferreira Marzano
+     13 | Angela Saraiva Portes
+      0 | Jamile Santana Cerqueira
+      0 | Uesley Da Silva Oliveira Dos Santos
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      5 | Daniel Elias Garcia
+      6 | Rodrigo Schmitz
+      0 | Marciano Aguiar Carneiro
+      0 | Camila Correia Vecchi Aguiar
+      0 | Priscilla Oliveira de França
+      0 | Eduardo Schmitz
+      7 | Emílio Matos Rocha
+      0 | Antonio Luiz Guariglia
+      6 | Marco Antônio Barbosa de Oliveira Jr
+      1 | Fábio Manoel Guimarães
+      0 | Celso Alves Cunha
+      0 | Pietrangelo Rosalem
+      0 | Jussiara Santos Ermano Sukiennik
+      0 | Erick Soares Teles
+      0 | Thais Silva Moreira de Sousa
+      0 | Alexsander Pretti Domingos
+      7 | Alessandra Cristine Aparecida de Carlos
+      7 | Daniel Melo Cruz
+      1 | Flávio Alexandre Alves Da Costa e Silva
+    150 | Irani Flores
+      0 | Cristiane Borguetti Moraes Lopes
+      0 | Lorenna Vita Varjão de Jesus
+      0 | Iane Santos da Costa
+      9 | Dora Plat
+   TOTAL: 418 | banco novos=216
+
+[20:16:45] >>> Eloyse Mirella Tavares Ramos | (sem site)
+    [-] sem site cadastrado - pulado
+[20:16:45] >>> Anna Karoline Santos do Amaral | (sem site)
+    [-] sem site cadastrado - pulado
+[20:16:45] >>> Catiele Borges Leffa | https://leffaleiloes.com.br
+    cards candidatos: 28
+    [OK] imoveis com 1a praca futura: 18
+
+----- REPORT PARCIAL (20:24) sites 68/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+      0 | Maurice da Silva Oliveira
+    144 | Tiago Tessler Blecher
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+      0 | Rafaela Melo Ferreira Marzano
+     13 | Angela Saraiva Portes
+      0 | Jamile Santana Cerqueira
+      0 | Uesley Da Silva Oliveira Dos Santos
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      5 | Daniel Elias Garcia
+      6 | Rodrigo Schmitz
+      0 | Marciano Aguiar Carneiro
+      0 | Camila Correia Vecchi Aguiar
+      0 | Priscilla Oliveira de França
+      0 | Eduardo Schmitz
+      7 | Emílio Matos Rocha
+      0 | Antonio Luiz Guariglia
+      6 | Marco Antônio Barbosa de Oliveira Jr
+      1 | Fábio Manoel Guimarães
+      0 | Celso Alves Cunha
+      0 | Pietrangelo Rosalem
+      0 | Jussiara Santos Ermano Sukiennik
+      0 | Erick Soares Teles
+      0 | Thais Silva Moreira de Sousa
+      0 | Alexsander Pretti Domingos
+      7 | Alessandra Cristine Aparecida de Carlos
+      7 | Daniel Melo Cruz
+      1 | Flávio Alexandre Alves Da Costa e Silva
+    150 | Irani Flores
+      0 | Cristiane Borguetti Moraes Lopes
+      0 | Lorenna Vita Varjão de Jesus
+      0 | Iane Santos da Costa
+      9 | Dora Plat
+      0 | Eloyse Mirella Tavares Ramos
+      0 | Anna Karoline Santos do Amaral
+     18 | Catiele Borges Leffa
+   TOTAL: 436 | banco novos=225
+
+[20:24:23] >>> Paulo Alexandre Heisler | (sem site)
+    [-] sem site cadastrado - pulado
+[20:24:23] >>> Renan Souza Silva | https://silvaleiloes.com.br
+    cards candidatos: 4
+    [OK] imoveis com 1a praca futura: 4
+[20:27:10] >>> Luiz Roberto Brenneken | https://lubreleiloes.com.br
+    [X] inacessivel
+[20:27:15] >>> Alberto José Marchi Macedo | https://albertomacedoleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[20:28:23] >>> Aline Souza Flores | https://leilaobrasil.com.br
+    cards candidatos: 150
+    [OK] imoveis com 1a praca futura: 150
+[20:29:03] >>> Marcus Vinicius Yoshimi Uebara | https://destakleiloes.com.br
+    cards candidatos: 7
+    [OK] imoveis com 1a praca futura: 7
+
+----- REPORT PARCIAL (20:31) sites 74/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+      0 | Maurice da Silva Oliveira
+    144 | Tiago Tessler Blecher
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+      0 | Rafaela Melo Ferreira Marzano
+     13 | Angela Saraiva Portes
+      0 | Jamile Santana Cerqueira
+      0 | Uesley Da Silva Oliveira Dos Santos
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      5 | Daniel Elias Garcia
+      6 | Rodrigo Schmitz
+      0 | Marciano Aguiar Carneiro
+      0 | Camila Correia Vecchi Aguiar
+      0 | Priscilla Oliveira de França
+      0 | Eduardo Schmitz
+      7 | Emílio Matos Rocha
+      0 | Antonio Luiz Guariglia
+      6 | Marco Antônio Barbosa de Oliveira Jr
+      1 | Fábio Manoel Guimarães
+      0 | Celso Alves Cunha
+      0 | Pietrangelo Rosalem
+      0 | Jussiara Santos Ermano Sukiennik
+      0 | Erick Soares Teles
+      0 | Thais Silva Moreira de Sousa
+      0 | Alexsander Pretti Domingos
+      7 | Alessandra Cristine Aparecida de Carlos
+      7 | Daniel Melo Cruz
+      1 | Flávio Alexandre Alves Da Costa e Silva
+    150 | Irani Flores
+      0 | Cristiane Borguetti Moraes Lopes
+      0 | Lorenna Vita Varjão de Jesus
+      0 | Iane Santos da Costa
+      9 | Dora Plat
+      0 | Eloyse Mirella Tavares Ramos
+      0 | Anna Karoline Santos do Amaral
+     18 | Catiele Borges Leffa
+      0 | Paulo Alexandre Heisler
+      4 | Renan Souza Silva
+      0 | Luiz Roberto Brenneken
+      0 | Alberto José Marchi Macedo
+    150 | Aline Souza Flores
+      7 | Marcus Vinicius Yoshimi Uebara
+   TOTAL: 597 | banco novos=229
+
+[20:31:42] >>> Gustavo Moretto G. de Oliveira | https://gustavomorettoleiloeiro.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[20:31:49] >>> Hélcio Kronberg | https://www.kronleiloes.com.br
+    cards candidatos: 2
+    [OK] imoveis com 1a praca futura: 1
+[20:34:13] >>> Gileno Almeida de Oliveira | (sem site)
+    [-] sem site cadastrado - pulado
+[20:34:13] >>> Rita Christianne Schlang de Carvalho | (sem site)
+    [-] sem site cadastrado - pulado
+[20:34:13] >>> Cristiane Barros da Mota Balbino | (sem site)
+    [-] sem site cadastrado - pulado
+[20:34:13] >>> Rodrigo Aparecido Rigolon Da Silva | https://rigolonleiloes.com.br
+    cards candidatos: 5
+    [OK] imoveis com 1a praca futura: 5
+
+----- REPORT PARCIAL (20:36) sites 80/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+      0 | Maurice da Silva Oliveira
+    144 | Tiago Tessler Blecher
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+      0 | Rafaela Melo Ferreira Marzano
+     13 | Angela Saraiva Portes
+      0 | Jamile Santana Cerqueira
+      0 | Uesley Da Silva Oliveira Dos Santos
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      5 | Daniel Elias Garcia
+      6 | Rodrigo Schmitz
+      0 | Marciano Aguiar Carneiro
+      0 | Camila Correia Vecchi Aguiar
+      0 | Priscilla Oliveira de França
+      0 | Eduardo Schmitz
+      7 | Emílio Matos Rocha
+      0 | Antonio Luiz Guariglia
+      6 | Marco Antônio Barbosa de Oliveira Jr
+      1 | Fábio Manoel Guimarães
+      0 | Celso Alves Cunha
+      0 | Pietrangelo Rosalem
+      0 | Jussiara Santos Ermano Sukiennik
+      0 | Erick Soares Teles
+      0 | Thais Silva Moreira de Sousa
+      0 | Alexsander Pretti Domingos
+      7 | Alessandra Cristine Aparecida de Carlos
+      7 | Daniel Melo Cruz
+      1 | Flávio Alexandre Alves Da Costa e Silva
+    150 | Irani Flores
+      0 | Cristiane Borguetti Moraes Lopes
+      0 | Lorenna Vita Varjão de Jesus
+      0 | Iane Santos da Costa
+      9 | Dora Plat
+      0 | Eloyse Mirella Tavares Ramos
+      0 | Anna Karoline Santos do Amaral
+     18 | Catiele Borges Leffa
+      0 | Paulo Alexandre Heisler
+      4 | Renan Souza Silva
+      0 | Luiz Roberto Brenneken
+      0 | Alberto José Marchi Macedo
+    150 | Aline Souza Flores
+      7 | Marcus Vinicius Yoshimi Uebara
+      0 | Gustavo Moretto G. de Oliveira
+      1 | Hélcio Kronberg
+      0 | Gileno Almeida de Oliveira
+      0 | Rita Christianne Schlang de Carvalho
+      0 | Cristiane Barros da Mota Balbino
+      5 | Rodrigo Aparecido Rigolon Da Silva
+   TOTAL: 603 | banco novos=235
+
+[20:36:57] >>> Eduardo Gomes | https://leiloeiroeduardo.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[20:37:49] >>> Francisco Jonnathan Santos Freitas | https://www.franciscofreitasleiloes.com.br
+    cards candidatos: 5
+    [OK] imoveis com 1a praca futura: 2
+
+----- REPORT PARCIAL (20:42) sites 82/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+      0 | Maurice da Silva Oliveira
+    144 | Tiago Tessler Blecher
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+      0 | Rafaela Melo Ferreira Marzano
+     13 | Angela Saraiva Portes
+      0 | Jamile Santana Cerqueira
+      0 | Uesley Da Silva Oliveira Dos Santos
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      5 | Daniel Elias Garcia
+      6 | Rodrigo Schmitz
+      0 | Marciano Aguiar Carneiro
+      0 | Camila Correia Vecchi Aguiar
+      0 | Priscilla Oliveira de França
+      0 | Eduardo Schmitz
+      7 | Emílio Matos Rocha
+      0 | Antonio Luiz Guariglia
+      6 | Marco Antônio Barbosa de Oliveira Jr
+      1 | Fábio Manoel Guimarães
+      0 | Celso Alves Cunha
+      0 | Pietrangelo Rosalem
+      0 | Jussiara Santos Ermano Sukiennik
+      0 | Erick Soares Teles
+      0 | Thais Silva Moreira de Sousa
+      0 | Alexsander Pretti Domingos
+      7 | Alessandra Cristine Aparecida de Carlos
+      7 | Daniel Melo Cruz
+      1 | Flávio Alexandre Alves Da Costa e Silva
+    150 | Irani Flores
+      0 | Cristiane Borguetti Moraes Lopes
+      0 | Lorenna Vita Varjão de Jesus
+      0 | Iane Santos da Costa
+      9 | Dora Plat
+      0 | Eloyse Mirella Tavares Ramos
+      0 | Anna Karoline Santos do Amaral
+     18 | Catiele Borges Leffa
+      0 | Paulo Alexandre Heisler
+      4 | Renan Souza Silva
+      0 | Luiz Roberto Brenneken
+      0 | Alberto José Marchi Macedo
+    150 | Aline Souza Flores
+      7 | Marcus Vinicius Yoshimi Uebara
+      0 | Gustavo Moretto G. de Oliveira
+      1 | Hélcio Kronberg
+      0 | Gileno Almeida de Oliveira
+      0 | Rita Christianne Schlang de Carvalho
+      0 | Cristiane Barros da Mota Balbino
+      5 | Rodrigo Aparecido Rigolon Da Silva
+      0 | Eduardo Gomes
+      2 | Francisco Jonnathan Santos Freitas
+   TOTAL: 605 | banco novos=235
+
+[20:42:20] >>> Danyele Lima Cavalcanti Lira | (sem site)
+    [-] sem site cadastrado - pulado
+[20:42:20] >>> Renato Guedes Rocha | https://rioleiloes.com.br
+    cards candidatos: 16
+    [OK] imoveis com 1a praca futura: 15
+[20:46:12] >>> Renato Schlobach Moyses | https://rmoyses.com.br
+    cards candidatos: 2
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (20:47) sites 85/88 -----
+      4 | Hilda Emília de Souza Costa Lima
+      6 | Paulo Cézar Rocha Teixeira
+      0 | Orlando José Lacerda Pereira
+      0 | Tânia Maria de Abreu
+      0 | Oscar de Menezes Palmeira
+      0 | Miguel Paulo Rodrigues da Silva
+      0 | Eustácio Medeiros Neves
+      0 | Adilson Guimarães Araújo
+      0 | Arthur Ferreira Nunes
+      5 | Rudival Almeida Gomes Júnior
+      0 | Antônio Romero Ferreira da Silva
+      4 | Maurício Paes Inácio
+      0 | Josecelli Kildare Fraga Gomes
+      0 | Péricles Luciano Santos de Jesus
+      0 | Smith Pereira da Silva Neto
+      0 | Clauberto Fernandes Nascimento Júnior
+      0 | Tábata Mineiro Bezerra
+      5 | Viriato Domingues Cravo
+      0 | Kátia Cerqueira da Silva Casaes
+      0 | João Luiz de França Neto
+      8 | Rafaela Santos Ribeiro do Vale
+      2 | Ivana Montenegro Castelo Branco Rocha
+      0 | João Paulo Mineiro Bezerra
+      0 | Nina Chamadoiro Matos
+     10 | José David Gonçalves de Melo
+      0 | Gutemberg da Silva Araújo
+      0 | Teófilo Santos de Jesus
+      0 | Anderson Douglas Gali Falleiros
+     16 | Maria Isabel Brito Mendes Palma Soeiro
+      0 | Alex Willian Hoppe
+      0 | Davi Borges de Aquino
+      0 | Maurice da Silva Oliveira
+    144 | Tiago Tessler Blecher
+      2 | Fernando Caetano Moreira Filho
+      0 | Jonas Gabriel Antunes Moreira
+      0 | Lucas Rafael Antunes Moreira
+      0 | Rafaela Melo Ferreira Marzano
+     13 | Angela Saraiva Portes
+      0 | Jamile Santana Cerqueira
+      0 | Uesley Da Silva Oliveira Dos Santos
+      0 | Marco Túlio Montenegro Cavalcanti Dias
+      5 | Daniel Elias Garcia
+      6 | Rodrigo Schmitz
+      0 | Marciano Aguiar Carneiro
+      0 | Camila Correia Vecchi Aguiar
+      0 | Priscilla Oliveira de França
+      0 | Eduardo Schmitz
+      7 | Emílio Matos Rocha
+      0 | Antonio Luiz Guariglia
+      6 | Marco Antônio Barbosa de Oliveira Jr
+      1 | Fábio Manoel Guimarães
+      0 | Celso Alves Cunha
+      0 | Pietrangelo Rosalem
+      0 | Jussiara Santos Ermano Sukiennik
+      0 | Erick Soares Teles
+      0 | Thais Silva Moreira de Sousa
+      0 | Alexsander Pretti Domingos
+      7 | Alessandra Cristine Aparecida de Carlos
+      7 | Daniel Melo Cruz
+      1 | Flávio Alexandre Alves Da Costa e Silva
+    150 | Irani Flores
+      0 | Cristiane Borguetti Moraes Lopes
+      0 | Lorenna Vita Varjão de Jesus
+      0 | Iane Santos da Costa
+      9 | Dora Plat
+      0 | Eloyse Mirella Tavares Ramos
+      0 | Anna Karoline Santos do Amaral
+     18 | Catiele Borges Leffa
+      0 | Paulo Alexandre Heisler
+      4 | Renan Souza Silva
+      0 | Luiz Roberto Brenneken
+      0 | Alberto José Marchi Macedo
+    150 | Aline Souza Flores
+      7 | Marcus Vinicius Yoshimi Uebara
+      0 | Gustavo Moretto G. de Oliveira
+      1 | Hélcio Kronberg
+      0 | Gileno Almeida de Oliveira
+      0 | Rita Christianne Schlang de Carvalho
+      0 | Cristiane Barros da Mota Balbino
+      5 | Rodrigo Aparecido Rigolon Da Silva
+      0 | Eduardo Gomes
+      2 | Francisco Jonnathan Santos Freitas
+      0 | Danyele Lima Cavalcanti Lira
+     15 | Renato Guedes Rocha
+      0 | Renato Schlobach Moyses
+   TOTAL: 620 | banco novos=250
+
+[20:47:20] >>> Danillo Hamesses Melo Cunha | (sem site)
+    [-] sem site cadastrado - pulado
+[20:47:20] >>> Wilson Manoel De Goes Filho | (sem site)
+    [-] sem site cadastrado - pulado
+[20:47:20] >>> Cleber da Silva Melo | (sem site)
+    [-] sem site cadastrado - pulado
+
+[CSV] C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_bahia_2026-06-09.csv
+
+========================================================================
+RELATORIO FINAL
+========================================================================
+    150 | Irani Flores -> ok (150)
+    150 | Aline Souza Flores -> ok (150)
+    144 | Tiago Tessler Blecher -> ok (144)
+     18 | Catiele Borges Leffa -> ok (18)
+     16 | Maria Isabel Brito Mendes Palma Soeiro -> ok (16)
+     15 | Renato Guedes Rocha -> ok (15)
+     13 | Angela Saraiva Portes -> ok (13)
+     10 | José David Gonçalves de Melo -> ok (10)
+      9 | Dora Plat -> ok (9)
+      8 | Rafaela Santos Ribeiro do Vale -> ok (8)
+      7 | Emílio Matos Rocha -> ok (7)
+      7 | Alessandra Cristine Aparecida de Carlos -> ok (7)
+      7 | Daniel Melo Cruz -> ok (7)
+      7 | Marcus Vinicius Yoshimi Uebara -> ok (7)
+      6 | Paulo Cézar Rocha Teixeira -> ok (6)
+      6 | Rodrigo Schmitz -> ok (6)
+      6 | Marco Antônio Barbosa de Oliveira Jr -> ok (6)
+      5 | Rudival Almeida Gomes Júnior -> ok (5)
+      5 | Viriato Domingues Cravo -> ok (5)
+      5 | Daniel Elias Garcia -> ok (5)
+      5 | Rodrigo Aparecido Rigolon Da Silva -> ok (5)
+      4 | Hilda Emília de Souza Costa Lima -> ok (4)
+      4 | Maurício Paes Inácio -> ok (4)
+      4 | Renan Souza Silva -> ok (4)
+      2 | Ivana Montenegro Castelo Branco Rocha -> ok (2)
+      2 | Fernando Caetano Moreira Filho -> ok (2)
+      2 | Francisco Jonnathan Santos Freitas -> ok (2)
+      1 | Fábio Manoel Guimarães -> ok (1)
+      1 | Flávio Alexandre Alves Da Costa e Silva -> ok (1)
+      1 | Hélcio Kronberg -> ok (1)
+      0 | Orlando José Lacerda Pereira -> sem site (nao raspavel)
+      0 | Tânia Maria de Abreu -> inacessivel
+      0 | Oscar de Menezes Palmeira -> ok (0)
+      0 | Miguel Paulo Rodrigues da Silva -> ok (0)
+      0 | Eustácio Medeiros Neves -> ok (0)
+      0 | Adilson Guimarães Araújo -> ok (0)
+      0 | Arthur Ferreira Nunes -> ok (0)
+      0 | Antônio Romero Ferreira da Silva -> ok (0)
+      0 | Josecelli Kildare Fraga Gomes -> sem site (nao raspavel)
+      0 | Péricles Luciano Santos de Jesus -> ok (0)
+      0 | Smith Pereira da Silva Neto -> sem site (nao raspavel)
+      0 | Clauberto Fernandes Nascimento Júnior -> ok (0)
+      0 | Tábata Mineiro Bezerra -> ok (0)
+      0 | Kátia Cerqueira da Silva Casaes -> ok (0)
+      0 | João Luiz de França Neto -> inacessivel
+      0 | João Paulo Mineiro Bezerra -> ok (0)
+      0 | Nina Chamadoiro Matos -> sem site (nao raspavel)
+      0 | Gutemberg da Silva Araújo -> ok (0)
+      0 | Teófilo Santos de Jesus -> ok (0)
+      0 | Anderson Douglas Gali Falleiros -> ok (0)
+      0 | Alex Willian Hoppe -> ok (0)
+      0 | Davi Borges de Aquino -> ok (0)
+      0 | Maurice da Silva Oliveira -> ok (0)
+      0 | Jonas Gabriel Antunes Moreira -> ok (0)
+      0 | Lucas Rafael Antunes Moreira -> ok (0)
+      0 | Rafaela Melo Ferreira Marzano -> ok (0)
+      0 | Jamile Santana Cerqueira -> ok (0)
+      0 | Uesley Da Silva Oliveira Dos Santos -> inacessivel
+      0 | Marco Túlio Montenegro Cavalcanti Dias -> ok (0)
+      0 | Marciano Aguiar Carneiro -> inacessivel
+      0 | Camila Correia Vecchi Aguiar -> inacessivel
+      0 | Priscilla Oliveira de França -> sem site (nao raspavel)
+      0 | Eduardo Schmitz -> inacessivel
+      0 | Antonio Luiz Guariglia -> ok (0)
+      0 | Celso Alves Cunha -> ok (0)
+      0 | Pietrangelo Rosalem -> sem site (nao raspavel)
+      0 | Jussiara Santos Ermano Sukiennik -> ok (0)
+      0 | Erick Soares Teles -> ok (0)
+      0 | Thais Silva Moreira de Sousa -> sem site (nao raspavel)
+      0 | Alexsander Pretti Domingos -> sem site (nao raspavel)
+      0 | Cristiane Borguetti Moraes Lopes -> ok (0)
+      0 | Lorenna Vita Varjão de Jesus -> sem site (nao raspavel)
+      0 | Iane Santos da Costa -> sem site (nao raspavel)
+      0 | Eloyse Mirella Tavares Ramos -> sem site (nao raspavel)
+      0 | Anna Karoline Santos do Amaral -> sem site (nao raspavel)
+      0 | Paulo Alexandre Heisler -> sem site (nao raspavel)
+      0 | Luiz Roberto Brenneken -> inacessivel
+      0 | Alberto José Marchi Macedo -> ok (0)
+      0 | Gustavo Moretto G. de Oliveira -> ok (0)
+      0 | Gileno Almeida de Oliveira -> sem site (nao raspavel)
+      0 | Rita Christianne Schlang de Carvalho -> sem site (nao raspavel)
+      0 | Cristiane Barros da Mota Balbino -> sem site (nao raspavel)
+      0 | Eduardo Gomes -> ok (0)
+      0 | Danyele Lima Cavalcanti Lira -> sem site (nao raspavel)
+      0 | Renato Schlobach Moyses -> ok (0)
+      0 | Danillo Hamesses Melo Cunha -> sem site (nao raspavel)
+      0 | Wilson Manoel De Goes Filho -> sem site (nao raspavel)
+      0 | Cleber da Silva Melo -> sem site (nao raspavel)
+
+Total imoveis (1a praca futura): 620
+Banco: novos=250 ja_existiam=370 | Erros: 7

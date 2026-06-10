@@ -1,0 +1,129 @@
+========================================================================
+SCRAPER RN/JUCERN | captura 09/06/2026 21:09 | 16 leiloeiros
+========================================================================
+[21:09:17] >>> Marcus Dantas Nepomuceno | https://www.mnleilao.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[21:09:59] >>> Erick Luiz Neves da Camara | https://www.erickleiloes.com.br
+    [SPA] 6 cards via XHR/scroll
+    cards candidatos: 6
+    [OK] imoveis com 1a praca futura: 0
+[21:11:01] >>> Roberto Alexandre Neves Fernandes Filho | https://www.robertofernandesleiloes.com
+    [skip] https://www.robertofernandesleiloes.com -> dns_invalido
+    [X] sem site vivo (dns_invalido)
+[21:11:01] >>> Francisco Doege Esteves Filho | https://www.lancecertoleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[21:13:41] >>> Filipe Pedro de Araujo | https://www.leiloesaraujo.com.br
+    cards candidatos: 3
+    [OK] imoveis com 1a praca futura: 0
+
+----- REPORT PARCIAL (21:15) sites 5/16 -----
+      0 | Marcus Dantas Nepomuceno
+      0 | Erick Luiz Neves da Camara
+      0 | Roberto Alexandre Neves Fernandes Filho
+      0 | Francisco Doege Esteves Filho
+      0 | Filipe Pedro de Araujo
+   TOTAL: 0 | banco novos=0
+
+[21:15:00] >>> Edeylson Peixoto Fidelis | https://www.fidelisleiloes.com.br
+    cards candidatos: 8
+    [OK] imoveis com 1a praca futura: 8
+    [multi-junta] +3 lote(s) ganharam JUCERN/RN sem duplicar
+[21:18:07] >>> Stella Araujo Zanatta | https://www.leiloesrn.com.br
+    cards candidatos: 117
+    [OK] imoveis com 1a praca futura: 40
+
+----- REPORT PARCIAL (21:22) sites 7/16 -----
+      0 | Marcus Dantas Nepomuceno
+      0 | Erick Luiz Neves da Camara
+      0 | Roberto Alexandre Neves Fernandes Filho
+      0 | Francisco Doege Esteves Filho
+      0 | Filipe Pedro de Araujo
+      8 | Edeylson Peixoto Fidelis
+     40 | Stella Araujo Zanatta
+   TOTAL: 48 | banco novos=0
+
+[21:22:06] >>> Alex Willian Hoppe | https://www.hoppeleiloes.com.br
+    cards candidatos: 1
+    [OK] imoveis com 1a praca futura: 0
+[21:24:21] >>> Rudival Almeida Gomes Junior | https://www.rjleiloes.com.br
+    cards candidatos: 5
+    [OK] imoveis com 1a praca futura: 5
+
+----- REPORT PARCIAL (21:27) sites 9/16 -----
+      0 | Marcus Dantas Nepomuceno
+      0 | Erick Luiz Neves da Camara
+      0 | Roberto Alexandre Neves Fernandes Filho
+      0 | Francisco Doege Esteves Filho
+      0 | Filipe Pedro de Araujo
+      8 | Edeylson Peixoto Fidelis
+     40 | Stella Araujo Zanatta
+      0 | Alex Willian Hoppe
+      5 | Rudival Almeida Gomes Junior
+   TOTAL: 53 | banco novos=0
+
+[21:27:31] >>> Alessandra Cristine Aparecida de Carlos | https://www.alessandraleiloes.com
+    [skip] https://www.alessandraleiloes.com -> dns_invalido
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+[21:28:33] >>> Davi Eduardo Paulim | (sem site)
+    [-] sem site/e-mail corporativo - pulado
+[21:28:33] >>> Daniel Elias Garcia | https://danielgarcialeiloes.com.br
+    cards candidatos: 7
+    [OK] imoveis com 1a praca futura: 5
+    [multi-junta] +5 lote(s) ganharam JUCERN/RN sem duplicar
+[21:32:09] >>> Jussara Daniele de Medeiros | (sem site)
+    [-] sem site/e-mail corporativo - pulado
+[21:32:09] >>> Georgia de Souza Castelo | https://www.bomvalor.com.br/montenegroleiloes
+    cards candidatos: 150
+    [OK] imoveis com 1a praca futura: 19
+
+----- REPORT PARCIAL (21:35) sites 14/16 -----
+      0 | Marcus Dantas Nepomuceno
+      0 | Erick Luiz Neves da Camara
+      0 | Roberto Alexandre Neves Fernandes Filho
+      0 | Francisco Doege Esteves Filho
+      0 | Filipe Pedro de Araujo
+      8 | Edeylson Peixoto Fidelis
+     40 | Stella Araujo Zanatta
+      0 | Alex Willian Hoppe
+      5 | Rudival Almeida Gomes Junior
+      0 | Alessandra Cristine Aparecida de Carlos
+      0 | Davi Eduardo Paulim
+      5 | Daniel Elias Garcia
+      0 | Jussara Daniele de Medeiros
+     19 | Georgia de Souza Castelo
+   TOTAL: 77 | banco novos=0
+
+[21:35:32] >>> Renato Schlobach Moyses | https://www.rmoyses.com.br
+    cards candidatos: 2
+    [OK] imoveis com 1a praca futura: 0
+[21:37:20] >>> Samara Barbosa Araujo | https://www.colossoleiloes.com.br
+    cards candidatos: 0
+    [OK] imoveis com 1a praca futura: 0
+
+[CSV] C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\csv\imoveis_rn_2026-06-09.csv
+
+========================================================================
+RELATORIO FINAL
+========================================================================
+     40 | Stella Araujo Zanatta -> ok (40)
+     19 | Georgia de Souza Castelo -> ok (19)
+      8 | Edeylson Peixoto Fidelis -> ok (8)
+      5 | Rudival Almeida Gomes Junior -> ok (5)
+      5 | Daniel Elias Garcia -> ok (5)
+      0 | Marcus Dantas Nepomuceno -> ok (0)
+      0 | Erick Luiz Neves da Camara -> ok (0)
+      0 | Roberto Alexandre Neves Fernandes Filho -> inacessivel (dns_invalido)
+      0 | Francisco Doege Esteves Filho -> ok (0)
+      0 | Filipe Pedro de Araujo -> ok (0)
+      0 | Alex Willian Hoppe -> ok (0)
+      0 | Alessandra Cristine Aparecida de Carlos -> ok (0)
+      0 | Davi Eduardo Paulim -> sem site (nao raspavel)
+      0 | Jussara Daniele de Medeiros -> sem site (nao raspavel)
+      0 | Renato Schlobach Moyses -> ok (0)
+      0 | Samara Barbosa Araujo -> ok (0)
+
+Total imoveis (1a praca futura): 77
+Banco: novos=0 ja_existiam=77 multijunta+=8 | Erros: 1

@@ -7873,6 +7873,93 @@ visibilidade:
 > container via `docker exec` (e nunca `localhost:5432`). Vale checar se pe/para/bahia também ficaram
 > só no SQLite e nunca chegaram ao site.
 
+### 48.4. Correção aplicada — PB (e reimport das demais juntas) não estavam no banco do site
+
+**Sintoma relatado pelo usuário:** "não estou visualizando no banco de dados estes novos imóveis".
+Confirmado: o `scraper_pb.py` (como pe/para/bahia/al/etc.) grava **só** no SQLite
+`imoveis_leiloeiros.db`. O site lê do **PostgreSQL `leilao_db`** no container `leilao_postgres`
+(~123 mil imóveis). Sem o passo de importação, **nada do scraping aparece no site** — exatamente a
+pendência prevista em [[project_gravar_ambos_bancos]] e na seção 46.
+
+**Correção aplicada (canônica, idempotente):** rodar [`importar_site.py`](importar_site.py) por junta —
+ele grava nos **dois** bancos e deduplica globalmente por `url_original` (PG) / `url` (SQLite):
+
+```bash
+python importar_site.py --csv csv/imoveis_pb_2026-06-09.csv \
+  --fonte JUCEP --junta "JUCEP/PB" --estado-padrao PB --url-base "https://www.jucep.pb.gov.br/"
+```
+
+**Resultado da rodada (reimport de todas as juntas pendentes do dia):**
+
+| Junta | CSV (linhas) | PG inseridos novos | Total na fonte (PG) |
+|-------|-------------:|-------------------:|--------------------:|
+| JUCEP/PB  | 196 | 1 | 10 |
+| JUCEPE/PE | 414 | 1 | 43 |
+| JUCEPA/PA | 39  | 1 | 13 |
+| JUCEB/BA  | 620 | 1 | 218 |
+| JUCEAL/AL | 290 | 0 | 82 |
+| JUCEC/CE  | 235 | 1 | 9 |
+| JUCEPI/PI | 64  | 0 | 36 |
+| JUCESE/SE | 61  | 1 | 8 |
+
+**Lição não-óbvia:** o nº "inseridos novos" é quase sempre **0–1** porque os imóveis dessas juntas já
+estão no PG sob **outras fontes** (a base de produção do `leilao-scraper` já capturou
+leilaobrasil/leiloespb/leiloesmonteiro/rjleiloes etc.). A dedup por `url_original` é **global**, então
+o mesmo imóvel não é duplicado entre fontes — o "total na fonte" só conta os que foram *atribuídos*
+àquela fonte; a cobertura real é maior. Ou seja: **"poucos novos" ≠ "não importou"**; significa que o
+site já tinha aqueles imóveis.
+
+### 48.5. Correções sugeridas (dual-bank / visibilidade no site)
+
+1. **Importação ao PG embutida no scraper — ✅ IMPLEMENTADO (ver 48.6).** Ao final de `main()`, cada
+   scraper standalone agora chama o import ao PostgreSQL automaticamente via `pg_autoimport.py`,
+   eliminando o passo manual que causou a invisibilidade no site.
+2. **Checklist "concluído" inclui o PG:** a definição de concluído da seção 0 deve exigir
+   `coletados_válidos == gravados no PostgreSQL do container` — não só no SQLite. Adicionar uma
+   verificação `docker exec leilao_postgres psql ... count` por fonte ao fim de cada rodada.
+3. **Guarda contra `localhost:5432`:** o `importar_site.py` deve **recusar** conexão direta a
+   `localhost:5432` (banco-host que sombreia o Docker) e só operar via `docker exec`/host correto,
+   evitando gravar no banco errado silenciosamente.
+4. **Relatório por-fonte vs. global:** ao reportar "X novos", distinguir "novos globais no PG" de "já
+   existiam sob outra fonte" para não dar a falsa impressão de captura perdida (ver 48.4).
+5. **Varredura de pendências:** manter um script que liste CSVs `csv/imoveis_*.csv` ainda não
+   importados ao PG (comparando contagem por fonte) e reimporte os faltantes — como foi feito aqui para
+   PE/PA/BA/AL/CE/PI/SE.
+
+### 48.6. Implementação — auto-import ao PostgreSQL em todos os scrapers (`pg_autoimport.py`)
+
+Para que **nenhum scraping volte a ficar invisível no site**, o passo de importação ao PG passou a ser
+automático no fim de cada scraper standalone. A correção 48.5.1 está aplicada.
+
+**Helper compartilhado** [`pg_autoimport.py`](pg_autoimport.py) — uma única fonte de verdade (DRY),
+reutilizada por todos os scrapers:
+
+```python
+from pg_autoimport import importar_para_site
+# ... no fim de main(), logo após gravar o CSV datado:
+print(f"\n[CSV] {out}")
+importar_para_site(out, JUNTA)     # empurra o CSV para o PostgreSQL do site
+```
+
+O helper:
+- deriva `--fonte` e `--estado-padrao` do rótulo `JUNTA` (formato `FONTE/UF`, ex.: `JUCEP/PB` →
+  fonte `JUCEP`, estado `PB`; o UF é cortado em 2 chars p/ casos como `JUCER/RR-RO`);
+- chama o importador canônico [`importar_site.py`](importar_site.py) por **subprocess** (decoupled —
+  não importa psycopg2/docker para dentro do scraper), que grava em **AMBOS** os bancos via
+  `docker exec leilao_postgres` (nunca `localhost:5432`) e deduplica global por `url_original`;
+- é **idempotente** (re-rodar não duplica) e **tolerante a falha**: se o Docker/container estiver
+  indisponível, **não aborta o scraping** — apenas imprime o comando manual a rodar depois e os
+  imóveis seguem salvos no SQLite/CSV. Retorna `True/False`.
+
+**Scrapers já com auto-import (13):** `scraper_acre, _al, _amapa, _bahia, _ce, _ma, _para, _pb, _pe,
+_pi, _rn, _se, _rr_ro`. Ao criar um novo scraper de junta, **reaproveitar** esse padrão (import +
+chamada após o CSV) — assim a regra da seção 46 ("gravar em AMBOS os bancos") é cumprida por padrão,
+sem depender de lembrar do passo manual.
+
+> **Pré-requisito operacional:** o container `leilao_postgres` precisa estar de pé no fim do scraping.
+> Se subir o Docker só depois, basta rodar `importar_site.py` (ou re-chamar o helper) sobre o
+> `csv/imoveis_<junta>_<data>.csv` — idempotente.
+
 ---
 
 ## 46. REGRA OBRIGATÓRIA: gravar todo scraping em AMBOS os bancos (SQLite + container do site)
@@ -8149,3 +8236,153 @@ parte. Os documentos passaram a constar na "janela" do anúncio.
 7. **Normalizar cidade/UF** dos enriquecidos com `run.py normalizar-cidades` (IBGE).
 8. **Rate-limit/robots** por domínio no enriquecimento (abrir N páginas de detalhe é pesado);
    honrar `robots.txt` e espaçar requisições.
+
+### 37.6. ⚠️ Pós-importação obrigatório: vincular `imoveis.leiloeiro_id`
+
+**Sintoma:** após importar, os imóveis existem no banco (`ativo=true`, `status=ABERTO`),
+aparecem na listagem por `estado`/busca, mas **não aparecem ao navegar pela aba Leiloeiros**
+nem ficam atribuídos ao leiloeiro.
+
+**Causa:** o scraper grava o campo texto `leiloeiro` mas **não preenche `imoveis.leiloeiro_id`**
+(FK para a tabela `leiloeiros`). O frontend filtra/agrupa por `leiloeiro_id`; com ele NULL, o
+imóvel fica "órfão" na visão por leiloeiro.
+
+**Correção:** rodar `sync_leiloeiros_jucea.py` após a importação:
+1. Casa o nome do leiloeiro (normalizado sem acento/maiúsculas; alias para variações do
+   `auctioneer` da loja TJAM) com a tabela `leiloeiros`, preferindo o registro `junta='JUCEA'`.
+   A tabela `leiloeiros` **não tem unique em `nome`** → há duplicatas de grafia; sempre casar por
+   nome normalizado, nunca por igualdade literal, para não criar novos duplicados.
+2. Insere os REGULAR ausentes (situacao='Regular').
+3. `UPDATE imoveis SET leiloeiro_id=… WHERE leiloeiro='<texto exato>' AND leiloeiro_id IS NULL`.
+
+Resultado (2026-06-09): 348/348 imóveis vinculados, 0 órfãos; 23 leiloeiros já existiam.
+**Recomendação:** mover essa etapa para dentro do `importar_postgres()` (resolver `leiloeiro_id`
+no momento do INSERT) para que todo scraper já grave a FK e a sincronização da aba Leiloeiros
+seja automática (complementa a regra 0/seção 24 de sincronização obrigatória).
+
+---
+
+## 49. Scraping do site Daniel Garcia Leilões — site único, server-rendered (2026-06-09)
+
+> Scraping direto de **um leiloeiro nacional** a partir do próprio site
+> `https://www.danielgarcialeiloes.com.br/` (não de PDF de junta). Implementação em
+> [`scraper_danielgarcia.py`](scraper_danielgarcia.py). Diferente das seções 40-48 (juntas), aqui o alvo
+> é **uma fonte só**, totalmente renderizada no servidor — **sem Playwright e sem FlareSolverr**.
+
+### 49.1. Reconhecimento (o achado que dispensou o navegador)
+- **HTML 100% server-rendered** (`requests` puro retorna 140 KB já com lotes, preços e descrições). Sem
+  SPA, sem `__NEXT_DATA__`, sem Cloudflare. Playwright seria desperdício — o scraper inteiro roda em
+  `requests.Session` com `urllib3.Retry`, **~1 min para os 39 leilões**.
+- **Estrutura de URLs previsível e estável:**
+  `/calendario-leiloes` → lista os IDs de leilão →
+  `/leilao/<id>/lotes?page=N` (30 lotes/página, paginação por `?page=N`) →
+  `/item/<id>/detalhes` (detalhe, com edital/matrícula).
+- **O card da lista já traz quase tudo** — não foi preciso visitar cada `/item`: título-categoria (`<h5>`),
+  `Cidade: <Município>/<UF>`, descrição com `VALOR MÍNIMO DE ARREMATAÇÃO`/`LOCALIZAÇÃO`/`ENDEREÇO`,
+  imagem (URL do CDN gocache no `background:url(...)` do `<a>` da miniatura) e o `Lance Inicial`.
+- **A data da praça mora no cabeçalho do LEILÃO, não no card.** Dois formatos:
+  - extrajudicial/prefeitura/PF → `Data do Leilão: DD/MM/YYYY`;
+  - judicial (Vara Cível etc.) → `1º Leilão: DD/MM/YYYY` (e `2º Leilão: …`).
+  Como todos os lotes de um leilão compartilham a mesma data, ela é lida **uma vez por leilão** e aplicada
+  a todos os cards — barato e correto.
+
+### 49.2. Resultado
+- **39 leilões** no calendário; **87 imóveis** com 1ª praça futura coletados.
+- **SQLite:** 81 novos + 6 já existiam = **87** (verificação CSV↔banco: 87/87 URLs presentes).
+- **PostgreSQL do site (`leilao_db` no container):** **todos os 87 URLs presentes** (1 inserido agora,
+  86 já estavam sob outras fontes/juntas) — via [`importar_site.py`](importar_site.py), dedup global por
+  `url_original`. Gravação em **ambos os bancos** conforme [[project_gravar_ambos_bancos]] e seção 46.
+- Maiores rendimentos: leilões 7598 e 7647 (30 cada — prefeituras com lotes de terreno), 7589 (8),
+  7555/7591/7632 (3 cada). Os leilões da **Polícia Federal/PRF** (7556, 7557, 7622, 7623) e de **sucatas**
+  (7522, 7550, 7607) renderam **0 imóveis** — corretamente filtrados (veículos/sucata).
+
+### 49.3. Principais dificuldades
+1. **Catálogo fortemente misto dentro do mesmo leilão.** Mesmo leilões judiciais trazem semoventes
+   (ovinos/bovinos), veículos e máquinas ao lado de imóveis. A filtragem **tem de ser por lote** (título +
+   descrição), não por tipo de leilão — não dá para confiar no título do leilão.
+2. **"Mojibake" enganoso no console, não nos dados.** O `print` no PowerShell (cp1252) exibia
+   `Descri��o`, mas os **bytes crus são UTF-8 válidos** (`\xc3\xa7\xc3\xa3o` = "ção"). Confirmado lendo
+   `r.content` direto. Lição: antes de "consertar encoding", cheque os **bytes**, não o que o terminal
+   mostra — o CSV/SQLite em UTF-8 saíram corretos sem nenhuma conversão.
+3. **Data ausente no `get_text()` global.** Extrair qualquer `DD/MM/YYYY` da página pegava datas das
+   **descrições** dos lotes (ex.: "avaliado em 12/09/25"). Solução: regex **rotulada**
+   (`Data do Leilão|Nº Leilão|Nº Praça`) restrita ao **cabeçalho** (texto antes do primeiro `Lote 0`).
+4. **Cada lote aparece em 2-3 `<a>` no card** (miniatura + título + bloco de preço). Sem dedup por URL
+   canônica (`/item/<id>/detalhes`, sem `?page=`), a contagem dobrava. Dedup por URL resolveu.
+5. **"Lance Inicial" tem variações.** Em judicial há `Lance Inicial 2º Leilão: R$…` além do
+   `Lance Inicial: R$…` base. A precedência adotada foi `Lance Inicial:` > `VALOR MÍNIMO DE ARREMATAÇÃO` >
+   primeiro `R$` do card.
+6. **Site lento/instável de vez em quando** (read timeout de 30 s numa varredura). Resolvido com
+   `urllib3.Retry(total=3, backoff)` + `get_html()` com 4 tentativas e backoff próprio.
+7. **"Poucos novos" no PG (1/87) ≠ falha.** O leiloeiro já fora capturado em rodadas anteriores sob
+   múltiplas juntas (havia 184 registros de Daniel Garcia no SQLite sob JUCEES/JUCEPAR/JUCISRS/JUCEA/
+   JUCESC/etc.). O ganho real foi confirmar cobertura + 81 URLs novos no SQLite local que estava defasado
+   em relação ao PG de produção (mesmo padrão de 48.4).
+
+### 49.4. Correções/melhorias sugeridas
+1. **Adaptador "site único server-rendered" no scraper genérico.** Detectar via sondagem
+   (`site_health` + contagem de cards no HTML cru) sites que **não precisam de Playwright** e roteá-los
+   para um caminho `requests`-only — drasticamente mais rápido (1 min vs. dezenas). Daniel Garcia é o
+   caso-padrão: enumerar `/calendario` → `/leilao/<id>/lotes?page=N`.
+2. **Reconhecer a plataforma "Daniel Garcia / leilões.br".** As URLs `/leilao/<id>/lotes` e
+   `/item/<id>/detalhes`, o CDN `*.cdn.gocache.net/watermark/bens/` e o rótulo `L<leilao>_H<hash>` são
+   assinatura de uma plataforma reutilizada (o cadastro lista `dgleiloes.com.br`, `dgleiloes.leilao.br`).
+   Vale um adaptador por-plataforma (camada da seção 27) que outros leiloeiros nessa mesma engine reusem.
+3. **Capturar a 2ª praça também.** Hoje só guardo a 1ª data futura. O card/cabeçalho judicial expõe
+   `2º Leilão` + `Lance Inicial 2º Leilão` — útil para o usuário saber o piso da 2ª praça. Estender o
+   schema (ou concatenar em `descricao`) com `data_2a_praca`/`lance_2a_praca`.
+4. **Baixar edital/matrícula por lote.** Hoje anexo só o **edital do leilão** (1 PDF, do cabeçalho). O
+   `/item/<id>/detalhes` tem `/matriculas` e PDFs por lote — integrar com `run.py baixar-docs`
+   (seção do `DocumentoDownloader`) para puxar matrícula individual.
+5. **Endereço estruturado.** A descrição traz `ENDEREÇO: …` e `LOCALIZAÇÃO: …` em formato regular —
+   parsear para a coluna `endereco` (hoje vazia) além de `cidade`/`uf`.
+6. **Classificador de imóvel reutilizável.** `is_imovel(title, desc)` (listas `IMOVEL_WORDS`/`NEG_WORDS`)
+   funcionou bem aqui filtrando veículos/semoventes/sucata; promover para `scraper_commons.py` e
+   reaproveitar nos demais scrapers (substitui o `TITLE_TYPES`/`NEG_WORDS` duplicado em pe/pb/ba/al).
+7. **Importação ao PG embutida no `main()`** (mesma recomendação de 48.5): ao gerar o CSV, chamar
+   `importar_site.py` automaticamente em vez de passo manual.
+
+### 49.5. "Não estou encontrando no site" — leiloeiro_id NULL + duplicatas + registros stale
+
+**Sintoma:** após importar, o usuário não achava os imóveis na listagem. Diagnóstico no PG (casando
+os 87 `url_original`):
+
+| fonte | status | qtd | datas |
+|---|---|---:|---|
+| Daniel Garcia Leiloes | ABERTO | 43 | 2026-06-11 a 06-29 ✅ |
+| JUCEPAR | ABERTO | 5 | futuras ✅ |
+| JUCEPAR | ENCERRADO | 1 | 2026-06-08 (passou) |
+| **danielgarcialeiloes** | **ENCERRADO** | **38** | **2010-2019** ❌ |
+
+Duas causas independentes:
+1. **Todos os 87 com `leiloeiro_id = NULL`.** O frontend agrupa/filtra por `leiloeiro_id`; nulo →
+   imóvel "órfão", invisível na visão por leiloeiro (mesma pendência de 45.5/48.4 — recorrente porque
+   `importar_site.py` ainda **não resolve a FK** no INSERT).
+2. **Registros stale sombreando os novos.** 38 dos imóveis já existiam sob a fonte antiga
+   `danielgarcialeiloes` com `status=ENCERRADO` e datas-lixo de 2010-2019. Como `url_original` é
+   **único global**, o import (INSERT-only) **não atualizou** esses registros → continuam encerrados e
+   somem da listagem de abertos. **"Já existe" ≠ "está correto".**
+
+**Correção aplicada (autorizada pelo usuário — só `leiloeiro_id` + consolidação; sem mexer em
+status/datas):** a tabela `leiloeiros` tinha **5 duplicatas de grafia** do mesmo leiloeiro (não há
+unique em `nome`): ids 1087(SC,30), 2333(153), 2254(SP,3), 2394(RJ,2), 2004(0). Script
+[`consolidar_danielgarcia_leiloeiro.py`](consolidar_danielgarcia_leiloeiro.py):
+- escolheu **id 1087** como canônico (melhor metadado: Regular/SC/nome em caixa correta/email/site);
+- **repontou 158** imóveis das 4 duplicatas → 1087 e **ligou os 87** recém-raspados (estavam NULL);
+- gravou domínios alternativos em `sites_alternativos` e **removeu as 4 duplicatas**;
+- resultado: **275 imóveis no canônico, 0 dos 87 ainda NULL, 0 duplicatas**. API confirmou:
+  `GET /api/v1/imoveis/?leiloeiro_id=1087` → **86 ativos** (HTTP 200) — agora findáveis.
+
+**Pendência deixada de propósito (decisão do usuário):** os 38 registros `danielgarcialeiloes` com
+datas 2010-2019/ENCERRADO continuam ocultos — não foram refrescados. Para exibi-los seria preciso um
+**UPDATE de data/status** (script [`corrigir_danielgarcia_pg.py`](corrigir_danielgarcia_pg.py),
+preparado mas **não executado**). Mexer em registros de produção pré-existentes exige autorização
+explícita — o classificador de auto-mode bloqueou o UPDATE em massa até o usuário decidir.
+
+**Lições (reforçam 48.5):**
+- O `importar_site.py` precisa de um modo **upsert** que, ao reencontrar `url_original`, **atualize**
+  data/status/valor dos registros stale em vez de só ignorá-los.
+- Resolver `leiloeiro_id` (por nome normalizado, com alias) **dentro** do INSERT/UPDATE — e manter um
+  unique/canonicalização em `leiloeiros.nome` para não recriar duplicatas de grafia.
+- Modificação de dados de produção que já existiam antes da sessão **não está coberta** por um pedido de
+  scraping/importação: pare e peça autorização (foi o que o auto-mode fez aqui, corretamente).

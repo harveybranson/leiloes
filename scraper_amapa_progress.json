@@ -1,10 +1,10 @@
 {
-  "iniciado": "2026-06-09T16:20:18.891043",
-  "capture_date": "09/06/2026 16:20",
-  "leiloeiros_processados": 18,
-  "imoveis_total": 20,
+  "iniciado": "2026-06-10T10:16:46.786827",
+  "capture_date": "10/06/2026 10:16",
+  "leiloeiros_processados": 11,
+  "imoveis_total": 6,
   "por_leiloeiro": {
-    "Daniel Elias Garcia": 5,
+    "Daniel Elias Garcia": 0,
     "José Carlos Zingra": 0,
     "Jaciara de Souza Coutinho Ferreira": 0,
     "Luciano Marangoni": 0,
@@ -12,19 +12,12 @@
     "Hugo Moreira Pimenta": 0,
     "Sidney Canezin": 0,
     "Alex Willian Hoppe": 0,
-    "Rafael Galvani Ferreira": 3,
+    "Rafael Galvani Ferreira": 6,
     "Wesley Silva Ramos": 0,
-    "Sandro de Oliveira": 0,
-    "Wirna Campos Cardoso": 0,
-    "Henrique Reis de Oliveira Borba": 0,
-    "Daniel Ribas Rosa Frahm": 0,
-    "Fernando Caetano Moreira Filho": 2,
-    "Jonas Gabriel Antunes Moreira": 5,
-    "Leonardo Simon Tobelem": 0,
-    "Lucas Rafael Antunes Moreira": 5
+    "Sandro de Oliveira": 0
   },
   "status_sites": {
-    "Daniel Elias Garcia": "ok (5)",
+    "Daniel Elias Garcia": "inacessivel",
     "José Carlos Zingra": "ok (0)",
     "Jaciara de Souza Coutinho Ferreira": "sem site (nao raspavel)",
     "Luciano Marangoni": "ok (0)",
@@ -32,20 +25,14 @@
     "Hugo Moreira Pimenta": "ok (0)",
     "Sidney Canezin": "ok (0)",
     "Alex Willian Hoppe": "ok (0)",
-    "Rafael Galvani Ferreira": "ok (3)",
+    "Rafael Galvani Ferreira": "ok (6)",
     "Wesley Silva Ramos": "ok (0)",
-    "Sandro de Oliveira": "ok (0)",
-    "Wirna Campos Cardoso": "ok (0)",
-    "Henrique Reis de Oliveira Borba": "sem site (nao raspavel)",
-    "Daniel Ribas Rosa Frahm": "sem site (nao raspavel)",
-    "Fernando Caetano Moreira Filho": "ok (2)",
-    "Jonas Gabriel Antunes Moreira": "ok (5)",
-    "Leonardo Simon Tobelem": "ok (0)",
-    "Lucas Rafael Antunes Moreira": "ok (5)"
+    "Sandro de Oliveira": "ok (0)"
   },
-  "erros": [],
-  "last_report": "2026-06-09T16:42:50.503421",
-  "db_novos": 0,
-  "db_ja_existiam": 20,
-  "status": "concluido"
+  "erros": [
+    "Daniel Elias Garcia: inacessivel"
+  ],
+  "last_report": "2026-06-10T10:31:40.427561",
+  "db_novos": 1,
+  "db_ja_existiam": 5
 }

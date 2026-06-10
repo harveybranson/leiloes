@@ -1,31 +1,28 @@
 {
-  "iniciado": "2026-06-09T16:40:58.448381",
-  "capture_date": "09/06/2026 16:40",
-  "leiloeiros_processados": 7,
-  "imoveis_total": 24,
+  "iniciado": "2026-06-10T09:46:46.546723",
+  "capture_date": "10/06/2026 09:46",
+  "leiloeiros_processados": 6,
+  "imoveis_total": 14,
   "por_leiloeiro": {
     "SA Leilões": 0,
-    "Deonizia Leilões": 6,
+    "Deonizia Leilões": 7,
     "Lote Leilões": 0,
     "Danie Garcia Leilões": 0,
-    "Leilões Aguiar e Oliani": 6,
-    "J Silva Leilões": 0,
-    "Thais Teixeira Leilões": 12
+    "Leilões Aguiar e Oliani": 7,
+    "J Silva Leilões": 0
   },
   "status_sites": {
     "SA Leilões": "ok (0)",
-    "Deonizia Leilões": "ok (6)",
+    "Deonizia Leilões": "ok (7)",
     "Lote Leilões": "ok (0)",
     "Danie Garcia Leilões": "inacessivel",
-    "Leilões Aguiar e Oliani": "ok (6)",
-    "J Silva Leilões": "ok (0)",
-    "Thais Teixeira Leilões": "ok (12)"
+    "Leilões Aguiar e Oliani": "ok (7)",
+    "J Silva Leilões": "ok (0)"
   },
   "erros": [
     "Danie Garcia Leilões: inacessivel"
   ],
-  "last_report": "2026-06-09T16:54:37.764365",
-  "db_novos": 0,
-  "db_ja_existiam": 24,
-  "status": "concluido"
+  "last_report": "2026-06-10T09:55:22.418371",
+  "db_novos": 2,
+  "db_ja_existiam": 12
 }

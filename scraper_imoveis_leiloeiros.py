@@ -20,9 +20,9 @@ from playwright.sync_api import sync_playwright
 urllib3.disable_warnings()
 
 # Config
-CSV_LEILOEIROS = Path("C:\\Users\\arthur\\OneDrive\\Documentos\\Cursor\\leiloes\\csv\\leiloeiros_juceac_2026-06-08.csv")
-OUTPUT_DIR = Path("C:\\Users\\arthur\\OneDrive\\Documentos\\Cursor\\leiloes\\csv")
-PROGRESS_FILE = Path("C:\\Users\\arthur\\OneDrive\\Documentos\\Cursor\\leiloes\\scraper_imoveis_progress.json")
+CSV_LEILOEIROS = Path(__file__).resolve().parent / "csv" / "leiloeiros_juceac_2026-06-08.csv"
+OUTPUT_DIR = Path(__file__).resolve().parent / "csv"
+PROGRESS_FILE = Path(__file__).resolve().parent / "scraper_imoveis_progress.json"
 
 CAPTURE_DATE = datetime.now()
 HEADERS = {

@@ -31,7 +31,7 @@ urllib3.disable_warnings()
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
-BASE_DIR = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR = BASE_DIR / "csv"
 DB_PATH = BASE_DIR / "imoveis_leiloeiros.db"
 PROGRESS_FILE = BASE_DIR / "scraper_juceac_completo_progress.json"

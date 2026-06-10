@@ -135,9 +135,9 @@ LEILOEIROS_PDF = [
     },
 ]
 
-OUTPUT_DIR = Path("C:\\Users\\arthur\\OneDrive\\Documentos\\Cursor\\leiloes\\csv")
-PROGRESS_FILE = Path("C:\\Users\\arthur\\OneDrive\\Documentos\\Cursor\\leiloes\\scraper_juceac_v2_progress.json")
-RELATORIO_FILE = Path("C:\\Users\\arthur\\OneDrive\\Documentos\\Cursor\\leiloes\\captura_dados_leiloes_v2.md")
+OUTPUT_DIR = Path(__file__).resolve().parent / "csv"
+PROGRESS_FILE = Path(__file__).resolve().parent / "scraper_juceac_v2_progress.json"
+RELATORIO_FILE = Path(__file__).resolve().parent / "captura_dados_leiloes_v2.md"
 
 CAPTURE_DATE = datetime.now()
 

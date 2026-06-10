@@ -15,7 +15,7 @@ import csv, os, sys, subprocess, argparse
 from pathlib import Path
 from decimal import Decimal
 
-BASE    = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE    = Path(__file__).resolve().parent
 CSV_DIR = BASE / "csv"
 
 

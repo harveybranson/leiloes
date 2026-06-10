@@ -14,7 +14,7 @@ Bancos:
 NÃO deduplica anúncios: insere todos os aprovados (a checagem de URL é só p/ evitar repetir a
 mesma inserção, não para descartar anúncios distintos).
 """
-import argparse, csv, hashlib, json, sqlite3, subprocess, sys
+import argparse, csv, hashlib, json, os, sqlite3, subprocess, sys
 from datetime import datetime
 from pathlib import Path
 
@@ -23,10 +23,10 @@ try:
 except Exception:
     pass
 
-BASE = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE = Path(__file__).resolve().parent
 STAGING_DB = BASE / "staging.db"
 SQLITE_MAIN = BASE / "imoveis_leiloeiros.db"
-MOUNT_SCRAPING = Path(r"C:\Users\arthur\leilao-scraper\scraping")
+MOUNT_SCRAPING = Path(os.environ.get("SCRAPING_ROOT", str(Path(__file__).resolve().parent.parent / "leilao-scraper" / "scraping")))
 
 
 def _con():

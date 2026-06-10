@@ -1003,7 +1003,7 @@ def buscar_leiloeiro_em_portais(nome_leiloeiro: str) -> list[str]:
 """
 
     # Append to the v2 md file
-    md_path = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes\captura_dados_leiloes_v2.md")
+    md_path = Path(__file__).resolve().parent / "captura_dados_leiloes_v2.md"
     try:
         with open(md_path, 'a', encoding='utf-8') as f:
             f.write(md)

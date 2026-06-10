@@ -42,7 +42,7 @@ CSV_IMOVEIS    = BASE_DIR / "csv" / f"imoveis_jucerja_{datetime.now():%Y%m%d_%H%
 PROGRESS_FILE  = BASE_DIR / "scraper_jucerja_progress.json"
 LOG_FILE       = BASE_DIR / "scraper_jucerja.log"
 
-SCRAPER_DIR    = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leilao-scraper\leilao-scraper")
+SCRAPER_DIR    = Path(os.environ.get("SITE_ROOT", str(Path(__file__).resolve().parent.parent / "leilao-scraper" / "leilao-scraper")))
 
 # ── Constantes ────────────────────────────────────────────────────────────────
 REPORT_INTERVAL = 300   # segundos entre relatórios de progresso (5 min)

@@ -18,10 +18,10 @@ if sys.platform == "win32":
         sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
         sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
-BASE      = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE      = Path(__file__).resolve().parent
 CSV_DIR   = BASE / "csv"
 DB_FILE   = BASE / "imoveis_leiloeiros.db"
-SCRAPER_ROOT = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leilao-scraper\leilao-scraper")
+SCRAPER_ROOT = Path(os.environ.get("SITE_ROOT", str(Path(__file__).resolve().parent.parent / "leilao-scraper" / "leilao-scraper")))
 
 # Encontra o CSV mais recente de leiloesjudiciais
 csvs = sorted(CSV_DIR.glob("imoveis_leiloesjudiciais_*.csv"), reverse=True)

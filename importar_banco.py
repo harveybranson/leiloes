@@ -14,7 +14,7 @@ from datetime import datetime
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-BASE = Path(r"C:/Users/arthur/OneDrive/Documentos/Cursor/leiloes")
+BASE = Path(__file__).resolve().parent
 CSV_FILE = BASE / "csv" / "imoveis_leiloeiros_2026-06-03.csv"
 DB_FILE = BASE / "imoveis_leiloeiros.db"
 

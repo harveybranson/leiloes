@@ -23,7 +23,7 @@ try:
 except Exception:
     pass
 
-BASE = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE = Path(__file__).resolve().parent
 DB = BASE / "imoveis_leiloeiros.db"
 HOST = "www.hoppeleiloes.com.br"
 STORE_ID = "16194"

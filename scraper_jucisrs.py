@@ -38,7 +38,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from bs4 import BeautifulSoup
 
 # ── Configuração ──────────────────────────────────────────────────────────────
-BASE          = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE          = Path(__file__).resolve().parent
 CSV_DIR       = BASE / "csv"
 DB_FILE       = BASE / "imoveis_leiloeiros.db"
 PROGRESS_FILE = BASE / "scraper_jucisrs_progress.json"

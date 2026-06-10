@@ -20,7 +20,7 @@ if sys.platform == "win32":
     except AttributeError:
         sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
-BASE    = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE    = Path(__file__).resolve().parent
 CSV_DIR = BASE / "csv"
 DB_FILE = BASE / "imoveis_leiloeiros.db"
 

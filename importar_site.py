@@ -37,7 +37,7 @@ try:
 except Exception:
     pass
 
-BASE = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE = Path(__file__).resolve().parent
 DB_SQLITE = BASE / "imoveis_leiloeiros.db"
 CONTAINER = "leilao_postgres"
 

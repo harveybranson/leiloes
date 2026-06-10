@@ -23,7 +23,7 @@ try:
 except Exception:
     pass
 
-BASE = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE = Path(__file__).resolve().parent
 DB = BASE / "imoveis_leiloeiros.db"
 OUT = BASE / "csv" / f"imoveis_norte_amapa_{datetime.now():%Y-%m-%d}.csv"
 SITE = "https://www.norteleiloes.com.br"

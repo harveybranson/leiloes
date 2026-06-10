@@ -17,7 +17,7 @@ import requests, urllib3
 from bs4 import BeautifulSoup
 urllib3.disable_warnings()
 
-BASE_DIR = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR = BASE_DIR / "csv"
 PROGRESS_FILE = BASE_DIR / "scraper_trt3mg_progress.json"
 RELATORIO_FILE = BASE_DIR / "captura_dados_leiloes_v2.md"

@@ -19,8 +19,8 @@ from typing import Dict, List
 # Config
 BASE_URL = "https://juceac.ac.gov.br"
 LEILOEIROS_URL = "https://juceac.ac.gov.br/leiloeiro/"
-OUTPUT_DIR = Path("C:\\Users\\arthur\\OneDrive\\Documentos\\Cursor\\leiloes\\csv")
-PROGRESS_FILE = Path("C:\\Users\\arthur\\OneDrive\\Documentos\\Cursor\\leiloes\\scraper_juceac_progress.json")
+OUTPUT_DIR = Path(__file__).resolve().parent / "csv"
+PROGRESS_FILE = Path(__file__).resolve().parent / "scraper_juceac_progress.json"
 CSV_OUTPUT = OUTPUT_DIR / f"leiloeiros_juceac_{datetime.now().strftime('%Y-%m-%d')}.csv"
 
 CAPTURE_DATE = datetime.now()

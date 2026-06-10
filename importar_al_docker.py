@@ -15,7 +15,7 @@ try:
 except Exception:
     pass
 
-BASE = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE = Path(__file__).resolve().parent
 CSV_FILE = BASE / "csv" / "imoveis_al_2026-06-09.csv"
 CONTAINER = "leilao_postgres"
 TIPOS = {"APARTAMENTO", "CASA", "TERRENO", "COMERCIAL", "RURAL", "GALPAO", "SALA", "VAGA", "OUTRO"}

@@ -38,10 +38,10 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from bs4 import BeautifulSoup
 
 # ── Configuração ───────────────────────────────────────────────────────────────
-BASE        = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE        = Path(__file__).resolve().parent
 CSV_DIR     = BASE / "csv"
 DB_FILE     = BASE / "imoveis_leiloeiros.db"
-SCRAPER_ROOT = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leilao-scraper\leilao-scraper")
+SCRAPER_ROOT = Path(os.environ.get("SITE_ROOT", str(Path(__file__).resolve().parent.parent / "leilao-scraper" / "leilao-scraper")))
 PROGRESS_FILE = BASE / "scraper_jucesc_progress.json"
 LOG_FILE     = BASE / "scraper_jucesc.log"
 

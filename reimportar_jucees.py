@@ -15,7 +15,7 @@ if sys.platform == "win32":
     except Exception:
         sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
-BASE    = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE    = Path(__file__).resolve().parent
 CSV_DIR = BASE / "csv"
 TODAY   = datetime.now().strftime("%Y-%m-%d")
 

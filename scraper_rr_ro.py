@@ -15,6 +15,7 @@ from urllib.parse import urljoin, urlparse
 import requests, urllib3
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
+from pg_autoimport import importar_para_site
 
 urllib3.disable_warnings()
 try:
@@ -22,7 +23,7 @@ try:
 except Exception:
     pass
 
-BASE = Path(r"C:\Users\arthur\OneDrive\Documentos\Cursor\leiloes")
+BASE = Path(__file__).resolve().parent
 CSV_IN = BASE / "csv" / "leiloeiros_roraima_rondonia_2026-06-09.csv"
 OUT_DIR = BASE / "csv"
 DB = BASE / "imoveis_leiloeiros.db"
@@ -416,6 +417,7 @@ def main():
             w.writeheader()
             w.writerows(all_im)
         print(f"\n[CSV] {out}")
+        importar_para_site(out, "JUCER/RR-RO")
 
     conn.close()
     _BROWSER.close()

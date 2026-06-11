@@ -1,30 +1,16 @@
 {
-  "iniciado": "2026-06-10T10:01:46.771289",
-  "capture_date": "10/06/2026 10:01",
-  "leiloeiros_processados": 8,
+  "iniciado": "2026-06-11T10:44:46.338558",
+  "capture_date": "11/06/2026 10:44",
+  "leiloeiros_processados": 1,
   "imoveis_total": 0,
   "por_leiloeiro": {
-    "ISALDO SOBRAL E SILVA": 0,
-    "OSMAN SOBRAL E SILVA": 0,
-    "FERNANDO GUSTAVO ALENCAR DE ALBUQUERQUE LINS": 0,
-    "OLDICÉA SOBRAL E SILVA DE ALBUQUERQUE": 0,
-    "CARLOS ADRIANO SOLANO DOS SANTOS PINHO": 0,
-    "ADILSON BENTO DE ARAÚJO": 0,
-    "CRISTIANE BARROS DA MOTA BALBINO": 0,
-    "ALEXANDRE ALMEIDA DE SOUZA E SILVA": 0
+    "ISALDO SOBRAL E SILVA": 0
   },
   "status_sites": {
-    "ISALDO SOBRAL E SILVA": "ok (0)",
-    "OSMAN SOBRAL E SILVA": "ok (0)",
-    "FERNANDO GUSTAVO ALENCAR DE ALBUQUERQUE LINS": "ok (0)",
-    "OLDICÉA SOBRAL E SILVA DE ALBUQUERQUE": "ok (0)",
-    "CARLOS ADRIANO SOLANO DOS SANTOS PINHO": "ok (0)",
-    "ADILSON BENTO DE ARAÚJO": "ok (0)",
-    "CRISTIANE BARROS DA MOTA BALBINO": "ok (0)",
-    "ALEXANDRE ALMEIDA DE SOUZA E SILVA": "ok (0)"
+    "ISALDO SOBRAL E SILVA": "ok (0)"
   },
   "erros": [],
-  "last_report": "2026-06-10T10:14:34.269438",
+  "last_report": "2026-06-11T10:45:04.586547",
   "db_novos": 0,
   "db_ja_existiam": 0
 }

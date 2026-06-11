@@ -1,150 +1,24 @@
 {
   "running": true,
-  "started_at": "2026-06-10T09:46:45",
+  "started_at": "2026-06-11T10:31:14",
   "finished_at": null,
   "timeout_s": 900,
   "total_scrapers": 47,
-  "concluidos": 15,
-  "total_sqlite_inicial": 11071,
-  "total_sqlite": 11077,
-  "novos_total": 6,
+  "concluidos": 1,
+  "total_sqlite_inicial": 11077,
+  "total_sqlite": 11084,
+  "novos_total": 7,
   "jsonl": null,
   "scrapers": [
     {
       "script": "scraper_acre.py",
-      "status": "TIMEOUT",
-      "novos": 2,
-      "antes": 11071,
-      "depois": 11073,
-      "duracao_s": 900,
-      "erro": ">15min"
-    },
-    {
-      "script": "scraper_al.py",
-      "status": "TIMEOUT",
-      "novos": 0,
-      "antes": 11073,
-      "depois": 11073,
-      "duracao_s": 900,
-      "erro": ">15min"
-    },
-    {
-      "script": "scraper_amapa.py",
-      "status": "TIMEOUT",
-      "novos": 1,
-      "antes": 11073,
-      "depois": 11074,
-      "duracao_s": 900,
-      "erro": ">15min"
-    },
-    {
-      "script": "scraper_bahia.py",
-      "status": "TIMEOUT",
-      "novos": 0,
-      "antes": 11074,
-      "depois": 11074,
-      "duracao_s": 900,
-      "erro": ">15min"
-    },
-    {
-      "script": "scraper_bomvalor.py",
-      "status": "TIMEOUT",
-      "novos": 0,
-      "antes": 11074,
-      "depois": 11074,
-      "duracao_s": 900,
-      "erro": ">15min"
-    },
-    {
-      "script": "scraper_ce.py",
-      "status": "TIMEOUT",
-      "novos": 2,
-      "antes": 11074,
-      "depois": 11076,
-      "duracao_s": 900,
-      "erro": ">15min"
-    },
-    {
-      "script": "scraper_completo.py",
-      "status": "SEM_NOVOS",
-      "novos": 0,
-      "antes": 11076,
-      "depois": 11076,
-      "duracao_s": 1,
-      "erro": ""
-    },
-    {
-      "script": "scraper_danielgarcia.py",
-      "status": "SEM_NOVOS",
-      "novos": 0,
-      "antes": 11076,
-      "depois": 11076,
-      "duracao_s": 40,
-      "erro": ""
-    },
-    {
-      "script": "scraper_extra.py",
-      "status": "SEM_NOVOS",
-      "novos": 0,
-      "antes": 11076,
-      "depois": 11076,
-      "duracao_s": 503,
-      "erro": ""
-    },
-    {
-      "script": "scraper_hoppe.py",
-      "status": "SEM_NOVOS",
-      "novos": 0,
-      "antes": 11076,
-      "depois": 11076,
-      "duracao_s": 1,
-      "erro": ""
-    },
-    {
-      "script": "scraper_imoveis_leiloeiros.py",
-      "status": "SEM_NOVOS",
-      "novos": 0,
-      "antes": 11076,
-      "depois": 11076,
-      "duracao_s": 74,
-      "erro": ""
-    },
-    {
-      "script": "scraper_juceac.py",
-      "status": "SEM_NOVOS",
-      "novos": 0,
-      "antes": 11076,
-      "depois": 11076,
-      "duracao_s": 7,
-      "erro": ""
-    },
-    {
-      "script": "scraper_juceac_completo.py",
       "status": "OK",
-      "novos": 1,
-      "antes": 11076,
-      "depois": 11077,
-      "duracao_s": 569,
-      "erro": ""
-    },
-    {
-      "script": "scraper_juceac_v2.py",
-      "status": "SEM_NOVOS",
-      "novos": 0,
+      "novos": 7,
       "antes": 11077,
-      "depois": 11077,
-      "duracao_s": 0,
+      "depois": 11084,
+      "duracao_s": 811,
       "erro": ""
-    },
-    {
-      "script": "scraper_jucees.py",
-      "status": "TIMEOUT",
-      "novos": 0,
-      "antes": 11077,
-      "depois": 11077,
-      "duracao_s": 900,
-      "erro": ">15min"
     }
   ],
-  "atual": null
+  "atual": "scraper_al.py"
 }

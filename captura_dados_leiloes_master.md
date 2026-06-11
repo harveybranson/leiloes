@@ -441,11 +441,19 @@ Implementam, na prática, as regras das partes anteriores.
 | `migrar_imagens_anexos.py` | Cria as tabelas 1→N `imovel_imagens` e `imovel_anexos` (Parte VII: "todas as fotos" + anexos). Faz backfill de `imoveis.imagem`. | `python migrar_imagens_anexos.py` |
 | `check_cobertura.py` | Gate de qualidade (Parte X DoD): % preenchido por campo; **exit ≠ 0** se abaixo do limite. | `python check_cobertura.py --por-leiloeiro` · `--desde AAAA-MM-DD` · `--json` |
 | `gerar_dashboard_frescor.py` | Dashboard HTML de cobertura por campo + frescor por data + tabela por leiloeiro (Parte IX.4). | `python gerar_dashboard_frescor.py` → `dashboard_frescor.html` |
+| `snapshot_cobertura.py` | Histórico (`cobertura_historico.jsonl`) + **detecção de regressão** (queda de cobertura por leiloeiro = sinal de redesign). | `python snapshot_cobertura.py [--limite-queda 15] [--strict]` |
+| `finalizar_coleta.py` | **Orquestra a pós-coleta:** snapshot+regressão → gate `check_cobertura` → regenera dashboard. **Exit ≠ 0 trava o commit do banco.** | `python finalizar_coleta.py --desde hoje` |
+
+**Helpers em `scraper_commons.py`** (use nos extratores): `detectar_plataforma(site, html,
+leiloeiro)` (roteia via `plataformas.json`); `extrair_galeria(html, base_url)` (todas as fotos,
+maior resolução, sem logos); `extrair_anexos(html, base_url)` (PDFs tipados); `salvar_galeria()`
+e `salvar_anexos()` (upsert nas tabelas 1→N).
 
 **Modelo de dados de fotos/anexos:** grave a foto de capa também em `imoveis.imagem` (compat.) e
 **todas** as imagens em `imovel_imagens` (`ordem`, `principal`, `largura`/`altura` para maior
 resolução). PDFs em `imovel_anexos` (`tipo` = edital/matricula/laudo, `url`, `caminho_local`).
 
-**No fim de cada coleta:** rode `check_cobertura.py --desde <hoje>` (trava se cair abaixo do
-limite) e regenere o `dashboard_frescor.html`. `% None` subindo num leiloeiro = sinal de
-redesign — investigue o extrator antes que vire buraco no banco.
+**No fim de cada coleta** (encadeado em `run_scraper.py --finalize` ou `python
+finalizar_coleta.py --desde hoje`): grava snapshot e alerta regressões → roda o gate de
+cobertura (trava se cair abaixo do limite) → regenera o `dashboard_frescor.html`. `% None`
+subindo num leiloeiro = sinal de redesign — investigue o extrator antes que vire buraco no banco.

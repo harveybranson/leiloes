@@ -10,9 +10,13 @@ Implementa as 4 correcoes sugeridas na secao 41 de captura_dados_leiloes_v2.md:
 
 Sao funcoes puras/dependencia-leve (requests + stdlib). Os scrapers importam o que precisarem.
 """
+import json
+import os
 import re
 import socket
-from urllib.parse import urlparse
+import sqlite3
+from datetime import datetime
+from urllib.parse import urljoin, urlparse
 
 import requests
 import urllib3
@@ -227,6 +231,193 @@ def merge_juntas(atual, nova):
     return "; ".join(juntas)
 
 
+# ---------------------------------------------------------------------------
+# 5. Roteamento por plataforma (le plataformas.json)
+# ---------------------------------------------------------------------------
+_PLAT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "plataformas.json")
+_PLAT_CACHE = None
+
+
+def _load_plataformas():
+    global _PLAT_CACHE
+    if _PLAT_CACHE is None:
+        try:
+            with open(_PLAT_PATH, encoding="utf-8") as f:
+                _PLAT_CACHE = json.load(f).get("plataformas", {})
+        except Exception:
+            _PLAT_CACHE = {}
+    return _PLAT_CACHE
+
+
+def detectar_plataforma(site, html=None, leiloeiro=None):
+    """Identifica a plataforma de um site usando plataformas.json.
+
+    Casa por dominio (deteccao.dominio_contem), marcador no HTML
+    (deteccao.marcadores_html), ou nome do leiloeiro (deteccao.leiloeiro_igual).
+    Retorna dict {chave, ...config} pronto para escolher adapter/tier, ou o
+    fallback 'html_generico' quando nada casa. Assim o scraper pula o
+    reconhecimento (Parte III) em fontes ja conhecidas e vai direto ao extrator.
+
+    >>> detectar_plataforma("https://www.megaleiloes.com.br/imoveis")["chave"]
+    'megaleiloes'
+    """
+    plats = _load_plataformas()
+    host = urlparse(site if "//" in (site or "") else "//" + (site or "")).netloc.lower()
+    html_l = (html or "").lower()
+    fallback = None
+    for chave, cfg in plats.items():
+        det = cfg.get("deteccao", {})
+        if det.get("fallback"):
+            fallback = {"chave": chave, **cfg}
+            continue
+        if any(d in host for d in det.get("dominio_contem", [])):
+            return {"chave": chave, **cfg}
+        if leiloeiro and leiloeiro in det.get("leiloeiro_igual", []):
+            return {"chave": chave, **cfg}
+        if html_l and any(m.lower() in html_l for m in det.get("marcadores_html", [])):
+            return {"chave": chave, **cfg}
+    return fallback
+
+
+# ---------------------------------------------------------------------------
+# 6. Extracao de galeria completa de fotos e de anexos (PDFs)
+#    Parte VII do master: "capture TODAS as fotos" + "anexos edital/matricula/laudo"
+# ---------------------------------------------------------------------------
+# Lixo que nao e foto de imovel (logo, icone, placeholder, sprite...).
+_IMG_LIXO_RE = re.compile(
+    r"logo|sprite|icon|placeholder|avatar|blank|pixel|spacer|loading|"
+    r"selo|bandeira|favicon|whatsapp|facebook|instagram|/ads?/|banner",
+    re.I,
+)
+_IMG_EXT_RE = re.compile(r"\.(?:jpe?g|png|webp)(?:\?[^\s\"']*)?$", re.I)
+# Atributos onde a URL real da imagem costuma estar (lazy-load).
+_IMG_ATTR_RE = re.compile(
+    r'(?:data-src|data-lazy|data-original|data-srcset|srcset|src|content)\s*=\s*'
+    r'["\']([^"\']+)["\']',
+    re.I,
+)
+_PDF_RE = re.compile(r'href\s*=\s*["\']([^"\']+?\.pdf(?:\?[^"\']*)?)["\']', re.I)
+
+
+def _maior_do_srcset(valor):
+    """De um srcset ('a.jpg 320w, b.jpg 1024w') devolve a URL de maior largura."""
+    melhor, melhor_w = None, -1
+    for parte in valor.split(","):
+        toks = parte.strip().split()
+        if not toks:
+            continue
+        url = toks[0]
+        w = 0
+        if len(toks) > 1 and toks[1].rstrip("wx").isdigit():
+            w = int(toks[1].rstrip("wx"))
+        if w >= melhor_w:
+            melhor, melhor_w = url, w
+    return melhor
+
+
+def extrair_galeria(html, base_url=""):
+    """Lista ordenada e deduplicada de URLs de imagens reais do imovel.
+
+    Resolve relativas->absolutas, prefere a maior resolucao do srcset, ignora
+    logos/icones/placeholders. Cobre lazy-load (data-src/data-lazy/data-original).
+    """
+    urls, vistos = [], set()
+    for tag in re.findall(r"<(?:img|source|meta)[^>]+>", html or "", re.I):
+        for m in _IMG_ATTR_RE.finditer(tag):
+            val = m.group(1).strip()
+            if not val or val.startswith("data:"):
+                continue
+            if " " in val and ("w," in val or val.rstrip().endswith(("w", "x"))):
+                val = _maior_do_srcset(val) or val
+            url = urljoin(base_url, val) if base_url else val
+            if not _IMG_EXT_RE.search(url) and "og:image" not in tag.lower():
+                continue
+            if _IMG_LIXO_RE.search(url):
+                continue
+            if url not in vistos:
+                vistos.add(url)
+                urls.append(url)
+    return urls
+
+
+def _tipo_anexo(texto):
+    t = (texto or "").lower()
+    if "edital" in t:
+        return "edital"
+    if "matr" in t:           # matricula / matrícula
+        return "matricula"
+    if "laudo" in t or "avalia" in t:
+        return "laudo"
+    return "outro"
+
+
+def extrair_anexos(html, base_url=""):
+    """Lista de {tipo, url} para os PDFs linkados (edital/matricula/laudo/outro)."""
+    out, vistos = [], set()
+    for m in re.finditer(
+        r'<a[^>]+href\s*=\s*["\']([^"\']+?\.pdf(?:\?[^"\']*)?)["\'][^>]*>(.*?)</a>',
+        html or "", re.I | re.S,
+    ):
+        href, rotulo = m.group(1), re.sub(r"<[^>]+>", " ", m.group(2))
+        url = urljoin(base_url, href) if base_url else href
+        if url in vistos:
+            continue
+        vistos.add(url)
+        out.append({"tipo": _tipo_anexo(rotulo + " " + href), "url": url})
+    # PDFs fora de <a> (ex.: em data-*), sem rotulo:
+    for m in _PDF_RE.finditer(html or ""):
+        url = urljoin(base_url, m.group(1)) if base_url else m.group(1)
+        if url not in vistos:
+            vistos.add(url)
+            out.append({"tipo": _tipo_anexo(url), "url": url})
+    return out
+
+
+# ---------------------------------------------------------------------------
+# 7. Persistencia nas tabelas 1->N (criadas por migrar_imagens_anexos.py)
+# ---------------------------------------------------------------------------
+def _con(db):
+    return db if isinstance(db, sqlite3.Connection) else sqlite3.connect(db)
+
+
+def salvar_galeria(db, imovel_id, urls, larguras=None):
+    """Upsert da galeria em imovel_imagens. urls em ordem; 1a = principal.
+    Aceita um caminho de banco OU uma sqlite3.Connection (nao fecha se passada)."""
+    if not urls:
+        return 0
+    con = _con(db)
+    agora = datetime.now().isoformat(timespec="seconds")
+    larguras = larguras or {}
+    con.executemany(
+        "INSERT OR IGNORE INTO imovel_imagens "
+        "(imovel_id, url, ordem, principal, largura, capturado_em) VALUES (?,?,?,?,?,?)",
+        [(imovel_id, u, i, 1 if i == 0 else 0, larguras.get(u), agora)
+         for i, u in enumerate(urls)],
+    )
+    con.commit()
+    if not isinstance(db, sqlite3.Connection):
+        con.close()
+    return len(urls)
+
+
+def salvar_anexos(db, imovel_id, anexos):
+    """Upsert de anexos em imovel_anexos. anexos = [{tipo,url,caminho_local?,descricao?}]."""
+    if not anexos:
+        return 0
+    con = _con(db)
+    agora = datetime.now().isoformat(timespec="seconds")
+    con.executemany(
+        "INSERT OR IGNORE INTO imovel_anexos "
+        "(imovel_id, tipo, url, caminho_local, descricao, capturado_em) VALUES (?,?,?,?,?,?)",
+        [(imovel_id, a.get("tipo", "outro"), a["url"],
+          a.get("caminho_local"), a.get("descricao"), agora) for a in anexos],
+    )
+    con.commit()
+    if not isinstance(db, sqlite3.Connection):
+        con.close()
+    return len(anexos)
+
+
 if __name__ == "__main__":
     # smoke test rapido das funcoes puras
     assert site_from_email("contato@colossoleiloes.com.br") == "https://www.colossoleiloes.com.br"
@@ -241,4 +432,28 @@ if __name__ == "__main__":
                                       "dataLeilao": "10/07/2026", "url": "/lote/1"}]}],
                          base_url="https://x.com")
     assert any("Casa em Natal" in c["titulo"] for c in cs.values()), cs
+
+    # 5. detectar_plataforma
+    assert detectar_plataforma("https://www.megaleiloes.com.br/imoveis")["chave"] == "megaleiloes"
+    assert detectar_plataforma("https://qualquer-site-desconhecido.com.br")["chave"] == "html_generico"
+    assert detectar_plataforma("https://x.com", leiloeiro="Central Sul de Leilões")["chave"] == "central_sul"
+
+    # 6. galeria: pega maior do srcset, ignora logo, resolve relativa, dedup
+    _html = ('<img src="/logo.png"><img data-src="/fotos/casa1.jpg">'
+             '<img srcset="t.jpg 320w, /fotos/casa1-grande.jpg 1024w">'
+             '<img src="https://cdn.x.com/fotos/casa1.jpg">')
+    g = extrair_galeria(_html, base_url="https://site.com.br/lote/1")
+    assert "https://site.com.br/fotos/casa1.jpg" in g
+    assert "https://site.com.br/fotos/casa1-grande.jpg" in g
+    assert all("logo" not in u for u in g), g
+
+    # 6b. anexos: tipa por rotulo/href, dedup
+    _a = ('<a href="/docs/edital.pdf">Edital do leilão</a>'
+          '<a href="/docs/matricula-123.pdf">Matrícula</a>'
+          '<a href="/docs/edital.pdf">repetido</a>')
+    ax = extrair_anexos(_a, base_url="https://site.com.br")
+    tipos = {x["tipo"] for x in ax}
+    assert "edital" in tipos and "matricula" in tipos, ax
+    assert len(ax) == 2, ax  # dedup do edital repetido
+
     print("scraper_commons: todos os smoke tests passaram OK")

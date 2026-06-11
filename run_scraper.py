@@ -1,7 +1,6 @@
 """Scraper direto nos sites dos leiloeiros — coleta todas as ofertas de imóveis."""
 import asyncio, csv, re, sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-from playwright.async_api import async_playwright
 
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
@@ -72,6 +71,7 @@ async def paginate_skip(browser, name, url_fn, selector, base, step=20, max_skip
 
 
 async def main():
+    from playwright.async_api import async_playwright  # import lazy (só na coleta)
     # URLs já existentes para marcar duplicados
     existing = set()
     try:
@@ -220,4 +220,19 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    import argparse
+    ap = argparse.ArgumentParser(description="Coleta ofertas dos leiloeiros.")
+    ap.add_argument("--finalize", action="store_true",
+                    help="após a coleta, roda o gate de qualidade (finalizar_coleta.py)")
+    ap.add_argument("--only-finalize", action="store_true",
+                    help="pula a coleta e roda apenas o gate de qualidade")
+    args, _ = ap.parse_known_args()
+
+    rc = 0
+    if not args.only_finalize:
+        asyncio.run(main())
+    if args.finalize or args.only_finalize:
+        import finalizar_coleta
+        from datetime import date
+        rc = finalizar_coleta.finalizar(desde=date.today().isoformat())
+    sys.exit(rc)

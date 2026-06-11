@@ -468,30 +468,56 @@ def carregar_municipios():
     return _IBGE_CACHE
 
 
-_UF_PAT = re.compile(r"[/\-,\s]([A-Z]{2})\b")
+# Sinais de UF de ALTA precisão (evitam o ruído de substring em texto livre):
+_UF_BRACKET = re.compile(r"\[([A-Z]{2})\]")                        # '[DF]' — marcação explícita
+_UF_CID_UF = re.compile(r"[A-Za-zÀ-ú]{3,}\s*[-/]\s*([A-Z]{2})\b")  # 'CAMPINAS - SP', 'Hugo/RS'
+_PREPS = {"em", "no", "na", "de", "da", "do"}  # preposições de lugar
 
 
 def inferir_uf(*textos):
-    """Tenta deduzir a UF a partir de texto livre (titulo/endereco/descricao/cidade).
+    """Deduz a UF a partir de texto livre (titulo/endereco/descricao/cidade) com ALTA
+    precisão (melhor deixar vazio do que gravar UF errada). Ordem dos sinais:
 
-    1) padrao explicito 'Cidade/UF' (ex.: 'Tio Hugo/RS'); 2) nome de municipio que
-    existe em uma unica UF. Retorna a sigla ou None. Nunca devolve UF invalida.
+      0) algum argumento que é EXATAMENTE um município de UF única (campo 'cidade');
+      1) 'Cidade-UF'/'Cidade/UF' (palavra + separador + sigla válida);
+      2) nome de município (UF única) logo após preposição 'em/de/no/na...' (mais longo).
+
+    Retorna a sigla ou None. Nunca devolve UF inválida.
 
     >>> inferir_uf("TERRENO EM TIO HUGO/RS")
     'RS'
+    >>> inferir_uf("APARTAMENTO | CAMPINAS - SP 1º Leilão")
+    'SP'
     """
     byname, ufs = carregar_municipios()
     if not ufs:
         return None
-    txt = " ".join(str(t or "") for t in textos)
-    for m in _UF_PAT.finditer(txt):
-        if m.group(1) in ufs:
-            return m.group(1)
-    ntxt = " " + _norm_txt(txt) + " "
-    for nome, nufs in byname.items():
-        if len(nome) >= 5 and len(nufs) == 1 and (" " + nome + " ") in ntxt:
+    # 0) argumento que é exatamente um município (típico do campo 'cidade')
+    for t in textos:
+        nufs = byname.get(_norm_txt(t))
+        if nufs and len(nufs) == 1:
             return next(iter(nufs))
-    return None
+    txt = " ".join(str(t or "") for t in textos)
+    # 1) UF entre colchetes '[DF]' e 'Cidade<sep>UF' com sigla válida
+    for rx in (_UF_BRACKET, _UF_CID_UF):
+        m = rx.search(txt)
+        if m and m.group(1) in ufs:
+            return m.group(1)
+    # 2) município após preposição de lugar. Avalia CADA preposição e fica com o nome
+    #    MAIS LONGO (mais específico) que existe no IBGE numa única UF — assim
+    #    'no Rio de Janeiro' vence 'em Ipanema', e 'São Paulo do Potengi' vence 'São Paulo'.
+    toks = _norm_txt(txt).split()
+    melhor_nome, melhor_uf = "", None
+    for i, w in enumerate(toks):
+        if w not in _PREPS:
+            continue
+        for n in range(4, 0, -1):
+            cand = " ".join(toks[i + 1 : i + 1 + n])
+            nufs = byname.get(cand)
+            if nufs and len(nufs) == 1 and len(cand) > len(melhor_nome):
+                melhor_nome, melhor_uf = cand, next(iter(nufs))
+                break
+    return melhor_uf
 
 
 def municipio_valido(cidade, uf=None):
@@ -543,8 +569,11 @@ if __name__ == "__main__":
 
     # 8. inferir UF
     assert inferir_uf("TERRENO URBANO EM TIO HUGO/RS") == "RS", inferir_uf("...TIO HUGO/RS")
+    assert inferir_uf("Porto Alegre", "Casa") == "RS", inferir_uf("Porto Alegre")  # longest-match
     assert inferir_uf("sem nada util aqui") is None
     assert inferir_uf("XX") is None  # UF inexistente não vaza
+    assert inferir_uf("APARTAMENTO no centro") is None  # 'AP' não vaza como Amapá
+    assert inferir_uf("Casa, AP 101, bloco B") is None  # vírgula+sigla não conta
     assert municipio_valido("Porto Alegre", "RS") is True
     assert municipio_valido("Porto Alegre", "SP") is False
 

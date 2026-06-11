@@ -32,6 +32,17 @@ from pathlib import Path
 from datetime import datetime
 from decimal import Decimal
 
+import scraper_commons as sc   # inferir_uf (backfill de UF na importação)
+
+
+def uf_backfill(r, padrao=""):
+    """UF do CSV; se vazia, deduz de cidade/titulo/descricao via IBGE; senão o padrão."""
+    uf = clean(r.get("uf"), 2)
+    if uf:
+        return uf
+    uf = sc.inferir_uf(r.get("cidade"), r.get("titulo"), r.get("descricao"))
+    return uf or padrao
+
 try:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 except Exception:
@@ -104,7 +115,7 @@ def import_sqlite(rows, junta):
         cur.execute("INSERT OR IGNORE INTO imoveis VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     (rid, clean(r.get("leiloeiro")), r.get("junta") or junta, clean(r.get("site")),
                      clean(r.get("titulo"), 500), clean(r.get("descricao"), 300), "",
-                     clean(r.get("cidade")), clean(r.get("uf")),
+                     clean(r.get("cidade")), uf_backfill(r),
                      to_dec(r.get("preco")), None, clean(r.get("data_leilao")),
                      url, "imovel", clean(r.get("imagem")), agora))
         novos += cur.rowcount
@@ -135,7 +146,7 @@ def import_postgres(rows, fonte, url_base, estado_padrao):
             "url_original": url,
             "tipo_imovel": tipo_imovel(r.get("titulo")),
             "cidade": clean(r.get("cidade"), 200),
-            "estado": clean(r.get("uf"), 2) or estado_padrao,
+            "estado": uf_backfill(r, estado_padrao),
             "valor_minimo": "" if vmin is None else str(vmin),
             "data_primeiro_leilao": to_date_iso(r.get("data_leilao")),
             "imagem_principal": clean(r.get("imagem"), 1000),

@@ -32,6 +32,7 @@ HTML_OUT = BASE / "anuncios_novos.html"
 PG_DSN = "host=localhost port=5432 dbname=leilao_db user=leilao password=leilao123"
 
 import scraper_rr_ro as S  # reusa render(), scrape_leiloeiro(), extract_cards()
+import scraper_commons as S_commons  # inferir_uf (backfill de UF no staging)
 
 PDF_OK = re.compile(r"edital|matr[ií]cula|laudo|avalia[çc][ãa]o|certid|processo", re.I)
 PDF_BAD = re.compile(r"cookie|termo|pol[ií]tica|aviso|lgpd|privacidade", re.I)
@@ -182,7 +183,10 @@ def main():
              tipo,imagem,fotos,edital,matricula,anexos,status,aprovado,capturado_em)
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)""",
             (im["url"], im["leiloeiro"], im.get("site", ""), im["titulo"], im.get("descricao_full", ""),
-             im.get("cidade", ""), im.get("uf", ""), im.get("preco", ""), im.get("lance_inicial"),
+             im.get("cidade", ""),
+             im.get("uf") or S_commons.inferir_uf(im.get("cidade"), im.get("titulo"),
+                                                   im.get("descricao_full")) or "",
+             im.get("preco", ""), im.get("lance_inicial"),
              im.get("data_leilao", ""), "imovel", (im.get("fotos") or [""])[0],
              json.dumps(im.get("fotos", []), ensure_ascii=False), im.get("edital", ""),
              im.get("matricula", ""), json.dumps(im.get("anexos_list", []), ensure_ascii=False),

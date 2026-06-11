@@ -445,11 +445,25 @@ Implementam, na prática, as regras das partes anteriores.
 | `finalizar_coleta.py` | **Orquestra a pós-coleta:** snapshot+regressão → gate `check_cobertura` → regenera dashboard. **Exit ≠ 0 trava o commit do banco.** | `python finalizar_coleta.py --desde hoje` |
 | `enrich_local.py` | Enriquecimento **offline** (sem rede) do que já está no banco: deduz `uf` via IBGE (`inferir_uf`) e `lance_inicial` do texto. Idempotente. | `python enrich_local.py [--dry-run]` |
 | `scripts/run-quality.ps1` + `setup-scheduled-quality.ps1` | Agenda o gate **1×/dia** (Task Scheduler), alimentando o histórico p/ a detecção de regressão. | `powershell -File scripts\setup-scheduled-quality.ps1` |
+| `gerar_viewer_galeria.py` | Viewer HTML com **carrossel** de fotos por imóvel (lê `imovel_imagens` 1→N) + links de anexos; filtro por UF/texto. | `python gerar_viewer_galeria.py` → `viewer_galeria.html` |
+| `.claude/settings.json` + `scripts/session-setup.sh` | **SessionStart hook** (inclui Claude na web): instala deps + Playwright/Chromium e roda o smoke test. | automático ao abrir a sessão |
 
 **Plug no `scraper_detalhe.py`:** o `_extract` já chama `extrair_galeria`/`extrair_anexos` e
 infere `uf`; ao fim, `persistir_midia()` casa cada lote (por `url`) com `imoveis.id` e grava nas
 tabelas 1→N. **Dashboard:** painel de **tendência** (sparkline de cobertura global por campo) e de
 **regressões** entre os dois últimos snapshots.
+
+**Inferência de UF (`scraper_commons.inferir_uf`) — alta precisão** (melhor vazio que errado):
+sinais aceitos, em ordem — (0) campo que é exatamente um município de UF única; (1) `[UF]` entre
+colchetes ou `Cidade-UF`/`Cidade/UF`; (2) município após preposição de lugar (`em/de/no/na…`),
+escolhendo o nome **mais longo** (`no Rio de Janeiro` vence `em Ipanema`). Não deduz de siglas
+soltas (`AP`/`SP`) para não colidir com "apartamento" etc. Resultado no banco: `uf` 85,6% → 91,1%.
+
+> **Nota sobre o piloto de `scraper_detalhe.py`:** recuperar `lance_inicial` (64,3%) e popular as
+> galerias 1→N **em volume** exige rodar o scraper com **navegador real** — todos os leiloeiros
+> retornam HTTP 403 a requisições sem browser e dependem do Chromium do Playwright. O caminho está
+> plugado e testado ponta a ponta; rode em ambiente com navegador/CDN liberado (a máquina onde os
+> scrapers já rodam, ou uma sessão web com rede ao CDN do Playwright via o SessionStart hook).
 
 **Helpers em `scraper_commons.py`** (use nos extratores): `detectar_plataforma(site, html,
 leiloeiro)` (roteia via `plataformas.json`); `extrair_galeria(html, base_url)` (todas as fotos,

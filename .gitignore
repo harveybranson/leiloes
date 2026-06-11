@@ -1,5 +1,6 @@
-# Claude Code
-.claude/
+# Claude Code (ignora tudo, exceto o hook de setup versionado)
+.claude/*
+!.claude/settings.json
 
 # Logs
 *.log

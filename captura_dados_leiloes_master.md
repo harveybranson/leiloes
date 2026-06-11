@@ -443,6 +443,13 @@ Implementam, na prática, as regras das partes anteriores.
 | `gerar_dashboard_frescor.py` | Dashboard HTML de cobertura por campo + frescor por data + tabela por leiloeiro (Parte IX.4). | `python gerar_dashboard_frescor.py` → `dashboard_frescor.html` |
 | `snapshot_cobertura.py` | Histórico (`cobertura_historico.jsonl`) + **detecção de regressão** (queda de cobertura por leiloeiro = sinal de redesign). | `python snapshot_cobertura.py [--limite-queda 15] [--strict]` |
 | `finalizar_coleta.py` | **Orquestra a pós-coleta:** snapshot+regressão → gate `check_cobertura` → regenera dashboard. **Exit ≠ 0 trava o commit do banco.** | `python finalizar_coleta.py --desde hoje` |
+| `enrich_local.py` | Enriquecimento **offline** (sem rede) do que já está no banco: deduz `uf` via IBGE (`inferir_uf`) e `lance_inicial` do texto. Idempotente. | `python enrich_local.py [--dry-run]` |
+| `scripts/run-quality.ps1` + `setup-scheduled-quality.ps1` | Agenda o gate **1×/dia** (Task Scheduler), alimentando o histórico p/ a detecção de regressão. | `powershell -File scripts\setup-scheduled-quality.ps1` |
+
+**Plug no `scraper_detalhe.py`:** o `_extract` já chama `extrair_galeria`/`extrair_anexos` e
+infere `uf`; ao fim, `persistir_midia()` casa cada lote (por `url`) com `imoveis.id` e grava nas
+tabelas 1→N. **Dashboard:** painel de **tendência** (sparkline de cobertura global por campo) e de
+**regressões** entre os dois últimos snapshots.
 
 **Helpers em `scraper_commons.py`** (use nos extratores): `detectar_plataforma(site, html,
 leiloeiro)` (roteia via `plataformas.json`); `extrair_galeria(html, base_url)` (todas as fotos,

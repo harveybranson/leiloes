@@ -27,7 +27,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 DB_PADRAO = "imoveis_leiloeiros.db"
 HIST_PADRAO = "cobertura_historico.jsonl"
-CAMPOS_CHAVE = ["titulo", "descricao", "cidade", "lance_inicial", "data_leilao", "imagem"]
+CAMPOS_CHAVE = ["titulo", "descricao", "cidade", "uf", "lance_inicial", "data_leilao", "imagem"]
 
 
 def _vazio(v):

@@ -76,9 +76,40 @@ def coletar(db_path):
                                                       "lance_inicial", "data_leilao", "imagem"]}})
     por_leil.sort(key=lambda x: -x["total"])
 
+    historico, regressoes = _historico_e_regressoes()
+
     return {"total": total, "cob_global": cob_global, "frescor": frescor,
             "por_leiloeiro": por_leil, "limites": LIMITES,
+            "historico": historico, "regressoes": regressoes,
             "gerado_em": datetime.now().isoformat(timespec="seconds")}
+
+
+def _historico_e_regressoes(hist_path="cobertura_historico.jsonl"):
+    """Lê o histórico de snapshots → série de cobertura global por campo (sparkline)
+    + regressões entre os dois últimos snapshots (sinal de redesign, Parte IX.4)."""
+    snaps = []
+    try:
+        with open(hist_path, encoding="utf-8") as f:
+            for ln in f:
+                if ln.strip():
+                    snaps.append(json.loads(ln))
+    except FileNotFoundError:
+        return {"ts": [], "series": {}}, []
+
+    campos = list(snaps[-1].get("global", {})) if snaps else []
+    historico = {
+        "ts": [s["ts"][5:16].replace("T", " ") for s in snaps],
+        "series": {c: [s.get("global", {}).get(c, 0) for s in snaps] for c in campos},
+    }
+    regs = []
+    if len(snaps) >= 2:
+        try:
+            import snapshot_cobertura
+            regs = snapshot_cobertura.regressoes(snaps[-2], snaps[-1],
+                                                 limite=15.0, min_volume=20)
+        except Exception:
+            regs = []
+    return historico, regs
 
 
 HTML = """<!doctype html>
@@ -114,6 +145,8 @@ HTML = """<!doctype html>
 <div class="grid">
   <div class="card"><h2>Cobertura por campo (global)</h2><div id="cov"></div></div>
   <div class="card"><h2>Frescor — imóveis por data de importação</h2><div class="bars" id="fresh"></div></div>
+  <div class="card"><h2>Tendência — cobertura global por campo</h2><div id="trend"></div></div>
+  <div class="card"><h2>Regressões detectadas <span class="sub" style="font-weight:400">(queda ≥15pp vs. snapshot anterior)</span></h2><div id="reg"></div></div>
   <div class="card full"><h2>Por leiloeiro <span class="sub" style="font-weight:400">(clique no cabeçalho para ordenar)</span>
     <input id="q" placeholder="filtrar leiloeiro..." oninput="render()"></h2>
     <table id="tbl"><thead><tr>
@@ -149,6 +182,47 @@ for (const [d,n] of fe){
      <div class="b" style="height:${Math.round(100*n/max)}%"></div>
      <div class="cap">${d.slice(5)}</div></div>`);
 }
+// tendência: sparkline SVG por campo a partir do histórico de snapshots
+const trend = document.getElementById('trend');
+const H = D.historico || {ts:[], series:{}};
+const nSnap = (H.ts||[]).length;
+if (nSnap < 2){
+  trend.innerHTML = `<div class="sub">Histórico com ${nSnap} snapshot(s). `+
+    `A tendência aparece a partir de 2 (rode <code>snapshot_cobertura.py</code> a cada coleta).</div>`;
+} else {
+  for (const c of Object.keys(H.series)){
+    const vals = H.series[c]; const lim = D.limites[c];
+    const W=180, Ht=28;
+    const pts = vals.map((v,i)=>`${(i/(vals.length-1)*W).toFixed(1)},${(Ht-(v/100*Ht)).toFixed(1)}`).join(' ');
+    const last = vals[vals.length-1], first = vals[0], delta = (last-first);
+    const dc = delta<-0.05? 'cell-bad' : (delta>0.05?'':''); const sign = delta>=0?'+':'';
+    trend.insertAdjacentHTML('beforeend',
+      `<div class="row"><div class="lbl">${c}</div>
+       <svg width="${W}" height="${Ht}" style="overflow:visible">
+         ${lim?`<line x1="0" y1="${(Ht-(lim/100*Ht)).toFixed(1)}" x2="${W}" y2="${(Ht-(lim/100*Ht)).toFixed(1)}" stroke="#fff" stroke-opacity=".25" stroke-dasharray="3 3"/>`:''}
+         <polyline points="${pts}" fill="none" stroke="${last<(lim||0)?'var(--bad)':'var(--accent)'}" stroke-width="1.5"/>
+       </svg>
+       <div class="num">${last.toFixed(0)}%</div>
+       <div class="num ${dc}" title="variação no período">${sign}${delta.toFixed(1)}</div></div>`);
+  }
+}
+
+// regressões detectadas
+const reg = document.getElementById('reg');
+const R = D.regressoes || [];
+if (!R.length){
+  reg.innerHTML = `<div class="sub">✓ Nenhuma regressão entre os dois últimos snapshots.</div>`;
+} else {
+  reg.insertAdjacentHTML('beforeend', `<div class="sub" style="margin-bottom:8px">⚠ ${R.length} regressão(ões) — provável redesign de site:</div>`);
+  for (const r of R.slice(0,30)){
+    reg.insertAdjacentHTML('beforeend',
+      `<div class="row"><div class="lbl" style="width:auto;flex:1">${r.leiloeiro}</div>
+       <span class="pill" style="background:#3d1418;color:var(--bad)">${r.campo}</span>
+       <div class="num">${r.antes.toFixed(0)}→${r.agora.toFixed(0)}%</div>
+       <div class="num cell-bad">−${r.queda.toFixed(0)}pp</div></div>`);
+  }
+}
+
 // tabela por leiloeiro
 let key='total', asc=false;
 function sort(k){ asc = (key===k)?!asc:false; key=k; render(); }

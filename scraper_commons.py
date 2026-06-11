@@ -418,6 +418,91 @@ def salvar_anexos(db, imovel_id, anexos):
     return len(anexos)
 
 
+# ---------------------------------------------------------------------------
+# 8. Inferencia/validacao de UF e municipio via _ibge_municipios.json
+#    Parte VII do master: "valide o municipio contra _ibge_municipios.json"
+# ---------------------------------------------------------------------------
+import unicodedata  # noqa: E402  (local ao bloco IBGE)
+
+_IBGE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_ibge_municipios.json")
+_IBGE_CACHE = None  # (byname: {nome_norm: set(UF)}, ufs: set)
+
+
+def _norm_txt(s):
+    s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode().lower()
+    return re.sub(r"[^a-z0-9 ]", " ", s).strip()
+
+
+def _uf_de_municipio(m):
+    """Extrai a sigla da UF de um registro do IBGE (cobre os 2 formatos de aninhamento)."""
+    try:
+        mr = m.get("microrregiao")
+        if mr:
+            return mr["mesorregiao"]["UF"]["sigla"]
+    except Exception:
+        pass
+    try:
+        ri = m.get("regiao-imediata")
+        if ri:
+            return ri["regiao-intermediaria"]["UF"]["sigla"]
+    except Exception:
+        pass
+    return None
+
+
+def carregar_municipios():
+    """Carrega (uma vez) o indice nome_municipio_normalizado -> set(UF) e o set de UFs."""
+    global _IBGE_CACHE
+    if _IBGE_CACHE is None:
+        byname = {}
+        try:
+            with open(_IBGE_PATH, encoding="utf-8") as f:
+                for m in json.load(f):
+                    uf = _uf_de_municipio(m)
+                    if uf:
+                        byname.setdefault(_norm_txt(m["nome"]), set()).add(uf)
+        except Exception:
+            pass
+        ufs = {s for v in byname.values() for s in v}
+        _IBGE_CACHE = (byname, ufs)
+    return _IBGE_CACHE
+
+
+_UF_PAT = re.compile(r"[/\-,\s]([A-Z]{2})\b")
+
+
+def inferir_uf(*textos):
+    """Tenta deduzir a UF a partir de texto livre (titulo/endereco/descricao/cidade).
+
+    1) padrao explicito 'Cidade/UF' (ex.: 'Tio Hugo/RS'); 2) nome de municipio que
+    existe em uma unica UF. Retorna a sigla ou None. Nunca devolve UF invalida.
+
+    >>> inferir_uf("TERRENO EM TIO HUGO/RS")
+    'RS'
+    """
+    byname, ufs = carregar_municipios()
+    if not ufs:
+        return None
+    txt = " ".join(str(t or "") for t in textos)
+    for m in _UF_PAT.finditer(txt):
+        if m.group(1) in ufs:
+            return m.group(1)
+    ntxt = " " + _norm_txt(txt) + " "
+    for nome, nufs in byname.items():
+        if len(nome) >= 5 and len(nufs) == 1 and (" " + nome + " ") in ntxt:
+            return next(iter(nufs))
+    return None
+
+
+def municipio_valido(cidade, uf=None):
+    """True se 'cidade' existe no IBGE (e, se uf dada, naquela UF)."""
+    byname, _ = carregar_municipios()
+    ufs = byname.get(_norm_txt(cidade))
+    if not ufs:
+        return False
+    return (uf in ufs) if uf else True
+
+
 if __name__ == "__main__":
     # smoke test rapido das funcoes puras
     assert site_from_email("contato@colossoleiloes.com.br") == "https://www.colossoleiloes.com.br"
@@ -455,5 +540,12 @@ if __name__ == "__main__":
     tipos = {x["tipo"] for x in ax}
     assert "edital" in tipos and "matricula" in tipos, ax
     assert len(ax) == 2, ax  # dedup do edital repetido
+
+    # 8. inferir UF
+    assert inferir_uf("TERRENO URBANO EM TIO HUGO/RS") == "RS", inferir_uf("...TIO HUGO/RS")
+    assert inferir_uf("sem nada util aqui") is None
+    assert inferir_uf("XX") is None  # UF inexistente não vaza
+    assert municipio_valido("Porto Alegre", "RS") is True
+    assert municipio_valido("Porto Alegre", "SP") is False
 
     print("scraper_commons: todos os smoke tests passaram OK")

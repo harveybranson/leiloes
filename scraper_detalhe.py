@@ -21,6 +21,7 @@ import asyncio
 import csv
 import json
 import re
+import sqlite3
 import sys
 import time
 from pathlib import Path
@@ -28,7 +29,11 @@ from pathlib import Path
 import requests
 from playwright.async_api import async_playwright
 
+import scraper_commons as sc
+
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+DB_PATH = "imoveis_leiloeiros.db"
 
 INPUT_CSV    = "ofertas_completo.csv"
 OUTPUT_CSV   = "ofertas_detalhadas.csv"
@@ -174,6 +179,23 @@ def _extract(html: str, base: dict) -> dict:
     )
     if img_m and not r.get("imagem_url"):
         r["imagem_url"] = img_m.group(1)
+
+    # ── Galeria completa + anexos (Parte VII do master) ───────────────────────
+    base_url = r.get("url", "")
+    galeria = sc.extrair_galeria(html, base_url)
+    if galeria:
+        r["imagens"] = galeria                       # lista completa (persistida em 1→N)
+        if not r.get("imagem_url"):
+            r["imagem_url"] = galeria[0]             # capa = 1ª da galeria
+    anexos = sc.extrair_anexos(html, base_url)
+    if anexos:
+        r["anexos"] = anexos
+
+    # ── UF: deduz do texto quando ausente, validando contra IBGE ──────────────
+    if not (r.get("estado") or "").strip():
+        uf = sc.inferir_uf(r.get("titulo"), r.get("bairro"), r.get("cidade"), txt[:4000])
+        if uf:
+            r["estado"] = uf
 
     return r
 
@@ -407,6 +429,37 @@ async def main(reset: bool, limite: int | None):
         await browser.close()
 
     _print_summary(rows_out)
+    persistir_midia(rows_out)
+
+
+def persistir_midia(rows: list, db: str = DB_PATH):
+    """Grava galeria (imovel_imagens) e anexos (imovel_anexos) das linhas coletadas.
+
+    Casa cada linha com imoveis.id pela url. Cria as tabelas 1→N se faltarem.
+    Falhas não interrompem a coleta (a mídia é enriquecimento, não bloqueante).
+    """
+    com_midia = [r for r in rows if r.get("imagens") or r.get("anexos")]
+    if not com_midia:
+        return
+    try:
+        import migrar_imagens_anexos
+        con = sqlite3.connect(db)
+        migrar_imagens_anexos.migrar(db, backfill=False)  # garante as tabelas
+        url2id = {u: i for i, u in con.execute(
+            "SELECT id, url FROM imoveis WHERE url IS NOT NULL AND TRIM(url) <> ''")}
+        n_img = n_anx = n_lig = 0
+        for r in com_midia:
+            iid = url2id.get(r.get("url"))
+            if not iid:
+                continue
+            n_lig += 1
+            n_img += sc.salvar_galeria(con, iid, r.get("imagens") or [])
+            n_anx += sc.salvar_anexos(con, iid, r.get("anexos") or [])
+        con.close()
+        print(f"\nMídia persistida: {n_img} imagens + {n_anx} anexos "
+              f"em {n_lig} imóveis (1→N).")
+    except Exception as e:  # noqa: BLE001
+        print(f"\n[aviso] persistência de mídia pulada: {e}")
 
 
 def _print_summary(rows: list):

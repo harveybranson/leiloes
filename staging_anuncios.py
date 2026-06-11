@@ -32,7 +32,20 @@ HTML_OUT = BASE / "anuncios_novos.html"
 PG_DSN = "host=localhost port=5432 dbname=leilao_db user=leilao password=leilao123"
 
 import scraper_rr_ro as S  # reusa render(), scrape_leiloeiro(), extract_cards()
-import scraper_commons as S_commons  # inferir_uf (backfill de UF no staging)
+import scraper_commons as S_commons  # inferir_uf / extrair_municipio (limpeza na origem)
+
+
+def _cidade_limpa_staging(im):
+    """Normaliza a cidade na captura: extrai o município real do IBGE quando o valor é
+    bairro+cidade; mantém o original se nada reconhecível."""
+    cidade = (im.get("cidade") or "").strip()
+    if not cidade or S_commons.municipio_valido(cidade):
+        return cidade
+    uf = (im.get("uf") or "").strip().upper()
+    m = S_commons.extrair_municipio(cidade, uf_hint=uf or None)
+    if m and (not uf or uf in m["ufs"]):
+        return m["nome"]
+    return cidade
 
 PDF_OK = re.compile(r"edital|matr[ií]cula|laudo|avalia[çc][ãa]o|certid|processo", re.I)
 PDF_BAD = re.compile(r"cookie|termo|pol[ií]tica|aviso|lgpd|privacidade", re.I)
@@ -183,7 +196,7 @@ def main():
              tipo,imagem,fotos,edital,matricula,anexos,status,aprovado,capturado_em)
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)""",
             (im["url"], im["leiloeiro"], im.get("site", ""), im["titulo"], im.get("descricao_full", ""),
-             im.get("cidade", ""),
+             _cidade_limpa_staging(im),
              im.get("uf") or S_commons.inferir_uf(im.get("cidade"), im.get("titulo"),
                                                    im.get("descricao_full")) or "",
              im.get("preco", ""), im.get("lance_inicial"),

@@ -439,7 +439,7 @@ Implementam, na prática, as regras das partes anteriores.
 |---|---|---|
 | `plataformas.json` | Mapa plataforma → tier/adapter (Parte II/III.4). Pula o reconhecimento em fontes já conhecidas. | consultar `deteccao` por domínio/marcador HTML; achou → use `adapter`/`tier` |
 | `migrar_imagens_anexos.py` | Cria as tabelas 1→N `imovel_imagens` e `imovel_anexos` (Parte VII: "todas as fotos" + anexos). Faz backfill de `imoveis.imagem`. | `python migrar_imagens_anexos.py` |
-| `check_cobertura.py` | Gate de qualidade (Parte X DoD): % preenchido por campo; **exit ≠ 0** se abaixo do limite. | `python check_cobertura.py --por-leiloeiro` · `--desde AAAA-MM-DD` · `--json` |
+| `check_cobertura.py` | Gate de qualidade (Parte X DoD): % preenchido por campo; **exit ≠ 0** se abaixo do limite. **`--gate-leiloeiro`** também falha se UM leiloeiro despenca ≥`margem`pp abaixo da média num campo crítico (`n≥min-volume`) — pega redesign/extrator quebrado antes de afetar a média. | `python check_cobertura.py --por-leiloeiro` · `--gate-leiloeiro [--margem 40] [--min-volume 20]` · `--json` |
 | `gerar_dashboard_frescor.py` | Dashboard HTML de cobertura por campo + frescor por data + tabela por leiloeiro (Parte IX.4). | `python gerar_dashboard_frescor.py` → `dashboard_frescor.html` |
 | `snapshot_cobertura.py` | Histórico (`cobertura_historico.jsonl`) + **detecção de regressão** (queda de cobertura por leiloeiro = sinal de redesign). | `python snapshot_cobertura.py [--limite-queda 15] [--strict]` |
 | `finalizar_coleta.py` | **Orquestra a pós-coleta:** snapshot+regressão → gate `check_cobertura` → regenera dashboard. **Exit ≠ 0 trava o commit do banco.** | `python finalizar_coleta.py --desde hoje` |
@@ -447,6 +447,11 @@ Implementam, na prática, as regras das partes anteriores.
 | `scripts/run-quality.ps1` + `setup-scheduled-quality.ps1` | Agenda o gate **1×/dia** (Task Scheduler), alimentando o histórico p/ a detecção de regressão. | `powershell -File scripts\setup-scheduled-quality.ps1` |
 | `gerar_viewer_galeria.py` | Viewer HTML com **carrossel** de fotos por imóvel (lê `imovel_imagens` 1→N) + links de anexos; filtro por UF/texto. | `python gerar_viewer_galeria.py` → `viewer_galeria.html` |
 | `.claude/settings.json` + `scripts/session-setup.sh` | **SessionStart hook** (inclui Claude na web): instala deps + Playwright/Chromium e roda o smoke test. | automático ao abrir a sessão |
+
+**Limpeza de cidade na ORIGEM:** `importar_site.py` (`cidade_limpa`) e `staging_anuncios.py`
+(`_cidade_limpa_staging`) já normalizam a cidade na importação via `sc.extrair_municipio` (nome
+canônico do IBGE quando o valor é bairro+cidade), evitando gravar ruído de origem — não só no
+enrich a posteriori.
 
 **Plug no `scraper_detalhe.py`:** o `_extract` já chama `extrair_galeria`/`extrair_anexos` e
 infere `uf`; ao fim, `persistir_midia()` casa cada lote (por `url`) com `imoveis.id` e grava nas

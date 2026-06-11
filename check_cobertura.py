@@ -106,6 +106,12 @@ def main():
     ap.add_argument("--min", action="append", default=[],
                     help="override por campo, ex.: --min titulo=95")
     ap.add_argument("--json", action="store_true", help="saída em JSON")
+    ap.add_argument("--gate-leiloeiro", action="store_true",
+                    help="também falha se um leiloeiro despencar vs. a média (pega redesign)")
+    ap.add_argument("--margem", type=float, default=40.0,
+                    help="com --gate-leiloeiro: pp abaixo do global p/ flagar (padrão 40)")
+    ap.add_argument("--min-volume", type=int, default=20,
+                    help="com --gate-leiloeiro: ignora leiloeiros com menos de N imóveis")
     args = ap.parse_args()
 
     limites = dict(LIMITES_PADRAO)
@@ -127,7 +133,7 @@ def main():
     falhas = {c: cob[c] for c in limites if cob[c] < limites[c]}
 
     por_leil = {}
-    if args.por_leiloeiro:
+    if args.por_leiloeiro or args.gate_leiloeiro:
         grupos = {}
         for ln in linhas:
             grupos.setdefault(ln.get("leiloeiro") or "(sem leiloeiro)", []).append(ln)
@@ -135,10 +141,24 @@ def main():
             c, t = cobertura(ls, list(limites))
             por_leil[nome] = {"total": t, "cobertura": c}
 
+    # Gate por leiloeiro: flagra quem despenca >margem pp abaixo do global num campo
+    # crítico (sinal de redesign/extrator quebrado), com volume mínimo. Auto-calibrado.
+    outliers = []
+    if args.gate_leiloeiro:
+        for nome, info in por_leil.items():
+            if info["total"] < args.min_volume:
+                continue
+            for c in limites:
+                queda = cob[c] - info["cobertura"][c]
+                if queda >= args.margem and info["cobertura"][c] < limites[c]:
+                    outliers.append({"leiloeiro": nome, "campo": c, "total": info["total"],
+                                     "leiloeiro_pct": info["cobertura"][c], "global_pct": cob[c]})
+        outliers.sort(key=lambda x: x["leiloeiro_pct"] - x["global_pct"])
+
     if args.json:
         print(json.dumps({
             "total": total, "cobertura": cob, "limites": limites,
-            "falhas": falhas, "por_leiloeiro": por_leil,
+            "falhas": falhas, "por_leiloeiro": por_leil, "outliers_leiloeiro": outliers,
         }, ensure_ascii=False, indent=2))
     else:
         print(f"\n  COBERTURA DE CAMPOS  ({total} imóveis"
@@ -158,14 +178,30 @@ def main():
                 img = info["cobertura"].get("imagem", 0)
                 print(f"    {nome[:34]:<34} n={info['total']:<5} "
                       f"titulo={tit:5.1f}%  imagem={img:5.1f}%")
+        if args.gate_leiloeiro:
+            print(f"\n  GATE POR LEILOEIRO (≥{args.margem:.0f}pp abaixo do global, "
+                  f"n≥{args.min_volume}):")
+            if outliers:
+                for o in outliers[:15]:
+                    print(f"    ✗ {o['leiloeiro'][:32]:<32} {o['campo']:<13} "
+                          f"{o['leiloeiro_pct']:5.1f}% (global {o['global_pct']:.0f}%) n={o['total']}")
+                if len(outliers) > 15:
+                    print(f"    ... (+{len(outliers) - 15})")
+            else:
+                print("    ✓ nenhum leiloeiro destoa da média.")
         print()
+        motivos = []
         if falhas:
-            print("  RESULTADO: ✗ FALHOU — campos abaixo do limite: "
-                  + ", ".join(f"{c} ({v:.1f}%)" for c, v in falhas.items()))
+            motivos.append("campos globais abaixo do limite: "
+                           + ", ".join(f"{c} ({v:.1f}%)" for c, v in falhas.items()))
+        if args.gate_leiloeiro and outliers:
+            motivos.append(f"{len(outliers)} leiloeiro(s) despencando")
+        if motivos:
+            print("  RESULTADO: ✗ FALHOU — " + "; ".join(motivos))
         else:
-            print("  RESULTADO: ✓ OK — todos os campos críticos acima do limite.")
+            print("  RESULTADO: ✓ OK — cobertura dentro dos limites.")
 
-    sys.exit(1 if falhas else 0)
+    sys.exit(1 if (falhas or (args.gate_leiloeiro and outliers)) else 0)
 
 
 if __name__ == "__main__":

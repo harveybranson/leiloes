@@ -43,6 +43,21 @@ def uf_backfill(r, padrao=""):
     uf = sc.inferir_uf(r.get("cidade"), r.get("titulo"), r.get("descricao"))
     return uf or padrao
 
+
+def cidade_limpa(r):
+    """Normaliza `cidade` JÁ na importação (corrige o ruído na origem, item Parte XI):
+    se o valor não é um município do IBGE, tenta extrair o município real (bairro+cidade)
+    usando a UF como desambiguador, gravando o nome canônico. Se não houver município
+    reconhecível, mantém o valor original (a limpeza em massa fica para enrich_local)."""
+    cidade = clean(r.get("cidade"))
+    if not cidade or sc.municipio_valido(cidade):
+        return cidade
+    uf = clean(r.get("uf"), 2)
+    m = sc.extrair_municipio(cidade, uf_hint=uf or None)
+    if m and (not uf or uf in m["ufs"]):
+        return m["nome"]
+    return cidade
+
 try:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 except Exception:
@@ -115,7 +130,7 @@ def import_sqlite(rows, junta):
         cur.execute("INSERT OR IGNORE INTO imoveis VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     (rid, clean(r.get("leiloeiro")), r.get("junta") or junta, clean(r.get("site")),
                      clean(r.get("titulo"), 500), clean(r.get("descricao"), 300), "",
-                     clean(r.get("cidade")), uf_backfill(r),
+                     cidade_limpa(r), uf_backfill(r),
                      to_dec(r.get("preco")), None, clean(r.get("data_leilao")),
                      url, "imovel", clean(r.get("imagem")), agora))
         novos += cur.rowcount
@@ -145,7 +160,7 @@ def import_postgres(rows, fonte, url_base, estado_padrao):
             "descricao": clean(r.get("descricao"), 500),
             "url_original": url,
             "tipo_imovel": tipo_imovel(r.get("titulo")),
-            "cidade": clean(r.get("cidade"), 200),
+            "cidade": clean(cidade_limpa(r), 200),
             "estado": uf_backfill(r, estado_padrao),
             "valor_minimo": "" if vmin is None else str(vmin),
             "data_primeiro_leilao": to_date_iso(r.get("data_leilao")),

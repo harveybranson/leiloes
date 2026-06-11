@@ -1,0 +1,112 @@
+{
+  "_meta": {
+    "descricao": "Mapa plataforma -> tier/adapter para o scraping de leilões. Ver captura_dados_leiloes_master.md (Parte II escada de robustez e Parte III.4 árvore de decisão). Permite pular o reconhecimento em fontes já conhecidas e ir direto ao extrator certo. tier: 1=API JSON, 2=intercepta XHR, 3=JSON embutido, 4=HTML, 5=browser+JS, 6=evasão.",
+    "atualizado_em": "2026-06-11",
+    "como_usar": "Detecte a plataforma por 'deteccao' (domínio ou marcador no HTML); use 'adapter'/'tier' indicados. Se não casar nenhuma, faça o reconhecimento da Parte III e adicione aqui."
+  },
+  "plataformas": {
+    "superbid": {
+      "nome": "Superbid (white-label)",
+      "tier": 1,
+      "adapter": "superbid_adapter.py",
+      "deteccao": {
+        "config_url": "https://siteconfigprod.superbid.net/{host}/style.config.json",
+        "marcadores_html": ["superbid", "offer-query.superbid.net", "storeId"]
+      },
+      "api": "https://offer-query.superbid.net/offers/?...stores.id:{store}&portalId={portal}",
+      "paginacao": "pageNumber/pageSize (offset numérico)",
+      "anti_bot": "nenhum relevante",
+      "notas": "Muitos leiloeiros usam white-label Superbid; descobrir store/portal via style.config.json resolve dezenas de sites com o mesmo extrator."
+    },
+    "lancevip": {
+      "nome": "LanceVip / suporteleiloes (SSR)",
+      "tier": 4,
+      "adapter": "lancevip_adapter.py",
+      "deteccao": {"dominio_contem": ["lancevip"], "marcadores_html": ["suporteleiloes"]},
+      "api": null,
+      "paginacao": "página numérica (SSR); lote em /eventos/leilao/<id>/<slug>/lote",
+      "anti_bot": "nenhum",
+      "notas": "Sem API JSON; HTML renderizado. Evento 'sicoob ... imovel' = 1 imóvel cada."
+    },
+    "milan": {
+      "nome": "Milan Leilões",
+      "tier": 6,
+      "adapter": "scraper_milan.py",
+      "deteccao": {"dominio_contem": ["milanleiloes"], "marcadores_html": ["milan"]},
+      "api": null,
+      "paginacao": "via FlareSolverr",
+      "anti_bot": "Cloudflare — usar FlareSolverr em http://localhost:8191/v1",
+      "notas": "Ver Parte VI.2 (Cloudflare). FlareSolverr substitui o Playwright; se indisponível, Milan é pulado."
+    },
+    "central_sul": {
+      "nome": "Central Sul de Leilões",
+      "tier": 1,
+      "adapter": "scraper_detalhe.py (classifica sem visita)",
+      "deteccao": {"leiloeiro_igual": ["Central Sul de Leilões"]},
+      "api": "API interna já rica",
+      "paginacao": "offset da API",
+      "anti_bot": "nenhum",
+      "notas": "Dados já chegam completos da API → apenas classificar, sem visitar página de detalhe."
+    },
+    "megaleiloes": {
+      "nome": "Mega Leilões",
+      "tier": 4,
+      "adapter": "scraper_detalhe.py::_extract_megaleiloes",
+      "deteccao": {"dominio_contem": ["megaleiloes"], "marcadores_html": ["mega leilões", "megaleiloes"]},
+      "api": null,
+      "paginacao": "página numérica",
+      "anti_bot": "leve",
+      "notas": "Extração por padrões específicos do HTML do Mega Leilões."
+    },
+    "sodre_santoro": {
+      "nome": "Sodré Santoro",
+      "tier": 2,
+      "adapter": null,
+      "deteccao": {"dominio_contem": ["sodresantoro"]},
+      "api": "interna (XHR) — confirmar via DevTools",
+      "paginacao": "offset/cursor (a confirmar)",
+      "anti_bot": "a confirmar",
+      "notas": "Plataforma comum; reconhecer XHR (Parte III.1) e promover ao Tier 1 quando possível. Adapter ainda não escrito."
+    },
+    "leilaoimovel": {
+      "nome": "LeilãoImóvel",
+      "tier": 5,
+      "adapter": "scraper_leilaoimovel.py",
+      "deteccao": {"dominio_contem": ["leilaoimovel"]},
+      "api": "verificar API interna por trás da paginação (Parte VI.2)",
+      "paginacao": "?pag=N (bloqueado por Cloudflare a partir de pag=2)",
+      "anti_bot": "Cloudflare Managed Challenge / Turnstile — exige cf_clearance (sessão Playwright persistida)",
+      "notas": "Estudo de caso da Parte VI.2: resolver desafio uma vez, salvar storage_state, detectar sessão caída."
+    },
+    "next_js": {
+      "nome": "Genérico Next.js",
+      "tier": 3,
+      "adapter": "html_json_extractor (--source next)",
+      "deteccao": {"marcadores_html": ["__NEXT_DATA__", "/_next/"]},
+      "api": "atalho /_next/data/<buildId>/<rota>.json?page=N",
+      "paginacao": "via ?page= no atalho _next/data",
+      "anti_bot": "varia",
+      "notas": "Ler buildId do __NEXT_DATA__ e promover ao Tier 1. Ouro em props.pageProps."
+    },
+    "wordpress_jsonld": {
+      "nome": "Genérico WordPress + JSON-LD",
+      "tier": 3,
+      "adapter": "html_json_extractor (--source jsonld)",
+      "deteccao": {"marcadores_html": ["wp-content", "application/ld+json", "@graph"]},
+      "api": "wp-json/ às vezes disponível",
+      "paginacao": "página numérica /page/N/",
+      "anti_bot": "geralmente nenhum",
+      "notas": "JSON-LD com Product/Offer/RealEstateListing. Yoast/RankMath expõem @graph."
+    },
+    "html_generico": {
+      "nome": "SSR genérico sem JSON",
+      "tier": 4,
+      "adapter": "html_parser / BeautifulSoup",
+      "deteccao": {"fallback": true},
+      "api": null,
+      "paginacao": "a descobrir (Parte III.3)",
+      "anti_bot": "varia",
+      "notas": "Último recurso por leiloeiro: ancorar em data-*/id/itemprop e no texto do rótulo visível; fallbacks por campo degradando para None."
+    }
+  }
+}

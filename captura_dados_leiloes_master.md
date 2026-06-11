@@ -428,3 +428,24 @@ API/JSON (Tier 1) → intercepta XHR (2) → JSON embutido (3) → markup (4)
 ```
 **A cada degrau, desacelere antes de escalar.** Pergunte sempre: *"estou apanhando porque estou
 rápido demais?"* — educação resolve a maioria dos bloqueios antes que apareçam.
+
+---
+
+# PARTE XI — Ferramentas de apoio deste repositório
+
+Implementam, na prática, as regras das partes anteriores.
+
+| Ferramenta | Para quê | Uso |
+|---|---|---|
+| `plataformas.json` | Mapa plataforma → tier/adapter (Parte II/III.4). Pula o reconhecimento em fontes já conhecidas. | consultar `deteccao` por domínio/marcador HTML; achou → use `adapter`/`tier` |
+| `migrar_imagens_anexos.py` | Cria as tabelas 1→N `imovel_imagens` e `imovel_anexos` (Parte VII: "todas as fotos" + anexos). Faz backfill de `imoveis.imagem`. | `python migrar_imagens_anexos.py` |
+| `check_cobertura.py` | Gate de qualidade (Parte X DoD): % preenchido por campo; **exit ≠ 0** se abaixo do limite. | `python check_cobertura.py --por-leiloeiro` · `--desde AAAA-MM-DD` · `--json` |
+| `gerar_dashboard_frescor.py` | Dashboard HTML de cobertura por campo + frescor por data + tabela por leiloeiro (Parte IX.4). | `python gerar_dashboard_frescor.py` → `dashboard_frescor.html` |
+
+**Modelo de dados de fotos/anexos:** grave a foto de capa também em `imoveis.imagem` (compat.) e
+**todas** as imagens em `imovel_imagens` (`ordem`, `principal`, `largura`/`altura` para maior
+resolução). PDFs em `imovel_anexos` (`tipo` = edital/matricula/laudo, `url`, `caminho_local`).
+
+**No fim de cada coleta:** rode `check_cobertura.py --desde <hoje>` (trava se cair abaixo do
+limite) e regenere o `dashboard_frescor.html`. `% None` subindo num leiloeiro = sinal de
+redesign — investigue o extrator antes que vire buraco no banco.

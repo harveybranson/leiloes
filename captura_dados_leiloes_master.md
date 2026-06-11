@@ -443,14 +443,17 @@ Implementam, na prática, as regras das partes anteriores.
 | `gerar_dashboard_frescor.py` | Dashboard HTML de cobertura por campo + frescor por data + tabela por leiloeiro (Parte IX.4). | `python gerar_dashboard_frescor.py` → `dashboard_frescor.html` |
 | `snapshot_cobertura.py` | Histórico (`cobertura_historico.jsonl`) + **detecção de regressão** (queda de cobertura por leiloeiro = sinal de redesign). | `python snapshot_cobertura.py [--limite-queda 15] [--strict]` |
 | `finalizar_coleta.py` | **Orquestra a pós-coleta:** snapshot+regressão → gate `check_cobertura` → regenera dashboard. **Exit ≠ 0 trava o commit do banco.** | `python finalizar_coleta.py --desde hoje` |
-| `enrich_local.py` | Enriquecimento **offline** (sem rede) do que já está no banco: deduz `uf` via IBGE (`inferir_uf`) e `lance_inicial` do texto. Idempotente. | `python enrich_local.py [--dry-run]` |
+| `enrich_local.py` | Enriquecimento **offline** (sem rede): deduz `uf` via IBGE (`inferir_uf`) e `lance_inicial` do texto. **`--auditar`** revisa UFs já preenchidas vs. inferência, separando ALTA confiança (campo `cidade` contradiz a UF salva — `--corrigir` aplica só essas) de baixa (lotes ambíguos, só reporta). | `python enrich_local.py` · `--auditar [--corrigir]` |
 | `scripts/run-quality.ps1` + `setup-scheduled-quality.ps1` | Agenda o gate **1×/dia** (Task Scheduler), alimentando o histórico p/ a detecção de regressão. | `powershell -File scripts\setup-scheduled-quality.ps1` |
 | `gerar_viewer_galeria.py` | Viewer HTML com **carrossel** de fotos por imóvel (lê `imovel_imagens` 1→N) + links de anexos; filtro por UF/texto. | `python gerar_viewer_galeria.py` → `viewer_galeria.html` |
 | `.claude/settings.json` + `scripts/session-setup.sh` | **SessionStart hook** (inclui Claude na web): instala deps + Playwright/Chromium e roda o smoke test. | automático ao abrir a sessão |
 
 **Plug no `scraper_detalhe.py`:** o `_extract` já chama `extrair_galeria`/`extrair_anexos` e
 infere `uf`; ao fim, `persistir_midia()` casa cada lote (por `url`) com `imoveis.id` e grava nas
-tabelas 1→N. **Dashboard:** painel de **tendência** (sparkline de cobertura global por campo) e de
+tabelas 1→N. **`--reprocessar-sem-foto`** monta a lista de trabalho direto dos imóveis sem foto
+(nem `imoveis.imagem` nem `imovel_imagens`) e revisita só esses — ataque cirúrgico à lacuna de
+imagem. Piloto sugerido: `python scraper_detalhe.py --reprocessar-sem-foto --limite 20` (exige
+navegador real; ver nota abaixo). **Dashboard:** painel de **tendência** (sparkline por campo) e de
 **regressões** entre os dois últimos snapshots.
 
 **Inferência de UF (`scraper_commons.inferir_uf`) — alta precisão** (melhor vazio que errado):

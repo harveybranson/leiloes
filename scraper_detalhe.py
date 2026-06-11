@@ -317,10 +317,36 @@ async def visit(sem, page, url: str, base: dict) -> dict:
             return base
 
 
+def load_input_sem_foto(db: str = DB_PATH) -> list[dict]:
+    """Monta a lista de trabalho a partir dos imóveis SEM foto (nem em imoveis.imagem,
+    nem em imovel_imagens). Usado por --reprocessar-sem-foto para atacar direto a
+    lacuna de imagem, revisitando só esses lotes para capturar a galeria 1→N."""
+    con = sqlite3.connect(db)
+    con.row_factory = sqlite3.Row
+    com_galeria = set()
+    if con.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
+                   "AND name='imovel_imagens'").fetchone():
+        com_galeria = {r[0] for r in con.execute("SELECT DISTINCT imovel_id FROM imovel_imagens")}
+    rows = []
+    for r in con.execute("SELECT id, leiloeiro, url, titulo, cidade, uf, lance_inicial, "
+                         "avaliacao FROM imoveis WHERE url IS NOT NULL AND TRIM(url) <> '' "
+                         "AND (imagem IS NULL OR TRIM(imagem) = '')"):
+        if r["id"] in com_galeria:
+            continue  # já tem galeria persistida
+        rows.append({"leiloeiro": r["leiloeiro"] or "", "url": r["url"],
+                     "titulo": r["titulo"] or "", "cidade": r["cidade"] or "",
+                     "estado": r["uf"] or "", "preco": r["lance_inicial"] or 0,
+                     "avaliacao": r["avaliacao"] or 0})
+    con.close()
+    return rows
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
-async def main(reset: bool, limite: int | None):
-    rows_in = load_input()
+async def main(reset: bool, limite: int | None, sem_foto: bool = False):
+    rows_in = load_input_sem_foto() if sem_foto else load_input()
+    if sem_foto:
+        print(f"Modo --reprocessar-sem-foto: {len(rows_in)} imóveis sem foto a revisitar.")
     if limite:
         rows_in = rows_in[:limite]
 
@@ -475,5 +501,8 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--reset",  action="store_true", help="Reinicia do zero")
     ap.add_argument("--limite", type=int, default=None, help="Processa só N URLs")
+    ap.add_argument("--reprocessar-sem-foto", action="store_true",
+                    help="revisita só os imóveis sem foto (alimenta a galeria 1→N)")
     args = ap.parse_args()
-    asyncio.run(main(reset=args.reset, limite=args.limite))
+    asyncio.run(main(reset=args.reset, limite=args.limite,
+                     sem_foto=args.reprocessar_sem_foto))

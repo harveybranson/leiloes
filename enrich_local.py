@@ -89,11 +89,72 @@ def enriquecer(db_path, dry_run=False):
     con.close()
 
 
+def auditar(db_path, corrigir=False, limite_mostra=40):
+    """Audita as UFs JÁ preenchidas: re-infere do texto (alta precisão) e sinaliza
+    divergências (provável UF errada vinda do scraper). Classifica por confiança:
+
+      ALTA  — o próprio campo `cidade` (município de UF única) contradiz a UF salva;
+              é seguro corrigir (ex.: cidade=Joinville salvo como SE → SC).
+      BAIXA — só o título/descrição divergem (pode ser lote multi-localização); só reporta.
+
+    Por padrão só relata; com corrigir=True sobrescreve APENAS as de confiança ALTA.
+    """
+    con = sqlite3.connect(db_path)
+    con.row_factory = sqlite3.Row
+    alta, baixa = [], []
+    for r in con.execute("SELECT id, titulo, descricao, endereco, cidade, uf "
+                          "FROM imoveis WHERE uf IS NOT NULL AND TRIM(uf) <> ''"):
+        atual = r["uf"].strip().upper()
+        inf = sc.inferir_uf(r["titulo"], r["endereco"], r["descricao"], r["cidade"])
+        if not inf or inf == atual:
+            continue
+        item = {"id": r["id"], "atual": atual, "inferida": inf,
+                "txt": ((r["titulo"] or "") + " ¦ " + (r["cidade"] or "") + " ¦ "
+                        + (r["descricao"] or "")).strip()[:88]}
+        uf_cidade = sc.inferir_uf(r["cidade"]) if (r["cidade"] or "").strip() else None
+        (alta if (uf_cidade and uf_cidade == inf and uf_cidade != atual) else baixa).append(item)
+
+    total = con.execute("SELECT COUNT(*) FROM imoveis WHERE uf IS NOT NULL "
+                        "AND TRIM(uf) <> ''").fetchone()[0]
+    print(f"  UFs preenchidas: {total} | divergências: {len(alta) + len(baixa)}  "
+          f"(ALTA confiança: {len(alta)} · baixa: {len(baixa)})")
+    print(f"\n  ALTA confiança (campo cidade contradiz a UF salva — seguro corrigir):")
+    for d in alta[:limite_mostra]:
+        print(f"    {d['atual']} → {d['inferida']}   {d['txt']}")
+    if len(alta) > limite_mostra:
+        print(f"    ... (+{len(alta) - limite_mostra})")
+    if baixa:
+        print(f"\n  baixa confiança (só título/descrição; revisar à mão — NÃO corrigido):")
+        for d in baixa[:10]:
+            print(f"    {d['atual']} → {d['inferida']}   {d['txt']}")
+        if len(baixa) > 10:
+            print(f"    ... (+{len(baixa) - 10})")
+
+    if corrigir and alta:
+        con.executemany("UPDATE imoveis SET uf = ? WHERE id = ?",
+                        [(d["inferida"], d["id"]) for d in alta])
+        con.commit()
+        print(f"\n  ✔ {len(alta)} UFs de ALTA confiança corrigidas. "
+              f"(baixa confiança preservada para revisão)")
+    elif alta:
+        print("\n  (relatório; use --corrigir para aplicar só as de ALTA confiança)")
+    con.close()
+    return {"alta": alta, "baixa": baixa}
+
+
 def main():
     ap = argparse.ArgumentParser(description="Enriquecimento offline de uf/lance_inicial.")
     ap.add_argument("--db", default=DB_PADRAO)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--auditar", action="store_true",
+                    help="audita UFs já preenchidas vs. inferência (não enriquece vazios)")
+    ap.add_argument("--corrigir", action="store_true",
+                    help="com --auditar: sobrescreve UFs divergentes pela inferência")
     args = ap.parse_args()
+    if args.auditar:
+        print("AUDITORIA DE UF (existente vs. inferida de alta precisão)")
+        auditar(args.db, corrigir=args.corrigir)
+        return
     print("ENRICH LOCAL (texto já no banco)")
     enriquecer(args.db, args.dry_run)
 

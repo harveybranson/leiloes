@@ -108,7 +108,8 @@ def auditar(db_path, corrigir=False, limite_mostra=40, csv_out=None):
         inf = sc.inferir_uf(r["titulo"], r["endereco"], r["descricao"], r["cidade"])
         if not inf or inf == atual:
             continue
-        item = {"id": r["id"], "atual": atual, "inferida": inf,
+        forte = sc.inferir_uf_forte(r["titulo"], r["endereco"], r["descricao"], r["cidade"])
+        item = {"id": r["id"], "atual": atual, "inferida": inf, "forte": forte,
                 "cidade": r["cidade"] or "", "url": r["url"] or "",
                 "titulo": (r["titulo"] or "")[:120],
                 "txt": ((r["titulo"] or "") + " ¦ " + (r["cidade"] or "") + " ¦ "
@@ -148,11 +149,18 @@ def auditar(db_path, corrigir=False, limite_mostra=40, csv_out=None):
             w = _csv.DictWriter(f, fieldnames=["id", "confianca", "uf_atual",
                                 "uf_inferida", "decisao", "cidade", "titulo", "url"])
             w.writeheader()
+            pre = 0
             for d in alta + baixa:
+                # Auto-triagem: pré-preenche 'aplicar' quando a inferência é confirmada por
+                # SINAL FORTE ([UF]/Cidade-UF) — só as realmente ambíguas ficam em branco.
+                decisao = "aplicar" if d.get("forte") == d["inferida"] else ""
+                pre += decisao == "aplicar"
                 w.writerow({"id": d["id"], "confianca": d["confianca"],
                             "uf_atual": d["atual"], "uf_inferida": d["inferida"],
-                            "decisao": "",  # preencha: aplicar | manter | <UF> (ex.: RJ)
+                            "decisao": decisao,
                             "cidade": d["cidade"], "titulo": d["titulo"], "url": d["url"]})
+        print(f"  (auto-triagem: {pre} pré-marcadas 'aplicar' por sinal forte; "
+              f"{len(alta) + len(baixa) - pre} em branco p/ revisão)")
         print(f"\n  → {csv_out}: {len(alta) + len(baixa)} divergências para revisão.")
     con.close()
     return {"alta": alta, "baixa": baixa}
@@ -187,7 +195,7 @@ def auditar_cidade(db_path, limite_mostra=25):
     return {"inexistentes": inexistentes, "uf_inconsistente": uf_inconsistente}
 
 
-def limpar_cidade(db_path, dry_run=False, mostra=25):
+def limpar_cidade(db_path, dry_run=False, mostra=25, remover_ruido=False):
     """Limpa o campo `cidade` inválido (bairro+município concatenado, ruído): extrai o
     município real via IBGE (sc.extrair_municipio, usando a UF salva p/ desambiguar) e o
     substitui pelo nome canônico. Preenche `uf` vazia quando a extração resolve a UF.
@@ -200,6 +208,7 @@ def limpar_cidade(db_path, dry_run=False, mostra=25):
         if not sc.municipio_valido(r["cidade"])
     )
     upd, exemplos, irrecuperaveis, conflitos = [], [], 0, 0
+    ruido_ids = []
     for r in con.execute("SELECT id, cidade, uf FROM imoveis "
                           "WHERE cidade IS NOT NULL AND TRIM(cidade) <> ''"):
         if sc.municipio_valido(r["cidade"]):
@@ -208,6 +217,7 @@ def limpar_cidade(db_path, dry_run=False, mostra=25):
         m = sc.extrair_municipio(r["cidade"], uf_hint=uf_atual or None)
         if not m:
             irrecuperaveis += 1
+            ruido_ids.append(r["id"])   # sem município reconhecível = ruído de navegação
             continue
         # Guarda de consistência: se há UF salva e o município extraído NÃO existe nela,
         # é match suspeito (homônimo / grafia divergente, ex.: 'Mirassol' vs "Mirassol d'Oeste")
@@ -226,11 +236,16 @@ def limpar_cidade(db_path, dry_run=False, mostra=25):
         print(f"    {orig!r:42} → {novo!r} ({uf})")
     if len(upd) > mostra:
         print(f"    ... (+{len(upd) - mostra})")
+    if remover_ruido:
+        print(f"  --remover-ruido: {len(ruido_ids)} cidades-ruído serão esvaziadas.")
 
     if dry_run:
         print("  [dry-run] nada gravado.")
     else:
         con.executemany("UPDATE imoveis SET cidade = ?, uf = ? WHERE id = ?", upd)
+        if remover_ruido and ruido_ids:
+            con.executemany("UPDATE imoveis SET cidade = '' WHERE id = ?",
+                            [(i,) for i in ruido_ids])
         con.commit()
         validas = sum(
             1 for r in con.execute("SELECT cidade FROM imoveis "
@@ -241,6 +256,30 @@ def limpar_cidade(db_path, dry_run=False, mostra=25):
                           "AND TRIM(cidade) <> ''").fetchone()[0]
         print(f"  ✔ {len(upd)} cidades normalizadas. Válidas no IBGE: "
               f"{100*validas/tot:.1f}% das preenchidas.")
+    con.close()
+    return upd
+
+
+def uf_de_cidade(db_path, dry_run=False):
+    """Preenche `uf` vazia a partir do campo `cidade` quando ele é um município de UF
+    única no IBGE (sinal forte, pós-limpeza). Idempotente."""
+    con = sqlite3.connect(db_path)
+    con.row_factory = sqlite3.Row
+    upd = []
+    for r in con.execute("SELECT id, cidade FROM imoveis "
+                          "WHERE (uf IS NULL OR TRIM(uf) = '') AND cidade <> ''"):
+        uf = sc.inferir_uf(r["cidade"])           # step 0: município exato de UF única
+        if uf:
+            upd.append((uf, r["id"]))
+    print(f"  uf vazias preenchíveis pela cidade canônica: {len(upd)}")
+    if dry_run:
+        print("  [dry-run] nada gravado.")
+    elif upd:
+        con.executemany("UPDATE imoveis SET uf = ? WHERE id = ?", upd)
+        con.commit()
+        print(f"  ✔ {len(upd)} UFs preenchidas a partir de cidade.")
+    else:
+        print("  nada a fazer (pipeline já capturou via limpeza/enrich).")
     con.close()
     return upd
 
@@ -259,10 +298,18 @@ def main():
                     help="audita o campo cidade contra o IBGE (inexistentes / uf inconsistente)")
     ap.add_argument("--limpar-cidade", action="store_true",
                     help="extrai o município real de cidades inválidas (bairro+cidade/ruído)")
+    ap.add_argument("--remover-ruido", action="store_true",
+                    help="com --limpar-cidade: esvazia cidades-ruído (sem município reconhecível)")
+    ap.add_argument("--uf-de-cidade", action="store_true",
+                    help="preenche uf vazia a partir da cidade canônica (município de UF única)")
     args = ap.parse_args()
+    if args.uf_de_cidade:
+        print("UF A PARTIR DE CIDADE (pós-limpeza)")
+        uf_de_cidade(args.db, dry_run=args.dry_run)
+        return
     if args.limpar_cidade:
         print("LIMPEZA DE CIDADE (extrai município do IBGE)")
-        limpar_cidade(args.db, dry_run=args.dry_run)
+        limpar_cidade(args.db, dry_run=args.dry_run, remover_ruido=args.remover_ruido)
         return
     if args.auditar_cidade:
         print("AUDITORIA DE CIDADE (contra _ibge_municipios.json)")

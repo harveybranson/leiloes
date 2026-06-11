@@ -1,0 +1,18 @@
+# FlareSolverr — proxy que resolve o Cloudflare Managed Challenge/Turnstile (Parte VI.2).
+# Destrava as fontes que bloqueiam o headless (Mega Leilões, Central Sul) usadas pelo
+# fallback de scraper_detalhe.py (sc.fetch_flaresolverr).
+#
+# Subir:   docker compose -f docker-compose.flaresolverr.yml up -d
+# Checar:  python probe_flaresolverr.py
+# Usar:    o scraper já lê FLARESOLVERR_URL (default http://localhost:8191/v1)
+#          python scraper_detalhe.py --reprocessar-sem-foto --limite 20
+services:
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    restart: unless-stopped
+    ports:
+      - "8191:8191"
+    environment:
+      - LOG_LEVEL=info
+      - TZ=America/Sao_Paulo

@@ -467,16 +467,24 @@ soltas (`AP`/`SP`) para não colidir com "apartamento" etc. Resultado no banco: 
 concatenados como "BELA VISTA SÃO PAULO") e (b) cidade existente mas **fora da UF salva**. Aponta
 volume e valores distintos para limpeza.
 
-**Limpeza de cidade (`enrich_local.py --limpar-cidade`):** extrai o município real de valores
-inválidos (bairro+município concatenado, ruído de navegação) via `sc.extrair_municipio` (nome
-canônico do IBGE, UF como desambiguador). **Guarda de consistência:** se a UF salva não contém o
-município extraído (homônimo/grafia divergente, ex.: "Mirassol" vs "Mirassol d'Oeste"), pula em vez
-de corromper. Resultado: `cidade` válida no IBGE 37% → **79,6%** das preenchidas.
+**Limpeza de cidade (`enrich_local.py --limpar-cidade [--remover-ruido]`):** extrai o município
+real de valores inválidos (bairro+município concatenado) via `sc.extrair_municipio` (nome canônico
+do IBGE, UF como desambiguador). **Guarda de consistência:** se a UF salva não contém o município
+extraído (homônimo/grafia, ex.: "Mirassol" vs "Mirassol d'Oeste"), pula em vez de corromper.
+`--remover-ruido` esvazia cidades sem município reconhecível (navegação: "LOGIN CADASTRE" etc.).
+Resultado: `cidade` válida no IBGE 37% → **85,1%** das preenchidas. `--uf-de-cidade` preenche UF
+vazia a partir da cidade canônica (idempotente; hoje 0 — o pipeline já captura via limpeza+enrich).
 
 **Revisão de UF (`--auditar --csv csv/uf_revisao.csv` → `aplicar_revisao.py`):** exporta as
-divergências de baixa confiança com uma coluna `decisao` em branco; você preenche
-(`aplicar` = usar `uf_inferida` · `manter` · `<UF>` explícita) e o `aplicar_revisao.py` valida
-contra o IBGE e grava. Fecha o ciclo das ambíguas em lote.
+divergências com uma coluna `decisao` **auto-triada**: pré-marca `aplicar` quando a UF é confirmada
+por **sinal forte inequívoco** (`sc.inferir_uf_forte` — `[UF]`/`Cidade-UF`, e *None* se houver
+múltiplas UFs fortes = lote multi-localização); deixa em branco só as ambíguas (349 vs 190). Você
+revisa, ajusta (`aplicar`/`manter`/`<UF>`) e o `aplicar_revisao.py` valida contra o IBGE e grava.
+
+**FlareSolverr de fato (`docker-compose.flaresolverr.yml` + `probe_flaresolverr.py`):** sobe o
+serviço (`docker compose -f docker-compose.flaresolverr.yml up -d`) e valida (`python
+probe_flaresolverr.py`) antes de rodar o scraper — o fallback do `visit()` passa a destravar
+Mega/Central Sul mesmo via headless.
 
 **Resiliência de navegador (env vars, lidas por `scraper_detalhe.py`):** `PW_CHROMIUM_PATH` aponta
 um Chromium já presente quando o download oficial falha (CDN bloqueado); `PW_IGNORE_HTTPS=1` ignora

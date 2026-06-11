@@ -586,6 +586,23 @@ def fetch_flaresolverr(url, timeout_ms=60000, session=None, endpoint=None):
         return None
 
 
+def inferir_uf_forte(*textos):
+    """Como inferir_uf, mas SÓ com sinais de altíssima precisão (`[UF]` e `Cidade-UF`/
+    `Cidade/UF`), sem a heurística de município após preposição. Ciente de ambiguidade:
+    se o texto traz MAIS DE UMA UF forte distinta (lote multi-localização), retorna None.
+    Usado para auto-triagem — só confirma o que é inequívoco."""
+    byname, ufs, _canon = carregar_municipios()
+    if not ufs:
+        return None
+    txt = " ".join(str(t or "") for t in textos)
+    achadas = set()
+    for rx in (_UF_BRACKET, _UF_CID_UF):
+        for m in rx.finditer(txt):
+            if m.group(1) in ufs:
+                achadas.add(m.group(1))
+    return next(iter(achadas)) if len(achadas) == 1 else None
+
+
 def municipio_valido(cidade, uf=None):
     """True se 'cidade' existe no IBGE (e, se uf dada, naquela UF)."""
     byname, _ufs, _canon = carregar_municipios()
@@ -649,5 +666,10 @@ if __name__ == "__main__":
     assert extrair_municipio("DPO LOGIN CADASTRE") is None
     _c = extrair_municipio("Site do leiloeiro oficial de Cascavel", uf_hint="PR")
     assert _c and _c["nome"] == "Cascavel" and _c["uf"] == "PR"
+
+    # inferir_uf_forte: só sinal de alta precisão
+    assert inferir_uf_forte("APARTAMENTO | CAMPINAS - SP") == "SP"
+    assert inferir_uf_forte("[DF] Vara de Taguatinga") == "DF"
+    assert inferir_uf_forte("Casa em Teresópolis") is None  # preposição = sinal fraco
 
     print("scraper_commons: todos os smoke tests passaram OK")

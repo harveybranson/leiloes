@@ -451,21 +451,57 @@ def _uf_de_municipio(m):
 
 
 def carregar_municipios():
-    """Carrega (uma vez) o indice nome_municipio_normalizado -> set(UF) e o set de UFs."""
+    """Carrega (uma vez): byname {nome_norm -> set(UF)}, ufs {siglas}, canon {nome_norm ->
+    nome canônico (capitalização do IBGE)}."""
     global _IBGE_CACHE
     if _IBGE_CACHE is None:
-        byname = {}
+        byname, canon = {}, {}
         try:
             with open(_IBGE_PATH, encoding="utf-8") as f:
                 for m in json.load(f):
                     uf = _uf_de_municipio(m)
                     if uf:
-                        byname.setdefault(_norm_txt(m["nome"]), set()).add(uf)
+                        nn = _norm_txt(m["nome"])
+                        byname.setdefault(nn, set()).add(uf)
+                        canon.setdefault(nn, m["nome"])
         except Exception:
             pass
         ufs = {s for v in byname.values() for s in v}
-        _IBGE_CACHE = (byname, ufs)
+        _IBGE_CACHE = (byname, ufs, canon)
     return _IBGE_CACHE
+
+
+def extrair_municipio(texto, uf_hint=None):
+    """Extrai um município válido de uma string composta (ex.: 'BELA VISTA SÃO PAULO' →
+    São Paulo). Testa subsequências de tokens; prefere a que (a) resolve UF — usando
+    `uf_hint` para desambiguar homônimos —, (b) é mais longa, (c) aparece mais ao fim
+    (o município costuma vir após o bairro). Retorna {'nome','uf'} canônicos ou None.
+    """
+    byname, _ufs, canon = carregar_municipios()
+    toks = _norm_txt(texto).split()
+    L = len(toks)
+    melhor = None  # (score, cand_norm, uf)
+    for i in range(L):
+        for j in range(L, i, -1):
+            cand = " ".join(toks[i:j])
+            nufs = byname.get(cand)
+            if not nufs:
+                continue
+            if uf_hint and uf_hint in nufs:
+                uf = uf_hint
+            elif len(nufs) == 1:
+                uf = next(iter(nufs))
+            else:
+                uf = None  # homônimo sem hint → UF indefinida
+            # prefere: UF resolvida > posição mais ao FIM (município vem após o bairro) > mais longo
+            score = (uf is not None, j, len(cand))
+            if melhor is None or score > melhor[0]:
+                melhor = (score, cand, uf)
+            break  # maior subsequência iniciada em i
+    if not melhor:
+        return None
+    _, cand, uf = melhor
+    return {"nome": canon.get(cand, cand.title()), "uf": uf, "ufs": byname.get(cand, set())}
 
 
 # Sinais de UF de ALTA precisão (evitam o ruído de substring em texto livre):
@@ -489,7 +525,7 @@ def inferir_uf(*textos):
     >>> inferir_uf("APARTAMENTO | CAMPINAS - SP 1º Leilão")
     'SP'
     """
-    byname, ufs = carregar_municipios()
+    byname, ufs, _canon = carregar_municipios()
     if not ufs:
         return None
     # 0) argumento que é exatamente um município (típico do campo 'cidade')
@@ -520,9 +556,39 @@ def inferir_uf(*textos):
     return melhor_uf
 
 
+FLARESOLVERR_URL = os.environ.get("FLARESOLVERR_URL", "http://localhost:8191/v1")
+
+
+def parece_bloqueio(html, status=None):
+    """Heurística: a resposta é uma tela de bloqueio/challenge (Cloudflare/WAF)?"""
+    if status in (403, 429, 503):
+        return True
+    h = (html or "").lower()
+    return (len(h) < 1000 and ("403" in h or "forbidden" in h or "denied" in h)) or \
+        "just a moment" in h or "cf-challenge" in h or "challenge-platform" in h or \
+        "attention required" in h
+
+
+def fetch_flaresolverr(url, timeout_ms=60000, session=None, endpoint=None):
+    """Resolve uma URL via FlareSolverr (contorna Cloudflare Managed Challenge — Parte VI.2).
+    Retorna o HTML resolvido ou None se o serviço estiver indisponível/falhar. Não levanta:
+    é um fallback — quem chama segue sem ele se voltar None."""
+    payload = {"cmd": "request.get", "url": url, "maxTimeout": timeout_ms}
+    if session:
+        payload["session"] = session
+    try:
+        r = requests.post(endpoint or FLARESOLVERR_URL, json=payload,
+                          timeout=(timeout_ms / 1000) + 15)
+        if r.status_code != 200:
+            return None
+        return r.json().get("solution", {}).get("response")
+    except Exception:
+        return None
+
+
 def municipio_valido(cidade, uf=None):
     """True se 'cidade' existe no IBGE (e, se uf dada, naquela UF)."""
-    byname, _ = carregar_municipios()
+    byname, _ufs, _canon = carregar_municipios()
     ufs = byname.get(_norm_txt(cidade))
     if not ufs:
         return False
@@ -576,5 +642,12 @@ if __name__ == "__main__":
     assert inferir_uf("Casa, AP 101, bloco B") is None  # vírgula+sigla não conta
     assert municipio_valido("Porto Alegre", "RS") is True
     assert municipio_valido("Porto Alegre", "SP") is False
+
+    # extrair_municipio (limpeza de 'bairro+município')
+    assert extrair_municipio("BELA VISTA SÃO PAULO", uf_hint="SP")["nome"] == "São Paulo"
+    assert extrair_municipio("CENTRO HORIZONTINA")["nome"] == "Horizontina"
+    assert extrair_municipio("DPO LOGIN CADASTRE") is None
+    _c = extrair_municipio("Site do leiloeiro oficial de Cascavel", uf_hint="PR")
+    assert _c and _c["nome"] == "Cascavel" and _c["uf"] == "PR"
 
     print("scraper_commons: todos os smoke tests passaram OK")

@@ -467,14 +467,27 @@ soltas (`AP`/`SP`) para não colidir com "apartamento" etc. Resultado no banco: 
 concatenados como "BELA VISTA SÃO PAULO") e (b) cidade existente mas **fora da UF salva**. Aponta
 volume e valores distintos para limpeza.
 
-**Revisão de UF (`--auditar --csv csv/uf_revisao.csv`):** exporta as divergências de baixa
-confiança (lotes multi-localização, veículos com placa de outra UF) com `confianca/uf_atual/
-uf_inferida/cidade/titulo/url` para triagem manual em lote.
+**Limpeza de cidade (`enrich_local.py --limpar-cidade`):** extrai o município real de valores
+inválidos (bairro+município concatenado, ruído de navegação) via `sc.extrair_municipio` (nome
+canônico do IBGE, UF como desambiguador). **Guarda de consistência:** se a UF salva não contém o
+município extraído (homônimo/grafia divergente, ex.: "Mirassol" vs "Mirassol d'Oeste"), pula em vez
+de corromper. Resultado: `cidade` válida no IBGE 37% → **79,6%** das preenchidas.
+
+**Revisão de UF (`--auditar --csv csv/uf_revisao.csv` → `aplicar_revisao.py`):** exporta as
+divergências de baixa confiança com uma coluna `decisao` em branco; você preenche
+(`aplicar` = usar `uf_inferida` · `manter` · `<UF>` explícita) e o `aplicar_revisao.py` valida
+contra o IBGE e grava. Fecha o ciclo das ambíguas em lote.
 
 **Resiliência de navegador (env vars, lidas por `scraper_detalhe.py`):** `PW_CHROMIUM_PATH` aponta
 um Chromium já presente quando o download oficial falha (CDN bloqueado); `PW_IGNORE_HTTPS=1` ignora
 cert inválido de proxy TLS. O `session-setup.sh` detecta e exporta esses valores automaticamente
 (fallback para `/opt/pw-browsers/...` ou Chrome do sistema).
+
+**Fallback FlareSolverr (fontes que bloqueiam headless):** `sc.fetch_flaresolverr(url)` +
+`sc.parece_bloqueio(html, status)`. No `visit()` do `scraper_detalhe.py`, quando o headless recebe
+403/challenge (Mega Leilões, Central Sul…), tenta resolver via FlareSolverr (`FLARESOLVERR_URL`,
+default `http://localhost:8191/v1`) antes de desistir. Gracioso: sem o serviço, retorna `None` e o
+fluxo segue. Suba o FlareSolverr (Docker) para destravar essas fontes mesmo via headless.
 
 > **Nota sobre o piloto de `scraper_detalhe.py`:** recuperar `lance_inicial` (64,3%) e popular as
 > galerias 1→N **em volume** exige rodar com **navegador real**. A fiação está plugada e validada

@@ -146,11 +146,12 @@ def auditar(db_path, corrigir=False, limite_mostra=40, csv_out=None):
         import csv as _csv
         with open(csv_out, "w", newline="", encoding="utf-8") as f:
             w = _csv.DictWriter(f, fieldnames=["id", "confianca", "uf_atual",
-                                "uf_inferida", "cidade", "titulo", "url"])
+                                "uf_inferida", "decisao", "cidade", "titulo", "url"])
             w.writeheader()
             for d in alta + baixa:
                 w.writerow({"id": d["id"], "confianca": d["confianca"],
                             "uf_atual": d["atual"], "uf_inferida": d["inferida"],
+                            "decisao": "",  # preencha: aplicar | manter | <UF> (ex.: RJ)
                             "cidade": d["cidade"], "titulo": d["titulo"], "url": d["url"]})
         print(f"\n  → {csv_out}: {len(alta) + len(baixa)} divergências para revisão.")
     con.close()
@@ -186,6 +187,64 @@ def auditar_cidade(db_path, limite_mostra=25):
     return {"inexistentes": inexistentes, "uf_inconsistente": uf_inconsistente}
 
 
+def limpar_cidade(db_path, dry_run=False, mostra=25):
+    """Limpa o campo `cidade` inválido (bairro+município concatenado, ruído): extrai o
+    município real via IBGE (sc.extrair_municipio, usando a UF salva p/ desambiguar) e o
+    substitui pelo nome canônico. Preenche `uf` vazia quando a extração resolve a UF.
+    Linhas sem município reconhecível ficam inalteradas (não apaga dado)."""
+    con = sqlite3.connect(db_path)
+    con.row_factory = sqlite3.Row
+    invalidas_antes = sum(
+        1 for r in con.execute("SELECT cidade FROM imoveis "
+                               "WHERE cidade IS NOT NULL AND TRIM(cidade) <> ''")
+        if not sc.municipio_valido(r["cidade"])
+    )
+    upd, exemplos, irrecuperaveis, conflitos = [], [], 0, 0
+    for r in con.execute("SELECT id, cidade, uf FROM imoveis "
+                          "WHERE cidade IS NOT NULL AND TRIM(cidade) <> ''"):
+        if sc.municipio_valido(r["cidade"]):
+            continue
+        uf_atual = (r["uf"] or "").strip().upper()
+        m = sc.extrair_municipio(r["cidade"], uf_hint=uf_atual or None)
+        if not m:
+            irrecuperaveis += 1
+            continue
+        # Guarda de consistência: se há UF salva e o município extraído NÃO existe nela,
+        # é match suspeito (homônimo / grafia divergente, ex.: 'Mirassol' vs "Mirassol d'Oeste")
+        # → não altera, p/ não criar registro cidade/uf incoerente.
+        if uf_atual and uf_atual not in m["ufs"]:
+            conflitos += 1
+            continue
+        nova_uf = m["uf"] if (not uf_atual and m["uf"]) else uf_atual
+        upd.append((m["nome"], nova_uf, r["id"]))
+        if len(exemplos) < mostra:
+            exemplos.append((r["cidade"], m["nome"], nova_uf))
+
+    print(f"  cidades inválidas: {invalidas_antes} | recuperáveis: {len(upd)} | "
+          f"conflito uf (pulado): {conflitos} | irrecuperáveis (ruído): {irrecuperaveis}")
+    for orig, novo, uf in exemplos:
+        print(f"    {orig!r:42} → {novo!r} ({uf})")
+    if len(upd) > mostra:
+        print(f"    ... (+{len(upd) - mostra})")
+
+    if dry_run:
+        print("  [dry-run] nada gravado.")
+    else:
+        con.executemany("UPDATE imoveis SET cidade = ?, uf = ? WHERE id = ?", upd)
+        con.commit()
+        validas = sum(
+            1 for r in con.execute("SELECT cidade FROM imoveis "
+                                   "WHERE cidade IS NOT NULL AND TRIM(cidade) <> ''")
+            if sc.municipio_valido(r["cidade"])
+        )
+        tot = con.execute("SELECT COUNT(*) FROM imoveis WHERE cidade IS NOT NULL "
+                          "AND TRIM(cidade) <> ''").fetchone()[0]
+        print(f"  ✔ {len(upd)} cidades normalizadas. Válidas no IBGE: "
+              f"{100*validas/tot:.1f}% das preenchidas.")
+    con.close()
+    return upd
+
+
 def main():
     ap = argparse.ArgumentParser(description="Enriquecimento offline de uf/lance_inicial.")
     ap.add_argument("--db", default=DB_PADRAO)
@@ -198,7 +257,13 @@ def main():
                     help="com --auditar: exporta as divergências para revisão (ex.: uf_revisao.csv)")
     ap.add_argument("--auditar-cidade", action="store_true",
                     help="audita o campo cidade contra o IBGE (inexistentes / uf inconsistente)")
+    ap.add_argument("--limpar-cidade", action="store_true",
+                    help="extrai o município real de cidades inválidas (bairro+cidade/ruído)")
     args = ap.parse_args()
+    if args.limpar_cidade:
+        print("LIMPEZA DE CIDADE (extrai município do IBGE)")
+        limpar_cidade(args.db, dry_run=args.dry_run)
+        return
     if args.auditar_cidade:
         print("AUDITORIA DE CIDADE (contra _ibge_municipios.json)")
         auditar_cidade(args.db)

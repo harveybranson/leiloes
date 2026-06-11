@@ -306,15 +306,24 @@ def make_base(row: dict) -> dict:
 
 async def visit(sem, page, url: str, base: dict) -> dict:
     async with sem:
+        html, status = "", None
         try:
-            await page.goto(url, timeout=30000, wait_until="domcontentloaded")
+            resp = await page.goto(url, timeout=30000, wait_until="domcontentloaded")
+            status = resp.status if resp else None
             await asyncio.sleep(1.5)
             html = await page.content()
-            fn = EXTRACTORS.get(base["fonte"], _extract)
-            return fn(html, base)
         except Exception as e:
             print(f"    ERRO {url[:60]}: {e}")
+        # Fallback FlareSolverr quando o headless é bloqueado (403/challenge) — Parte VI.2.
+        if sc.parece_bloqueio(html, status):
+            fs = await asyncio.to_thread(sc.fetch_flaresolverr, url)
+            if fs and not sc.parece_bloqueio(fs):
+                print(f"    ↻ FlareSolverr resolveu bloqueio: {url[:55]}")
+                html = fs
+        if not html:
             return base
+        fn = EXTRACTORS.get(base["fonte"], _extract)
+        return fn(html, base)
 
 
 def load_input_sem_foto(db: str = DB_PATH) -> list[dict]:

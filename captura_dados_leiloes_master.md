@@ -462,11 +462,25 @@ colchetes ou `Cidade-UF`/`Cidade/UF`; (2) município após preposição de lugar
 escolhendo o nome **mais longo** (`no Rio de Janeiro` vence `em Ipanema`). Não deduz de siglas
 soltas (`AP`/`SP`) para não colidir com "apartamento" etc. Resultado no banco: `uf` 85,6% → 91,1%.
 
+**Auditoria de `cidade` (`enrich_local.py --auditar-cidade`):** confere o campo contra o IBGE —
+(a) cidades **inexistentes** (typo/ruído, ex.: "DPO LOGIN CADASTRE" ou "bairro+município"
+concatenados como "BELA VISTA SÃO PAULO") e (b) cidade existente mas **fora da UF salva**. Aponta
+volume e valores distintos para limpeza.
+
+**Revisão de UF (`--auditar --csv csv/uf_revisao.csv`):** exporta as divergências de baixa
+confiança (lotes multi-localização, veículos com placa de outra UF) com `confianca/uf_atual/
+uf_inferida/cidade/titulo/url` para triagem manual em lote.
+
+**Resiliência de navegador (env vars, lidas por `scraper_detalhe.py`):** `PW_CHROMIUM_PATH` aponta
+um Chromium já presente quando o download oficial falha (CDN bloqueado); `PW_IGNORE_HTTPS=1` ignora
+cert inválido de proxy TLS. O `session-setup.sh` detecta e exporta esses valores automaticamente
+(fallback para `/opt/pw-browsers/...` ou Chrome do sistema).
+
 > **Nota sobre o piloto de `scraper_detalhe.py`:** recuperar `lance_inicial` (64,3%) e popular as
-> galerias 1→N **em volume** exige rodar o scraper com **navegador real** — todos os leiloeiros
-> retornam HTTP 403 a requisições sem browser e dependem do Chromium do Playwright. O caminho está
-> plugado e testado ponta a ponta; rode em ambiente com navegador/CDN liberado (a máquina onde os
-> scrapers já rodam, ou uma sessão web com rede ao CDN do Playwright via o SessionStart hook).
+> galerias 1→N **em volume** exige rodar com **navegador real**. A fiação está plugada e validada
+> ponta a ponta (`--reprocessar-sem-foto --limite N` lança o browser, visita e persiste sem crashar),
+> mas os leiloeiros **bloqueiam acesso headless** (HTTP 403) a partir deste sandbox. Rode na máquina
+> onde os scrapers já passam pelo anti-bot — ou via FlareSolverr/stealth (Parte VI.2).
 
 **Helpers em `scraper_commons.py`** (use nos extratores): `detectar_plataforma(site, html,
 leiloeiro)` (roteia via `plataformas.json`); `extrair_galeria(html, base_url)` (todas as fotos,

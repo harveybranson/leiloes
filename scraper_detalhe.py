@@ -412,9 +412,17 @@ async def main(reset: bool, limite: int | None, sem_foto: bool = False):
     BATCH = 30   # salva a cada 30 páginas
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
+        # Resiliência de ambiente (ver scripts/session-setup.sh):
+        #  PW_CHROMIUM_PATH → usa um Chromium já presente (CDN bloqueado);
+        #  PW_IGNORE_HTTPS=1 → ignora cert inválido de proxy TLS de sandbox.
+        import os
+        launch_kw = {"headless": True, "args": ["--no-sandbox", "--disable-quic"]}
+        if os.environ.get("PW_CHROMIUM_PATH"):
+            launch_kw["executable_path"] = os.environ["PW_CHROMIUM_PATH"]
+        browser = await p.chromium.launch(**launch_kw)
         ctx = await browser.new_context(
             user_agent=UA, locale="pt-BR",
+            ignore_https_errors=os.environ.get("PW_IGNORE_HTTPS") == "1",
             extra_http_headers={"Accept-Language": "pt-BR,pt;q=0.9"},
         )
 

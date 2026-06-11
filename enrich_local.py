@@ -89,7 +89,7 @@ def enriquecer(db_path, dry_run=False):
     con.close()
 
 
-def auditar(db_path, corrigir=False, limite_mostra=40):
+def auditar(db_path, corrigir=False, limite_mostra=40, csv_out=None):
     """Audita as UFs JÁ preenchidas: re-infere do texto (alta precisão) e sinaliza
     divergências (provável UF errada vinda do scraper). Classifica por confiança:
 
@@ -102,17 +102,20 @@ def auditar(db_path, corrigir=False, limite_mostra=40):
     con = sqlite3.connect(db_path)
     con.row_factory = sqlite3.Row
     alta, baixa = [], []
-    for r in con.execute("SELECT id, titulo, descricao, endereco, cidade, uf "
+    for r in con.execute("SELECT id, titulo, descricao, endereco, cidade, uf, url "
                           "FROM imoveis WHERE uf IS NOT NULL AND TRIM(uf) <> ''"):
         atual = r["uf"].strip().upper()
         inf = sc.inferir_uf(r["titulo"], r["endereco"], r["descricao"], r["cidade"])
         if not inf or inf == atual:
             continue
         item = {"id": r["id"], "atual": atual, "inferida": inf,
+                "cidade": r["cidade"] or "", "url": r["url"] or "",
+                "titulo": (r["titulo"] or "")[:120],
                 "txt": ((r["titulo"] or "") + " ¦ " + (r["cidade"] or "") + " ¦ "
                         + (r["descricao"] or "")).strip()[:88]}
         uf_cidade = sc.inferir_uf(r["cidade"]) if (r["cidade"] or "").strip() else None
-        (alta if (uf_cidade and uf_cidade == inf and uf_cidade != atual) else baixa).append(item)
+        item["confianca"] = "alta" if (uf_cidade and uf_cidade == inf and uf_cidade != atual) else "baixa"
+        (alta if item["confianca"] == "alta" else baixa).append(item)
 
     total = con.execute("SELECT COUNT(*) FROM imoveis WHERE uf IS NOT NULL "
                         "AND TRIM(uf) <> ''").fetchone()[0]
@@ -138,8 +141,49 @@ def auditar(db_path, corrigir=False, limite_mostra=40):
               f"(baixa confiança preservada para revisão)")
     elif alta:
         print("\n  (relatório; use --corrigir para aplicar só as de ALTA confiança)")
+
+    if csv_out:
+        import csv as _csv
+        with open(csv_out, "w", newline="", encoding="utf-8") as f:
+            w = _csv.DictWriter(f, fieldnames=["id", "confianca", "uf_atual",
+                                "uf_inferida", "cidade", "titulo", "url"])
+            w.writeheader()
+            for d in alta + baixa:
+                w.writerow({"id": d["id"], "confianca": d["confianca"],
+                            "uf_atual": d["atual"], "uf_inferida": d["inferida"],
+                            "cidade": d["cidade"], "titulo": d["titulo"], "url": d["url"]})
+        print(f"\n  → {csv_out}: {len(alta) + len(baixa)} divergências para revisão.")
     con.close()
     return {"alta": alta, "baixa": baixa}
+
+
+def auditar_cidade(db_path, limite_mostra=25):
+    """Audita o campo `cidade` contra o IBGE: (a) cidades INEXISTENTES (typo/lixo) e
+    (b) cidades que existem mas NÃO na UF salva (cidade/uf inconsistente)."""
+    con = sqlite3.connect(db_path)
+    con.row_factory = sqlite3.Row
+    inexistentes, uf_inconsistente = [], []
+    total = 0
+    for r in con.execute("SELECT cidade, uf, COUNT(*) n FROM imoveis "
+                         "WHERE cidade IS NOT NULL AND TRIM(cidade) <> '' "
+                         "GROUP BY cidade, uf"):
+        total += r["n"]
+        cidade, uf = r["cidade"].strip(), (r["uf"] or "").strip().upper()
+        if not sc.municipio_valido(cidade):
+            inexistentes.append((cidade, uf, r["n"]))
+        elif uf and not sc.municipio_valido(cidade, uf):
+            uf_inconsistente.append((cidade, uf, r["n"]))
+    print(f"  Linhas com cidade: {total}")
+    print(f"\n  (a) cidade INEXISTENTE no IBGE (typo/ruído): "
+          f"{sum(n for *_, n in inexistentes)} linhas, {len(inexistentes)} valores distintos")
+    for cidade, uf, n in sorted(inexistentes, key=lambda x: -x[2])[:limite_mostra]:
+        print(f"      {n:>4}×  {cidade!r}  (uf={uf or '-'})")
+    print(f"\n  (b) cidade existe mas NÃO na UF salva (cidade/uf inconsistente): "
+          f"{sum(n for *_, n in uf_inconsistente)} linhas, {len(uf_inconsistente)} distintos")
+    for cidade, uf, n in sorted(uf_inconsistente, key=lambda x: -x[2])[:limite_mostra]:
+        print(f"      {n:>4}×  {cidade!r} salvo como {uf}")
+    con.close()
+    return {"inexistentes": inexistentes, "uf_inconsistente": uf_inconsistente}
 
 
 def main():
@@ -150,10 +194,18 @@ def main():
                     help="audita UFs já preenchidas vs. inferência (não enriquece vazios)")
     ap.add_argument("--corrigir", action="store_true",
                     help="com --auditar: sobrescreve UFs divergentes pela inferência")
+    ap.add_argument("--csv", default=None,
+                    help="com --auditar: exporta as divergências para revisão (ex.: uf_revisao.csv)")
+    ap.add_argument("--auditar-cidade", action="store_true",
+                    help="audita o campo cidade contra o IBGE (inexistentes / uf inconsistente)")
     args = ap.parse_args()
+    if args.auditar_cidade:
+        print("AUDITORIA DE CIDADE (contra _ibge_municipios.json)")
+        auditar_cidade(args.db)
+        return
     if args.auditar:
         print("AUDITORIA DE UF (existente vs. inferida de alta precisão)")
-        auditar(args.db, corrigir=args.corrigir)
+        auditar(args.db, corrigir=args.corrigir, csv_out=args.csv)
         return
     print("ENRICH LOCAL (texto já no banco)")
     enriquecer(args.db, args.dry_run)

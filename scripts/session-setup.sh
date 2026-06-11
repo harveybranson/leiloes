@@ -21,9 +21,21 @@ if ! $PY -c "import playwright" 2>/dev/null; then
   $PY -m pip install -q playwright 2>/dev/null && echo "[session-setup] playwright instalado"
 fi
 if $PY -c "import playwright" 2>/dev/null; then
-  $PY -m playwright install chromium >/dev/null 2>&1 \
-    && echo "[session-setup] chromium pronto" \
-    || echo "[session-setup] aviso: chromium não baixado (rede restrita) — scrapers via Playwright podem não rodar"
+  if $PY -m playwright install chromium >/dev/null 2>&1; then
+    echo "[session-setup] chromium pronto (download oficial)"
+  else
+    # Fallback: reaproveita um Chromium já presente (CDN bloqueado). Os scrapers leem
+    # PW_CHROMIUM_PATH/PW_IGNORE_HTTPS (ver scraper_detalhe.py). Persiste no profile.
+    CHROME=$(ls -1 /opt/pw-browsers/chromium-*/chrome-linux/chrome 2>/dev/null | head -1)
+    [ -z "$CHROME" ] && CHROME=$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || command -v chromium-browser)
+    if [ -n "$CHROME" ] && [ -x "$CHROME" ]; then
+      echo "[session-setup] chromium oficial indisponível — usando fallback: $CHROME"
+      { echo "export PW_CHROMIUM_PATH=\"$CHROME\""; echo "export PW_IGNORE_HTTPS=1"; } >> "$HOME/.bashrc" 2>/dev/null
+      export PW_CHROMIUM_PATH="$CHROME"; export PW_IGNORE_HTTPS=1
+    else
+      echo "[session-setup] aviso: nenhum Chromium disponível — scrapers via Playwright não rodam aqui"
+    fi
+  fi
 fi
 
 # 3) Smoke test das funções puras (detecta regressão de ambiente cedo).

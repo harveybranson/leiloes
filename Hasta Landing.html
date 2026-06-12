@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>hasta — todos os leilões de imóveis do Brasil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAFAF7;--ink:#16140F;--void:#0B1220;--card:#fff;
+    --muted:#8A8478;--line:rgba(40,36,26,.12);
+    --e:#2E78FF;--c:#E8456B;--m:#F2A33C;--p:#3F6B4F;--v:#6B5CFF;--o:#E2B95B;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 36px;}
+  .sora{font-family:'Sora',sans-serif;}
+  .wm{font-family:'Sora',sans-serif;font-weight:800;letter-spacing:-.045em;line-height:1;}
+
+  /* ===== header ===== */
+  header{position:sticky;top:0;background:rgba(250,250,247,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:50;}
+  .hd{display:flex;align-items:center;gap:34px;height:66px;}
+  .logo{display:flex;flex-direction:column;align-items:flex-start;gap:3.5px;text-decoration:none;color:var(--ink);}
+  .logo .trema{display:flex;gap:5px;padding-left:2px;}
+  .logo .trema i{width:5.5px;height:5.5px;border-radius:50%;display:block;}
+  .logo .nm{font-size:24px;}
+  nav{display:flex;gap:26px;margin-left:auto;}
+  nav a{color:#4F4A3E;text-decoration:none;font-size:14.5px;font-weight:500;}
+  nav a:hover{color:var(--ink);}
+  .btn{font-family:'Sora',sans-serif;font-weight:700;font-size:14.5px;border-radius:12px;padding:11px 20px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;}
+  .btn.dark{background:var(--ink);color:#fff;}
+  .btn.gold{background:var(--o);color:var(--ink);}
+  .btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink);}
+
+  /* ===== hero ===== */
+  .hero{padding:84px 0 70px;text-align:center;position:relative;overflow:hidden;}
+  .hero .trema-big{display:flex;gap:16px;justify-content:center;}
+  .hero .trema-big i{width:13px;height:13px;border-radius:50%;display:block;}
+  .hero h1.brand{font-size:76px;margin:10px 0 0;}
+  .hero h2{font-family:'Sora',sans-serif;font-weight:800;font-size:46px;letter-spacing:-.03em;line-height:1.08;margin:46px auto 0;max-width:760px;}
+  .hero h2 em{font-style:normal;color:var(--c);}
+  .hero .sub{font-size:18px;color:#4F4A3E;margin:18px auto 0;max-width:560px;line-height:1.55;}
+  .hero .sub b{color:var(--ink);}
+
+  .search{max-width:680px;margin:34px auto 0;background:#fff;border:1.5px solid var(--ink);border-radius:16px;display:flex;align-items:center;padding:6px 6px 6px 22px;box-shadow:0 14px 34px -18px rgba(22,20,15,.35);}
+  .search svg{flex:none;}
+  .search input{flex:1;border:none;outline:none;font-size:16.5px;font-family:'Space Grotesk';padding:14px 14px;background:transparent;color:var(--ink);}
+  .search .btn{font-size:15.5px;padding:14px 24px;}
+  .chips{display:flex;gap:9px;justify-content:center;margin-top:16px;flex-wrap:wrap;}
+  .chip{font-size:12.5px;font-weight:500;color:#6F6A5C;border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 14px;}
+  .chip b{color:var(--ink);font-weight:600;}
+  .chip.hot{background:var(--o);border-color:transparent;color:var(--ink);font-weight:600;}
+
+  /* ===== números ===== */
+  .nums{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff;}
+  .nums .row{display:grid;grid-template-columns:repeat(4,1fr);}
+  .num{padding:26px 10px;text-align:center;}
+  .num + .num{border-left:1px solid var(--line);}
+  .num .v{font-family:'Sora',sans-serif;font-weight:800;font-size:27px;letter-spacing:-.02em;}
+  .num .v i{font-style:normal;}
+  .num .l{font-size:12.5px;color:var(--muted);margin-top:4px;letter-spacing:.04em;}
+
+  /* ===== seções ===== */
+  section{padding:84px 0 0;}
+  .sec-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.24em;color:var(--muted);}
+  .sec-h{font-family:'Sora',sans-serif;font-weight:800;font-size:33px;letter-spacing:-.025em;margin:12px 0 0;line-height:1.12;}
+  .sec-sub{font-size:16px;color:#4F4A3E;margin-top:10px;max-width:560px;line-height:1.55;}
+
+  /* como funciona */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:38px;}
+  .step{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px 22px;}
+  .step .ic{height:54px;display:flex;align-items:center;}
+  .step .n{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--muted);}
+  .step h3{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;margin:6px 0 0;}
+  .step p{font-size:13.5px;color:#6F6A5C;line-height:1.5;margin:7px 0 0;}
+
+  /* cards de imóveis */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:38px;}
+  .imv{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;}
+  .imv .ph{height:150px;position:relative;display:flex;align-items:center;justify-content:center;}
+  .imv .ph svg{opacity:.9;}
+  .imv .desc-tag{position:absolute;left:14px;top:14px;background:var(--ink);color:#fff;font-family:'Sora',sans-serif;font-weight:800;font-size:15px;border-radius:9px;padding:6px 11px;}
+  .imv .st-tag{position:absolute;right:14px;top:14px;font-size:11px;font-weight:600;letter-spacing:.05em;border-radius:99px;padding:5px 11px;background:rgba(255,255,255,.92);}
+  .imv .bd{padding:16px 18px 18px;}
+  .imv h4{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;margin:0;}
+  .imv .loc{font-size:12.5px;color:var(--muted);margin-top:3px;}
+  .imv .vals{display:flex;align-items:baseline;gap:10px;margin-top:13px;flex-wrap:wrap;}
+  .imv .lance{font-family:'Sora',sans-serif;font-weight:800;font-size:21px;white-space:nowrap;}
+  .imv .aval{font-size:13px;color:var(--muted);text-decoration:line-through;white-space:nowrap;}
+  .imv .meta2{display:flex;justify-content:space-between;align-items:center;margin-top:13px;padding-top:13px;border-top:1px dashed var(--line);font-size:12px;color:var(--muted);}
+  .imv .meta2 b{color:var(--p);font-weight:600;}
+
+  /* diferenciais */
+  .difs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:38px;}
+  .dif{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px;display:flex;gap:18px;}
+  .dif .ic{flex:none;width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;}
+  .dif h3{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;margin:0;}
+  .dif p{font-size:14px;color:#6F6A5C;line-height:1.55;margin:6px 0 0;}
+  .dif p b{color:var(--ink);}
+
+  /* confiança */
+  .trust{background:var(--void);color:#EDF1FA;border-radius:24px;margin-top:84px;padding:64px 56px;}
+  .trust .sec-label{color:rgba(237,241,250,.55);}
+  .trust .sec-h{color:#EDF1FA;}
+  .trust .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:46px;margin-top:36px;align-items:start;}
+  .quote{font-size:19px;line-height:1.6;font-weight:500;}
+  .quote b{color:var(--o);font-weight:700;}
+  .quote .who{font-size:13.5px;color:rgba(237,241,250,.6);margin-top:16px;}
+  .fontes{display:flex;flex-direction:column;gap:12px;}
+  .fonte{display:flex;gap:12px;align-items:center;background:rgba(237,241,250,.06);border:1px solid rgba(237,241,250,.12);border-radius:13px;padding:14px 18px;font-size:14px;}
+  .fonte i{width:9px;height:9px;border-radius:50%;flex:none;}
+
+  /* planos */
+  .plans{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:38px;max-width:880px;}
+  .plan{background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:30px;}
+  .plan.up{border-color:var(--ink);position:relative;box-shadow:0 18px 40px -22px rgba(22,20,15,.4);}
+  .plan .tag{position:absolute;right:22px;top:-12px;background:var(--o);font-size:11px;font-weight:700;letter-spacing:.08em;border-radius:99px;padding:5px 12px;white-space:nowrap;}
+  .plan h3{font-family:'Sora',sans-serif;font-size:20px;font-weight:800;margin:0;}
+  .plan .pr{font-family:'Sora',sans-serif;font-weight:800;font-size:34px;margin-top:10px;}
+  .plan .pr span{font-size:14px;color:var(--muted);font-weight:500;}
+  .plan ul{list-style:none;padding:0;margin:20px 0 0;display:flex;flex-direction:column;gap:11px;}
+  .plan li{font-size:14.5px;display:flex;gap:10px;align-items:baseline;color:#4F4A3E;}
+  .plan li::before{content:"✓";color:var(--p);font-weight:700;flex:none;}
+  .plan li.no{color:#B5AF9F;}
+  .plan li.no::before{content:"—";color:#C9C3B4;}
+  .plan .btn{width:100%;justify-content:center;margin-top:24px;}
+
+  /* faq */
+  .faq{max-width:760px;margin-top:38px;}
+  details{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden;}
+  summary{cursor:pointer;padding:18px 22px;font-family:'Sora',sans-serif;font-weight:700;font-size:15.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px;}
+  summary::after{content:"+";font-size:20px;color:var(--muted);flex:none;}
+  details[open] summary::after{content:"–";}
+  details .a{padding:0 22px 20px;font-size:14.5px;line-height:1.6;color:#4F4A3E;}
+  details .a b{color:var(--ink);}
+
+  /* cta final */
+  .final{text-align:center;padding:90px 0 0;}
+  .final .trema-big{display:flex;gap:13px;justify-content:center;}
+  .final .trema-big i{width:10px;height:10px;border-radius:50%;display:block;}
+  .final h2{font-family:'Sora',sans-serif;font-weight:800;font-size:38px;letter-spacing:-.025em;margin:18px 0 0;}
+  .final p{color:#4F4A3E;font-size:16px;margin:12px 0 0;}
+
+  /* footer */
+  footer{margin-top:90px;border-top:1px solid var(--line);background:#fff;}
+  .ft{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:30px;padding:46px 0;}
+  .ft h5{font-family:'Sora',sans-serif;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 13px;}
+  .ft a{display:block;color:#4F4A3E;text-decoration:none;font-size:14px;margin-bottom:9px;}
+  .ft .legal{font-size:12.5px;color:var(--muted);line-height:1.65;max-width:300px;margin-top:14px;}
+  .ft-bar{border-top:1px solid var(--line);padding:18px 0;font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+
+  @media(max-width:920px){
+    .hero h2{font-size:32px;}
+    .hero h1.brand{font-size:54px;}
+    .steps,.cards,.difs,.plans,.nums .row{grid-template-columns:1fr;}
+    .num + .num{border-left:none;border-top:1px solid var(--line);}
+    .trust .grid{grid-template-columns:1fr;}
+    .ft{grid-template-columns:1fr 1fr;}
+    nav{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header data-screen-label="Header">
+  <div class="wrap hd">
+    <a class="logo" href="#">
+      <span class="trema"><i style="background:var(--e);"></i><i style="background:var(--c);"></i><i style="background:var(--m);"></i><i style="background:var(--p);"></i></span>
+      <span class="wm nm">hasta</span>
+    </a>
+    <nav>
+      <a href="#busca">Buscar</a>
+      <a href="#como">Como funciona</a>
+      <a href="#planos">Planos</a>
+      <a href="#faq">Dúvidas</a>
+    </nav>
+    <a class="btn dark" href="#planos">Criar alerta grátis</a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="busca" data-screen-label="Hero">
+  <div class="wrap">
+    <div class="trema-big">
+      <i style="background:var(--e);"></i><i style="background:var(--c);"></i><i style="background:var(--m);"></i><i style="background:var(--p);"></i>
+    </div>
+    <h1 class="brand wm">hasta</h1>
+    <h2>Todos os leilões de imóveis do Brasil.<br><em>Um mapa, zero juridiquês.</em></h2>
+    <p class="sub">Reunimos os editais de <b>1.900+ leiloeiros oficiais</b>, traduzimos o risco em dados claros e avisamos quando a casa certa aparecer — por <b>até 60% menos</b> que o valor de avaliação.</p>
+
+    <div class="search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#16140F" stroke-width="2.4"/><path d="M16.5 16.5 L21 21" stroke="#16140F" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <input type="text" placeholder="Cidade, bairro ou CEP — ex.: Vila Mariana, São Paulo" aria-label="Buscar imóveis em leilão">
+      <button class="btn gold" type="button">Buscar leilões</button>
+    </div>
+    <div class="chips">
+      <span class="chip hot">até −60% da avaliação</span>
+      <span class="chip"><b>412 mil</b> imóveis ativos</span>
+      <span class="chip">Caixa + bancos + judiciais</span>
+      <span class="chip">Busca grátis, sem cadastro</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NÚMEROS ============ -->
+<div class="nums" data-screen-label="Cobertura">
+  <div class="wrap row">
+    <div class="num"><div class="v">412.380</div><div class="l">imóveis em leilão agora</div></div>
+    <div class="num"><div class="v">1.947</div><div class="l">leiloeiros oficiais monitorados</div></div>
+    <div class="num"><div class="v">5.412</div><div class="l">municípios cobertos</div></div>
+    <div class="num"><div class="v" style="color:var(--p);">1h</div><div class="l">frequência de atualização</div></div>
+  </div>
+</div>
+
+<!-- ============ COMO FUNCIONA ============ -->
+<section id="como" data-screen-label="Como funciona">
+  <div class="wrap">
+    <div class="sec-label">Como funciona</div>
+    <h2 class="sec-h">Do medo à chave, em quatro passos.</h2>
+    <p class="sec-sub">Leilão não é loteria nem armadilha — é processo. A gente organiza o processo; você toma a decisão.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="ic"><svg width="44" height="44" viewBox="0 0 136 120"><circle cx="40" cy="34" r="13" fill="var(--e)"/><circle cx="96" cy="34" r="13" fill="var(--c)"/><circle cx="40" cy="86" r="13" fill="var(--m)"/><circle cx="96" cy="86" r="13" fill="var(--p)"/><circle cx="68" cy="60" r="15" fill="var(--ink)"/><circle cx="68" cy="60" r="5.5" fill="var(--o)"/></svg></div>
+        <div class="n">PASSO 1</div><h3>Busque em tudo</h3>
+        <p>Um campo de busca, todos os leilões do país: Caixa, bancos, judiciais e extrajudiciais — sem abrir 50 sites.</p>
+      </div>
+      <div class="step">
+        <div class="ic"><svg width="40" height="44" viewBox="0 0 100 110"><rect x="14" y="8" width="72" height="94" rx="9" fill="none" stroke="var(--ink)" stroke-width="6"/><path d="M30 34 L70 34 M30 52 L70 52 M30 70 L52 70" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/><path d="M56 84 L64 92 L80 72" fill="none" stroke="var(--p)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="n">PASSO 2</div><h3>Entenda o edital</h3>
+        <p>Nossa IA resume o edital em português de gente: ocupação, dívidas, prazos e custos — riscos na mesa, sem letra miúda.</p>
+      </div>
+      <div class="step">
+        <div class="ic"><div style="display:flex;gap:7px;align-items:center;height:44px;"><i style="width:16px;height:16px;border-radius:50%;background:var(--ink);"></i><i style="width:12px;height:12px;border-radius:50%;background:var(--ink);"></i><i style="width:9px;height:9px;border-radius:50%;background:var(--o);"></i></div></div>
+        <div class="n">PASSO 3</div><h3>Dê o lance certo</h3>
+        <p>Calculadora de custo total: lance + taxas + leiloeiro + reforma. Você sabe o número antes de levantar a mão.</p>
+      </div>
+      <div class="step">
+        <div class="ic"><svg width="40" height="44" viewBox="0 0 92 120"><circle cx="46" cy="26" r="15" fill="none" stroke="var(--o)" stroke-width="9"/><line x1="46" y1="42" x2="46" y2="100" stroke="var(--ink)" stroke-width="9" stroke-linecap="round"/><path d="M46 96 L62 86 M46 76 L58 69" stroke="var(--ink)" stroke-width="8" stroke-linecap="round"/></svg></div>
+        <div class="n">PASSO 4</div><h3>Pegue a chave</h3>
+        <p>Arrematou? A gente segue junto: guia pós-arremate, documentação e os próximos passos até a mudança.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPORTUNIDADES ============ -->
+<section data-screen-label="Oportunidades">
+  <div class="wrap">
+    <div class="sec-label">Agora no mapa</div>
+    <h2 class="sec-h">O que ninguém viu, você vê primeiro.</h2>
+    <div class="cards">
+      <article class="imv">
+        <div class="ph" style="background:linear-gradient(145deg,#E3ECFF,#C9D9FB);">
+          <svg width="72" height="72" viewBox="0 0 120 120"><path d="M20 52 L60 20 L100 52 L100 98 Q100 104 94 104 L26 104 Q20 104 20 98 Z" fill="var(--e)"/><rect x="50" y="72" width="20" height="32" rx="2.5" fill="#fff"/><circle cx="60" cy="46" r="9" fill="#fff"/><circle cx="60" cy="46" r="3.6" fill="var(--o)"/></svg>
+          <span class="desc-tag">−54%</span>
+          <span class="st-tag" style="color:var(--p);">● Aberto</span>
+        </div>
+        <div class="bd">
+          <h4>Apartamento 2 dorm · 64 m²</h4>
+          <div class="loc">Vila Mariana, São Paulo · SP</div>
+          <div class="vals"><span class="lance">R$ 198.000</span><span class="aval">R$ 430.000</span></div>
+          <div class="meta2"><span>2ª praça · encerra 14/07</span><b>Caixa Econômica</b></div>
+        </div>
+      </article>
+      <article class="imv">
+        <div class="ph" style="background:linear-gradient(145deg,#FFE9DC,#FBD2C2);">
+          <svg width="72" height="72" viewBox="0 0 120 120"><path d="M20 52 L60 20 L100 52 L100 98 Q100 104 94 104 L26 104 Q20 104 20 98 Z" fill="var(--c)"/><rect x="50" y="72" width="20" height="32" rx="2.5" fill="#fff"/><circle cx="60" cy="46" r="9" fill="#fff"/><circle cx="60" cy="46" r="3.6" fill="var(--o)"/></svg>
+          <span class="desc-tag">−61%</span>
+          <span class="st-tag" style="color:var(--m);">● Encerrando</span>
+        </div>
+        <div class="bd">
+          <h4>Casa 3 dorm + quintal · 142 m²</h4>
+          <div class="loc">Bangu, Rio de Janeiro · RJ</div>
+          <div class="vals"><span class="lance">R$ 145.500</span><span class="aval">R$ 372.000</span></div>
+          <div class="meta2"><span>1ª praça · encerra amanhã</span><b>Leilão judicial</b></div>
+        </div>
+      </article>
+      <article class="imv">
+        <div class="ph" style="background:linear-gradient(145deg,#E5F0E4,#CDE2CC);">
+          <svg width="72" height="72" viewBox="0 0 120 120"><path d="M20 52 L60 20 L100 52 L100 98 Q100 104 94 104 L26 104 Q20 104 20 98 Z" fill="var(--p)"/><rect x="50" y="72" width="20" height="32" rx="2.5" fill="#fff"/><circle cx="60" cy="46" r="9" fill="#fff"/><circle cx="60" cy="46" r="3.6" fill="var(--o)"/></svg>
+          <span class="desc-tag">−47%</span>
+          <span class="st-tag" style="color:var(--p);">● Aberto</span>
+        </div>
+        <div class="bd">
+          <h4>Sobrado 3 dorm · 118 m²</h4>
+          <div class="loc">Boa Vista, Curitiba · PR</div>
+          <div class="vals"><span class="lance">R$ 289.000</span><span class="aval">R$ 545.000</span></div>
+          <div class="meta2"><span>2ª praça · encerra 22/07</span><b>Banco Bradesco</b></div>
+        </div>
+      </article>
+    </div>
+    <div style="margin-top:26px;display:flex;justify-content:center;"><a class="btn ghost" href="#busca">Ver os 412 mil imóveis →</a></div>
+  </div>
+</section>
+
+<!-- ============ DIFERENCIAIS ============ -->
+<section data-screen-label="Diferenciais">
+  <div class="wrap">
+    <div class="sec-label">Por que a hasta</div>
+    <h2 class="sec-h">Confiança que se prova, não que se promete.</h2>
+    <div class="difs">
+      <div class="dif"><div class="ic" style="background:#E3ECFF;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="var(--e)" stroke-width="2.6"/><path d="M15.5 15.5 L21 21" stroke="var(--e)" stroke-width="2.6" stroke-linecap="round"/></svg></div>
+        <div><h3>Busca que entende você</h3><p>Filtre por <b>% de desconto</b>, ocupação, modalidade, financiamento e até “aceita FGTS”. Lista ou mapa — você escolhe.</p></div></div>
+      <div class="dif"><div class="ic" style="background:#E5F0E4;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 12 L9 17 L20 5" stroke="var(--p)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><h3>Dados verificados na fonte</h3><p>Editais, matrículas e datas coletados <b>direto dos leiloeiros oficiais</b> e diários de justiça — com link para a fonte, sempre.</p></div></div>
+      <div class="dif"><div class="ic" style="background:#F3EDFF;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2.5" stroke="var(--v)" stroke-width="2.4"/><path d="M8 8.5 L16 8.5 M8 12.5 L16 12.5 M8 16.5 L12 16.5" stroke="var(--v)" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+        <div><h3>Due diligence com IA</h3><p>O edital de 40 páginas vira um resumo honesto: <b>riscos, dívidas e ocupação</b> em linguagem simples. Estimativa, nunca promessa.</p></div></div>
+      <div class="dif"><div class="ic" style="background:#FBF1DC;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3 C7 3 4 6.5 4 10.5 C4 15 8 17.5 12 21 C16 17.5 20 15 20 10.5 C20 6.5 17 3 12 3 Z" stroke="#C9821F" stroke-width="2.4" stroke-linejoin="round"/><circle cx="12" cy="10.5" r="2.4" fill="#C9821F"/></svg></div>
+        <div><h3>Alertas onde você vive</h3><p>Defina bairro, preço e desconto mínimo. Quando aparecer, avisamos <b>no WhatsApp</b> — antes do leilão lotar de gente.</p></div></div>
+    </div>
+
+    <!-- confiança -->
+    <div class="trust" data-screen-label="Prova social">
+      <div class="sec-label">Quem já passou pela porta</div>
+      <h2 class="sec-h" style="font-size:28px;">“Eu tinha certeza de que leilão era golpe.”</h2>
+      <div class="grid">
+        <div class="quote">
+          “Passei 6 meses com medo de dar lance. A hasta me mostrou o edital traduzido, o custo real — incluindo o advogado — e um apartamento a <b>R$ 102 mil na minha rua</b>. Hoje moro nele. O medo era só falta de informação.”
+          <div class="who">Mariana C. · 34 · Belo Horizonte · arrematou em mar/2026</div>
+        </div>
+        <div class="fontes">
+          <div class="fonte"><i style="background:var(--e);"></i>Fontes oficiais: leiloeiros registrados nas Juntas Comerciais</div>
+          <div class="fonte"><i style="background:var(--c);"></i>Editais íntegros + matrícula vinculados em cada anúncio</div>
+          <div class="fonte"><i style="background:var(--m);"></i>Sem promessa de lucro: números são estimativas declaradas</div>
+          <div class="fonte"><i style="background:var(--p);"></i>LGPD: seus alertas são seus — nunca vendemos seu contato</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLANOS ============ -->
+<section id="planos" data-screen-label="Planos">
+  <div class="wrap">
+    <div class="sec-label">Planos</div>
+    <h2 class="sec-h">Comece grátis. Evolua quando fizer sentido.</h2>
+    <p class="sec-sub">A busca é aberta para sempre — conhecimento sobre leilão não deveria ter paywall. O plano pago existe para quem quer velocidade e profundidade.</p>
+    <div class="plans">
+      <div class="plan">
+        <h3>Grátis</h3>
+        <div class="pr">R$ 0 <span>para sempre</span></div>
+        <ul>
+          <li>Busca completa nos 412 mil imóveis</li>
+          <li>Mapa de oportunidades</li>
+          <li>Resumo do edital (3 por mês)</li>
+          <li>1 alerta de busca</li>
+          <li class="no">Alertas ilimitados no WhatsApp</li>
+          <li class="no">Calculadora de custo total + ROI</li>
+          <li class="no">Due diligence completa com IA</li>
+          <li class="no">Comparador de oportunidades</li>
+        </ul>
+        <a class="btn ghost" href="#busca">Começar a buscar</a>
+      </div>
+      <div class="plan up">
+        <span class="tag">7 DIAS GRÁTIS</span>
+        <h3>hasta<span style="color:var(--o);">+</span></h3>
+        <div class="pr">R$ 49 <span>/mês · cancele quando quiser</span></div>
+        <ul>
+          <li>Tudo do plano grátis, sem limites</li>
+          <li>Alertas ilimitados no WhatsApp e e-mail</li>
+          <li>Due diligence com IA em todos os editais</li>
+          <li>Calculadora de custo total + cenários</li>
+          <li>Comparador lado a lado (até 4 imóveis)</li>
+          <li>Histórico de preços e 2ª praça prevista</li>
+          <li>Suporte de quem entende de leilão</li>
+        </ul>
+        <a class="btn dark" href="#">Testar o hasta+ grátis</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" data-screen-label="FAQ">
+  <div class="wrap">
+    <div class="sec-label">Sem medo de perguntar</div>
+    <h2 class="sec-h">As dúvidas que todo mundo tem<br>(e quase ninguém responde direito).</h2>
+    <div class="faq">
+      <details open>
+        <summary>Comprar imóvel em leilão é seguro?</summary>
+        <div class="a">É — <b>quando você sabe o que está comprando</b>. Leilões da Caixa, de bancos e judiciais são processos públicos regulados por lei, conduzidos por leiloeiros oficiais. O risco não está no leilão em si: está em arrematar sem ler o edital. É exatamente isso que a hasta resolve — mostramos ocupação, dívidas e custos <b>antes</b> do lance.</div>
+      </details>
+      <details>
+        <summary>E se o imóvel estiver ocupado?</summary>
+        <div class="a">Acontece, e <b>não é o fim do mundo — é um dado</b>. Cada anúncio na hasta indica a situação de ocupação declarada no edital. Imóvel ocupado costuma sair mais barato e exige um processo de desocupação (geralmente 2 a 6 meses, via justiça ou acordo). Mostramos isso no resumo, com o custo estimado incluído na calculadora.</div>
+      </details>
+      <details>
+        <summary>Por que está tão barato? Qual é a pegadinha?</summary>
+        <div class="a">Não há pegadinha — há <b>pressa institucional</b>. Bancos e tribunais não querem ser imobiliárias: querem recuperar crédito rápido. Por isso a lei permite vender com desconto em praça pública. O desconto é o prêmio de quem faz a lição de casa que a maioria não faz.</div>
+      </details>
+      <details>
+        <summary>Preciso de advogado para participar?</summary>
+        <div class="a">Para <b>dar o lance, não</b>. Para arrematar com tranquilidade — especialmente em leilão judicial — recomendamos acompanhamento jurídico, e somos transparentes: <b>incluímos esse custo na calculadora</b> (R$ 3–8 mil tipicamente). Nada de surpresa depois.</div>
+      </details>
+      <details>
+        <summary>Posso financiar ou usar FGTS?</summary>
+        <div class="a">Em muitos leilões da Caixa e de bancos, <b>sim</b> — financiamento e FGTS são aceitos e o edital diz isso explicitamente. Temos um filtro só para isso: busque com “aceita financiamento” ligado e veja apenas o que cabe no seu plano.</div>
+      </details>
+      <details>
+        <summary>A hasta vende os imóveis?</summary>
+        <div class="a">Não. Somos um <b>agregador independente</b>: organizamos os leilões de 1.900+ leiloeiros oficiais num lugar só e damos as ferramentas de decisão. O lance acontece no site do leiloeiro responsável — com nosso link direto e checklist do que verificar antes.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA FINAL ============ -->
+<section class="final" data-screen-label="CTA final">
+  <div class="wrap">
+    <div class="trema-big">
+      <i style="background:var(--e);"></i><i style="background:var(--c);"></i><i style="background:var(--m);"></i><i style="background:var(--p);"></i>
+    </div>
+    <h2>Sua próxima casa pode estar<br>em leilão agora.</h2>
+    <p>Buscar é grátis. O medo é opcional.</p>
+    <div style="margin-top:28px;display:flex;gap:12px;justify-content:center;">
+      <a class="btn gold" href="#busca" style="font-size:16px;padding:15px 28px;">Buscar leilões grátis</a>
+      <a class="btn ghost" href="#como" style="font-size:16px;padding:15px 28px;">Como funciona</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer data-screen-label="Rodapé">
+  <div class="wrap ft">
+    <div>
+      <a class="logo" href="#" style="margin-bottom:6px;">
+        <span class="trema"><i style="background:var(--e);"></i><i style="background:var(--c);"></i><i style="background:var(--m);"></i><i style="background:var(--p);"></i></span>
+        <span class="wm nm">hasta</span>
+      </a>
+      <div class="legal">Todos os leilões de imóveis do Brasil, em um lugar. Valores, descontos e retornos exibidos são estimativas baseadas em dados públicos — nunca promessa de resultado. Leia sempre o edital.</div>
+    </div>
+    <div>
+      <h5>Produto</h5>
+      <a href="#busca">Buscar imóveis</a>
+      <a href="#">Mapa de oportunidades</a>
+      <a href="#planos">Planos e preços</a>
+      <a href="#">Alertas no WhatsApp</a>
+    </div>
+    <div>
+      <h5>Aprenda</h5>
+      <a href="#como">Como funciona</a>
+      <a href="#faq">Guia do primeiro lance</a>
+      <a href="#">Glossário sem juridiquês</a>
+      <a href="#">Blog da hasta</a>
+    </div>
+    <div>
+      <h5>Empresa</h5>
+      <a href="#">Sobre nós</a>
+      <a href="#">Fontes e metodologia</a>
+      <a href="#">Privacidade (LGPD)</a>
+      <a href="#">Fale com a gente</a>
+    </div>
+  </div>
+  <div class="wrap ft-bar">
+    <span>© 2026 hasta tecnologia ltda. · CNPJ 00.000.000/0001-00</span>
+    <span>Feito no Brasil, de olho no mundo.</span>
+  </div>
+</footer>
+
+</body>
+</html>

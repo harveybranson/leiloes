@@ -1,8 +1,8 @@
 {
   "total": 997,
-  "done": 997,
-  "sites_ok": 251,
-  "sites_err": 746,
-  "total_imoveis": 6029,
-  "updated": "2026-06-11T16:37:11.847140"
+  "done": 593,
+  "sites_ok": 164,
+  "sites_err": 429,
+  "total_imoveis": 3580,
+  "updated": "2026-06-13T10:54:06.112906"
 }

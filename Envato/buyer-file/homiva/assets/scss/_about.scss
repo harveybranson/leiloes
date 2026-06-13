@@ -1,0 +1,528 @@
+.about-wrapper {
+
+        @include breakpoint (max-xxl) {
+            margin-top: 30px;
+        }
+
+        .about-image {
+            position: relative;
+            max-width: 660px;
+            overflow: hidden;
+
+            @include breakpoint (max-xxl) {
+                max-width: initial;
+            }
+
+            img {
+                @include imgw;
+                border-radius: 60px;
+            }
+
+             .man-image {
+                position: absolute;
+                bottom: 0;
+                z-index: 999;
+                right: 130px;
+
+                @include breakpoint (max-xxl) {
+                    right: 100px;
+                    height: 400px;
+                }
+
+                @include breakpoint (max-lg) {
+                    right: 130px;
+                    height: initial;
+                }
+
+                @include breakpoint (max-sm) {
+                    right: 80px;
+                    height: 300px;
+                }
+            }
+        }
+    
+    .about-content {
+
+        .text {
+            margin-top: 15px;
+            max-width: 690px;
+        }
+
+        .about-list-item {
+            @include flex;
+            gap: 30px;
+            border-top: 1px solid rgba(22, 36, 62, 0.2);
+            border-bottom: 1px solid rgba(22, 36, 62, 0.2);
+            padding: 30px 0;
+            margin-top: 30px;
+            max-width: 445px;
+            width: 100%;
+
+            @include breakpoint (max-lg) {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .list {
+
+                li {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: rgba(22, 36, 62, 1);
+
+                    &:not(:last-child) {
+                        margin-bottom: 15px;
+                    }
+
+                    img {
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+
+        .about-button-item {
+            @include flex;
+            gap: 20px;
+            margin-top: 30px;
+
+             @include breakpoint (max-lg) {
+                flex-wrap: wrap;
+            }
+
+            .about-icon-item {
+                @include flex;
+                gap: 15px;
+
+                .icon {
+                    width: 56px;
+                    height: 56px;
+                    line-height: 56px;
+                    text-align: center;
+                    background-color: rgba(227, 87, 45, 0.2);
+                    border-radius: 100px;
+                }
+
+                .content {
+                    span {
+                        color: rgba(85, 94, 114, 1);
+                    }
+
+                    h3 {
+                        font-size: 20px;
+                    }
+                }
+            }
+        }
+
+        .video-image {
+            position: absolute;
+            top: 455px;
+            right: 245px;
+            z-index: 9;
+
+             @include breakpoint (max-xl4) {
+                right: 150px;
+            }
+
+             @include breakpoint (max-xxxl) {
+                right: 34px;
+            }
+
+            @include breakpoint (max-xxl) {
+                display: none;
+            }
+
+            .shape {
+                position: absolute;
+                right: -30px;
+                bottom: 0;
+                z-index: -1;
+
+                @include breakpoint (max-xxxl) {
+                    right: -12px;
+                }
+            }
+
+            .video-btn {
+                width: 90px;
+                height: 90px;
+                line-height: 90px;
+                display: inline-block;
+                text-align: center;
+                border-radius: 100px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: $white;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+            }
+
+            img {
+                border-radius: 10px;
+                transform: rotate(15deg);
+            }
+        }
+    }
+}
+
+
+.about-section {
+    position: relative;
+
+    .about-top-image {
+        position: absolute;
+        left: -318px;
+        top: 120px;
+        max-width: 660px;
+
+        @include breakpoint (max-xl4) {
+           left: -460px;
+        }
+
+         @include breakpoint (max-xxxl) {
+           left: -555px;
+        }
+
+         @include breakpoint (max-xxl) {
+           display: none;
+        }
+
+        img  {
+            @include imgw;
+            border-radius: 6px;
+        }
+    }
+
+    .radius-shape {
+        position: absolute;
+        top: 190px;
+        left: 70px;
+        z-index: 999;
+
+         @include breakpoint (max-xxxl) {
+           left: 20px;
+        }
+
+        @include breakpoint (max-xxl) {
+            display: none;
+        }
+    }
+}
+
+.about-wrapper-2 {
+    .about-content {
+        @include breakpoint (max-xxl){
+            max-width: 600px;
+        }
+        .about-text {
+            margin-top: 25px;
+        }
+
+        ul {
+            margin-top: 30px;
+            margin-bottom: 50px;
+
+            @include breakpoint (max-md){
+                margin-top: 30px;
+                margin-top: 25px;
+            }
+
+            li {
+                @include flex;
+                gap: 16px;
+
+                @include breakpoint (max-sm){
+                   display: grid;
+                }
+
+                .icon {
+                    border-radius: 8px;
+                    border: 1px solid rgba(204, 206, 213, 0.24);
+                    background: $white;
+                    max-width: 80px;
+                    width: 100%;
+                    height: 80px;
+                    line-height: 80px;
+                    text-align: center;
+                    font-size: 40px;
+                    color: $header-color;
+                    @include transition;
+                }
+
+                .content {
+                    h3 {
+                        margin-bottom: 5px;
+                        font-size: 20px;
+                    }
+                }
+
+                &:not(:last-child){
+                    margin-bottom: 25px;
+                }
+
+                &:hover {
+                    .icon {
+                        background-color: $theme-color;
+                        color: $white;
+                    }
+                }
+            }
+        }
+    }
+
+    .about-image-items {
+        .about-image-1 {
+            display: flex;
+
+            @include breakpoint (max-sm){
+                display: block;
+            }
+
+            .thumb {
+                max-width: 483px;
+
+                @include breakpoint (max-sm){
+                    max-width: 700px;
+                }
+
+                img {
+                    @include imgw;
+                    border-radius: 16px 0px;
+                }
+            }
+
+            .counter-box {
+                writing-mode: vertical-rl;
+                display: grid;
+                gap: 10px;
+                transform: rotate(180deg);
+                border-radius: 0px 0 0 16px;
+                background: $theme-color;
+                padding: 20px 36px;
+                height: 260px;
+
+                 @include breakpoint (max-sm){
+                    transform: rotate(0deg);
+                    writing-mode: initial;
+                    height: initial;
+                    margin-top: -20px;
+                }
+
+                h2 {
+                    font-size: 40px;
+                    color: $white;
+                }
+
+                h3 {
+                    color: $white;
+                    font-weight: 600;
+                    opacity: 0.88;
+                    font-size: 20px;
+                }
+            }
+        }
+        
+        .about-image-2 {
+            @include flex;
+            margin-top: -20px;
+
+            @include breakpoint (max-md){
+                display: block;
+            }
+
+            .icon-box {
+                background-color: $header-color;
+                padding: 43px 24px;
+                display: inline-block;
+                border-radius: 0px 0px 0px 16px;
+
+                @include breakpoint (max-md){
+                    display: block;
+                }
+
+                .icon {
+                    border-radius: 8px;
+                    border: 1px solid rgba(204, 206, 213, 0.24);
+                    background: transparent;
+                    text-align: center;
+                    width: 80px;
+                    height: 80px;
+                    line-height: 80px;
+                    font-size: 40px;
+                    color: $theme-color;
+                }
+
+                .content {
+                    margin-top: 20px;
+
+                    h3 {
+                        color: $white;
+                        margin-bottom: 14px;
+                        font-size: 20px;
+                    }
+
+                    p {
+                        color: $white;
+                        opacity: .7;
+                        max-width: 230px;
+                    }
+                }
+            }
+
+            .thumb-2 {
+                max-width: 365px;
+
+                @include breakpoint (max-md){
+                    max-width: 700px;
+                }
+
+                img {
+                    border-radius: 16px 0px;
+                    @include imgw;
+                    border-top-left-radius: 0;
+                }
+            }
+        }
+    }
+}
+
+.about-section-2 {
+    position: relative;
+    z-index: 9;
+
+    .left-shape {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+
+        @include breakpoint (max-xxl) {
+            display: none;
+        }
+    }
+}
+
+.about-wrapper-3 {
+
+    .about-image {
+        position: relative;
+
+        .border-shape {
+            position: absolute;
+            top: -5px;
+            left: 15px;
+
+            @include breakpoint (max-xl) {
+                display: none;
+            }
+
+            img {
+                width: initial;
+                height: initial;
+            }
+        }
+
+        img {
+            @include imgw;
+        }
+    }
+
+    .about-content {
+        margin-left: 20px;
+
+        @include breakpoint (max-xl) {
+            margin-left: 0;
+         }
+
+        .about-list-item {
+            margin-top: 60px;
+            @include flex;
+            gap: 55px;
+
+            @include breakpoint (max-xxl) {
+               margin-top: 30px;
+               gap: 30px;
+            }
+
+            @include breakpoint (max-lg) {
+                flex-wrap: wrap;
+                gap: 30px;
+            }
+
+            .list-item {
+                
+                .list {
+                    margin-bottom: 48px;
+
+                    @include breakpoint (max-xxl) {
+                        margin-bottom: 30px;
+                    }
+
+
+                    li {
+                        font-size: 18px;
+                        font-weight: 600;
+                        font-family: $heading-font;
+                        color: $header-color;
+
+                        @include breakpoint (max-xxl) {
+                            font-size: 14px;
+                        }
+
+                        @include breakpoint (max-lg) {
+                            font-size: 18px;
+                        }
+
+                        &:not(:last-child) {
+                            margin-bottom: 10px;
+                        }
+
+                        i {
+                            color: $theme-color;
+                            margin-right: 12px;
+                        }
+                    }
+                }
+            }
+
+            .counter-box {
+                background-color: $theme-color;
+                border-radius: 16px;
+                padding: 56px 36px;
+                text-align: center;
+                width: 268px;
+
+                h3 {
+                    font-size: 72px;
+                    font-weight: 800;
+                    color: $white;
+                }
+
+                h4 {
+                    font-weight: 800;
+                    color: $white;
+                }
+            }
+        }
+    }
+}
+
+.about-section-3 {
+    position: relative;
+    z-index: 9;
+
+    .right-shape {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        z-index: -1;
+
+        @include breakpoint (max-xl) {
+            display: none;
+        }
+    }
+}

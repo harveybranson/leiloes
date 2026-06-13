@@ -1,0 +1,73 @@
+/*======================================================================================
+Theme Name: Homiva 
+Author: Pixel-plus
+Author URI: https://themeforest.net/user/Pixel-plus/portfolio
+Description: Homiva - Real Estate HTML Template
+Service Html Template 
+Version: 1.0.0
+=======================================================================================*/
+
+/*======================================================================================
+  >> TABLE OF CONTENTS <<
+========================================================================================
+01. Mixins & Variables
+02. Base
+03. Components
+04. Layouts
+05. Sections
+======================================================================================*/
+
+/*---------------------------------------
+01. Mixins & Variables
+---------------------------------------*/
+@import "_mixins";
+@import "_variables";
+
+/*---------------------------------------
+02. Base
+---------------------------------------*/
+@import "_typography";
+@import "_buttons";
+
+/*---------------------------------------
+03. Components
+---------------------------------------*/
+@import "_meanmenu";
+@import "_preloader";
+@import "_animation";
+
+/*---------------------------------------
+04. Layouts
+---------------------------------------*/
+@import "_header";
+@import "_footer";
+@import "_section";
+
+/*---------------------------------------
+05. Sections
+---------------------------------------*/
+@import "_about";
+@import "_brand";
+@import "_contact";
+@import "_cta";
+@import "_faq";
+@import "_feature";
+@import "_hero";
+@import "_news";
+@import "_pricing";
+@import "_project";
+@import "_service";
+@import "_team";
+@import "_testimonial";
+
+
+
+
+
+
+
+@import "_helping";
+
+
+
+

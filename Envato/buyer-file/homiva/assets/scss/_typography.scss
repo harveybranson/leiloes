@@ -1,0 +1,177 @@
+/* --------------------------------------------
+    Template Default Fonts & Fonts Styles
+ ---------------------------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+$heading-font: 'Manrope', sans-serif;
+$body-font: "Manrope", sans-serif;
+//font-family: "Font Awesome 6 Free";
+$fa: "Font Awesome 6 Pro";
+
+body {
+    font-family: $body-font;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 28px;
+    color: $text-color;
+    background-color: $white;
+	padding: 0;
+	margin: 0;
+	overflow-x: hidden;
+
+	@include breakpoint (max-sm){
+		font-size: 14px;
+	}
+}
+
+ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+button {
+    border: none;
+    background-color: transparent;
+	padding: 0;
+}
+
+input:focus{
+	color: $white;
+	outline: none;
+}
+
+input{
+	color: $white;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: $heading-font;
+    margin: 0px;
+	padding: 0;
+    color: $header-color;
+	@include transition;
+}
+
+h1 {
+	font-size: 70px;
+	font-weight: 800;
+	line-height: 114%;
+	text-transform: capitalize;
+
+	@include breakpoint(max-xxxl){
+		font-size: 60px;
+	}
+
+	@include breakpoint(max-xxl){
+		font-size: 65px;
+	}
+
+	@include breakpoint(max-xl){
+		font-size: 40px;
+	}
+
+	@include breakpoint(max-lg){
+		font-size: 55px;
+	}
+
+	@include breakpoint(max-md){
+		font-size: 35px;
+	}
+
+	@include breakpoint(max-sm){
+		font-size: 28px;
+	}
+
+	@include breakpoint(max-xxs){
+		font-size: 28px;
+	}
+}
+
+h2 {
+	font-size: 50px;
+	font-weight: 700;
+	line-height: 120%;
+
+	@include breakpoint(max-xxl){
+		font-size: 44px;
+	}
+
+	@include breakpoint(max-xl){
+		font-size: 40px;
+	}
+
+	@include breakpoint(max-lg){
+		font-size: 36px;
+	}
+
+	@include breakpoint(max-md){
+		font-size: 40px;
+	}
+
+	@include breakpoint(max-sm){
+		font-size: 30px;
+	}
+
+
+	@include breakpoint(max-xxs){
+		font-size: 30px;
+	}
+}
+
+h3 {
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 133%;
+	text-transform: capitalize;
+
+	@include breakpoint(max-sm){
+		font-size: 20px;
+	}
+}
+
+h4 {
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 150%;
+	text-transform: capitalize;
+}
+
+h5 {
+	font-size: 18px;
+	font-weight: 600;
+	text-transform: capitalize;
+}
+
+h6 {
+	font-size: 16px;
+	font-weight: 600;
+	text-transform: capitalize;
+}
+
+a {
+    text-decoration: none;
+    outline: none !important;
+    cursor: pointer;
+    color: $header-color;
+	@include transition;
+}
+
+p {
+    margin: 0px;
+	@include transition;
+}
+
+span {
+	margin: 0px;
+	// @include transition;
+}
+

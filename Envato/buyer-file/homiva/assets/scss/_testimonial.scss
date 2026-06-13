@@ -1,0 +1,249 @@
+.testimonial-box-item {
+    background-color: $white;
+    padding: 50px;
+    border-radius: 12px;
+    margin-top: 30px;
+
+    @include breakpoint (max-xxl) {
+        padding: 30px;
+    }
+
+    .info-item {
+        @include flex;
+        gap: 15px;
+        border-bottom: 1px solid rgba(2, 6, 10, 0.08);
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+
+        img {
+            border-radius: 5px;
+        }
+
+        .content {
+            h3 {
+                font-size: 20px;
+                font-weight: 700;
+                line-height: 150%;
+                text-transform: capitalize;
+            }
+        }
+    }
+
+    p {
+        font-weight: 500;
+        font-size: 22px;
+        font-family: $heading-font;
+        line-height: 136%;
+
+        @include breakpoint (max-xxl) {
+            font-size: 16px;
+        }
+    }
+
+    .star {
+        color: $theme-color;
+        margin-top: 20px;
+    }
+}
+
+.testimonial-section {
+    position: relative;
+
+    .array-button {
+
+        .array-prev {
+            position: absolute;
+            top: 56%;
+            left: 280px;
+            border: 1px solid $header-color;
+            color: $header-color;
+            @include transition;
+            background-color: $white;
+            z-index: 999;
+
+            @include breakpoint (max-xl4) {
+                top: 64%;
+                left: 154px;
+            }
+
+            &:hover {
+                background-color: $theme-color;
+                border: 1px solid $theme-color;
+                color: $white;
+            }
+        }
+
+        .array-next {
+            position: absolute;
+            top: 56%;
+            right: 280px;
+            background-color: $theme-color;
+            color: $white;
+            z-index: 999;
+
+            @include breakpoint (max-xl4) {
+                top: 64%;
+                right: 154px;
+            }
+
+            &:hover {
+                background-color: $header-color;
+            }
+        }
+
+        @include breakpoint (max-xxl) {
+           display: none;
+        }
+    }
+
+    .testimonial-slider {
+        margin-left: -360px;
+        margin-right: -360px;
+
+        @include breakpoint(max-xxl){
+           margin-left: 10px;
+           margin-right: 10px;
+        }
+    }
+}
+
+.testimonial-wrapper-2 {
+    .testimonial-left-content {
+        .testi-text {
+            margin-top: 25px;
+            max-width: 535px;
+            margin-bottom: 48px;
+        }
+    }
+
+    .testimonial-right-items {
+        .testimonial-box-2 {
+            border-radius: 12px;
+            border: 1.5px solid $theme-color;
+            background: $white;
+            padding: 32px;
+            text-align: center;
+            box-sizing: border-box;
+            width: 100%;
+
+            .star {
+                color: #FCD554;
+                margin-bottom: 15px;
+            }
+
+            p {
+                font-size: 18px;
+                font-weight: 600;
+                font-family: $heading-font;
+            }
+
+            .client-info {
+                margin-top: 30px;
+
+                h3 {
+                    font-weight: 800;
+                    font-size: 20px;
+                }
+            }
+        }
+
+        .client-info-image {
+            max-width: 430px;
+            margin: 40px auto 0;
+            text-align: center;
+        }
+    }
+}
+
+.testimonial-section-2 {
+    position: relative;
+    z-index: 9;
+
+    .left-shape {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+    }
+}
+
+.testimonial-box-item-3 {
+    padding: 32px;
+    background-color: $bg-color;
+    border-radius: 16px;
+    border: 1px solid $bg-color;
+    @include transition;
+
+    @include breakpoint (max-xl) {
+        padding: 30px;
+    }
+
+    &.style-2 {
+        margin-top: 24px;
+        margin-bottom: 24px;
+    }
+
+    p {
+        max-width: 444px;
+        margin-bottom: 24px;
+    }
+
+    .client-info-item {
+         @include flex;
+         justify-content: space-between;
+
+         .client-item {
+            @include flex;
+            gap: 16px;
+
+            .info-content {
+                h2 {
+                    font-weight: 800;
+                    margin-bottom: 5px;
+                    font-size: 20px;
+                }
+            }
+        }
+
+    }
+
+    &:hover {
+        border: 1px solid $theme-color;
+    }
+}
+
+.testimonial-section-3 {
+    position: relative;
+    z-index: 9;
+
+    .shape {
+        position: absolute;
+        left: 50;
+        top: 0%;
+        z-index: -1;
+
+        @include breakpoint (max-xl) {
+            display: none;
+        }
+    }
+
+    .container-fluid {
+        padding: 0 155px;
+
+         @include breakpoint (max-xl) {
+            padding: 0 60px;
+        }
+
+         @include breakpoint (max-lg) {
+            padding: 0 50px;
+        }
+
+         @include breakpoint (max-md) {
+            padding: 0 40px;
+        }
+
+        @include breakpoint (max-sm) {
+            padding: 0 30px;
+        }
+    }
+}

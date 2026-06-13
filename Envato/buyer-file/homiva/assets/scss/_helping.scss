@@ -1,0 +1,444 @@
+.array-button {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 999;
+
+    .array-prev {
+        border-radius: 100px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        border-radius: 50%;
+       color: $white;
+        @include transition;
+        cursor: pointer;
+        
+
+        &:hover {
+            background-color: $theme-color;
+             border: 1px solid $theme-color;
+        }
+    }
+
+    .array-next {
+        border-radius: 100px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        border-radius: 50%;
+        color: $white;
+        @include transition;
+        cursor: pointer;
+        
+        &:hover {
+          background-color: $theme-color;
+           border: 1px solid $theme-color;
+        }
+    }
+}
+
+//pagination default
+.swiper-dot {
+  position: relative;
+  text-align: center;
+  margin-top: 45px;
+
+  @include breakpoint (max-xxl) {
+     margin-top: 30px;
+  }
+
+  .swiper-pagination-bullet {
+      width: 8px;
+      height: 8px;
+      transition: 0.6s;
+      background-color: rgba(204, 206, 213, 1);
+      opacity: 1;
+      border-radius: 10px;
+      &:not(:last-child){
+      margin-right: 5px;
+      }
+  }
+  .swiper-pagination-bullet.swiper-pagination-bullet-active {
+      background-color: $theme-color;
+      transition: 0.6s;
+      position: relative;
+  }
+
+}
+
+//page scroll bar add
+::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 5px $bg-color; 
+	border-radius: 5px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: $theme-color;
+	border-radius: 10px;
+}
+
+.bg-cover {
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  background-position: center;
+}
+
+.fix {
+  overflow: hidden;
+}
+
+.ralt{
+ position: relative;
+}
+
+.sticky-style {
+  position: sticky !important;
+  top: 100px;
+}
+
+.slide-transtion {
+	-webkit-transition-timing-function: linear;
+	transition-timing-function: linear;
+}
+.brand-slide-element {
+	width: auto;
+	display: inline-block;
+}
+
+
+.p-relative {
+  position: relative;
+}
+
+.ripple {
+  position: relative;
+
+  &::before,&::after {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 70px;
+      height: 70px;
+      -webkit-transform: translateX(-50%) translateY(-50%);
+      transform: translateX(-50%) translateY(-50%);
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.5);
+      -webkit-animation: rippleOne 3s infinite;
+      animation: rippleOne 3s infinite;
+  }
+
+  &::before {
+      -webkit-animation-delay: 0.9s;
+      animation-delay: 0.9s;
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+  }
+
+  &::after {
+      -webkit-animation-delay: 0.6s;
+      animation-delay: 0.6s;
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+  }
+}
+
+
+
+.page-nav-wrap {
+    margin-top: 60px;
+
+    ul {
+        li {
+            display: inline-block;
+
+            &.active {
+
+                .page-numbers {
+                    background-color: $theme-color;
+                    color: $white;
+                }
+            }
+
+            .page-numbers {
+                &.current {
+                    background-color: $theme-color;
+                    color: $white;
+                }
+
+                display: inline-block;
+                width: 48px;
+                height: 48px;
+                text-align: center;
+                line-height: 48px;
+                border-radius: 0;
+                background: $header-color;
+                color: $white;
+                font-weight: 500;
+                transition: all 0.3s ease-in-out;
+                margin: 0 2px;
+                border-radius: 50%;
+                font-family: $heading-font;
+
+                @media (max-width: 767px) {
+                    margin-top: 10px;
+                    width: 40px;
+                    height: 40px;
+                    line-height: 40px;
+                    font-size: 14px;
+                }
+
+                i {
+                    margin-top: 2px;
+                    color: $white;
+                    @include transition;
+                }
+
+                &:hover {
+                    background-color: $theme-color;
+                    color: $white;
+
+                    i {
+                        color: $white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// .full-img,.full-img2,.full-img3 {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 130%;
+//   background-position: top;
+//   background-repeat: no-repeat;
+//   object-fit: cover;
+// }
+
+
+
+.actually-area .bg-area {
+  position: absolute;
+  top: 40%;
+  left: 51%;
+  transform: translate(-50%, -50%) scale(0);
+  background-color: var(--header);
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+}
+
+
+ .tilt_scale {
+    transition: transform 0.2s ease;
+    display: inline-block;
+}
+
+.no-break {
+    white-space: nowrap; /* Keeps "My Background and Expertise" together */
+}
+
+/* Optional: styling for words split animation */
+.split-word {
+    display: inline-block; /* Required for animation */
+    opacity: 0;
+}
+
+.reveal-img {
+    opacity: 0;           /* start invisible */
+    transform: translateX(-600px); /* start left */
+
+}
+
+.arrow-path {
+  width: 220px;
+  height: 130px;
+  color: black;
+  stroke-dasharray: 1000;
+  animation: draw 10s linear infinite;
+}
+
+@keyframes draw {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.image-wrapper {
+  position: relative;
+  transition: all .8s 
+cubic-bezier(0.55, 0.085, 0, 0.99);
+}
+
+.animated-image {
+  display: block;
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+
+/* preloader শেষ হলে active class যোগ হবে */
+.image-wrapper.active .animated-image {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Ensure the link inherits styles from its parent */
+.wt-about-title2 a {
+    display: inline-block; /* Needed for transform animations */
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.project-section-3  {
+    .line-ani {
+        margin-top: -25px;
+
+        @include breakpoint (max-xxl){
+            display: none;
+        }
+    }
+}
+
+.brand-container {
+  max-width: 1660px;
+  margin: 0 auto;
+}
+
+.gt-text-scale-anim {
+    white-space: pre-wrap;
+    transform-origin: top left;
+}
+
+.gt-letter-span {
+    display: inline-block;
+}
+.gt-word-span {
+    display: inline-block;
+}
+
+.p-relative {
+  position: relative;
+  z-index: 99;
+}
+
+.mt-30 {
+  margin-top: 30px;
+}
+
+
+.mb-30 {
+  margin-bottom: 30px;
+}
+
+
+
+.custom-container {
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+
+
+
+.p-relative {
+  position: relative;
+}
+
+.tp-clip-anim {
+  position: relative;
+  overflow: hidden;
+
+  .mask {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.1);
+    opacity: 0;
+    animation: reveal 1s forwards;
+  }
+
+  // delay for each slice
+  @for $i from 1 through 9 {
+    .mask-#{$i} {
+      clip-path: inset(0 #{(9 - $i) * 11.1%} 0 #{($i - 1) * 11.1%});
+      animation-delay: #{$i * 0.1}s;
+    }
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.wrap-img-distortion {
+    position: relative;
+}
+
+.wrap-distort-canvas {
+    position: absolute;
+    inset: 0;
+    display: inline-block;
+    pointer-events: none;
+    object-fit: cover;
+}
+
+.gt--hover-img canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.color-theme {
+  color: $theme-color !important;
+}
+
+.swiper.imgSlider {
+  position: relative;
+  bottom: 50px;
+  left: 24%;
+  
+  @include breakpoint(max-xl){
+    bottom: 110px;
+  }
+
+  @include breakpoint(max-lg){
+    bottom: 120px;
+  }
+
+  @include breakpoint(max-sm){
+    bottom: 63px;
+  }
+
+}
